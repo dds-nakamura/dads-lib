@@ -6,11 +6,11 @@
 
 ## 取り込みバージョン (Pinned)
 
-| サブディレクトリ                          | 上流リポジトリ                                                                  | 上流バージョン (タグ等) | 取り込み時の HEAD コミット                 | 取り込み日 |
-| ----------------------------------------- | ------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------ | ---------- |
-| `design-tokens/`                          | <https://github.com/digital-go-jp/design-tokens>                                | v1.1.9 (develop ブランチ) | `797dee988d8a0dab5310ad206436d20190678713` | 2026-05-13 |
-| `tailwind-theme-plugin/`                  | <https://github.com/digital-go-jp/tailwind-theme-plugin>                        | v0.3.4 (develop ブランチ) | `37e88973f7dbdb24b151fd2d2b864c6f46be6c68` | 2026-05-13 |
-| `design-system-example-components-html/`  | <https://github.com/digital-go-jp/design-system-example-components-html>        | main ブランチ HEAD      | `b0acbeed91aebc1509295974ab7444cf99e422e6` | 2026-05-13 |
+| サブディレクトリ                         | 上流リポジトリ                                                           | 上流バージョン (タグ等)   | 取り込み時の HEAD コミット                 | 取り込み日 |
+| ---------------------------------------- | ------------------------------------------------------------------------ | ------------------------- | ------------------------------------------ | ---------- |
+| `design-tokens/`                         | <https://github.com/digital-go-jp/design-tokens>                         | v1.1.9 (develop ブランチ) | `797dee988d8a0dab5310ad206436d20190678713` | 2026-05-13 |
+| `tailwind-theme-plugin/`                 | <https://github.com/digital-go-jp/tailwind-theme-plugin>                 | v0.3.4 (develop ブランチ) | `37e88973f7dbdb24b151fd2d2b864c6f46be6c68` | 2026-05-13 |
+| `design-system-example-components-html/` | <https://github.com/digital-go-jp/design-system-example-components-html> | main ブランチ HEAD        | `b0acbeed91aebc1509295974ab7444cf99e422e6` | 2026-05-13 |
 
 `dads-document-md/` および `dads-document-html/` は公式 DADS サイト (<https://design.digital.go.jp/dads/>) からの抽出物で、独立した git 履歴を持たないためここには記載していない。
 

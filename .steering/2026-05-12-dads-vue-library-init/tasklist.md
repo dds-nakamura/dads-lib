@@ -75,26 +75,30 @@
 
 #### `@dads/tokens`
 
-- [ ] T-1.1 `packages/tokens/package.json` 作成（design.md §3.1）
-- [ ] T-1.2 `packages/tokens/src/index.ts` 作成（`export * from '@digital-go-jp/design-tokens'`）
-- [ ] T-1.3 `packages/tokens/tsconfig.json` 作成
-- [ ] T-1.4 `pnpm install`（`@digital-go-jp/design-tokens` を取得）
-- [ ] T-1.5 動作確認: テンポラリ Vue ファイルから `import '@dads/tokens/css'` でロードできるか確認 (`apps/docs` 構築時に Phase 5 で本確認 → 暫定 OK)
-- [ ] T-1.6 `packages/tokens/README.md` 作成（使い方を簡潔に）
+- [x] T-1.1 `packages/tokens/package.json` 作成
+- [x] T-1.2 `packages/tokens/src/index.ts` 作成（`export * from '@digital-go-jp/design-tokens'`）
+- [x] T-1.3 `packages/tokens/tsconfig.json` 作成（noEmit）
+- [x] T-1.4 `pnpm install` (`@digital-go-jp/design-tokens@1.1.9` 取得)
+- [x] T-1.5 ローカルビルドで `dist/{tokens.css,tokens-simple.css}` が生成されることを確認 (smoke test: JS module も import 可能)
+- [x] T-1.6 `packages/tokens/README.md` 作成
+- [+] T-1.7 (追加) `scripts/copy-css.mjs` 作成 — pnpm hoisting 対策で CSS をローカル `dist/` にコピー (R-2 への対応)
 
 #### `@dads/tailwind-plugin`
 
-- [ ] T-1.7 `packages/tailwind-plugin/package.json` 作成（design.md §3.2）
-- [ ] T-1.8 `packages/tailwind-plugin/src/index.ts` 作成（再エクスポート）
-- [ ] T-1.9 `packages/tailwind-plugin/tsconfig.json` 作成
-- [ ] T-1.10 `pnpm install`
-- [ ] T-1.11 `packages/tailwind-plugin/README.md` 作成
+- [x] T-1.8 `packages/tailwind-plugin/package.json` 作成 (**v3 only**)
+- [x] T-1.9 `packages/tailwind-plugin/src/index.ts` 作成（`export { default }`）
+- [x] T-1.10 `packages/tailwind-plugin/tsconfig.json` 作成
+- [x] T-1.11 `packages/tailwind-plugin/README.md` 作成（v4 ステータス明記）
+- [+] T-1.12 (追加) `src/shims.d.ts` 作成 — 上流 v0.3.4 の `exports['.']` に `types` condition が無いため、ローカルでモジュール宣言を補完
+- [-] **v4.css 配布は撤回** — 上流 npm パッケージ v0.3.4 の `dist/` に `v4.css` が含まれず、`exports` にも `./v4` が無いため。後段 Phase で「自前ビルド」または「上流が修正するのを待つ」のいずれかで対応
 
 ### Exit Criteria
 
-- [ ] `pnpm --filter @dads/tokens typecheck` 成功
-- [ ] `pnpm --filter @dads/tailwind-plugin typecheck` 成功
-- [ ] ルート `tsconfig.json` の `references` に両パッケージを追加済み
+- [x] `pnpm --filter @dads/tokens typecheck` 成功
+- [x] `pnpm --filter @dads/tailwind-plugin typecheck` 成功
+- [x] `pnpm build` で `@dads/tokens/dist/*.css` 生成
+- [x] `pnpm format:check` クリーン
+- [~] ルート `tsconfig.json` の `references` 追加 → **Phase 4 (Lint 整備時) へ繰越**。各パッケージ自身で `tsc --noEmit` するため必須ではない（IDE 連携用途のみ）
 
 ---
 

@@ -757,11 +757,11 @@ pnpm dlx @changesets/cli init
 
 以下 3 ディレクトリは **vendor (ソース取り込み)** とする。各上流の `.git/` は `.gitignore` で除外し、ソース実体のみ dads-lib の git 履歴に取り込む。
 
-| ディレクトリ                                | 上流                                                                            | バージョン      |
-| ------------------------------------------ | ------------------------------------------------------------------------------- | --------------- |
-| `design-tokens/`                           | digital-go-jp/design-tokens                                                     | v1.1.9          |
-| `tailwind-theme-plugin/`                   | digital-go-jp/tailwind-theme-plugin                                             | v0.3.4          |
-| `design-system-example-components-html/`   | digital-go-jp/design-system-example-components-html                             | main HEAD       |
+| ディレクトリ                             | 上流                                                | バージョン |
+| ---------------------------------------- | --------------------------------------------------- | ---------- |
+| `design-tokens/`                         | digital-go-jp/design-tokens                         | v1.1.9     |
+| `tailwind-theme-plugin/`                 | digital-go-jp/tailwind-theme-plugin                 | v0.3.4     |
+| `design-system-example-components-html/` | digital-go-jp/design-system-example-components-html | main HEAD  |
 
 - ソース実体（合計約 5MB）は dads-lib の git 履歴に含める
 - 各 clone の内部 `.git/` / `node_modules/` / `dist/` を `.gitignore` で除外

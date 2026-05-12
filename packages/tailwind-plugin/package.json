@@ -1,0 +1,28 @@
+{
+  "name": "@dads/tailwind-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "DADS Tailwind CSS プラグインの再エクスポート (@digital-go-jp/tailwind-theme-plugin の薄ラッパ / v3 only)",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "echo 'no build step (pure re-export)'",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.17 || ^4.0.0"
+  },
+  "dependencies": {
+    "@digital-go-jp/tailwind-theme-plugin": "^0.3.4"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}
