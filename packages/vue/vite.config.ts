@@ -20,11 +20,7 @@ export default defineConfig({
     cssCodeSplit: false,
     emptyOutDir: true,
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler',
-      },
-    },
-  },
+  // Vite 7 は SCSS の modern API がデフォルト。sass-embedded ではなく
+  // sass (dart-sass) を採用するのは、sass-embedded の async dispatcher が
+  // vitest 並列実行で落ちる既知の問題があるため。
 })

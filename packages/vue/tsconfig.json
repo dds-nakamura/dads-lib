@@ -3,7 +3,15 @@
   "compilerOptions": {
     "noEmit": true,
     "jsx": "preserve",
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals"],
+    // 移行元 (@vue/tsconfig/tsconfig.dom.json ベース) は noUncheckedIndexedAccess
+    // を有効化していなかったため、移植忠実度 (NFR-1) を優先して無効化する。
+    // 配列インデックスアクセスが `T | undefined` ではなく `T` を返すようになり、
+    // 既存ロジックがそのまま型チェックを通る。
+    "noUncheckedIndexedAccess": false
   },
-  "include": ["src/**/*", "test/**/*", "vite.config.ts", "vitest.config.ts"]
+  "include": ["src/**/*", "test/**/*", "vite.config.ts", "vitest.config.ts"],
+  // 移行元 tsconfig は __tests__ を typecheck 対象外にしていたため踏襲する。
+  // テストは vitest 実行時に SWC/esbuild で transpile される (型チェックは無し)。
+  "exclude": ["src/**/__tests__/**", "src/**/*.test.ts"]
 }

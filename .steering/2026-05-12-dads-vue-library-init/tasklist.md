@@ -137,7 +137,7 @@
 
 ### 事前検証
 
-- [ ] T-3.0 移行元 (`/Users/nakamura_kouji/git/web-label-print/frontend/src/components/dads/`) で再度 grep を走らせ、**禁忌 import 0 件** を確認:
+- [x] T-3.0 移行元で禁忌 import 0 件確認済 (JSDoc 内の `@/components/dads` 言及のみ)
   ```bash
   grep -rE "(vuetify|pinia|vue-router|vue-i18n|@/(store|router|i18n))" \
     --include='*.vue' --include='*.ts' \
@@ -147,36 +147,53 @@
 
 ### コピー作業
 
-- [ ] T-3.1 共有資産のコピー:
-  - `dads/types/common.ts` → `packages/vue/src/types/common.ts`
-  - `dads/styles/_base.scss` → `packages/vue/src/styles/_base.scss`
-  - `dads/styles/_focus-ring.scss` → `packages/vue/src/styles/_focus-ring.scss`
-- [ ] T-3.2 全 26 コンポーネントディレクトリを一括コピー:
-  ```bash
-  cp -R /Users/nakamura_kouji/git/web-label-print/frontend/src/components/dads/{Accordion,Breadcrumb,Button,Card,Checkbox,CheckboxGroup,Chip,ColorPicker,Combobox,Divider,Drawer,FileUpload,Header,Heading,Modal,NotificationBanner,ProgressIndicator,Radio,RadioGroup,Select,StepNavigation,Tab,Table,TextField,Textarea,Tooltip} \
-    /Users/nakamura_kouji/git/dads-lib/packages/vue/src/components/
-  ```
-- [ ] T-3.3 `packages/vue/src/index.ts` に移行元と同等の named export を記述（design.md §3.3 の構造、移行元 `index.ts` を踏襲）
-- [ ] T-3.4 `packages/vue/src/styles/index.scss` 作成:
-  ```scss
-  @forward 'base';
-  @forward 'focus-ring';
-  ```
+- [x] T-3.1 共有資産コピー (types/common.ts, _base.scss, _focus-ring.scss)
+- [x] T-3.2 全 26 コンポーネントディレクトリを `cp -R` で一括コピー (27 .vue / 26 .types.ts / 26 .test.ts)
+- [x] T-3.3 `packages/vue/src/index.ts` に移行元と同等の named export を記述
+- [x] T-3.4 `packages/vue/src/styles/index.scss` 作成 (forward base + focus-ring)
 
 ### 検証
 
-- [ ] T-3.5 移植後 grep で禁忌 import 0 件を再確認:
-  ```bash
-  cd /Users/nakamura_kouji/git/dads-lib/packages/vue/src && \
-    grep -rE "(vuetify|pinia|vue-router|vue-i18n|from ['\"]@/)" --include='*.vue' --include='*.ts'
-  ```
-- [ ] T-3.6 `pnpm --filter @dads/vue typecheck` 成功
-- [ ] T-3.7 `pnpm --filter @dads/vue test` で **26 テストファイル全 pass**
-- [ ] T-3.8 `pnpm --filter @dads/vue build` 成功:
-  - `dist/index.mjs` 生成
-  - `dist/styles/index.css` 生成
-  - `dist/index.d.ts` 生成
-- [ ] T-3.9 ビルド成果物の sanity check: `dist/index.d.ts` に `DadsButton` 等が exported されていることを目視確認
+- [x] T-3.5 移植後 grep で禁忌 import 0 件確認
+- [x] T-3.6 `pnpm --filter @dads/vue typecheck` 成功
+- [x] T-3.7 `pnpm --filter @dads/vue test` で **26 テストファイル / 883 テスト全 pass**
+- [x] T-3.8 `pnpm --filter @dads/vue build` 成功:
+  - `dist/index.js` (91KB) + `dist/index.js.map`
+  - `dist/index.css` (92KB) — 全 26 コンポーネントの SCSS をバンドル
+  - `dist/index.d.ts` + `dist/components/**/*.d.ts` 階層
+- [x] T-3.9 ビルド成果物の sanity check: `dist/index.d.ts` に `export * from './components/Button'` 等 26 行確認
+
+### Phase 3 で実施した追加修正・差分
+
+1. **`../types/common` → `../../types/common`** (10 ファイル)
+   - 移行元は `dads/Button/...types.ts` で `../types/common` 参照だった
+   - 移植先で `src/components/Button/...types.ts` 構造になり 1 階層深くなったため一括 sed 修正
+2. **`@use '../styles/base'` → `@use '../../styles/base'`** (26 .vue ファイル / 44 occurrence)
+   - 同様の階層差分修正。`css: false` でテストには影響しなかったが本番ビルドで露見
+3. **`tsconfig.json` を 2 箇所緩和**
+   - `noUncheckedIndexedAccess: false` 追加 (移行元 @vue/tsconfig の strictness に合わせる / NFR-1)
+   - `exclude: ["src/**/__tests__/**"]` 追加 (移行元も同様にテストを typecheck 対象外にしていた)
+4. **テストランタイムを `jsdom` → `happy-dom` に変更**
+   - 移行元が happy-dom 環境で書かれていたため。jsdom 26 では `getComputedStyle().lineHeight` が空文字を返さなくなり Textarea auto-resize 計算テストが落ちる
+   - `happy-dom@^20.9.0` を devDep に追加、`jsdom` を削除
+5. **SCSS preprocessor を `sass-embedded` → `sass`** に変更
+   - sass-embedded の async dispatcher が vitest 並列実行で `[sass] Tried writing to closed dispatcher` を起こす既知問題回避
+6. **Vite/Vitest スタックをソースに揃えてアップグレード**
+   - vite 6 → 7.3, vitest 2.1 → 3.2.4, vue-tsc 2 → 3, @vitejs/plugin-vue 5 → 6
+   - vite 7 で SCSS の `api: 'modern'` オプションが削除されたため vite.config.ts から削除
+   - vitest.config.ts で `mergeConfig` の型キャストを明示 (`UserConfig`) — vite/vitest の型分岐に対処
+7. **`package.json#exports['./styles']` を `./dist/index.css` に修正**
+   - Vite が `cssCodeSplit: false` + lib mode で `dist/index.css` を出すため (元の `dist/styles/index.css` 想定とは異なる)
+8. **テスト用に `vitest.config.ts` で `css: false`** を維持
+   - テストは class/attribute/DOM 構造のみ検証する。SCSS 処理を skip しても挙動変わらず、起動も速い
+9. **NotificationBanner のテスト残骸 (typecheck) は `tsconfig` exclude で対処** — 移行元と同じ扱い
+
+### Exit Criteria
+
+- [x] 26 テストファイル / 883 個別テスト 全 pass
+- [x] ビルド成功 (`dist/{index.js, index.css, index.d.ts}` + per-component d.ts)
+- [x] 禁忌 import スキャン 0 件
+- [x] format:check クリーン
 
 ### 想定トラブル時の対応
 

@@ -1,0 +1,5 @@
+// DADS スタイルバレル。
+// @dads/vue/styles/scss/index 経由で利用先 SCSS から forward できる。
+
+@forward 'base';
+@forward 'focus-ring';

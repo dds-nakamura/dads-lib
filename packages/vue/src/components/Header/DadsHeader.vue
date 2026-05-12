@@ -1,0 +1,143 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { DadsHeaderEmits, DadsHeaderProps } from './DadsHeader.types'
+
+const props = withDefaults(defineProps<DadsHeaderProps>(), {
+  sticky: true,
+  showMenuToggle: true,
+  menuToggleLabel: 'メニューを開く',
+})
+
+const emit = defineEmits<DadsHeaderEmits>()
+
+const rootClasses = computed(() => ['dads-header', { 'dads-header--sticky': props.sticky }])
+
+const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
+</script>
+
+<template>
+  <header :class="rootClasses">
+    <div class="dads-header__inner">
+      <button
+        v-if="showMenuToggle"
+        type="button"
+        class="dads-header__menu-toggle"
+        :aria-label="menuToggleLabel"
+        @click="onMenuClick"
+      >
+        <i class="mdi mdi-menu" aria-hidden="true" />
+      </button>
+      <div v-if="$slots.logo" class="dads-header__logo">
+        <slot name="logo" />
+      </div>
+      <nav v-if="$slots.nav" class="dads-header__nav" aria-label="メインナビゲーション">
+        <slot name="nav" />
+      </nav>
+      <div v-if="$slots.actions" class="dads-header__actions">
+        <slot name="actions" />
+      </div>
+    </div>
+  </header>
+</template>
+
+<style scoped lang="scss">
+@use '../../styles/base' as base;
+@use '../../styles/focus-ring' as ring;
+
+// Mobile / desktop boundary. The hamburger toggle is hidden at and above
+// this width — keep in sync with the spec ("max-width: 768px 想定").
+$dads-header-breakpoint: 768px;
+
+.dads-header {
+  background-color: var(--color-bg-surface, #fff);
+  border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  color: var(--color-text-primary, #1a1a1a);
+
+  // -------------------- sticky -------------------------------------------
+  &--sticky {
+    position: sticky;
+    top: 0;
+    // Keep the header above scrollable content but below modal overlays.
+    z-index: 100;
+  }
+
+  // -------------------- inner layout -------------------------------------
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-16, 1rem);
+    min-height: 3.5rem; // 56px — comfortable touch target on mobile
+    padding: 0 var(--spacing-16, 1rem);
+    // The actions slot is pushed by `margin-left: auto`, so flex-wrap on
+    // the inner row lets the actions drop onto a second line at sub-768px
+    // viewports instead of pushing the document horizontally.
+    flex-wrap: wrap;
+
+    @media (max-width: 767px) {
+      gap: var(--spacing-8, 0.5rem);
+      padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    }
+  }
+
+  // -------------------- hamburger menu toggle (mobile only) --------------
+  &__menu-toggle {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem; // 40px
+    height: 2.5rem;
+    border-radius: var(--border-radius-4, 0.25rem);
+    font-size: 1.5rem;
+    color: var(--color-text-primary, #1a1a1a);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    }
+
+    @media (min-width: #{$dads-header-breakpoint}) {
+      display: none;
+    }
+  }
+
+  // -------------------- logo / nav / actions slots -----------------------
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0; // allow nav children to truncate instead of overflowing
+  }
+
+  &__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-8, 0.5rem);
+    margin-left: auto;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+
+    @media (max-width: 767px) {
+      gap: var(--spacing-4, 0.25rem);
+    }
+  }
+
+  // -------------------- forced colors ------------------------------------
+  @include base.dads-forced-colors {
+    border-bottom: 1px solid CanvasText;
+
+    &__menu-toggle {
+      border: 1px solid CanvasText;
+    }
+  }
+}
+</style>

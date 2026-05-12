@@ -1,0 +1,184 @@
+<script setup lang="ts">
+import { computed, useId } from 'vue'
+import DadsRadio from '../Radio/DadsRadio.vue'
+import type {
+  DadsRadioGroupEmits,
+  DadsRadioGroupProps,
+  DadsRadioGroupValue,
+} from './DadsRadioGroup.types'
+
+const props = withDefaults(defineProps<DadsRadioGroupProps>(), {
+  direction: 'vertical',
+  size: 'md',
+  required: false,
+  error: false,
+  disabled: false,
+})
+
+const emit = defineEmits<DadsRadioGroupEmits>()
+
+// Generated once per instance so element ids and the group `name` stay stable
+// across renders. Two groups on the same page receive distinct names so the
+// browser's single-selection behavior does not bleed across them.
+const generatedId = useId()
+const rootId = computed(() => props.id ?? `dads-radio-group-${generatedId}`)
+const resolvedName = computed(() => props.name ?? `dads-radio-group-name-${generatedId}`)
+const hintId = computed(() => `${rootId.value}-hint`)
+const errorId = computed(() => `${rootId.value}-error`)
+
+const isError = computed(() => props.error || !!props.errorMessage)
+
+const describedBy = computed(() => {
+  if (isError.value && props.errorMessage) return errorId.value
+  if (props.hint) return hintId.value
+  return undefined
+})
+
+const rootClasses = computed(() => [
+  'dads-radio-group',
+  `dads-radio-group--${props.direction}`,
+  {
+    'dads-radio-group--error': isError.value,
+    'dads-radio-group--disabled': props.disabled,
+  },
+])
+
+const hasFooter = computed(() => (isError.value && !!props.errorMessage) || !!props.hint)
+
+const onSelect = (value: DadsRadioGroupValue) => {
+  emit('update:modelValue', value)
+  emit('change', value)
+}
+</script>
+
+<template>
+  <fieldset
+    :id="rootId"
+    :class="rootClasses"
+    :disabled="disabled"
+    :aria-invalid="isError || undefined"
+    :aria-describedby="describedBy"
+  >
+    <legend v-if="legend" class="dads-radio-group__legend">
+      {{ legend }}
+      <span v-if="required" class="dads-radio-group__required" aria-hidden="true">必須</span>
+    </legend>
+
+    <div class="dads-radio-group__items">
+      <DadsRadio
+        v-for="item in items"
+        :key="String(item.value)"
+        :model-value="modelValue ?? null"
+        :value="item.value"
+        :label="item.label"
+        :hint="item.hint"
+        :disabled="item.disabled || disabled"
+        :size="size"
+        :name="resolvedName"
+        :error="isError"
+        @update:model-value="onSelect"
+      />
+    </div>
+
+    <div v-if="hasFooter" class="dads-radio-group__footer">
+      <span
+        v-if="isError && errorMessage"
+        :id="errorId"
+        class="dads-radio-group__error"
+        role="alert"
+        >{{ errorMessage }}</span
+      >
+      <span v-else-if="hint" :id="hintId" class="dads-radio-group__hint">{{ hint }}</span>
+    </div>
+  </fieldset>
+</template>
+
+<style scoped lang="scss">
+@use '../../styles/base' as base;
+
+.dads-radio-group {
+  // Reset native fieldset chrome so we can compose with our own tokens.
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8, 0.5rem);
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  color: var(--color-text-primary, #1a1a1a);
+
+  // -------------------- legend & required marker -------------------------
+  &__legend {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-8, 0.5rem);
+    padding: 0;
+    font-size: var(--font-size-16, 1rem);
+    font-weight: 500;
+    line-height: var(--line-height-150, 1.5);
+  }
+
+  &__required {
+    background-color: var(--color-error, #ec0000);
+    color: var(--color-text-on-primary, #fff);
+    font-size: var(--font-size-14, 0.875rem);
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--border-radius-4, 0.25rem);
+    line-height: 1.2;
+  }
+
+  // -------------------- items wrapper ------------------------------------
+  &__items {
+    display: flex;
+    gap: var(--spacing-12, 0.75rem);
+  }
+
+  &--vertical &__items {
+    flex-direction: column;
+  }
+
+  &--horizontal &__items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--spacing-16, 1rem);
+  }
+
+  // -------------------- footer (hint / error) ---------------------------
+  // Only one of hint / error renders at a time (v-if/v-else-if), so we just
+  // need the typography here.
+  &__footer {
+    font-size: var(--font-size-14, 0.875rem);
+    line-height: var(--line-height-150, 1.5);
+  }
+
+  &__hint {
+    color: var(--color-text-secondary, #4d4d4d);
+  }
+
+  &__error {
+    color: var(--color-error, #ec0000);
+    font-weight: 500;
+  }
+
+  // -------------------- error -------------------------------------------
+  &--error &__legend {
+    color: var(--color-error, #ec0000);
+  }
+
+  // -------------------- disabled ----------------------------------------
+  // The native `fieldset[disabled]` attribute already disables descendant
+  // form controls, so visually we only dim the group.
+  &--disabled {
+    opacity: 0.5;
+  }
+
+  // -------------------- forced colors -----------------------------------
+  @include base.dads-forced-colors {
+    border: 1px solid CanvasText;
+    padding: var(--spacing-8, 0.5rem);
+  }
+}
+</style>

@@ -1,0 +1,48 @@
+// =============================================================================
+// DADS component base mixins
+// -----------------------------------------------------------------------------
+// Common resets and helpers reused across the DADS component suite.
+// Keep this file framework-free (no Vuetify dependency).
+// =============================================================================
+
+// Reset native button styles before applying DADS styling.
+@mixin dads-reset-button {
+  appearance: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+}
+
+// Reset native text input styles. Borders / focus rings are owned by the
+// surrounding control wrapper, so the input itself stays transparent.
+@mixin dads-reset-input {
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+
+  &::placeholder {
+    color: var(--color-text-disabled, #999);
+  }
+}
+
+// High contrast mode helper — re-enable system colors so SVGs and borders are
+// rendered by the OS instead of the design tokens.
+@mixin dads-forced-colors {
+  @media (forced-colors: active) {
+    forced-color-adjust: auto;
+    @content;
+  }
+}

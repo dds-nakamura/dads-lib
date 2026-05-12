@@ -1,0 +1,32 @@
+// =============================================================================
+// DADS focus ring mixins
+// -----------------------------------------------------------------------------
+// Black 2px outline + yellow 4px shadow, shown only on keyboard focus.
+// Reference: https://design.digital.go.jp/dads/foundations/
+// =============================================================================
+
+// Common visual rule.
+@mixin _dads-focus-ring-style {
+  outline: 2px solid var(--color-neutral-black, #000);
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+}
+
+// For elements that own the focus themselves (buttons, links, native inputs).
+@mixin dads-focus-ring {
+  &:focus-visible {
+    @include _dads-focus-ring-style;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// For wrapper elements that should highlight when a child receives focus
+// (e.g. an input wrapped by a control box with prepend / append icons).
+@mixin dads-focus-ring-within {
+  &:focus-within {
+    @include _dads-focus-ring-style;
+  }
+}
