@@ -2,13 +2,23 @@
 
 DADS (デジタル庁デザインシステム) の Vue 3 コンポーネントライブラリ。
 
-> Status: Phase 2 (scaffold) — Phase 3 で 26 コンポーネントを移植予定
+> Status: **初期構築完成 (Phase 8)** — 26 コンポーネント / 899 tests pass / Button・TextField・Modal は vitest-axe a11y テスト済
 
 ## 特徴
 
 - **Vue 3 のみに依存**: Vuetify / Pinia / Vue Router / Vue I18n などへの依存なし
 - **WCAG 2.1 AA 準拠**: `aria-*` 属性・focus 制御・色コントラストを DADS 仕様どおり実装
 - **CSS 変数フォールバック**: `@dads/tokens` の CSS が読み込まれていなくても基本的な見た目で動作 (`var(--color-..., #fallback)` 形式)
+- **Tree-shake 対応**: 個別 import 可 / ESM 出力 / `sideEffects: ["**/*.css", "**/*.scss"]`
+
+## 収録コンポーネント (26 個)
+
+| カテゴリ   | コンポーネント                                                                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| Form       | Button, TextField, Textarea, Select, Checkbox, CheckboxGroup, Radio, RadioGroup, FileUpload, Combobox, ColorPicker |
+| Navigation | Header, Drawer, Breadcrumb, StepNavigation, Tab                                                                    |
+| Feedback   | NotificationBanner, Modal, Tooltip, ProgressIndicator                                                              |
+| Display    | Card, Heading, Divider, Table, Accordion, Chip                                                                     |
 
 ## インストール
 
@@ -59,6 +69,23 @@ import { DadsButton, DadsTextField } from '@dads/vue'
 | `pnpm --filter @dads/vue test`       | Vitest 1 回実行                    |
 | `pnpm --filter @dads/vue test:watch` | Vitest watch モード                |
 | `pnpm --filter @dads/vue typecheck`  | vue-tsc による型チェック (no emit) |
+
+## a11y テスト (vitest-axe)
+
+`vitest-axe` で WCAG 違反を自動検出するテストを 3 コンポーネント (16 ケース) に追加済:
+
+| コンポーネント | ケース数 | カバー範囲                                                                        |
+| -------------- | -------- | --------------------------------------------------------------------------------- |
+| Button         | 5        | text-label / icon-only+aria-label / disabled / loading / anchor                   |
+| TextField      | 6        | label / hint / required / error / disabled / aria-label fallback                  |
+| Modal          | 5        | title+labelledby / header-slot fallback / persistent / footer / 4 size プリセット |
+
+**TODO**: 残り 23 コンポーネントの a11y テスト追加 (Phase 1 スコープ外)。
+
+## アイコン
+
+`prependIcon` / `appendIcon` は Material Design Icons のクラス名を受け取る (例: `mdi-download`)。
+利用側で別途 `@mdi/font` を入れる前提 (本パッケージにはフォントを含めない / R-2)。
 
 ## 依存
 

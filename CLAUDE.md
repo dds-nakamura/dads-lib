@@ -35,11 +35,68 @@
 
 ---
 
+## monorepo 構成 (2026-05-13 追加)
+
+このリポジトリは **pnpm workspaces monorepo** として運用される。Vue 3 コンポーネント実装本体は `packages/vue/`、デザイン参照資産は従来どおりルート直下に置く。
+
+| パッケージ              | パス                        | 用途                                                   |
+| ----------------------- | --------------------------- | ------------------------------------------------------ |
+| `@dads/vue`             | `packages/vue/`             | ★ 26 個の Vue 3 コンポーネント実装 (本体)              |
+| `@dads/tokens`          | `packages/tokens/`          | `@digital-go-jp/design-tokens` の薄ラッパ              |
+| `@dads/tailwind-plugin` | `packages/tailwind-plugin/` | `@digital-go-jp/tailwind-theme-plugin` の薄ラッパ (v3) |
+| `@dads/docs`            | `apps/docs/`                | VitePress カタログ (26 コンポーネントの demo + API)    |
+
+詳細仕様は `.steering/2026-05-12-dads-vue-library-init/{requirements,design,tasklist}.md` を参照。
+
+### 新規アプリで `@dads/vue` を使うときの最短手順
+
+```ts
+// main.ts
+import '@dads/tokens/css' // CSS 変数を :root に注入
+import '@dads/vue/styles' // 全コンポーネントの CSS
+```
+
+```vue
+<script setup lang="ts">
+import { DadsButton, DadsTextField } from '@dads/vue'
+</script>
+```
+
+ルート README.md と各 package の README.md にも詳細を記載。
+
+---
+
 ## フォルダ構成と役割
 
 ```
 dads-lib/
 ├── CLAUDE.md                              ← このファイル
+├── README.md                              monorepo 概観
+├── VENDORED.md                            vendor 取り込みバージョン管理
+├── package.json / pnpm-workspace.yaml     monorepo ルート
+├── tsconfig.base.json / tsconfig.json     TypeScript 共通設定 + solution-style references
+├── eslint.config.js                       ESLint 9 flat config (ルート集約 / L3 strictness)
+│
+├── packages/                              ★ 配布対象パッケージ群
+│   ├── vue/                               @dads/vue (Vue 3 コンポーネント本体)
+│   │   ├── src/components/                26 コンポーネント (Button, TextField, Modal, ...)
+│   │   ├── src/styles/                    共有 SCSS (_base, _focus-ring)
+│   │   ├── src/types/                     共有型 (DadsSize, DadsSemanticColor)
+│   │   └── test/                          Vitest setup (vitest-axe 登録)
+│   ├── tokens/                            @dads/tokens
+│   └── tailwind-plugin/                   @dads/tailwind-plugin
+│
+├── apps/                                  ★ プライベートアプリ
+│   └── docs/                              @dads/docs (VitePress カタログ)
+│       ├── .vitepress/config.ts           sidebar / nav 定義
+│       ├── .vitepress/theme/              tokens + vue/styles を global load
+│       ├── components/                    26 ページ (Button は full demo, 他は TODO スタブ)
+│       └── index.md                       ホーム
+│
+├── .changeset/                            Changesets (linked: @dads/*, ignore: @dads/docs)
+├── .github/workflows/ci.yml               CI (typecheck/lint/test/build × 3)
+├── .steering/                             仕様ドキュメント (requirements/design/tasklist)
+│
 ├── dads-document-md/                      ★ 仕様参照の第一候補（90 ファイル / 596KB）
 │   └── dads/
 │       ├── index.md                       概要・最新お知らせ
