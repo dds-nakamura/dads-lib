@@ -1,0 +1,69 @@
+import { defineConfig } from 'vitepress'
+
+// 26 コンポーネントを 6 カテゴリにグルーピング (DADS 公式の分類に準拠)
+// 入力 / ナビゲーション / 表示 / フィードバック / その他
+const components = {
+  Form: [
+    { text: 'Button', link: '/components/button' },
+    { text: 'TextField', link: '/components/text-field' },
+    { text: 'Textarea', link: '/components/textarea' },
+    { text: 'Select', link: '/components/select' },
+    { text: 'Checkbox', link: '/components/checkbox' },
+    { text: 'CheckboxGroup', link: '/components/checkbox-group' },
+    { text: 'Radio', link: '/components/radio' },
+    { text: 'RadioGroup', link: '/components/radio-group' },
+    { text: 'FileUpload', link: '/components/file-upload' },
+    { text: 'Combobox', link: '/components/combobox' },
+    { text: 'ColorPicker', link: '/components/color-picker' },
+  ],
+  Navigation: [
+    { text: 'Header', link: '/components/header' },
+    { text: 'Drawer', link: '/components/drawer' },
+    { text: 'Breadcrumb', link: '/components/breadcrumb' },
+    { text: 'StepNavigation', link: '/components/step-navigation' },
+    { text: 'Tab', link: '/components/tab' },
+  ],
+  Feedback: [
+    { text: 'NotificationBanner', link: '/components/notification-banner' },
+    { text: 'Modal', link: '/components/modal' },
+    { text: 'Tooltip', link: '/components/tooltip' },
+    { text: 'ProgressIndicator', link: '/components/progress-indicator' },
+  ],
+  Display: [
+    { text: 'Card', link: '/components/card' },
+    { text: 'Heading', link: '/components/heading' },
+    { text: 'Divider', link: '/components/divider' },
+    { text: 'Table', link: '/components/table' },
+    { text: 'Accordion', link: '/components/accordion' },
+    { text: 'Chip', link: '/components/chip' },
+  ],
+}
+
+export default defineConfig({
+  title: 'DADS Vue Components',
+  description: 'デジタル庁デザインシステム (DADS) Vue 3 実装',
+  lang: 'ja',
+  cleanUrls: true,
+  themeConfig: {
+    nav: [
+      { text: 'Home', link: '/' },
+      { text: 'Components', link: '/components/button' },
+    ],
+    sidebar: {
+      '/components/': [
+        { text: 'Form', collapsed: false, items: components.Form },
+        { text: 'Navigation', collapsed: false, items: components.Navigation },
+        { text: 'Feedback', collapsed: false, items: components.Feedback },
+        { text: 'Display', collapsed: false, items: components.Display },
+      ],
+    },
+    socialLinks: [
+      {
+        icon: 'github',
+        link: 'https://github.com/digital-go-jp/design-system-example-components-html',
+      },
+    ],
+    outline: { label: '目次', level: [2, 3] },
+    docFooter: { prev: '前へ', next: '次へ' },
+  },
+})

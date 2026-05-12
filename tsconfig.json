@@ -3,6 +3,7 @@
   "references": [
     { "path": "./packages/tokens" },
     { "path": "./packages/tailwind-plugin" },
-    { "path": "./packages/vue" }
+    { "path": "./packages/vue" },
+    { "path": "./apps/docs" }
   ]
 }

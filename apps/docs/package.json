@@ -1,0 +1,23 @@
+{
+  "name": "@dads/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DADS Vue コンポーネントカタログ (VitePress)",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@dads/tokens": "workspace:*",
+    "@dads/vue": "workspace:*",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitepress": "^1.6.0"
+  }
+}
