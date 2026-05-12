@@ -30,6 +30,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint .",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {

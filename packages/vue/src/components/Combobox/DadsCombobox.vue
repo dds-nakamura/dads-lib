@@ -322,7 +322,7 @@ watch(
 </script>
 
 <template>
-  <div :class="rootClasses" ref="rootRef">
+  <div ref="rootRef" :class="rootClasses">
     <label v-if="label" :for="inputId" class="dads-combobox__label">
       {{ label }}
       <span v-if="required" class="dads-combobox__required" aria-hidden="true">必須</span>

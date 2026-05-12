@@ -23,7 +23,7 @@ const onSelect = (item: DadsTabItem) => {
 }
 
 const focusTab = (index: number) => {
-  nextTick(() => {
+  void nextTick(() => {
     tabRefs.value[index]?.focus()
   })
 }
@@ -93,11 +93,11 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     <div role="tablist" class="dads-tab__list" :aria-label="ariaLabel" @keydown="onKeydown">
       <button
         v-for="item in items"
+        :id="tabId(item.value)"
         :key="String(item.value)"
         ref="tabRefs"
         type="button"
         role="tab"
-        :id="tabId(item.value)"
         :aria-selected="isActive(item)"
         :aria-controls="panelId(item.value)"
         :tabindex="isActive(item) ? 0 : -1"
@@ -112,10 +112,10 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     <div class="dads-tab__panels">
       <div
         v-for="item in items"
-        :key="String(item.value)"
         v-show="isActive(item)"
-        role="tabpanel"
         :id="panelId(item.value)"
+        :key="String(item.value)"
+        role="tabpanel"
         :aria-labelledby="tabId(item.value)"
         :hidden="!keepAlive && !isActive(item) ? true : undefined"
         class="dads-tab__panel"

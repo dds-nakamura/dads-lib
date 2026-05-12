@@ -44,7 +44,7 @@ const toggle = (item: DadsAccordionItem) => {
 // -------------------- keyboard navigation ---------------------------------
 
 const focusHeader = (index: number) => {
-  nextTick(() => {
+  void nextTick(() => {
     headerRefs.value[index]?.focus()
   })
 }
@@ -104,10 +104,10 @@ const itemClasses = (item: DadsAccordionItem) => [
     <div v-for="(item, idx) in items" :key="item.id" :class="itemClasses(item)">
       <h3 class="dads-accordion__heading">
         <button
+          :id="headerId(item.id)"
           ref="headerRefs"
           type="button"
           class="dads-accordion__header"
-          :id="headerId(item.id)"
           :aria-expanded="isOpen(item.id)"
           :aria-controls="panelId(item.id)"
           :disabled="item.disabled || undefined"
@@ -122,9 +122,9 @@ const itemClasses = (item: DadsAccordionItem) => [
       </h3>
       <div
         v-show="isOpen(item.id)"
+        :id="panelId(item.id)"
         role="region"
         class="dads-accordion__panel"
-        :id="panelId(item.id)"
         :aria-labelledby="headerId(item.id)"
       >
         <slot :name="`panel-${item.id}`" />

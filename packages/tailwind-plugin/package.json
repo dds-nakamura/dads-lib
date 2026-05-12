@@ -13,6 +13,7 @@
   "scripts": {
     "build": "echo 'no build step (pure re-export)'",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
     "clean": "rm -rf dist"
   },
   "peerDependencies": {

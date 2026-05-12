@@ -147,7 +147,7 @@
 
 ### コピー作業
 
-- [x] T-3.1 共有資産コピー (types/common.ts, _base.scss, _focus-ring.scss)
+- [x] T-3.1 共有資産コピー (types/common.ts, \_base.scss, \_focus-ring.scss)
 - [x] T-3.2 全 26 コンポーネントディレクトリを `cp -R` で一括コピー (27 .vue / 26 .types.ts / 26 .test.ts)
 - [x] T-3.3 `packages/vue/src/index.ts` に移行元と同等の named export を記述
 - [x] T-3.4 `packages/vue/src/styles/index.scss` 作成 (forward base + focus-ring)
@@ -217,21 +217,29 @@
 
 ### タスク
 
-- [ ] T-4.1 ルート `eslint.config.js` 作成（design.md §5.1）
-- [ ] T-4.2 `eslint-config-prettier` / `eslint-plugin-vue` / `typescript-eslint` / `vue-eslint-parser` を root の devDependencies に追加（ルート単位で集約管理）
-- [ ] T-4.3 `pnpm lint` をルートから実行 → 出力されるエラー・警告を **0 件** にする
-  - 移行元の品質が高いので、ほとんどは設定ミスのはず
-  - 真に必要な箇所のみコード修正、それ以外は config 調整で対応
-- [ ] T-4.4 `pnpm format:check` をルートから実行 → 違反があれば `pnpm format` で一括修正
-- [ ] T-4.5 `pnpm typecheck` がルートから全 references を走査して成功
-- [ ] T-4.6 移行元との **挙動差分が出ていない** ことを再確認（テスト 26 件 green を再走）
+- [x] T-4.0 ルート `tsconfig.json` (solution-style references) 作成 — Phase 0〜2 から繰越分
+- [x] T-4.1 ルート `eslint.config.js` 作成（design.md §5.1）
+- [x] T-4.2 `eslint-config-prettier` / `eslint-plugin-vue` / `typescript-eslint` / `vue-eslint-parser` / `@eslint/js` / `globals` を root の devDependencies に追加（ルート単位で集約管理）
+- [x] T-4.3 `pnpm lint` をルートから実行 → エラー・警告を **0 件** にする
+  - 設定調整: `no-useless-assignment` off、テストファイルから型認識ルール除外、Vue/src ts にブラウザ globals
+  - コード修正 2 件: `DadsTab.vue` / `DadsAccordion.vue` の `nextTick(...)` に `void` を付与（`no-floating-promises` 対応 / 挙動不変）
+  - ESLint `--fix` 適用: `vue/attributes-order` で 3 ファイル (Accordion/Combobox/Select/Tab) の template attribute 順序を整列（出力 HTML は不変 / NFR-1 適合）
+- [x] T-4.4 `pnpm format:check` をルートから実行 → `tasklist.md` 1 件を `pnpm format` で修正
+- [x] T-4.5 `pnpm typecheck` がルートから全 references を走査して成功
+- [x] T-4.6 移行元との **挙動差分が出ていない** ことを再確認（26 テストファイル / 883 個別テスト全 pass）
+
+### 各パッケージ追加事項
+
+- [x] `package.json` の `scripts.lint` を 3 パッケージ (tokens / tailwind-plugin / vue) に追加
+- [x] ルート `package.json` の `scripts.lint` を `echo` プレースホルダから `eslint .` に置換、`lint:fix` も追加
 
 ### Exit Criteria
 
-- [ ] `pnpm lint` 警告 / エラー 0 件
-- [ ] `pnpm format:check` 違反 0 件
-- [ ] `pnpm typecheck` エラー 0 件
-- [ ] Phase 3 で green だったテストが Phase 4 後も green
+- [x] `pnpm lint` 警告 / エラー 0 件
+- [x] `pnpm format:check` 違反 0 件
+- [x] `pnpm typecheck` エラー 0 件
+- [x] Phase 3 で green だったテストが Phase 4 後も green (883/883)
+- [x] `pnpm --filter @dads/vue build` 成功 (dist/index.{js,css,d.ts})
 
 ---
 
