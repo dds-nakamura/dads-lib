@@ -1,3 +1,8 @@
 packages:
   - 'packages/*'
   - 'apps/*'
+# Approve native install scripts. esbuild ships an arch-specific binary that
+# needs its postinstall to run; vitest/vite both depend on it transitively.
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true

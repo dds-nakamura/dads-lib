@@ -106,25 +106,30 @@
 
 ### タスク
 
-- [ ] T-2.1 `packages/vue/package.json` 作成（design.md §3.3）
-- [ ] T-2.2 `packages/vue/tsconfig.json` / `tsconfig.build.json` 作成（design.md §3.3）
-- [ ] T-2.3 `packages/vue/vite.config.ts` 作成（design.md §3.3）
-- [ ] T-2.4 `packages/vue/vitest.config.ts` 作成（design.md §6.1）
-- [ ] T-2.5 `packages/vue/test/setup.ts` 作成（vitest-axe 含む）
-- [ ] T-2.6 `packages/vue/src/index.ts` を **空 export** で作成（`export {}`）
-- [ ] T-2.7 ディレクトリ骨組み作成:
-  - `packages/vue/src/components/` 空
-  - `packages/vue/src/types/` 空
-  - `packages/vue/src/styles/` 空
-- [ ] T-2.8 `pnpm install`（vue, vite, vitest, @vue/test-utils, vue-tsc, sass-embedded, vitest-axe, jsdom 等を取得）
-- [ ] T-2.9 空状態で `pnpm --filter @dads/vue build` を走らせ、`dist/index.mjs` が生成されることを確認
-- [ ] T-2.10 空状態で `pnpm --filter @dads/vue test` を走らせ、「No test files」で OK 終了することを確認
-- [ ] T-2.11 ルート `tsconfig.json` の `references` に `packages/vue` を追加
+- [x] T-2.1 `packages/vue/package.json` 作成 (peer: vue ^3.4 / devDep: vite 6 + vitest 2 + vue-tsc 2 + sass-embedded 等)
+- [x] T-2.2 `packages/vue/tsconfig.json` / `tsconfig.build.json` 作成
+- [x] T-2.3 `packages/vue/vite.config.ts` 作成 (library mode / ESM / cssCodeSplit:false / SCSS modern-compiler)
+- [x] T-2.4 `packages/vue/vitest.config.ts` 作成 (vite config を mergeConfig で継承)
+- [x] T-2.5 `packages/vue/test/setup.ts` プレースホルダ作成 — vitest-axe の matcher 登録は Phase 6 で追加
+- [x] T-2.6 `packages/vue/src/index.ts` を空 export で作成
+- [x] T-2.7 ディレクトリ骨組み (Phase 0 で作成済み)
+- [x] T-2.8 `pnpm install` (`@parcel/watcher` / `esbuild` の build script を `pnpm-workspace.yaml#allowBuilds` で承認)
+- [x] T-2.9 ビルド成功 — `dist/index.js` (※ `.mjs` ではなく `.js`、`type: module` で ESM) と `dist/index.d.ts` を生成
+- [x] T-2.10 `vitest run --passWithNoTests` で exit 0 確認
+- [~] T-2.11 ルート `tsconfig.json` references → Phase 4 (Lint 整備時) へ繰越
 
 ### Exit Criteria
 
-- [ ] スカフォールド状態でビルド・テスト・型チェックすべてエラーなく終了
-- [ ] `dist/index.mjs` 生成済み（空エクスポートでも可）
+- [x] スカフォールド状態でビルド・テスト・型チェックすべてエラーなく終了
+- [x] `dist/index.js` + `dist/index.d.ts` 生成済み（空エクスポート）
+- [x] `pnpm format:check` クリーン
+
+### 計画からの差分
+
+- 出力拡張子を `.mjs` → `.js` に変更 (Vite library mode のデフォルト挙動 + `type: module` で ESM 解釈される)
+- `vitest-axe` を install したが setup.ts では未使用。Phase 6 で matcher 登録を実装する方が依存関係が明確
+- `@types/node` を devDep に追加 (vite.config.ts で `node:url` 使用)
+- pnpm 11 で追加の build script approval が必要だった (`@parcel/watcher` / `esbuild`)
 
 ---
 
