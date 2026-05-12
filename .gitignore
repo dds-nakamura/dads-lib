@@ -1,0 +1,48 @@
+# Node
+node_modules/
+*.log
+.pnpm-debug.log*
+pnpm-debug.log
+
+# Build outputs
+dist/
+coverage/
+
+# VitePress
+.vitepress/cache
+.vitepress/dist
+
+# OS
+.DS_Store
+Thumbs.db
+
+# MCP / agent artifacts
+.playwright-mcp/
+.claude/
+
+# Runtime artifacts from dads-document-html local server
+/dads-document-html/.server.pid
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# TypeScript
+*.tsbuildinfo
+
+# Vendored upstream clones — exclude internal git state and build artifacts.
+# Source files are intentionally tracked (Option A: vendor strategy / D-6).
+# See VENDORED.md for upstream version pinning.
+/design-tokens/.git
+/design-tokens/node_modules
+/design-tokens/dist
+/tailwind-theme-plugin/.git
+/tailwind-theme-plugin/node_modules
+/tailwind-theme-plugin/dist
+/design-system-example-components-html/.git
+/design-system-example-components-html/node_modules
+/design-system-example-components-html/dist
+/design-system-example-components-html/.astro
+/design-system-example-components-html/.svelte-kit

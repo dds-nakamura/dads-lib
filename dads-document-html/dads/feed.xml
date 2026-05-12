@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>デジタル庁デザインシステムβ版</title>
+        <link>https://design.digital.go.jp/dads/</link>
+        <description>デジタル庁デザインシステムは、スタイリングの考え方を提供するデザイン言語、情報の視覚表現とインタラクションを具現化するUIコンポーネント、ユーザビリティとアクセシビリティを踏まえた設計や実装のためのガイドラインから構成されるデザインアセットです。</description>
+        <lastBuildDate>Wed, 15 Apr 2026 07:13:16 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://design.digital.go.jp/dads/</generator>
+        <language>ja</language>
+        <copyright>Digital Agency</copyright>
+        <item>
+            <title><![CDATA[2026年4月15日 デザインデータ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/updates-design/#design-2026-04-15</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/figma-2026-04-15</guid>
+            <pubDate>Wed, 15 Apr 2026 09:00:00 GMT</pubDate>
+            <description><![CDATA[デザインデータ（Figma）v2.13.0を公開しました。]]></description>
+            <content:encoded><![CDATA[<p>デザインデータ（Figma）v2.13.0を公開しました。</p>
+
+<dl><dt>検索ボックス</dt><dd><ul>
+<li>サイズのバリエーションを追加</li>
+</ul></dd><dt>コンボボックス</dt><dd><ul>
+<li>初版公開</li>
+</ul></dd></dl>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2026年4月8日 デザインデータ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/updates-design/#design-2026-04-08</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/figma-2026-04-08</guid>
+            <pubDate>Wed, 08 Apr 2026 09:00:00 GMT</pubDate>
+            <description><![CDATA[デザインデータ（Figma）v2.12.0を公開しました。]]></description>
+            <content:encoded><![CDATA[<p>デザインデータ（Figma）v2.12.0を公開しました。</p>
+
+<dl><dt>画像</dt><dd><ul>
+<li>初版公開</li>
+</ul></dd><dt>テーブル／データテーブル</dt><dd><ul>
+<li>選択中の行の塗りを、セパレーターを追加した塗りの表現に変更</li>
+</ul></dd></dl>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2026年4月1日 デザインデータ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/updates-design/#design-2026-04-01</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/figma-2026-04-01</guid>
+            <pubDate>Wed, 01 Apr 2026 09:00:00 GMT</pubDate>
+            <description><![CDATA[デザインデータ（Figma）v2.11.1を公開しました。]]></description>
+            <content:encoded><![CDATA[<p>デザインデータ（Figma）v2.11.1を公開しました。</p>
+
+<dl><dt>アコーディオン</dt><dd><ul>
+<li>高さのバラつきを修正</li>
+<li>レイヤー構造を整理</li>
+</ul></dd><dt>テーブルコントロール</dt><dd><ul>
+<li>ページ数のバリエーションを満たすように作例を修正</li>
+</ul></dd><dt>ページナビゲーション</dt><dd><ul>
+<li>Textタイプの前後ボタンの高さを「ボタン」コンポーネントのMediumに合わせるかたちで、40pxから48pxに変更</li>
+</ul></dd></dl>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2026年4月1日 コードスニペット更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/updates-code-snippet/#code-snippet-2026-04-01</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/github-2026-04-01</guid>
+            <pubDate>Wed, 01 Apr 2026 09:00:00 GMT</pubDate>
+            <description><![CDATA[テキストエリアに文字数カウンターを追加。プログレスインジケーターを新規追加。]]></description>
+            <content:encoded><![CDATA[<dl><dt>HTML版：テキストエリア</dt><dd><ul>
+<li>文字数カウンターを追加</li>
+</ul></dd><dt>HTML版：プログレスインジケーター</dt><dd><ul>
+<li>新規追加</li>
+</ul></dd></dl>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2026年4月1日 ウェブサイト更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/updates-misc/#misc-2026-04-01</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/misc-2026-04-01</guid>
+            <pubDate>Wed, 01 Apr 2026 09:00:00 GMT</pubDate>
+            <description><![CDATA[本ウェブサイトのソースコードの可読性を向上しました。]]></description>
+            <content:encoded><![CDATA[<p>本ウェブサイトのソースコードの可読性を向上しました。</p>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[2026年3月18日 デザインデータ（Figma）v2.11.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2026031801</guid>
+            <pubDate>Wed, 18 Mar 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月26日 コンポーネント/見出しページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/heading/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/heading/rev1</guid>
+            <pubDate>Thu, 26 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月18日 デザインデータ（Figma）v2.10.3を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2026021801</guid>
+            <pubDate>Wed, 18 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月4日 コンポーネント/カルーセルページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/carousel/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/carousel/rev2</guid>
+            <pubDate>Wed, 04 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[打ち出しタイプおよびコンテナタイプについて追記。打ち出しタイプにシングルを追加]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月4日 コンポーネント/イメージスライダーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/image-slider/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/image-slider/rev1</guid>
+            <pubDate>Wed, 04 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月4日 コンポーネント/アコーディオンページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/accordion/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/accordion/rev1</guid>
+            <pubDate>Wed, 04 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月4日 コンポーネント/ディスクロージャーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/disclosure/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/disclosure/rev1</guid>
+            <pubDate>Wed, 04 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月4日 コンポーネント/箇条書きページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/list/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/list/rev1</guid>
+            <pubDate>Wed, 04 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年2月4日 デザインデータ（Figma）v2.10.2を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2026020401</guid>
+            <pubDate>Wed, 04 Feb 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年1月22日 コンポーネント/ファイルアップロード／ドロップエリアページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/file-upload/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/file-upload/rev2</guid>
+            <pubDate>Thu, 22 Jan 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[削除ボタンのラベルを「解除」に変更。ファイル選択サマリーを追加。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2026年1月21日 デザインデータ（Figma）v2.10.1を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2026012101</guid>
+            <pubDate>Wed, 21 Jan 2026 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年12月24日 コンポーネント/ファイルアップロード／ドロップエリアページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/file-upload/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/file-upload/rev1</guid>
+            <pubDate>Wed, 24 Dec 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年12月24日 コンポーネント/カルーセルページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/carousel/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/carousel/rev1</guid>
+            <pubDate>Wed, 24 Dec 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年12月24日 デザインデータ（Figma）v2.10.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2025122401</guid>
+            <pubDate>Wed, 24 Dec 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年12月10日 ウェブアクセシビリティページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/webaccessibility/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/webaccessibility/rev3</guid>
+            <pubDate>Wed, 10 Dec 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[2025年11月のウェブアクセシビリティ検証結果を公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年11月26日 デザインデータ（Figma）v2.9.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2025112601</guid>
+            <pubDate>Wed, 26 Nov 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年10月29日 デザインデータ（Figma）v2.8.1を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2025102901</guid>
+            <pubDate>Wed, 29 Oct 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年10月29日 コンポーネント/日付ピッカー／カレンダーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/date-picker/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/components/date-picker/rev3</guid>
+            <pubDate>Wed, 29 Oct 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[デスクリプションを修正。日付ピッカーは入力フィールドおよびカレンダーの組み合わせであることを明確にし、各ページに反映。「コンポーネント要素」の入力フィールドの説明からエラー時を別項目に分割]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年10月29日 基本デザイン／リンクテキストページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/link-text/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/foundations/link-text/rev3</guid>
+            <pubDate>Wed, 29 Oct 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[リンクテキストのActiveカラーをOrange-700からOrange-800へ修正。テキストのコントラスト要件を満たしていなかったため]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年10月29日 基本デザイン／エレベーションページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/elevation/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/foundations/elevation/rev2</guid>
+            <pubDate>Wed, 29 Oct 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[ドロップシャドウではコントラスト比を確保できないことを加筆。強制カラーモードを考慮し、オーバーレイシェード上の要素にボーダーをつけることを加筆]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年10月29日 ガイダンス／アクセシビリティページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/guidance/accessibility/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/guidance/accessibility/rev3</guid>
+            <pubDate>Wed, 29 Oct 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[「JIS X 8341-3:2016、WCAG、WAI-ARIA等の各ガイドライン」の項におけるリストから、WCAG 2.0勧告およびWCAG 2.1勧告のリンクを削除]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年10月8日 ウェブサイト更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/dads/2025100801</guid>
+            <pubDate>Wed, 08 Oct 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[本ウェブサイト（デジタル庁デザインシステム専用サイト）のURLを変更しました。旧：https://design.digital.go.jp/ 新：https://design.digital.go.jp/dads/]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年9月24日 デザインデータ（Figma）v2.8.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025092401</guid>
+            <pubDate>Wed, 24 Sep 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年9月10日 コンポーネント／ラジオボタンページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/radio/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/radio/rev2</guid>
+            <pubDate>Wed, 10 Sep 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[設計の原則を加筆]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年9月10日 コンポーネント／チェックボックスページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/checkbox/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/checkbox/rev2</guid>
+            <pubDate>Wed, 10 Sep 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[「設計の原則」を加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年8月20日 コンポーネント／インプットテキストページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/input-text/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/input-text/rev2</guid>
+            <pubDate>Wed, 20 Aug 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[v1のガイドラインだったものを、v2のガイドラインとして大幅改定。Readonlyステートを追加し、デザイン、コードスニペット、ガイドラインを更新]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年8月20日 デザインデータ（Figma）v2.7.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025082001</guid>
+            <pubDate>Wed, 20 Aug 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年7月30日 コードスニペット（HTML版）を公開しました]]></title>
+            <link>https://design.digital.go.jp/dads/html</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025073003</guid>
+            <pubDate>Wed, 30 Jul 2025 09:30:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年7月30日 基本デザイン/アイコンページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/icon/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/icon/rev1</guid>
+            <pubDate>Wed, 30 Jul 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年7月30日 デザインデータ（Figma）v2.6.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025073002</guid>
+            <pubDate>Wed, 30 Jul 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年7月30日 ウェブサイト更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025073001</guid>
+            <pubDate>Wed, 30 Jul 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[ウェブサイトにサイト内検索機能を追加しました。スキップリンクを視覚的にも表示するようにしました。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年7月10日 コンポーネントページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025071001</guid>
+            <pubDate>Thu, 10 Jul 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[「詳しく見る」というラベルを持つ作例から、タイトルのリンクを削除。一部の作例で見られたスクリーンショットと説明文の内容の不一致を修正。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年7月2日 デザインデータ（Figma）v2.5.1を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025070201</guid>
+            <pubDate>Wed, 02 Jul 2025 08:30:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年6月25日 デザインデータ（Figma）v2.5.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025062502</guid>
+            <pubDate>Wed, 25 Jun 2025 08:30:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年6月25日 コンポーネントページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025062501</guid>
+            <pubDate>Wed, 25 Jun 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[コンポーネントの各種リソース情報を「概要」ページ下部に追加しました。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年6月25日 テーブル／データテーブルページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/table/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/table/rev2</guid>
+            <pubDate>Wed, 25 Jun 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[アクセシビリティページを追加。「使い方」ページを加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年6月19日 基本デザイン/カラーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/color/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/color/rev3</guid>
+            <pubDate>Thu, 19 Jun 2025 09:00:00 GMT</pubDate>
+            <description><![CDATA[「コントラスト要件」を加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年6月9日 コンポーネント/日付ピッカー／カレンダーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/date-picker/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/date-picker/rev2</guid>
+            <pubDate>Mon, 09 Jun 2025 03:00:00 GMT</pubDate>
+            <description><![CDATA[「文脈に応じてautocompleteを使用する」を加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年4月30日 デザインデータ（Figma）v2.4.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025043001</guid>
+            <pubDate>Wed, 30 Apr 2025 08:30:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年4月23日 コンポーネント/日付ピッカー／カレンダーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/date-picker/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/date-picker/rev1</guid>
+            <pubDate>Wed, 23 Apr 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年4月23日 デザインデータ（Figma）v2.3.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025042301</guid>
+            <pubDate>Wed, 23 Apr 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年4月23日 基本デザイン/タイポグラフィページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/typography/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/typography/rev7</guid>
+            <pubDate>Wed, 23 Apr 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[Displayテキストスタイルに太さレベルBを追加]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年3月26日 コンポーネント/カードページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/card/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/card/rev1</guid>
+            <pubDate>Wed, 26 Mar 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年3月26日 デザインデータ（Figma）v2.2.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025032601</guid>
+            <pubDate>Wed, 26 Mar 2025 08:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年2月28日 コンポーネント/テーブル／データテーブルページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/table/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/table/rev1</guid>
+            <pubDate>Fri, 28 Feb 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[初版公開]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年2月28日 デザインデータ（Figma）v2.1.3を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025022801</guid>
+            <pubDate>Fri, 28 Feb 2025 07:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年2月28日 リソースページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/resources/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/resources/rev2</guid>
+            <pubDate>Fri, 28 Feb 2025 04:00:00 GMT</pubDate>
+            <description><![CDATA[デジタル庁デザインシステムの特定バージョン取得に関する説明と問い合わせフォームへのリンクを追加]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年2月4日 サイトコンテンツ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/updates-dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025020401</guid>
+            <pubDate>Tue, 04 Feb 2025 04:00:00 GMT</pubDate>
+            <description><![CDATA[お知らせページを追加しました。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年1月21日 デザインデータ（Figma）v2.1.2を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025012101</guid>
+            <pubDate>Tue, 21 Jan 2025 04:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年1月21日 コンポーネント/緊急時バナーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/emergency-banner/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/emergency-banner/rev2</guid>
+            <pubDate>Tue, 21 Jan 2025 04:00:00 GMT</pubDate>
+            <description><![CDATA[バナータイトルの先頭に「【緊急】」の文字列を追加。クリッカブルエリアをバナー全体ではなくアクションボタンのみに変更。アクションボタンの最小幅を利用可能な表示幅の50%に変更]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年1月15日 デザインデータ（Figma）v2.1.1を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025011501</guid>
+            <pubDate>Tue, 14 Jan 2025 22:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年1月15日 コンポーネント/ドロワーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/drawer/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/drawer/rev2</guid>
+            <pubDate>Tue, 14 Jan 2025 22:00:00 GMT</pubDate>
+            <description><![CDATA[仕様の内容を、モーダル展開に限定した文章として再構成]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年1月9日 デザインデータ（Figma）v1.4.3に記載のガイドラインを、デザインシステム本体（本ウェブサイト）に掲載しました。]]></title>
+            <link>https://design.digital.go.jp/dads/components/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2025010901</guid>
+            <pubDate>Thu, 09 Jan 2025 06:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2025年1月9日 ガイダンス/アクセシビリティページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/guidance/accessibility/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/guidance/accessibility/rev2</guid>
+            <pubDate>Wed, 08 Jan 2025 17:00:00 GMT</pubDate>
+            <description><![CDATA[参照ガイドラインのリンク集を加筆および構成を調整]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年12月25日 デザインデータ（Figma）v2.1.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024122501</guid>
+            <pubDate>Tue, 24 Dec 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年11月28日 デザインデータ（Figma）v2.0.4を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024112801</guid>
+            <pubDate>Wed, 27 Nov 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年10月16日 基本デザイン/タイポグラフィページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/typography/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/typography/rev6</guid>
+            <pubDate>Tue, 15 Oct 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[テキストスタイルの追加漏れを修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年9月25日 基本デザイン/カラーページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/color/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/color/rev2</guid>
+            <pubDate>Tue, 24 Sep 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[グレーのカラー定義名を「Grey」から「Gray」に変更]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年9月25日 基本デザイン/タイポグラフィページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/typography/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/typography/rev5</guid>
+            <pubDate>Tue, 24 Sep 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[太さレベルにv2系統では使用していないMediumが含まれていたのを削除。行ボックスの高さ（行高）の定義に175%を追加。テキストスタイル名の構成において行高を%表記の値のまま記述するように変更。行高175%のStandardテキストスタイルを追加。Standardテキストスタイルの文字間隔をフォントサイズの大小に応じて調整するように変更。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年9月25日 デザインデータ（Figma）v2をアップデートしました。アップデート内容は各Figma内の更新履歴をご参照ください。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024092501</guid>
+            <pubDate>Tue, 24 Sep 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年9月10日 コンポーネント/ボタンページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/button/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/button/rev4</guid>
+            <pubDate>Mon, 09 Sep 2024 18:00:00 GMT</pubDate>
+            <description><![CDATA[「無効ボタン（disabled）はタブフォーカスでアクセスできない」を加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年8月28日 基本デザイン/タイポグラフィページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/typography/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/typography/rev4</guid>
+            <pubDate>Tue, 27 Aug 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[テキストブロックのグリフ幅について、考え方を加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年7月31日 基本デザイン/レイアウトページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/layout/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/layout/rev2</guid>
+            <pubDate>Wed, 31 Jul 2024 01:00:00 GMT</pubDate>
+            <description><![CDATA[カラムおよびガターについての説明を加筆修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年7月11日 デザインデータ（Figma）v2をアップデートしました。アップデート内容は各Figma内の更新履歴をご参照ください。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024071101</guid>
+            <pubDate>Wed, 10 Jul 2024 16:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年7月4日 デザインデータv2に対応したコードスニペット（React）をリリースしました。詳しくはGitHubをご確認ください。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024070401</guid>
+            <pubDate>Wed, 03 Jul 2024 20:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年7月3日 デザインデータ（Figma）v2とv1をアップデートしました。アップデート内容は各Figma内の更新履歴をご参照ください。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024070301</guid>
+            <pubDate>Tue, 02 Jul 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年6月19日 基本デザイン/リンクテキストページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/link-text/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/link-text/rev2</guid>
+            <pubDate>Wed, 19 Jun 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[リンクテキストの下線の位置と範囲を調整]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年6月13日 RSSフィードの配信を開始しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024061301</guid>
+            <pubDate>Wed, 12 Jun 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年6月11日 コンポーネント/ボタンページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/button/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/button/rev3</guid>
+            <pubDate>Mon, 10 Jun 2024 23:00:00 GMT</pubDate>
+            <description><![CDATA[「ボタン配置の考え方」を加筆し、概要を再構成]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年6月10日 基本デザイン/タイポグラフィページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/typography/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/typography/rev3</guid>
+            <pubDate>Sun, 09 Jun 2024 18:00:00 GMT</pubDate>
+            <description><![CDATA[Denseテキストスタイルにおける太さレベルの説明の誤りを修正]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年6月4日 コンポーネント/ボタンページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/components/button/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/components/button/rev2</guid>
+            <pubDate>Mon, 03 Jun 2024 22:00:00 GMT</pubDate>
+            <description><![CDATA[参考情報のリンク先を変更]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年5月31日 基本デザイン/タイポグラフィページ更新情報]]></title>
+            <link>https://design.digital.go.jp/dads/foundations/typography/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/foundations/typography/rev2</guid>
+            <pubDate>Thu, 30 May 2024 18:00:00 GMT</pubDate>
+            <description><![CDATA[Windows環境での閲覧を考慮し、CSSの記述例からsystem-uiを削除]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年5月30日 デジタル庁デザインシステムの専用サイトおよびデザインデータv2.0.0を公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024053002</guid>
+            <pubDate>Thu, 30 May 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+        <item>
+            <title><![CDATA[2024年5月30日 従来のデザインシステムv1.4.1におけるアクセシビリティ上の重要な問題点を含む各種修正を実施し、v1.4.2として公開しました。]]></title>
+            <link>https://design.digital.go.jp/dads/</link>
+            <guid isPermaLink="false">https://design.digital.go.jp/2024053001</guid>
+            <pubDate>Thu, 30 May 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[詳細はウェブサイトにアクセスしてご確認ください。]]></description>
+        </item>
+    </channel>
+</rss>

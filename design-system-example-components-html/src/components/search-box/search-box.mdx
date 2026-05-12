@@ -1,0 +1,128 @@
+import { Canvas, Controls, Description, Meta, Source, Stories, Subtitle, Title, Unstyled } from "@storybook/addon-docs/blocks";
+ 
+import * as SearchBoxStories from "./search-box.stories";
+import searchBoxCss from "./search-box.css?raw";
+import buttonCss from "../button/button.css?raw";
+
+<Meta of={SearchBoxStories} />
+
+<Unstyled>
+<div className="prose">
+
+<Title />
+<Subtitle />
+<Description />
+
+<Canvas of={SearchBoxStories.Playground} withToolbar />
+<Controls of={SearchBoxStories.Playground} />
+
+## ソースコード
+
+<details>
+  <summary>HTML</summary>
+
+```html
+<div class="dads-search-box">
+  <div class="dads-search-box__fields">
+    <label class="dads-search-box__select">
+      <span>検索対象</span>
+      <select name="scope">
+        <option value="">すべて</option>
+        <option value="images">画像</option>
+        <option value="files">ファイル</option>
+        <option value="map">地図</option>
+        <option value="videos">動画</option>
+      </select>
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 17L3 8L4 7L12 15L20 7L21 8L12 17Z" fill="currentcolor"/>
+      </svg>
+    </label>
+    <label class="dads-search-box__input">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m21 20.5-6-6a7.4 7.4 0 0 0 1.9-5A7.4 7.4 0 0 0 9.5 2 7.5 7.5 0 1 0 14 15.5l6 6 1-1ZM3.5 9.5a6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6 6 6 0 0 1-6-6Z" fill="currentcolor"/>
+      </svg>
+      <span class="dads-u-visually-hidden">検索</span>
+      <input type="search" name="q">
+    </label>
+  </div>
+  <button class="dads-button" type="submit" data-type="solid-fill" data-size="lg">検索</button>
+</div>
+```
+
+</details>
+
+<details>
+  <summary>search-box.css</summary>
+  <Source code={searchBoxCss} language="css" />
+</details>
+
+### 依存ファイル
+
+<details>
+  <summary>button.css</summary>
+  <Source code={buttonCss} language="css" />
+</details>
+
+## 使い方
+
+### インストール
+
+#### 必要なファイル
+
+- **共通**
+  - `search-box.css`
+- **追加で必要**
+  - `button.css`（検索ボタンを使用する場合）
+
+### 絞り込みオプションを非表示にする
+
+絞り込みオプション（`.dads-search-box__select`）は任意です。検索対象を絞り込む必要がない場合は、この要素を削除してください。
+
+```html
+<div class="dads-search-box">
+  <div class="dads-search-box__fields">
+    <label class="dads-search-box__input">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m21 20.5-6-6a7.4 7.4 0 0 0 1.9-5A7.4 7.4 0 0 0 9.5 2 7.5 7.5 0 1 0 14 15.5l6 6 1-1ZM3.5 9.5a6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6 6 6 0 0 1-6-6Z" fill="currentcolor"/>
+      </svg>
+      <span class="dads-u-visually-hidden">検索</span>
+      <input type="search" name="q">
+    </label>
+  </div>
+  <button class="dads-button" type="submit" data-type="solid-fill" data-size="lg">検索</button>
+</div>
+```
+
+### アクセシビリティ
+
+検索フィールドには必ずラベルを付けてください。
+
+#### 画面上にラベルがある場合
+
+画面上に表示される見出しなどがラベルとして機能する場合、その要素に`id`属性を設定し、検索フィールドの`aria-labelledby`属性にその`id`を指定します。
+
+```html
+<h1 id="site-search-heading">サイト内検索</h1>
+
+<label class="dads-search-box__input">
+  <svg ...>...</svg>
+  <input type="search" name="q" aria-labelledby="site-search-heading">
+</label>
+```
+
+#### 画面上にラベルがない場合
+
+画面上に表示されるラベルがない場合、検索フィールドの直前に視覚的に非表示のラベル（`dads-u-visually-hidden`クラスを付与）を配置します。
+
+```html
+<label class="dads-search-box__input">
+  <svg ...>...</svg>
+  <span class="dads-u-visually-hidden">サイト内検索</span>
+  <input type="search" name="q">
+</label>
+```
+
+<Stories title="デモ" includePrimary={false} />
+
+</div>
+</Unstyled>

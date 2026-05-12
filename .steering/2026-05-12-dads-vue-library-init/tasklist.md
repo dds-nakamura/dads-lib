@@ -1,0 +1,321 @@
+# Tasklist — DADS Vue コンポーネントライブラリ初期化
+
+- Spec ID: `2026-05-12-dads-vue-library-init`
+- Depends on: `./requirements.md`, `./design.md`
+- Status: Draft（承認待ち）
+- Last Updated: 2026-05-12
+
+---
+
+## 進め方
+
+- **Phase 単位で実装 → ユーザー確認 → 次 Phase へ** を繰り返す
+- 各 Phase は **Exit Criteria（完了条件）** を満たすまで次に進まない
+- タスクは `[ ]` チェックボックスで管理。完了時に `[x]` に更新する
+- 着手前に必ず該当 Phase の冒頭サマリを再読する
+
+---
+
+## Phase 一覧
+
+| Phase | 内容                                           | 目安      | 並列度                 |
+| ----- | ---------------------------------------------- | --------- | ---------------------- |
+| 0     | リポジトリ初期化 / monorepo スカフォールド     | 30〜60 分 | 直列                   |
+| 1     | `@dads/tokens` + `@dads/tailwind-plugin` 構築  | 30 分     | 並列可（2 つを同時に） |
+| 2     | `@dads/vue` スカフォールド + ビルド config     | 45 分     | 直列                   |
+| 3     | **26 コンポーネントの移植 + テストグリーン化** | 60〜90 分 | コピー後は並列検証可   |
+| 4     | Lint / Format / Typecheck 整備                 | 30 分     | 直列                   |
+| 5     | VitePress カタログ (`apps/docs`)               | 60 分     | 直列                   |
+| 6     | a11y テスト (vitest-axe)                       | 30 分     | 直列                   |
+| 7     | CI / Changesets                                | 30 分     | 並列可                 |
+| 8     | README / 受入確認                              | 30 分     | 直列                   |
+
+合計目安: **5〜7 時間**（実装オンリー、レビュー / 試行錯誤を含まない場合）
+
+---
+
+## Phase 0 — リポジトリ初期化 / monorepo スカフォールド
+
+### 着手前確認
+
+- [x] `dads-lib` 配下に既存の `node_modules` や `package.json` が **無い** ことを再確認 (2026-05-12)
+- [x] `git init` 実行の可否を user に確認 → **承認** (2026-05-13)
+- [x] サブ clone の取り扱い → **Option A (vendor)** で確定 (D-6)
+
+### タスク
+
+- [x] T-0.1 `.gitignore` 作成（`node_modules`, `dist`, `.DS_Store`, `*.log`, `coverage`, `.vitepress/cache`, `.vitepress/dist`, サブ clone の `.git` 等）
+- [x] T-0.2 `.nvmrc` 作成（`24`）
+- [x] T-0.3 `.prettierrc.json` / `.prettierignore` 作成（design.md §5.2）
+- [x] T-0.4 ルート `package.json` 作成
+  - `private: true`
+  - `packageManager: "pnpm@11.1.1"` に修正（実機が 11 系のため）
+  - `engines.node`: `>=24`
+  - `scripts`: `build`, `test`, `lint` (placeholder), `typecheck`, `format`, `format:check`
+- [x] T-0.5 `pnpm-workspace.yaml` 作成
+- [x] T-0.6 `tsconfig.base.json` 作成（design.md §3.3）
+- [~] T-0.7 ルート `tsconfig.json` → **Phase 1 へ繰越**。空 references の solution-style は `tsc -b` でエラーになるため、最初のパッケージが登場する Phase 1 で作成する
+- [x] T-0.8 ディレクトリ作成: `packages/{tokens,tailwind-plugin,vue}`, `apps/docs` (空)
+- [x] T-0.9 `git init` 実行 (main ブランチ)
+- [x] T-0.10 `pnpm install` (lockfile 生成 / prettier + typescript のみ取得)
+
+### Exit Criteria
+
+- [x] `pnpm -r --filter "@dads/*" exec echo "ok"` がエラーなく完了（exit=0、informational のみ）
+- [x] `pnpm-lock.yaml` が生成されている
+- [x] `node -v` v24.12.0 / `.nvmrc` = 24
+- [x] `pnpm format:check` クリーン
+- [x] `pnpm build` / `pnpm test` / `pnpm typecheck` が全て exit=0（projects 未登録なので no-op）
+
+---
+
+## Phase 1 — `@dads/tokens` + `@dads/tailwind-plugin`
+
+### タスク（並列可）
+
+#### `@dads/tokens`
+
+- [ ] T-1.1 `packages/tokens/package.json` 作成（design.md §3.1）
+- [ ] T-1.2 `packages/tokens/src/index.ts` 作成（`export * from '@digital-go-jp/design-tokens'`）
+- [ ] T-1.3 `packages/tokens/tsconfig.json` 作成
+- [ ] T-1.4 `pnpm install`（`@digital-go-jp/design-tokens` を取得）
+- [ ] T-1.5 動作確認: テンポラリ Vue ファイルから `import '@dads/tokens/css'` でロードできるか確認 (`apps/docs` 構築時に Phase 5 で本確認 → 暫定 OK)
+- [ ] T-1.6 `packages/tokens/README.md` 作成（使い方を簡潔に）
+
+#### `@dads/tailwind-plugin`
+
+- [ ] T-1.7 `packages/tailwind-plugin/package.json` 作成（design.md §3.2）
+- [ ] T-1.8 `packages/tailwind-plugin/src/index.ts` 作成（再エクスポート）
+- [ ] T-1.9 `packages/tailwind-plugin/tsconfig.json` 作成
+- [ ] T-1.10 `pnpm install`
+- [ ] T-1.11 `packages/tailwind-plugin/README.md` 作成
+
+### Exit Criteria
+
+- [ ] `pnpm --filter @dads/tokens typecheck` 成功
+- [ ] `pnpm --filter @dads/tailwind-plugin typecheck` 成功
+- [ ] ルート `tsconfig.json` の `references` に両パッケージを追加済み
+
+---
+
+## Phase 2 — `@dads/vue` スカフォールド + ビルド config
+
+### タスク
+
+- [ ] T-2.1 `packages/vue/package.json` 作成（design.md §3.3）
+- [ ] T-2.2 `packages/vue/tsconfig.json` / `tsconfig.build.json` 作成（design.md §3.3）
+- [ ] T-2.3 `packages/vue/vite.config.ts` 作成（design.md §3.3）
+- [ ] T-2.4 `packages/vue/vitest.config.ts` 作成（design.md §6.1）
+- [ ] T-2.5 `packages/vue/test/setup.ts` 作成（vitest-axe 含む）
+- [ ] T-2.6 `packages/vue/src/index.ts` を **空 export** で作成（`export {}`）
+- [ ] T-2.7 ディレクトリ骨組み作成:
+  - `packages/vue/src/components/` 空
+  - `packages/vue/src/types/` 空
+  - `packages/vue/src/styles/` 空
+- [ ] T-2.8 `pnpm install`（vue, vite, vitest, @vue/test-utils, vue-tsc, sass-embedded, vitest-axe, jsdom 等を取得）
+- [ ] T-2.9 空状態で `pnpm --filter @dads/vue build` を走らせ、`dist/index.mjs` が生成されることを確認
+- [ ] T-2.10 空状態で `pnpm --filter @dads/vue test` を走らせ、「No test files」で OK 終了することを確認
+- [ ] T-2.11 ルート `tsconfig.json` の `references` に `packages/vue` を追加
+
+### Exit Criteria
+
+- [ ] スカフォールド状態でビルド・テスト・型チェックすべてエラーなく終了
+- [ ] `dist/index.mjs` 生成済み（空エクスポートでも可）
+
+---
+
+## Phase 3 — 26 コンポーネントの移植 + テストグリーン化
+
+### 事前検証
+
+- [ ] T-3.0 移行元 (`/Users/nakamura_kouji/git/web-label-print/frontend/src/components/dads/`) で再度 grep を走らせ、**禁忌 import 0 件** を確認:
+  ```bash
+  grep -rE "(vuetify|pinia|vue-router|vue-i18n|@/(store|router|i18n))" \
+    --include='*.vue' --include='*.ts' \
+    /Users/nakamura_kouji/git/web-label-print/frontend/src/components/dads/
+  ```
+  → 何か出たら **Phase 3 を中断してユーザーに報告**
+
+### コピー作業
+
+- [ ] T-3.1 共有資産のコピー:
+  - `dads/types/common.ts` → `packages/vue/src/types/common.ts`
+  - `dads/styles/_base.scss` → `packages/vue/src/styles/_base.scss`
+  - `dads/styles/_focus-ring.scss` → `packages/vue/src/styles/_focus-ring.scss`
+- [ ] T-3.2 全 26 コンポーネントディレクトリを一括コピー:
+  ```bash
+  cp -R /Users/nakamura_kouji/git/web-label-print/frontend/src/components/dads/{Accordion,Breadcrumb,Button,Card,Checkbox,CheckboxGroup,Chip,ColorPicker,Combobox,Divider,Drawer,FileUpload,Header,Heading,Modal,NotificationBanner,ProgressIndicator,Radio,RadioGroup,Select,StepNavigation,Tab,Table,TextField,Textarea,Tooltip} \
+    /Users/nakamura_kouji/git/dads-lib/packages/vue/src/components/
+  ```
+- [ ] T-3.3 `packages/vue/src/index.ts` に移行元と同等の named export を記述（design.md §3.3 の構造、移行元 `index.ts` を踏襲）
+- [ ] T-3.4 `packages/vue/src/styles/index.scss` 作成:
+  ```scss
+  @forward 'base';
+  @forward 'focus-ring';
+  ```
+
+### 検証
+
+- [ ] T-3.5 移植後 grep で禁忌 import 0 件を再確認:
+  ```bash
+  cd /Users/nakamura_kouji/git/dads-lib/packages/vue/src && \
+    grep -rE "(vuetify|pinia|vue-router|vue-i18n|from ['\"]@/)" --include='*.vue' --include='*.ts'
+  ```
+- [ ] T-3.6 `pnpm --filter @dads/vue typecheck` 成功
+- [ ] T-3.7 `pnpm --filter @dads/vue test` で **26 テストファイル全 pass**
+- [ ] T-3.8 `pnpm --filter @dads/vue build` 成功:
+  - `dist/index.mjs` 生成
+  - `dist/styles/index.css` 生成
+  - `dist/index.d.ts` 生成
+- [ ] T-3.9 ビルド成果物の sanity check: `dist/index.d.ts` に `DadsButton` 等が exported されていることを目視確認
+
+### 想定トラブル時の対応
+
+| 症状                                               | 対処                                                                                |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `@use '../styles/base'` で `Can't find stylesheet` | `vite.config.ts` の `css.preprocessorOptions.scss.loadPaths` に `src/styles` を追加 |
+| `mdi-*` クラス参照で IDE が警告                    | 文字列リテラルなので実行時問題なし、無視可                                          |
+| テストが import パスで落ちる                       | `vite.config.ts` の resolve.alias を確認                                            |
+| Drawer の `DadsDrawerItem.vue` の export がない    | `packages/vue/src/components/Drawer/index.ts` を確認・修正                          |
+
+### Exit Criteria
+
+- [ ] 26 テスト全 pass
+- [ ] ビルド成功
+- [ ] 禁忌 import スキャン 0 件
+- [ ] `pnpm --filter @dads/vue build` の生成物に SCSS コンパイル済 CSS が含まれる
+
+---
+
+## Phase 4 — Lint / Format / Typecheck
+
+### タスク
+
+- [ ] T-4.1 ルート `eslint.config.js` 作成（design.md §5.1）
+- [ ] T-4.2 `eslint-config-prettier` / `eslint-plugin-vue` / `typescript-eslint` / `vue-eslint-parser` を root の devDependencies に追加（ルート単位で集約管理）
+- [ ] T-4.3 `pnpm lint` をルートから実行 → 出力されるエラー・警告を **0 件** にする
+  - 移行元の品質が高いので、ほとんどは設定ミスのはず
+  - 真に必要な箇所のみコード修正、それ以外は config 調整で対応
+- [ ] T-4.4 `pnpm format:check` をルートから実行 → 違反があれば `pnpm format` で一括修正
+- [ ] T-4.5 `pnpm typecheck` がルートから全 references を走査して成功
+- [ ] T-4.6 移行元との **挙動差分が出ていない** ことを再確認（テスト 26 件 green を再走）
+
+### Exit Criteria
+
+- [ ] `pnpm lint` 警告 / エラー 0 件
+- [ ] `pnpm format:check` 違反 0 件
+- [ ] `pnpm typecheck` エラー 0 件
+- [ ] Phase 3 で green だったテストが Phase 4 後も green
+
+---
+
+## Phase 5 — VitePress カタログ (`apps/docs`)
+
+### タスク
+
+- [ ] T-5.1 `apps/docs/package.json` 作成（design.md §3.4）
+- [ ] T-5.2 `apps/docs/.vitepress/config.ts` 作成
+- [ ] T-5.3 `apps/docs/.vitepress/theme/index.ts` 作成（`@dads/tokens/css` + `@dads/vue/styles` を読み込む）
+- [ ] T-5.4 `apps/docs/index.md` 作成（トップページ）
+- [ ] T-5.5 **Button** のデモページ `apps/docs/components/button.md` を作成
+  - `<DadsButton>` を `<script setup>` でインポート
+  - variant × size × color のマトリックスデモ
+  - props 一覧表
+- [ ] T-5.6 `pnpm --filter @dads/docs dev` で起動、ブラウザで Button が描画されることを目視確認
+- [ ] T-5.7 `pnpm --filter @dads/docs build` 成功
+- [ ] T-5.8 残り 25 コンポーネントのデモページは **空ファイル + TODO コメントだけ作る**（Phase 1 スコープ外、後続で埋める）
+- [ ] T-5.9 ルート `tsconfig.json` の `references` に `apps/docs` を追加
+
+### Exit Criteria
+
+- [ ] dev サーバ起動 + Button デモ表示 OK
+- [ ] static build 成功
+
+---
+
+## Phase 6 — a11y テスト (vitest-axe)
+
+### タスク
+
+- [ ] T-6.1 Phase 2 で導入済みの `vitest-axe` の動作確認（setup.ts が読み込まれているか）
+- [ ] T-6.2 **Button** の `__tests__/DadsButton.test.ts` に a11y describe ブロックを追加（design.md §6.2 のサンプル）
+- [ ] T-6.3 **TextField** に同様の a11y テストを追加
+- [ ] T-6.4 **Modal** に同様の a11y テストを追加（focus trap / role="dialog" 等の検証込み）
+- [ ] T-6.5 `pnpm --filter @dads/vue test` で a11y テストも含めて green
+- [ ] T-6.6 残り 23 コンポーネントの a11y テストは Phase 1 スコープ外として TODO 化（README に明記）
+
+### Exit Criteria
+
+- [ ] Button / TextField / Modal の a11y テストが pass
+- [ ] axe 違反 0 件
+
+---
+
+## Phase 7 — CI / Changesets
+
+### タスク（並列可）
+
+#### CI
+
+- [ ] T-7.1 `.github/workflows/ci.yml` 作成（design.md §7）
+- [ ] T-7.2 ローカルで CI 相当のコマンド列を完走させて時間計測:
+  ```bash
+  pnpm install --frozen-lockfile
+  pnpm typecheck && pnpm lint && \
+    pnpm --filter @dads/vue test && \
+    pnpm --filter @dads/vue build && \
+    pnpm --filter @dads/docs build
+  ```
+- [ ] T-7.3 5〜10 分以内に完了することを確認
+
+#### Changesets
+
+- [ ] T-7.4 `pnpm dlx @changesets/cli init`
+- [ ] T-7.5 `.changeset/config.json` を design.md §8.2 の通りに書き換え
+- [ ] T-7.6 動作確認: `pnpm changeset` を一度実行して対話確認（実際には何も記録せず Ctrl+C で抜ける）
+
+### Exit Criteria
+
+- [ ] `ci.yml` がローカルで全コマンド成功（push 前検証）
+- [ ] Changesets が `linked: @dads/*` / `ignore: @dads/docs` 設定済み
+
+---
+
+## Phase 8 — README / 受入確認
+
+### タスク
+
+- [ ] T-8.1 ルート `README.md` を新規作成（monorepo 概観、各パッケージの役割、`pnpm install && pnpm build && pnpm test`、利用手順）
+- [ ] T-8.2 `CLAUDE.md` を更新（新しい monorepo 構造を反映、`packages/` / `apps/` の用途を明記、既存の参照資産との関係も整理）
+- [ ] T-8.3 各 `packages/*/README.md` を最小内容で揃える
+- [ ] T-8.4 受入基準 AC-1 〜 AC-10（requirements.md §5）を **1 件ずつチェック** し、結果を本 tasklist 末尾に追記
+- [ ] T-8.5 `pnpm install --frozen-lockfile && pnpm build && pnpm test` をクリーンな state で 1 回走らせて 5 分以内完走を確認（NFR-6）
+
+### Exit Criteria — 全 AC 確認
+
+- [ ] AC-1 `pnpm-workspace.yaml` が存在し `packages/{tokens,tailwind-plugin,vue}` と `apps/docs` を含む
+- [ ] AC-2 `pnpm install` 成功
+- [ ] AC-3 `pnpm --filter @dads/vue build` で `dist/index.mjs` と `dist/index.d.ts` 生成
+- [ ] AC-4 `pnpm --filter @dads/vue test` で 26 テストファイル全 pass
+- [ ] AC-5 `pnpm typecheck` / `pnpm lint` エラーなし
+- [ ] AC-6 `pnpm --filter @dads/docs dev` で Button カタログが描画される
+- [ ] AC-7 禁忌 import 0 件
+- [ ] AC-8 `.changeset/config.json` 存在
+- [ ] AC-9 GitHub Actions CI が pass（push or PR）
+- [ ] AC-10 全パッケージ `private: true`
+
+---
+
+## Phase 終了後の TODO（本スペック外）
+
+- `apps/docs/components/` 配下の **残り 25 コンポーネント** デモページ整備
+- 残り 23 コンポーネントの vitest-axe a11y テスト追加
+- Playwright + axe による VitePress カタログのスモークテスト
+- `web-label-print` 側の `frontend/src/components/dads/` 削除と `@dads/vue` への置換
+- npm 公開判断 + `private: true` 解除 + 初回 publish
+
+---
+
+## 進捗トラッキング
+
+各 Phase 着手時に「Phase N 開始」と宣言、Exit Criteria すべて満たしたら「Phase N 完了」とユーザーへ報告 → 承認後に次 Phase へ。

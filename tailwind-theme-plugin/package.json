@@ -1,0 +1,58 @@
+{
+  "name": "@digital-go-jp/tailwind-theme-plugin",
+  "version": "0.3.4",
+  "main": "dist/index.cjs.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs.js",
+      "import": "./dist/index.es.js"
+    },
+    "./v4": "./dist/v4.css"
+  },
+  "author": "Digital Agency",
+  "homepage": "https://github.com/digital-go-jp/tailwind-theme-plugin#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digital-go-jp/tailwind-theme-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/digital-go-jp/tailwind-theme-plugin/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "generate": "tsx scripts/generate-theme.ts",
+    "generate:v4": "tsx scripts/generate-v4-theme.ts",
+    "build": "npm run generate && vite build && tsc && npm run generate:v4",
+    "format": "biome format --write scripts/*.ts",
+    "lint": "biome lint **/*.ts **/*.js"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@digital-go-jp/design-tokens": "^1.1.9",
+    "@tsconfig/node22": "^22.0.5",
+    "@types/node": "^25.5.2",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "vite": "^7.3.2"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.17 || ^4.0.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=22",
+      "onFail": "error"
+    }
+  }
+}

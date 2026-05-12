@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+.vitepress/cache
+.vitepress/dist
+pnpm-lock.yaml
+
+# Vendored upstream sources — managed by their own tooling
+design-tokens
+tailwind-theme-plugin
+
+# Reference content (read-only)
+dads-document-html
+dads-document-md
+design-system-example-components-html
