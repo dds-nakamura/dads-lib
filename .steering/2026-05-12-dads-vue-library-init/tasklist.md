@@ -301,27 +301,33 @@
 
 #### CI
 
-- [ ] T-7.1 `.github/workflows/ci.yml` 作成（design.md §7）
-- [ ] T-7.2 ローカルで CI 相当のコマンド列を完走させて時間計測:
-  ```bash
-  pnpm install --frozen-lockfile
-  pnpm typecheck && pnpm lint && \
-    pnpm --filter @dads/vue test && \
-    pnpm --filter @dads/vue build && \
-    pnpm --filter @dads/docs build
-  ```
-- [ ] T-7.3 5〜10 分以内に完了することを確認
+- [x] T-7.1 `.github/workflows/ci.yml` 作成（pnpm 11 + Node 24 / typecheck → lint → format:check → test → build × 3）
+- [x] T-7.2 ローカルで CI 相当のコマンド列を完走 (timing 計測):
+      | ステップ | 所要 |
+      | ----------------- | --------- |
+      | install (cached) | 1 s |
+      | typecheck | 12 s |
+      | lint | 13 s |
+      | format:check | 6 s |
+      | test (899 tests) | 34 s |
+      | tokens build | 1 s |
+      | vue build | 12 s |
+      | docs build | 9 s |
+      | **TOTAL** | **88 s** |
+- [x] T-7.3 5〜10 分以内に完了することを確認 → ローカル 88s / CI install (no cache) 込みでも 3〜4 分以内
 
 #### Changesets
 
-- [ ] T-7.4 `pnpm dlx @changesets/cli init`
-- [ ] T-7.5 `.changeset/config.json` を design.md §8.2 の通りに書き換え
-- [ ] T-7.6 動作確認: `pnpm changeset` を一度実行して対話確認（実際には何も記録せず Ctrl+C で抜ける）
+- [x] T-7.4 `pnpm add -wD @changesets/cli && pnpm exec changeset init`
+- [x] T-7.5 `.changeset/config.json` を design.md §8.2 のとおりに書き換え (`linked: [["@dads/*"]]`, `ignore: ["@dads/docs"]`, `access: "restricted"`)
+- [x] T-7.6 動作確認: `pnpm exec changeset status` で config が valid に parse されることを確認 (no pending changes)
+- [+] (追加) ルート `package.json` に `changeset` / `version-packages` / `release` の 3 script を追加
 
 ### Exit Criteria
 
-- [ ] `ci.yml` がローカルで全コマンド成功（push 前検証）
-- [ ] Changesets が `linked: @dads/*` / `ignore: @dads/docs` 設定済み
+- [x] `ci.yml` がローカルで全コマンド成功 (TOTAL 88s / push 前検証済み)
+- [x] Changesets が `linked: @dads/*` / `ignore: @dads/docs` 設定済み
+- [x] `pnpm exec changeset status` が exit=0
 
 ---
 

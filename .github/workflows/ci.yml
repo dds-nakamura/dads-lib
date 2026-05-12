@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: typecheck / lint / test / build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          # `packageManager` field in package.json (pnpm@11.x) drives the
+          # exact version. `version` here is a fallback / sanity floor.
+          version: 11
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm -w run typecheck
+
+      - name: Lint
+        run: pnpm -w run lint
+
+      - name: Format check
+        run: pnpm -w run format:check
+
+      - name: Test (@dads/vue) — Vitest + vitest-axe
+        run: pnpm --filter @dads/vue test
+
+      - name: Build (@dads/tokens)
+        run: pnpm --filter @dads/tokens build
+
+      - name: Build (@dads/vue)
+        run: pnpm --filter @dads/vue build
+
+      - name: Build (@dads/docs) — VitePress static
+        run: pnpm --filter @dads/docs build
