@@ -1,10 +1,14 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsButton from '../DadsButton.vue'
 import type { DadsButtonProps } from '../DadsButton.types'
 
 const createWrapper = (props: DadsButtonProps = {}, slots = { default: 'クリック' }) =>
   mount(DadsButton, { props, slots })
+
+const mountInBody = (props: DadsButtonProps = {}, slots = { default: 'クリック' }) =>
+  mount(DadsButton, { props, slots, attachTo: document.body })
 
 describe('DadsButton', () => {
   describe('rendering', () => {
@@ -178,6 +182,49 @@ describe('DadsButton', () => {
       const preventDefault = vi.spyOn(event, 'preventDefault')
       wrapper.element.dispatchEvent(event)
       expect(preventDefault).toHaveBeenCalled()
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // a11y — axe-core via vitest-axe. The component should pass automated
+  // WCAG 2.1 AA checks under representative prop combinations. Test scope:
+  //   - default (text-labelled button)
+  //   - icon-only variant requires aria-label (we verify both label sources)
+  //   - disabled / loading states must remain announceable
+  //   - anchor variant (role="button") must keep an accessible name
+  //
+  // attachTo: document.body は axe が要求する DOM ツリー接続のため必須。
+  // ----------------------------------------------------------------------
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a text label', async () => {
+      const wrapper = mountInBody({}, { default: '保存' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when icon-only with aria-label', async () => {
+      const wrapper = mountInBody(
+        { ariaLabel: '保存', prependIcon: 'mdi-content-save' },
+        { default: '' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = mountInBody({ disabled: true }, { default: '送信' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in loading state', async () => {
+      const wrapper = mountInBody({ loading: true }, { default: '読み込み中' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when rendered as an anchor', async () => {
+      const wrapper = mountInBody(
+        { href: 'https://example.com', variant: 'outline' },
+        { default: 'リンク' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

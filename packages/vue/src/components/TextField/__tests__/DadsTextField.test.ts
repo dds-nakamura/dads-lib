@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsTextField from '../DadsTextField.vue'
 import type { DadsTextFieldProps } from '../DadsTextField.types'
 
 const createWrapper = (props: DadsTextFieldProps = {}) => mount(DadsTextField, { props })
+
+const mountInBody = (props: DadsTextFieldProps = {}) =>
+  mount(DadsTextField, { props, attachTo: document.body })
 
 describe('DadsTextField', () => {
   describe('rendering', () => {
@@ -252,6 +256,56 @@ describe('DadsTextField', () => {
       expect(input.attributes('autocomplete')).toBe('off')
       expect(input.attributes('maxlength')).toBe('20')
       expect(input.attributes('inputmode')).toBe('numeric')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // a11y — axe-core via vitest-axe. Text input fields require a visible or
+  // aria-labelled name, and error states must be programmatically linked
+  // to the input (aria-describedby / aria-invalid). Each scenario below
+  // covers a state combination commonly used in DADS-compliant forms.
+  // ----------------------------------------------------------------------
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = mountInBody({ label: '氏名', modelValue: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint message', async () => {
+      const wrapper = mountInBody({
+        label: 'メールアドレス',
+        hint: 'example@example.com の形式で入力',
+        type: 'email',
+        modelValue: '',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = mountInBody({ label: '電話番号', required: true, modelValue: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = mountInBody({
+        label: '郵便番号',
+        errorMessage: '7 桁の数字で入力してください',
+        modelValue: '123',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = mountInBody({ label: '読取専用', disabled: true, modelValue: 'x' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when label is omitted but input has a name', async () => {
+      // For headless usage where a label sits outside the component, the
+      // input still needs an accessible name. We pass it via aria-label.
+      const wrapper = mountInBody({ name: 'q', modelValue: '' })
+      wrapper.find('input').element.setAttribute('aria-label', '検索')
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

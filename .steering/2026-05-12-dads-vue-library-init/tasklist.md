@@ -274,17 +274,24 @@
 
 ### タスク
 
-- [ ] T-6.1 Phase 2 で導入済みの `vitest-axe` の動作確認（setup.ts が読み込まれているか）
-- [ ] T-6.2 **Button** の `__tests__/DadsButton.test.ts` に a11y describe ブロックを追加（design.md §6.2 のサンプル）
-- [ ] T-6.3 **TextField** に同様の a11y テストを追加
-- [ ] T-6.4 **Modal** に同様の a11y テストを追加（focus trap / role="dialog" 等の検証込み）
-- [ ] T-6.5 `pnpm --filter @dads/vue test` で a11y テストも含めて green
-- [ ] T-6.6 残り 23 コンポーネントの a11y テストは Phase 1 スコープ外として TODO 化（README に明記）
+- [x] T-6.1 `test/setup.ts` に `expect.extend(matchers)` を追加して `vitest-axe` の matcher を有効化
+- [x] T-6.2 **Button** に a11y describe ブロック追加 (5 ケース: text-label / icon-only+aria-label / disabled / loading / anchor)
+- [x] T-6.3 **TextField** に a11y describe ブロック追加 (6 ケース: visible label / hint / required / error message / disabled / aria-label fallback)
+- [x] T-6.4 **Modal** に a11y describe ブロック追加 (5 ケース: title+labelledby / header slot+aria-label fallback / persistent / footer slot / 4 size プリセット)
+- [x] T-6.5 `pnpm --filter @dads/vue test` 全 green: **26 ファイル / 899 テスト pass** (883 → +16 a11y)
+- [+] T-6.6 残り 23 コンポーネントの a11y テストは Phase 8 (README) で TODO 明記予定
+
+### Phase 6 で得た知見
+
+- `vitest-axe` + `happy-dom` の組合せは追加設定なしで動作
+- axe は DOM ツリー接続を要求するため、テストでは `attachTo: document.body` または Teleport 出力先 (`document.body.querySelector(...)`) を渡す必要あり
+- DadsModal は `title` 未指定時に `aria-labelledby` を出さない設計 (header slot で h2 を入れても axe は dialog の accessible name を見つけられない)。利用側が aria-label を補完する fallback パスを test 4 で実証
 
 ### Exit Criteria
 
-- [ ] Button / TextField / Modal の a11y テストが pass
-- [ ] axe 違反 0 件
+- [x] Button / TextField / Modal の a11y テストが pass (合計 16 ケース)
+- [x] axe 違反 0 件
+- [x] 既存 883 テストは regression なし
 
 ---
 

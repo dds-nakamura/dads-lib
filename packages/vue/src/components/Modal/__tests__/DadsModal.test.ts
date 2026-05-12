@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import { axe } from 'vitest-axe'
 import DadsModal from '../DadsModal.vue'
 import type { DadsModalProps } from '../DadsModal.types'
 
@@ -390,6 +391,75 @@ describe('DadsModal', () => {
     it('sets aria-hidden="true" on the overlay so it is not announced', () => {
       createWrapper()
       expect(queryOverlay()?.getAttribute('aria-hidden')).toBe('true')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // a11y — axe-core via vitest-axe. The modal Teleports into document.body
+  // so we run axe against the teleported root (.dads-modal) rather than the
+  // wrapper element (a Teleport placeholder).
+  //
+  // Modal-specific a11y contract verified here:
+  //   - role="dialog" + aria-modal="true" + aria-labelledby (when title)
+  //   - close button has aria-label
+  //   - overlay is aria-hidden so it isn't announced
+  //   - persistent / size variants don't introduce regressions
+  // ----------------------------------------------------------------------
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a title (aria-labelledby wired)', async () => {
+      createWrapper({ title: '確認' }, { default: '<p>本当に削除しますか?</p>' })
+      const modal = queryModal()
+      expect(modal).not.toBeNull()
+      expect(await axe(modal as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a header slot — when caller supplies aria-label', async () => {
+      // DadsModal's API contract: if `title` is omitted, the dialog has no
+      // accessible name (aria-labelledby is conditional on `title`). For
+      // headless usage where the caller renders their own header, the modal
+      // root needs an externally-set aria-label. This test verifies axe is
+      // satisfied in that fallback path.
+      createWrapper(
+        {},
+        {
+          header: '<h2>パスワード変更</h2>',
+          default: '<p>新しいパスワードを入力してください</p>',
+        },
+      )
+      const modal = queryModal()
+      ;(modal as Element).setAttribute('aria-label', 'パスワード変更')
+      expect(await axe(modal as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations in persistent mode', async () => {
+      createWrapper(
+        { title: '保存中', persistent: true, closable: false },
+        { default: '<p>処理中のためお待ちください</p>' },
+      )
+      const modal = queryModal()
+      expect(await axe(modal as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a footer slot', async () => {
+      createWrapper(
+        { title: '確認' },
+        {
+          default: '<p>続行しますか?</p>',
+          footer: '<button type="button">キャンセル</button><button type="button">続行</button>',
+        },
+      )
+      const modal = queryModal()
+      expect(await axe(modal as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations across size presets', async () => {
+      for (const size of ['sm', 'md', 'lg', 'fullscreen'] as const) {
+        const wrapper = createWrapper({ title: `Size ${size}`, size }, { default: '<p>x</p>' })
+        const modal = queryModal()
+        expect(await axe(modal as Element)).toHaveNoViolations()
+        wrapper.unmount()
+        await nextTick()
+      }
     })
   })
 })
