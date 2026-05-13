@@ -15,6 +15,8 @@ const components = {
     { text: 'FileUpload', link: '/components/file-upload' },
     { text: 'Combobox', link: '/components/combobox' },
     { text: 'ColorPicker', link: '/components/color-picker' },
+    { text: 'DatePicker', link: '/components/date-picker' },
+    { text: 'SearchBox', link: '/components/search-box' },
   ],
   Navigation: [
     { text: 'Header', link: '/components/header' },
@@ -22,6 +24,7 @@ const components = {
     { text: 'Breadcrumb', link: '/components/breadcrumb' },
     { text: 'StepNavigation', link: '/components/step-navigation' },
     { text: 'Tab', link: '/components/tab' },
+    { text: 'LanguageSelector', link: '/components/language-selector' },
   ],
   Feedback: [
     { text: 'NotificationBanner', link: '/components/notification-banner' },
@@ -36,6 +39,8 @@ const components = {
     { text: 'Table', link: '/components/table' },
     { text: 'Accordion', link: '/components/accordion' },
     { text: 'Chip', link: '/components/chip' },
+    { text: 'Disclosure', link: '/components/disclosure' },
+    { text: 'DescriptionList', link: '/components/description-list' },
   ],
 }
 
