@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-14-dads-vue-docs-rollout`
 - Depends on: `./requirements.md`, `./design.md`
-- Status: Draft（承認待ち）
+- Status: **Done** (2026-05-14 完了)
 - Last Updated: 2026-05-14
 
 ---
@@ -31,10 +31,10 @@
 
 ## 前提条件チェック (wave 1 着手前)
 
-- [ ] `git status` がクリーン (uncommitted changes なし)
-- [ ] `pnpm --filter @dads/docs build` が現状で成功する (Phase 8 完了状態の維持)
-- [ ] `apps/docs/components/button.md` が無変更で存在する (sub-agent のテンプレ参照源)
-- [ ] 25 個の TODO スタブが `apps/docs/components/` 配下にすべて存在する
+- [x] `git status` がクリーン (uncommitted changes なし)
+- [x] `pnpm --filter @dads/docs build` が現状で成功する (Phase 8 完了状態の維持)
+- [x] `apps/docs/components/button.md` が無変更で存在する (sub-agent のテンプレ参照源)
+- [x] 25 個の TODO スタブが `apps/docs/components/` 配下にすべて存在する
   - 検証: `grep -l 'TODO' apps/docs/components/*.md | wc -l` → 25
 
 ---
@@ -68,11 +68,11 @@ git diff --stat apps/docs/components/  # 5 files modified, no other
 
 ### Exit Criteria
 
-- [ ] 5 ファイルすべて TODO 脱却
-- [ ] `pnpm --filter @dads/docs build` 成功
-- [ ] 5 ファイル分の dist/components/\*.html に `class="dads-"` 出力あり
-- [ ] `git diff` で `apps/docs/components/` 以外の変更なし
-- [ ] user 承認後コミット: `docs(apps/docs): add Form-A component demos (Wave 1)`
+- [x] 5 ファイルすべて TODO 脱却
+- [x] `pnpm --filter @dads/docs build` 成功
+- [x] 5 ファイル分の dist/components/\*.html に `class="dads-"` 出力あり
+- [x] `git diff` で `apps/docs/components/` 以外の変更なし
+- [x] user 承認後コミット: `docs(apps/docs): add Form-A component demos (Wave 1)` (8ef2dee)
 
 ---
 
@@ -99,8 +99,8 @@ done
 
 ### Exit Criteria
 
-- [ ] 同 Wave 1 形式
-- [ ] commit: `docs(apps/docs): add Form-B component demos (Wave 2)`
+- [x] 同 Wave 1 形式
+- [x] commit: `docs(apps/docs): add Form-B component demos (Wave 2)` (634960b)
 
 ---
 
@@ -127,9 +127,9 @@ done
 
 ### Exit Criteria
 
-- [ ] 同 Wave 1 形式
-- [ ] Drawer は portal/teleport を含むため、`ref(false)` トリガ実装を確認
-- [ ] commit: `docs(apps/docs): add Navigation component demos (Wave 3)`
+- [x] 同 Wave 1 形式
+- [x] Drawer は portal/teleport を含むため、`ref(false)` トリガ実装を確認
+- [x] commit: `docs(apps/docs): add Navigation component demos (Wave 3)` (8e4da33)
 
 ---
 
@@ -155,9 +155,9 @@ done
 
 ### Exit Criteria
 
-- [ ] 同 Wave 1 形式
-- [ ] Modal / Tooltip は v-model / ref(false) トリガパターンを確認
-- [ ] commit: `docs(apps/docs): add Feedback component demos (Wave 4)`
+- [x] 同 Wave 1 形式
+- [x] Modal / Tooltip は v-model / ref(false) トリガパターンを確認
+- [x] commit: `docs(apps/docs): add Feedback component demos (Wave 4)` (6db66b3)
 
 ---
 
@@ -187,8 +187,8 @@ done
 
 ### Exit Criteria
 
-- [ ] 同 Wave 1 形式
-- [ ] commit: `docs(apps/docs): add Display component demos (Wave 5)`
+- [x] 同 Wave 1 形式
+- [x] commit: `docs(apps/docs): add Display component demos (Wave 5)` (01418e6)
 
 ---
 
@@ -216,20 +216,20 @@ pnpm --filter @dads/docs build               # 27 HTML pages
 
 ### スペック完了条件 (AC-1 〜 AC-8)
 
-- [ ] **AC-1** 26 ファイル全 TODO 脱却 (button.md + 25 新規)
-- [ ] **AC-2** 全 26 ファイルに `<script setup>` で Dads<Name> import
-- [ ] **AC-3** 全 26 ファイルに Props テーブル
-- [ ] **AC-4** `pnpm format:check` 0 件
-- [ ] **AC-5** docs build で 27 HTML 生成
-- [ ] **AC-6** Vue compile error / warning 0 件
-- [ ] **AC-7** Phase 8 状態の typecheck / lint / test 維持 (regression なし)
-- [ ] **AC-8** 5 wave コミットが git log に記録
+- [x] **AC-1** 26 ファイル全 TODO 脱却 (button.md + 25 新規)
+- [x] **AC-2** 全 26 ファイルに `<script setup>` で Dads<Name> import
+- [x] **AC-3** 全 26 ファイルに Props テーブル
+- [x] **AC-4** `pnpm format:check` 0 件
+- [x] **AC-5** docs build で 27 HTML 生成 (index + 26 components)
+- [x] **AC-6** Vue compile error / warning 0 件
+- [x] **AC-7** Phase 8 状態の typecheck / lint / test (899) 維持 (regression なし)
+- [x] **AC-8** 5 wave コミットが git log に記録 (8ef2dee / 634960b / 8e4da33 / 6db66b3 / 01418e6)
 
 ### 任意追加タスク (本スペック内 or 別タスク)
 
-- [ ] ルート `README.md` の Status 行を「全 26 コンポーネントカタログ完成」に更新
+- [x] ルート `README.md` の Status 行を「全 26 コンポーネントカタログ完成」に更新
 - [ ] `packages/vue/README.md` の TODO 行 (残り 23 a11y) はそのまま (a11y は別スペック対象)
-- [ ] `apps/docs/README.md` の「Button のみフルデモ」記載を更新
+- [x] `apps/docs/README.md` の「Button のみフルデモ」記載を更新
 
 ---
 

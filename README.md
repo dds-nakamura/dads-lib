@@ -4,7 +4,7 @@
 
 DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tailwind-theme-plugin）と、それを Vue 3 SFC として実装した `@dads/vue` パッケージを 1 つのリポジトリで管理する。
 
-> Status: **Phase 8 完了 (初期構築完成)** — 26 コンポーネント移植済み / 899 テスト pass / VitePress カタログ稼働
+> Status: **全 26 コンポーネントカタログ完成** — Phase 8 (初期構築) + docs-rollout 完了 / 899 テスト pass / VitePress カタログに 26 件すべてのフルデモ掲載
 
 公式: <https://design.digital.go.jp/dads/>
 

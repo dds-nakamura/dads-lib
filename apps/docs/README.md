@@ -2,7 +2,7 @@
 
 `@dads/vue` の VitePress カタログ。26 コンポーネントの API リファレンスとライブデモ。
 
-> Status: Button のみフルデモ。残り 25 コンポーネントは TODO スタブ。
+> Status: 全 26 コンポーネントのフルデモ完成 (Form / Navigation / Feedback / Display)。
 
 ## 起動
 
@@ -26,9 +26,9 @@ apps/docs/
 │   └── theme/
 │       ├── index.ts              @dads/tokens/css + @dads/vue/styles を global load
 │       └── custom.css            デモ用ユーティリティ (.demo / .demo-row / .demo-label)
-├── components/
-│   ├── button.md                 ★ フルデモ (variant × size × color × state)
-│   └── (他 25 ファイル)          TODO スタブ
+├── components/                   全 26 ファイル フルデモ
+│   ├── button.md                 例: variant × size × color × state
+│   └── ...
 ├── index.md                      ホーム (hero + features)
 └── package.json
 ```

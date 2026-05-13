@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-14-dads-vue-docs-rollout`
 - Owner: nakamura_kouji
-- Status: **Draft（着手前）**
+- Status: **Done** (2026-05-14 完了)
 - Last Updated: 2026-05-14
 - Depends on: `.steering/2026-05-12-dads-vue-library-init/` (Phase 0〜8 完了済)
 

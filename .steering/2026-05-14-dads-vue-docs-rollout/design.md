@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-14-dads-vue-docs-rollout`
 - Depends on: `./requirements.md`
-- Status: Draft（承認待ち）
+- Status: **Done** (2026-05-14 完了)
 - Last Updated: 2026-05-14
 
 ---
