@@ -3,6 +3,8 @@ dist
 coverage
 .vitepress/cache
 .vitepress/dist
+**/.vitepress/cache/**
+**/.vitepress/dist/**
 pnpm-lock.yaml
 
 # Vendored upstream sources — managed by their own tooling
