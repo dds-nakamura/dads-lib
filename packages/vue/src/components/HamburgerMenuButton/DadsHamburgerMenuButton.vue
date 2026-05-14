@@ -1,0 +1,173 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type {
+  DadsHamburgerMenuButtonEmits,
+  DadsHamburgerMenuButtonProps,
+} from './DadsHamburgerMenuButton.types'
+
+const props = withDefaults(defineProps<DadsHamburgerMenuButtonProps>(), {
+  modelValue: false,
+  disabled: false,
+  openLabel: 'メニュー',
+  closeLabel: '閉じる',
+  size: 'md',
+})
+
+const emit = defineEmits<DadsHamburgerMenuButtonEmits>()
+
+const isOpen = computed(() => Boolean(props.modelValue))
+
+const rootClasses = computed(() => [
+  'dads-hamburger-menu-button',
+  `dads-hamburger-menu-button--${props.size}`,
+  {
+    'dads-hamburger-menu-button--open': isOpen.value,
+  },
+])
+
+const label = computed(() => (isOpen.value ? props.closeLabel : props.openLabel))
+
+const onClick = (event: MouseEvent) => {
+  if (props.disabled) {
+    event.preventDefault()
+    return
+  }
+  emit('update:modelValue', !isOpen.value)
+  emit('click', event)
+}
+</script>
+
+<template>
+  <button
+    type="button"
+    :class="rootClasses"
+    :aria-expanded="isOpen"
+    :aria-controls="ariaControls"
+    :disabled="disabled || undefined"
+    @click="onClick"
+  >
+    <!-- メニュー閉（通常）→ 3 本線（ハンバーガー） -->
+    <svg
+      v-if="!isOpen"
+      class="dads-hamburger-menu-button__icon"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path d="M3 18V16H21V18H3ZM3 13V11H21V13H3ZM3 8V6H21V8H3Z" fill="currentcolor" />
+    </svg>
+    <!-- メニュー開 → ×（クローズ） -->
+    <svg
+      v-else
+      class="dads-hamburger-menu-button__icon"
+      width="24"
+      height="24"
+      viewBox="0 0 120 120"
+      aria-hidden="true"
+    >
+      <path
+        d="M32 95L25 88L53 60L25 32L32 25L60 53L88 25L95 32L67 60L95 88L88 95L60 67L32 95Z"
+        fill="currentcolor"
+      />
+    </svg>
+    <span class="dads-hamburger-menu-button__label">{{ label }}</span>
+  </button>
+</template>
+
+<style scoped lang="scss">
+@use '../../styles/base' as base;
+@use '../../styles/focus-ring' as ring;
+
+.dads-hamburger-menu-button {
+  @include base.dads-reset-button;
+  @include ring.dads-focus-ring;
+
+  display: inline-flex;
+  align-items: center;
+  column-gap: var(--spacing-4, 0.25rem);
+  width: fit-content;
+  border: 0;
+  border-radius: var(--border-radius-6, 0.375rem);
+  background: transparent;
+  color: var(--color-neutral-solid-gray-800, #333);
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  touch-action: manipulation;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  // -------------------- size ----------------------------------------------
+  &--lg {
+    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem)
+      calc(var(--spacing-8, 0.5rem) + 0.125rem);
+    font-size: var(--font-size-18, 1.125rem);
+  }
+
+  &--md {
+    padding: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem)
+      calc(var(--spacing-4, 0.25rem) + 0.125rem);
+    font-size: var(--font-size-16, 1rem);
+  }
+
+  &--sm {
+    column-gap: var(--spacing-4, 0.25rem);
+    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    font-size: var(--font-size-14, 0.875rem);
+  }
+
+  // -------------------- icon ----------------------------------------------
+  &__icon {
+    margin-top: 0.125rem; // 2/16rem — vertical optical alignment with text
+    width: 1.5rem; // 24/16rem
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: var(--color-neutral-black, #000);
+  }
+
+  &--sm &__icon {
+    width: 1.25rem; // 20/16rem
+    height: 1.25rem;
+  }
+
+  &--lg &__icon {
+    width: 1.75rem; // 28/16rem
+    height: 1.75rem;
+  }
+
+  // -------------------- label ---------------------------------------------
+  &__label {
+    display: inline-block;
+  }
+
+  // -------------------- hover ---------------------------------------------
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      text-decoration: underline;
+      text-underline-offset: 0.1875rem; // 3/16rem
+    }
+  }
+
+  // -------------------- disabled ------------------------------------------
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  // -------------------- forced colors -------------------------------------
+  @include base.dads-forced-colors {
+    border: 1px solid CanvasText;
+    color: CanvasText;
+
+    .dads-hamburger-menu-button__icon {
+      color: currentcolor;
+    }
+  }
+}
+</style>

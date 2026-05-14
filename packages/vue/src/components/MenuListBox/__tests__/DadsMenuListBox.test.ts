@@ -1,0 +1,238 @@
+import { afterEach, describe, expect, it } from 'vitest'
+import { enableAutoUnmount, mount } from '@vue/test-utils'
+import DadsMenuListBox from '../DadsMenuListBox.vue'
+import type { DadsMenuListBoxItem, DadsMenuListBoxProps } from '../DadsMenuListBox.types'
+
+enableAutoUnmount(afterEach)
+
+const sampleItems: DadsMenuListBoxItem[] = [
+  { label: 'メニュー項目1' },
+  { label: 'メニュー項目2' },
+  { label: 'メニュー項目3' },
+]
+
+const createWrapper = (props: Partial<DadsMenuListBoxProps> = {}) =>
+  mount(DadsMenuListBox, {
+    props: {
+      items: sampleItems,
+      ...props,
+    } as DadsMenuListBoxProps,
+  })
+
+describe('DadsMenuListBox', () => {
+  describe('rendering', () => {
+    it('renders the dads-menu-list-box root container', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-menu-list-box')
+    })
+
+    it('renders a <ul role="menu"> as the list container', () => {
+      const wrapper = createWrapper()
+      const list = wrapper.find('ul.dads-menu-list-box__list')
+      expect(list.exists()).toBe(true)
+      expect(list.attributes('role')).toBe('menu')
+    })
+
+    it('renders one <li role="presentation"> per item', () => {
+      const wrapper = createWrapper()
+      const lis = wrapper.findAll('li.dads-menu-list-box__list-item')
+      expect(lis).toHaveLength(sampleItems.length)
+      for (const li of lis) {
+        expect(li.attributes('role')).toBe('presentation')
+      }
+    })
+
+    it('renders one menuitem element per item with the correct label text', () => {
+      const wrapper = createWrapper()
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      expect(items).toHaveLength(sampleItems.length)
+      expect(items[0]?.text()).toContain('メニュー項目1')
+      expect(items[1]?.text()).toContain('メニュー項目2')
+      expect(items[2]?.text()).toContain('メニュー項目3')
+    })
+
+    it('renders <button type="button"> when no href is provided', () => {
+      const wrapper = createWrapper()
+      const buttons = wrapper.findAll('button.dads-menu-list-box__item')
+      expect(buttons).toHaveLength(sampleItems.length)
+      for (const btn of buttons) {
+        expect(btn.attributes('type')).toBe('button')
+        expect(btn.attributes('role')).toBe('menuitem')
+      }
+    })
+
+    it('handles an empty items array gracefully', () => {
+      const wrapper = createWrapper({ items: [] })
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      expect(items).toHaveLength(0)
+      expect(wrapper.find('ul.dads-menu-list-box__list').exists()).toBe(true)
+    })
+  })
+
+  describe('description', () => {
+    it('renders the description element when item.description is set', () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'プロフィール', description: 'アカウント情報の編集' }],
+      })
+      const desc = wrapper.find('.dads-menu-list-box__item-description')
+      expect(desc.exists()).toBe(true)
+      expect(desc.text()).toBe('アカウント情報の編集')
+    })
+
+    it('omits the description element when item.description is absent', () => {
+      const wrapper = createWrapper({ items: [{ label: 'プロフィール' }] })
+      expect(wrapper.find('.dads-menu-list-box__item-description').exists()).toBe(false)
+    })
+
+    it('always renders the label element regardless of description presence', () => {
+      const wrapper = createWrapper()
+      const labels = wrapper.findAll('.dads-menu-list-box__item-label')
+      expect(labels).toHaveLength(sampleItems.length)
+    })
+  })
+
+  describe('icon', () => {
+    it('renders an icon element when item.iconName is set', () => {
+      const wrapper = createWrapper({ items: [{ label: 'ホーム', iconName: 'mdi-home' }] })
+      const icon = wrapper.find('.dads-menu-list-box__item-icon')
+      expect(icon.exists()).toBe(true)
+      expect(icon.classes()).toContain('mdi-home')
+      expect(icon.attributes('aria-hidden')).toBe('true')
+    })
+
+    it('omits the icon element when item.iconName is absent', () => {
+      const wrapper = createWrapper({ items: [{ label: 'ホーム' }] })
+      expect(wrapper.find('.dads-menu-list-box__item-icon').exists()).toBe(false)
+    })
+  })
+
+  describe('active state', () => {
+    it('applies the --active modifier on active items', () => {
+      const wrapper = createWrapper({
+        items: [{ label: '一覧' }, { label: '詳細', active: true }, { label: '設定' }],
+      })
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      expect(items[0]?.classes()).not.toContain('dads-menu-list-box__item--active')
+      expect(items[1]?.classes()).toContain('dads-menu-list-box__item--active')
+      expect(items[2]?.classes()).not.toContain('dads-menu-list-box__item--active')
+    })
+
+    it('sets aria-current="page" on active items', () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'A' }, { label: 'B', active: true }],
+      })
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      expect(items[0]?.attributes('aria-current')).toBeUndefined()
+      expect(items[1]?.attributes('aria-current')).toBe('page')
+    })
+  })
+
+  describe('disabled state', () => {
+    it('applies the --disabled modifier on disabled items', () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'A' }, { label: 'B', disabled: true }],
+      })
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      expect(items[1]?.classes()).toContain('dads-menu-list-box__item--disabled')
+    })
+
+    it('sets the disabled attribute on the native button for disabled items', () => {
+      const wrapper = createWrapper({ items: [{ label: 'B', disabled: true }] })
+      const btn = wrapper.find('button.dads-menu-list-box__item')
+      expect(btn.attributes('disabled')).toBeDefined()
+      expect(btn.attributes('aria-disabled')).toBe('true')
+    })
+
+    it('renders disabled href items as <span>-like buttons (not anchors)', () => {
+      // Disabled + href: we deliberately render as <button> so the link cannot be
+      // followed by mouse / keyboard.
+      const wrapper = createWrapper({
+        items: [{ label: 'B', href: '/b', disabled: true }],
+      })
+      expect(wrapper.find('a.dads-menu-list-box__item').exists()).toBe(false)
+      expect(wrapper.find('button.dads-menu-list-box__item').exists()).toBe(true)
+    })
+
+    it('does not emit click:item when a disabled item is clicked', async () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'A' }, { label: 'B', disabled: true }],
+      })
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      await items[1]?.trigger('click')
+      expect(wrapper.emitted('click:item')).toBeFalsy()
+    })
+  })
+
+  describe('href / anchor rendering', () => {
+    it('renders an <a> element for items with href', () => {
+      const wrapper = createWrapper({
+        items: [{ label: '外部', href: 'https://example.com' }],
+      })
+      const link = wrapper.find('a.dads-menu-list-box__item')
+      expect(link.exists()).toBe(true)
+      expect(link.attributes('href')).toBe('https://example.com')
+      expect(link.attributes('role')).toBe('menuitem')
+    })
+
+    it('does not set the type attribute on anchor items', () => {
+      const wrapper = createWrapper({
+        items: [{ label: '外部', href: 'https://example.com' }],
+      })
+      const link = wrapper.find('a.dads-menu-list-box__item')
+      expect(link.attributes('type')).toBeUndefined()
+    })
+
+    it('mixes <a> and <button> when items have heterogeneous href', () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'リンク', href: '/x' }, { label: 'ボタン' }],
+      })
+      expect(wrapper.findAll('a.dads-menu-list-box__item')).toHaveLength(1)
+      expect(wrapper.findAll('button.dads-menu-list-box__item')).toHaveLength(1)
+    })
+  })
+
+  describe('aria semantics', () => {
+    it('applies the aria-label prop to the <ul role="menu">', () => {
+      const wrapper = createWrapper({ ariaLabel: 'グローバルメニュー' })
+      const list = wrapper.find('ul.dads-menu-list-box__list')
+      expect(list.attributes('aria-label')).toBe('グローバルメニュー')
+    })
+
+    it('omits aria-label on the list when not provided', () => {
+      const wrapper = createWrapper()
+      const list = wrapper.find('ul.dads-menu-list-box__list')
+      expect(list.attributes('aria-label')).toBeUndefined()
+    })
+
+    it('uses role="menu" on the list and role="menuitem" on actionable items', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('ul.dads-menu-list-box__list').attributes('role')).toBe('menu')
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      for (const item of items) {
+        expect(item.attributes('role')).toBe('menuitem')
+      }
+    })
+  })
+
+  describe('click interactions', () => {
+    it('emits click:item with the item, index, and MouseEvent when a button item is clicked', async () => {
+      const wrapper = createWrapper()
+      const items = wrapper.findAll('.dads-menu-list-box__item')
+      await items[1]?.trigger('click')
+      const emitted = wrapper.emitted('click:item')
+      expect(emitted).toBeTruthy()
+      expect(emitted?.[0]?.[0]).toEqual(sampleItems[1])
+      expect(emitted?.[0]?.[1]).toBe(1)
+      expect(emitted?.[0]?.[2]).toBeInstanceOf(Event)
+    })
+
+    it('emits click:item when an anchor item is clicked', async () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'L', href: '/x' }],
+      })
+      const link = wrapper.find('a.dads-menu-list-box__item')
+      await link.trigger('click')
+      expect(wrapper.emitted('click:item')).toBeTruthy()
+    })
+  })
+})

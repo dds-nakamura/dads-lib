@@ -25,6 +25,11 @@ const components = {
     { text: 'StepNavigation', link: '/components/step-navigation' },
     { text: 'Tab', link: '/components/tab' },
     { text: 'LanguageSelector', link: '/components/language-selector' },
+    { text: 'MenuList', link: '/components/menu-list' },
+    { text: 'MenuListBox', link: '/components/menu-list-box' },
+    { text: 'HamburgerMenuButton', link: '/components/hamburger-menu-button' },
+    { text: 'UtilityLink', link: '/components/utility-link' },
+    { text: 'ScrollTopButton', link: '/components/scroll-top-button' },
   ],
   Feedback: [
     { text: 'NotificationBanner', link: '/components/notification-banner' },
