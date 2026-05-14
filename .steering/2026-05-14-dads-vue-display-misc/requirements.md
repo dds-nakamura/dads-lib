@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-14-dads-vue-display-misc`
 - Owner: nakamura_kouji
-- Status: **Draft（着手前）**
+- Status: **Done（2026-05-14 完了）**
 - Last Updated: 2026-05-14
 - Depends on: `2026-05-14-dads-vue-navigation-menus` (Spec 2 完了後着手推奨)
 - Sibling specs: Spec 1 (Form-Inputs), Spec 2 (Navigation-Menus)

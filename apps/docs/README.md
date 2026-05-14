@@ -1,8 +1,8 @@
 # @dads/docs
 
-`@dads/vue` の VitePress カタログ。26 コンポーネントの API リファレンスとライブデモ。
+`@dads/vue` の VitePress カタログ。49 コンポーネントの API リファレンスとライブデモ。
 
-> Status: 全 26 コンポーネントのフルデモ完成 (Form / Navigation / Feedback / Display)。
+> Status: **DADS 公式 46 件完全カバー + 独自 4 件 = 計 49 コンポーネント** のフルデモ完成 (Form / Navigation / Feedback / Display)。
 
 ## 起動
 
@@ -26,7 +26,7 @@ apps/docs/
 │   └── theme/
 │       ├── index.ts              @dads/tokens/css + @dads/vue/styles を global load
 │       └── custom.css            デモ用ユーティリティ (.demo / .demo-row / .demo-label)
-├── components/                   全 26 ファイル フルデモ
+├── components/                   全 49 ファイル フルデモ
 │   ├── button.md                 例: variant × size × color × state
 │   └── ...
 ├── index.md                      ホーム (hero + features)

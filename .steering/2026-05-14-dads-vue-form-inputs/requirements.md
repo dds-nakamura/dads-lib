@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-14-dads-vue-form-inputs`
 - Owner: nakamura_kouji
-- Status: **Draft（着手前）**
+- Status: **Done（2026-05-14 完了）**
 - Last Updated: 2026-05-14
 - Depends on: `2026-05-12-dads-vue-library-init` (Phase 0〜8 完了済), `2026-05-14-dads-vue-docs-rollout` (全 26 デモ完成)
 - Sibling specs: `2026-05-14-dads-vue-navigation-menus` (Spec 2), `2026-05-14-dads-vue-display-misc` (Spec 3)

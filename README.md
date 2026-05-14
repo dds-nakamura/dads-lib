@@ -4,7 +4,7 @@
 
 DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tailwind-theme-plugin）と、それを Vue 3 SFC として実装した `@dads/vue` パッケージを 1 つのリポジトリで管理する。
 
-> Status: **全 26 コンポーネントカタログ完成** — Phase 8 (初期構築) + docs-rollout 完了 / 899 テスト pass / VitePress カタログに 26 件すべてのフルデモ掲載
+> Status: **DADS 公式 46 件完全カバー + 独自 4 件 = 計 49 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) 完了 / **1542 テスト pass** / VitePress カタログに 49 件すべてのフルデモ掲載
 
 公式: <https://design.digital.go.jp/dads/>
 
@@ -12,12 +12,12 @@ DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tai
 
 ## パッケージ一覧
 
-| パッケージ                                            | 役割                                       | 公開    |
-| ----------------------------------------------------- | ------------------------------------------ | ------- |
-| [`@dads/vue`](./packages/vue)                         | 26 個の Vue 3 コンポーネント実装           | private |
-| [`@dads/tokens`](./packages/tokens)                   | `@digital-go-jp/design-tokens` の再 export | private |
-| [`@dads/tailwind-plugin`](./packages/tailwind-plugin) | Tailwind v3 用プラグインラッパ             | private |
-| [`@dads/docs`](./apps/docs)                           | VitePress カタログ (デモ + API doc)        | private |
+| パッケージ                                            | 役割                                                | 公開    |
+| ----------------------------------------------------- | --------------------------------------------------- | ------- |
+| [`@dads/vue`](./packages/vue)                         | 49 個の Vue 3 コンポーネント実装 (公式 46 + 独自 4) | private |
+| [`@dads/tokens`](./packages/tokens)                   | `@digital-go-jp/design-tokens` の再 export          | private |
+| [`@dads/tailwind-plugin`](./packages/tailwind-plugin) | Tailwind v3 用プラグインラッパ                      | private |
+| [`@dads/docs`](./apps/docs)                           | VitePress カタログ (デモ + API doc)                 | private |
 
 `private: true` でロックされており、npm 公開は無効化されている。初期リリースは workspace 内利用と `file:` / GitHub Packages 経由を想定。
 
@@ -38,15 +38,15 @@ pnpm install
 
 ### 一括スクリプト (ルートから)
 
-| コマンド            | 内容                                                    |
-| ------------------- | ------------------------------------------------------- |
-| `pnpm build`        | `pnpm -r run build` — 全パッケージビルド                |
-| `pnpm test`         | `@dads/vue` の Vitest を実行 (26 ファイル / 899 テスト) |
-| `pnpm typecheck`    | 全パッケージで `tsc --noEmit` / `vue-tsc --noEmit`      |
-| `pnpm lint`         | `eslint .` (ESLint 9 flat config / L3 strictness)       |
-| `pnpm format`       | `prettier --write .`                                    |
-| `pnpm format:check` | `prettier --check .`                                    |
-| `pnpm changeset`    | リリース用の changeset を対話的に追加                   |
+| コマンド            | 内容                                                     |
+| ------------------- | -------------------------------------------------------- |
+| `pnpm build`        | `pnpm -r run build` — 全パッケージビルド                 |
+| `pnpm test`         | `@dads/vue` の Vitest を実行 (49 ファイル / 1542 テスト) |
+| `pnpm typecheck`    | 全パッケージで `tsc --noEmit` / `vue-tsc --noEmit`       |
+| `pnpm lint`         | `eslint .` (ESLint 9 flat config / L3 strictness)        |
+| `pnpm format`       | `prettier --write .`                                     |
+| `pnpm format:check` | `prettier --check .`                                     |
+| `pnpm changeset`    | リリース用の changeset を対話的に追加                    |
 
 ### ワークスペース個別実行
 
@@ -65,7 +65,7 @@ pnpm --filter @dads/docs build        # VitePress static build
 // main.ts
 import { createApp } from 'vue'
 import '@dads/tokens/css' // CSS 変数を :root に注入
-import '@dads/vue/styles' // 26 コンポーネントの CSS
+import '@dads/vue/styles' // 49 コンポーネントの CSS
 import App from './App.vue'
 
 createApp(App).mount('#app')
@@ -138,7 +138,7 @@ dads-lib/
 
 - `typecheck` (4 packages)
 - `lint` / `format:check`
-- `test` (`@dads/vue` / 899 tests)
+- `test` (`@dads/vue` / 1542 tests)
 - `build` (`@dads/tokens` → `@dads/vue` → `@dads/docs`)
 
 ローカル CI 相当のフル実行: ~88 秒 (M2 Mac)。
