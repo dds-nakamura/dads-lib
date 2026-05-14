@@ -1,0 +1,46 @@
+/**
+ * Type definitions for DadsImageSlider.
+ *
+ * 公式 DADS の image-slider は Carousel の「コンテナタイプ - マルチ - 幅狭サイズ」
+ * を再構成したコンポーネント。複数の画像を切り替えて閲覧できる。
+ *
+ * 参考: dads-document-md/dads/components/image-slider/index.md
+ */
+
+/** スライド 1 枚分の定義。 */
+export interface DadsImageSliderSlide {
+  /** 表示する画像の URL。 */
+  src: string
+  /** スクリーンリーダ向け代替テキスト。必須。 */
+  alt: string
+  /** スライド下部に表示する任意のキャプション。 */
+  caption?: string
+}
+
+export interface DadsImageSliderProps {
+  /** 現在表示中のスライドインデックス。v-model 対象。 */
+  modelValue?: number
+  /** スライドの配列。 */
+  slides: DadsImageSliderSlide[]
+  /** true のとき `interval` ms ごとに次のスライドへ自動遷移する。 */
+  autoPlay?: boolean
+  /** 自動再生の間隔 (ms)。 */
+  interval?: number
+  /** ホバー中に自動再生を一時停止する。 */
+  pauseOnHover?: boolean
+  /** 左右の矢印ボタンを表示する。 */
+  showArrows?: boolean
+  /** インジケータ (ドット) を表示する。 */
+  showIndicators?: boolean
+  /** true のとき末尾の次で先頭へ、先頭の前で末尾へラップする。 */
+  loop?: boolean
+  /** スライダ全体のアクセシブル名 (`aria-label`)。 */
+  ariaLabel?: string
+}
+
+export interface DadsImageSliderEmits {
+  /** v-model 用。新しいインデックス。 */
+  (e: 'update:modelValue', value: number): void
+  /** スライド変更時に発火。 */
+  (e: 'change', value: number): void
+}

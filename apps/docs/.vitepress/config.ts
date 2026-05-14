@@ -41,6 +41,7 @@ const components = {
     { text: 'Modal', link: '/components/modal' },
     { text: 'Tooltip', link: '/components/tooltip' },
     { text: 'ProgressIndicator', link: '/components/progress-indicator' },
+    { text: 'EmergencyBanner', link: '/components/emergency-banner' },
   ],
   Display: [
     { text: 'Card', link: '/components/card' },
@@ -51,6 +52,13 @@ const components = {
     { text: 'Chip', link: '/components/chip' },
     { text: 'Disclosure', link: '/components/disclosure' },
     { text: 'DescriptionList', link: '/components/description-list' },
+    { text: 'Image', link: '/components/image' },
+    { text: 'ImageSlider', link: '/components/image-slider' },
+    { text: 'Carousel', link: '/components/carousel' },
+    { text: 'List', link: '/components/list' },
+    { text: 'Blockquote', link: '/components/blockquote' },
+    { text: 'ResourceList', link: '/components/resource-list' },
+    { text: 'TableControl', link: '/components/table-control' },
   ],
 }
 
