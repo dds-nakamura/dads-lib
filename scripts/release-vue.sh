@@ -51,16 +51,31 @@ if [[ ! -d "${PKG_DIR}" ]]; then
   exit 1
 fi
 
-# Resolve each remote's URL from the working repo and verify it exists
-declare -A REMOTE_URLS=()
+# Resolve each remote's URL from the working repo and verify it exists.
+# Use a parallel array (REMOTE_URLS_LIST[i] == URL of REMOTES[i]) so this works
+# on macOS default bash 3.2 (no associative arrays).
+REMOTE_URLS_LIST=()
 for r in "${REMOTES[@]}"; do
   url="$(git remote get-url "${r}" 2>/dev/null || true)"
   if [[ -z "${url}" ]]; then
     echo "Error: remote '${r}' is not configured (git remote add ${r} <url>)." >&2
     exit 1
   fi
-  REMOTE_URLS["${r}"]="${url}"
+  REMOTE_URLS_LIST+=("${url}")
 done
+
+# Helper: look up a remote's URL by name
+remote_url_for() {
+  local name="$1"
+  local i
+  for i in "${!REMOTES[@]}"; do
+    if [[ "${REMOTES[$i]}" == "${name}" ]]; then
+      printf '%s' "${REMOTE_URLS_LIST[$i]}"
+      return 0
+    fi
+  done
+  return 1
+}
 
 # Tag must not exist locally
 if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
@@ -117,8 +132,8 @@ cd "${TMP_CLONE}"
 
 # Replace the default 'origin' (which points to ROOT_DIR) with the real remotes.
 git remote remove origin 2>/dev/null || true
-for r in "${REMOTES[@]}"; do
-  git remote add "${r}" "${REMOTE_URLS[${r}]}"
+for i in "${!REMOTES[@]}"; do
+  git remote add "${REMOTES[$i]}" "${REMOTE_URLS_LIST[$i]}"
 done
 
 # Fetch from all remotes (best effort)
@@ -189,10 +204,10 @@ echo "✓ Released ${TAG}"
 echo
 echo "Push results:"
 for r in "${SUCCEEDED[@]}"; do
-  echo "  ✓ ${r}  (${REMOTE_URLS[${r}]})"
+  echo "  ✓ ${r}  ($(remote_url_for "${r}"))"
 done
 for r in "${FAILED[@]}"; do
-  echo "  ✗ ${r}  (${REMOTE_URLS[${r}]})  — failed"
+  echo "  ✗ ${r}  ($(remote_url_for "${r}"))  — failed"
 done
 
 cat <<EOF
