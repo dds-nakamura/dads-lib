@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
-import DadsTextField from '../DadsTextField.vue'
-import type { DadsTextFieldProps } from '../DadsTextField.types'
+import DadsInputText from '../DadsInputText.vue'
+import type { DadsInputTextProps } from '../DadsInputText.types'
 
-const createWrapper = (props: DadsTextFieldProps = {}) => mount(DadsTextField, { props })
+const createWrapper = (props: DadsInputTextProps = {}) => mount(DadsInputText, { props })
 
-const mountInBody = (props: DadsTextFieldProps = {}) =>
-  mount(DadsTextField, { props, attachTo: document.body })
+const mountInBody = (props: DadsInputTextProps = {}) =>
+  mount(DadsInputText, { props, attachTo: document.body })
 
-describe('DadsTextField', () => {
+describe('DadsInputText', () => {
   describe('rendering', () => {
     it('renders a single input element by default', () => {
       const wrapper = createWrapper()
@@ -18,21 +18,21 @@ describe('DadsTextField', () => {
 
     it('renders the label when provided', () => {
       const wrapper = createWrapper({ label: '名前' })
-      const label = wrapper.find('label.dads-text-field__label')
+      const label = wrapper.find('label.dads-input-text__label')
       expect(label.exists()).toBe(true)
       expect(label.text()).toContain('名前')
     })
 
     it('does not render the footer when there is no hint, error or counter', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-text-field__footer').exists()).toBe(false)
+      expect(wrapper.find('.dads-input-text__footer').exists()).toBe(false)
     })
   })
 
   describe('size', () => {
-    it.each(['lg', 'md', 'sm'] as const)('applies dads-text-field--%s class', (size) => {
+    it.each(['lg', 'md', 'sm'] as const)('applies dads-input-text--%s class', (size) => {
       const wrapper = createWrapper({ size })
-      expect(wrapper.classes()).toContain(`dads-text-field--${size}`)
+      expect(wrapper.classes()).toContain(`dads-input-text--${size}`)
     })
   })
 
@@ -85,11 +85,11 @@ describe('DadsTextField', () => {
       // increments — separate mount() calls create separate apps and reset the
       // counter, which is unrealistic for production usage.
       const wrapper = mount({
-        components: { DadsTextField },
+        components: { DadsInputText },
         template: `
           <div>
-            <DadsTextField label="A" />
-            <DadsTextField label="B" />
+            <DadsInputText label="A" />
+            <DadsInputText label="B" />
           </div>
         `,
       })
@@ -108,7 +108,7 @@ describe('DadsTextField', () => {
   describe('required', () => {
     it('renders a required marker', () => {
       const wrapper = createWrapper({ label: 'Name', required: true })
-      expect(wrapper.find('.dads-text-field__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-input-text__required').exists()).toBe(true)
     })
 
     it('sets aria-required on the input', () => {
@@ -125,7 +125,7 @@ describe('DadsTextField', () => {
 
     it('applies the disabled modifier class', () => {
       const wrapper = createWrapper({ disabled: true })
-      expect(wrapper.classes()).toContain('dads-text-field--disabled')
+      expect(wrapper.classes()).toContain('dads-input-text--disabled')
     })
   })
 
@@ -137,14 +137,14 @@ describe('DadsTextField', () => {
 
     it('applies the readonly modifier class', () => {
       const wrapper = createWrapper({ readonly: true })
-      expect(wrapper.classes()).toContain('dads-text-field--readonly')
+      expect(wrapper.classes()).toContain('dads-input-text--readonly')
     })
   })
 
   describe('error / errorMessage', () => {
     it('renders the error message with role="alert"', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-text-field__error')
+      const error = wrapper.find('.dads-input-text__error')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
       expect(error.attributes('role')).toBe('alert')
@@ -157,28 +157,28 @@ describe('DadsTextField', () => {
 
     it('honors the explicit error prop', () => {
       const wrapper = createWrapper({ error: true })
-      expect(wrapper.classes()).toContain('dads-text-field--error')
+      expect(wrapper.classes()).toContain('dads-input-text--error')
       expect(wrapper.find('input').attributes('aria-invalid')).toBe('true')
     })
 
     it('hides the hint when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-text-field__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-text-field__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-input-text__hint').exists()).toBe(false)
+      expect(wrapper.find('.dads-input-text__error').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
     it('renders the hint when provided', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hint = wrapper.find('.dads-text-field__hint')
+      const hint = wrapper.find('.dads-input-text__hint')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('メモ')
     })
 
     it('points aria-describedby at the hint id', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hintId = wrapper.find('.dads-text-field__hint').attributes('id')
+      const hintId = wrapper.find('.dads-input-text__hint').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(hintId)
     })
   })
@@ -186,28 +186,28 @@ describe('DadsTextField', () => {
   describe('icons', () => {
     it('renders the prepend icon', () => {
       const wrapper = createWrapper({ prependIcon: 'mdi-tag' })
-      const icon = wrapper.find('.dads-text-field__icon--prepend')
+      const icon = wrapper.find('.dads-input-text__icon--prepend')
       expect(icon.exists()).toBe(true)
       expect(icon.classes()).toContain('mdi-tag')
     })
 
     it('renders the append icon', () => {
       const wrapper = createWrapper({ appendIcon: 'mdi-magnify' })
-      const icon = wrapper.find('.dads-text-field__icon--append')
+      const icon = wrapper.find('.dads-input-text__icon--append')
       expect(icon.exists()).toBe(true)
       expect(icon.classes()).toContain('mdi-magnify')
     })
 
     it('marks decorative icons as aria-hidden', () => {
       const wrapper = createWrapper({ prependIcon: 'mdi-tag' })
-      expect(wrapper.find('.dads-text-field__icon--prepend').attributes('aria-hidden')).toBe('true')
+      expect(wrapper.find('.dads-input-text__icon--prepend').attributes('aria-hidden')).toBe('true')
     })
   })
 
   describe('counter', () => {
     it('renders the current length / max counter', () => {
       const wrapper = createWrapper({ counter: 50, modelValue: 'abc' })
-      const counter = wrapper.find('.dads-text-field__counter')
+      const counter = wrapper.find('.dads-input-text__counter')
       expect(counter.exists()).toBe(true)
       expect(counter.text().replace(/\s+/g, '')).toBe('3/50')
     })
@@ -215,12 +215,12 @@ describe('DadsTextField', () => {
     it('updates as modelValue changes', async () => {
       const wrapper = createWrapper({ counter: 10, modelValue: '' })
       await wrapper.setProps({ modelValue: 'hello' })
-      expect(wrapper.find('.dads-text-field__counter').text().replace(/\s+/g, '')).toBe('5/10')
+      expect(wrapper.find('.dads-input-text__counter').text().replace(/\s+/g, '')).toBe('5/10')
     })
 
     it('includes the counter id in aria-describedby', () => {
       const wrapper = createWrapper({ counter: 10 })
-      const counterId = wrapper.find('.dads-text-field__counter').attributes('id')
+      const counterId = wrapper.find('.dads-input-text__counter').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toContain(counterId)
     })
   })

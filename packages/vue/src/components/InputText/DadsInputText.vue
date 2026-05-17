@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
-import type { DadsTextFieldEmits, DadsTextFieldProps } from './DadsTextField.types'
+import type { DadsInputTextEmits, DadsInputTextProps } from './DadsInputText.types'
 
-const props = withDefaults(defineProps<DadsTextFieldProps>(), {
+const props = withDefaults(defineProps<DadsInputTextProps>(), {
   type: 'text',
   size: 'md',
   disabled: false,
@@ -11,13 +11,13 @@ const props = withDefaults(defineProps<DadsTextFieldProps>(), {
   error: false,
 })
 
-const emit = defineEmits<DadsTextFieldEmits>()
+const emit = defineEmits<DadsInputTextEmits>()
 
 // Generated once per instance so the label `for` and `aria-describedby` ids
 // stay stable across renders. Calling useId() inside a computed would re-run
 // on every dependency change.
 const generatedId = useId()
-const inputId = computed(() => props.id ?? `dads-text-field-${generatedId}`)
+const inputId = computed(() => props.id ?? `dads-input-text-${generatedId}`)
 const hintId = computed(() => `${inputId.value}-hint`)
 const errorId = computed(() => `${inputId.value}-error`)
 const counterId = computed(() => `${inputId.value}-counter`)
@@ -35,12 +35,12 @@ const describedBy = computed(() => {
 })
 
 const rootClasses = computed(() => [
-  'dads-text-field',
-  `dads-text-field--${props.size}`,
+  'dads-input-text',
+  `dads-input-text--${props.size}`,
   {
-    'dads-text-field--disabled': props.disabled,
-    'dads-text-field--readonly': props.readonly,
-    'dads-text-field--error': isError.value,
+    'dads-input-text--disabled': props.disabled,
+    'dads-input-text--readonly': props.readonly,
+    'dads-input-text--error': isError.value,
   },
 ])
 
@@ -74,20 +74,20 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
 <template>
   <div :class="rootClasses">
-    <label v-if="label" :for="inputId" class="dads-text-field__label">
+    <label v-if="label" :for="inputId" class="dads-input-text__label">
       {{ label }}
-      <span v-if="required" class="dads-text-field__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-input-text__required" aria-hidden="true">必須</span>
     </label>
 
-    <div class="dads-text-field__control">
+    <div class="dads-input-text__control">
       <i
         v-if="prependIcon"
-        :class="['mdi', prependIcon, 'dads-text-field__icon', 'dads-text-field__icon--prepend']"
+        :class="['mdi', prependIcon, 'dads-input-text__icon', 'dads-input-text__icon--prepend']"
         aria-hidden="true"
       />
       <input
         :id="inputId"
-        class="dads-text-field__input"
+        class="dads-input-text__input"
         :type="type"
         :value="modelValue"
         v-bind="inputAttrs"
@@ -98,21 +98,21 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       />
       <i
         v-if="appendIcon"
-        :class="['mdi', appendIcon, 'dads-text-field__icon', 'dads-text-field__icon--append']"
+        :class="['mdi', appendIcon, 'dads-input-text__icon', 'dads-input-text__icon--append']"
         aria-hidden="true"
       />
     </div>
 
-    <div v-if="hasFooter" class="dads-text-field__footer">
+    <div v-if="hasFooter" class="dads-input-text__footer">
       <span
         v-if="isError && errorMessage"
         :id="errorId"
-        class="dads-text-field__error"
+        class="dads-input-text__error"
         role="alert"
         >{{ errorMessage }}</span
       >
-      <span v-else-if="hint" :id="hintId" class="dads-text-field__hint">{{ hint }}</span>
-      <span v-if="counter !== undefined" :id="counterId" class="dads-text-field__counter"
+      <span v-else-if="hint" :id="hintId" class="dads-input-text__hint">{{ hint }}</span>
+      <span v-if="counter !== undefined" :id="counterId" class="dads-input-text__counter"
         >{{ currentLength }} / {{ counter }}</span
       >
     </div>
@@ -123,7 +123,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
-.dads-text-field {
+.dads-input-text {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4, 0.25rem);
@@ -253,8 +253,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- hover (interactive) ------------------------------
-  &:not(.dads-text-field--readonly):not(.dads-text-field--disabled):not(.dads-text-field--error)
-    .dads-text-field__control:hover {
+  &:not(.dads-input-text--readonly):not(.dads-input-text--disabled):not(.dads-input-text--error)
+    .dads-input-text__control:hover {
     border-color: var(--color-text-primary, #1a1a1a);
   }
 
@@ -269,7 +269,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     pointer-events: none;
     opacity: 0.5;
 
-    .dads-text-field__control {
+    .dads-input-text__control {
       background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
     }
   }

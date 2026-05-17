@@ -1,10 +1,14 @@
 import type { DadsSize } from '../../types/common'
 
-export type DadsTextFieldSize = Exclude<DadsSize, 'xs'>
+/**
+ * 公式 slug は `input-text`。旧名 `DadsTextField` は deprecated alias と
+ * して併存する。
+ */
+export type DadsInputTextSize = Exclude<DadsSize, 'xs'>
 
-export type DadsTextFieldType = 'text' | 'email' | 'password' | 'tel' | 'url' | 'number' | 'search'
+export type DadsInputTextType = 'text' | 'email' | 'password' | 'tel' | 'url' | 'number' | 'search'
 
-export type DadsTextFieldInputmode =
+export type DadsInputTextInputmode =
   | 'text'
   | 'numeric'
   | 'decimal'
@@ -13,11 +17,11 @@ export type DadsTextFieldInputmode =
   | 'email'
   | 'url'
 
-export interface DadsTextFieldProps {
+export interface DadsInputTextProps {
   /** Bound value (v-model). */
   modelValue?: string | number
   /** Native input type. Default: `text`. */
-  type?: DadsTextFieldType
+  type?: DadsInputTextType
   /** Placeholder text shown when the input is empty. */
   placeholder?: string
   /** Native `name` attribute, used by form submission. */
@@ -30,9 +34,9 @@ export interface DadsTextFieldProps {
   /** Hard limit on the number of characters the user can type. */
   maxlength?: number
   /** Hint to mobile browsers about which on-screen keyboard to use. */
-  inputmode?: DadsTextFieldInputmode
+  inputmode?: DadsInputTextInputmode
   /** Size token. Default: `md`. */
-  size?: DadsTextFieldSize
+  size?: DadsInputTextSize
   /** Visible label rendered above the input. */
   label?: string
   /** Helper text displayed below the input when there is no error. */
@@ -60,7 +64,7 @@ export interface DadsTextFieldProps {
   counter?: number
 }
 
-export interface DadsTextFieldEmits {
+export interface DadsInputTextEmits {
   (e: 'update:modelValue', value: string | number): void
   (e: 'change', event: Event): void
   (e: 'focus', event: FocusEvent): void

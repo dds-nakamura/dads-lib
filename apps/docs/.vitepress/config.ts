@@ -5,7 +5,7 @@ import { defineConfig } from 'vitepress'
 const components = {
   Form: [
     { text: 'Button', link: '/components/button' },
-    { text: 'TextField', link: '/components/text-field' },
+    { text: 'InputText', link: '/components/input-text' },
     { text: 'Textarea', link: '/components/textarea' },
     { text: 'Select', link: '/components/select' },
     { text: 'Checkbox', link: '/components/checkbox' },

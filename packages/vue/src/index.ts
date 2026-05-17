@@ -8,7 +8,23 @@
  */
 
 export * from './components/Button'
-export * from './components/TextField'
+export * from './components/InputText'
+// Deprecated alias: DadsTextField は公式 slug が `input-text` のため
+// DadsInputText にリネームされた (2026-05-17)。次のメジャーで削除予定。
+/** @deprecated Use {@link DadsInputText} instead. Will be removed in a future major. */
+export { default as DadsTextField } from './components/InputText/DadsInputText.vue'
+export type {
+  /** @deprecated Use {@link DadsInputTextProps} instead. */
+  DadsInputTextProps as DadsTextFieldProps,
+  /** @deprecated Use {@link DadsInputTextEmits} instead. */
+  DadsInputTextEmits as DadsTextFieldEmits,
+  /** @deprecated Use {@link DadsInputTextSize} instead. */
+  DadsInputTextSize as DadsTextFieldSize,
+  /** @deprecated Use {@link DadsInputTextType} instead. */
+  DadsInputTextType as DadsTextFieldType,
+  /** @deprecated Use {@link DadsInputTextInputmode} instead. */
+  DadsInputTextInputmode as DadsTextFieldInputmode,
+} from './components/InputText/DadsInputText.types'
 export * from './components/Textarea'
 export * from './components/Select'
 export * from './components/Checkbox'

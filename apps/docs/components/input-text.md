@@ -1,12 +1,12 @@
-# TextField
+# InputText
 
-1 行のテキスト入力欄。ラベル・ヒント・エラー・カウンター・前後アイコンを内蔵し、`v-model` で文字列または数値を双方向バインドする。
+1 行のテキスト入力欄。ラベル・ヒント・エラー・カウンター・前後アイコンを内蔵し、`v-model` で文字列または数値を双方向バインドする。公式 slug は `input-text`。旧名 `DadsTextField` は deprecated として併存する。
 
 ## 基本
 
 <script setup>
 import { ref } from 'vue'
-import { DadsTextField } from '@dads/vue'
+import { DadsInputText } from '@dads/vue'
 
 const name = ref('')
 const email = ref('')
@@ -17,19 +17,19 @@ const zip = ref('123')
 </script>
 
 <div class="demo">
-  <DadsTextField v-model="name" label="氏名" placeholder="山田 太郎" />
+  <DadsInputText v-model="name" label="氏名" placeholder="山田 太郎" />
 </div>
 
 ```vue
 <script setup>
 import { ref } from 'vue'
-import { DadsTextField } from '@dads/vue'
+import { DadsInputText } from '@dads/vue'
 
 const name = ref('')
 </script>
 
 <template>
-  <DadsTextField v-model="name" label="氏名" placeholder="山田 太郎" />
+  <DadsInputText v-model="name" label="氏名" placeholder="山田 太郎" />
 </template>
 ```
 
@@ -39,9 +39,9 @@ const name = ref('')
 
 <div class="demo">
   <div class="demo-row">
-    <DadsTextField size="lg" label="LG" placeholder="large" />
-    <DadsTextField size="md" label="MD" placeholder="medium" />
-    <DadsTextField size="sm" label="SM" placeholder="small" />
+    <DadsInputText size="lg" label="LG" placeholder="large" />
+    <DadsInputText size="md" label="MD" placeholder="medium" />
+    <DadsInputText size="sm" label="SM" placeholder="small" />
   </div>
 </div>
 
@@ -51,10 +51,10 @@ const name = ref('')
 
 <div class="demo">
   <div class="demo-row">
-    <DadsTextField v-model="email" type="email" label="メールアドレス" placeholder="user@example.com" />
-    <DadsTextField type="password" label="パスワード" placeholder="••••••••" />
-    <DadsTextField v-model="age" type="number" label="年齢" />
-    <DadsTextField v-model="search" type="search" label="検索" placeholder="キーワード" />
+    <DadsInputText v-model="email" type="email" label="メールアドレス" placeholder="user@example.com" />
+    <DadsInputText type="password" label="パスワード" placeholder="••••••••" />
+    <DadsInputText v-model="age" type="number" label="年齢" />
+    <DadsInputText v-model="search" type="search" label="検索" placeholder="キーワード" />
   </div>
 </div>
 
@@ -63,7 +63,7 @@ const name = ref('')
 `label` でラベル、`hint` で補助テキストを表示する。`hint` は `aria-describedby` で input に紐付く。
 
 <div class="demo">
-  <DadsTextField
+  <DadsInputText
     label="メールアドレス"
     hint="例: user@example.com の形式で入力してください"
     type="email"
@@ -75,7 +75,7 @@ const name = ref('')
 `required` で必須バッジを表示し、`aria-required="true"` を付与する。
 
 <div class="demo">
-  <DadsTextField label="電話番号" required placeholder="090-0000-0000" />
+  <DadsInputText label="電話番号" required placeholder="090-0000-0000" />
 </div>
 
 ## エラー
@@ -84,21 +84,21 @@ const name = ref('')
 メッセージを別所に表示している場合は `error` だけを使う。
 
 <div class="demo">
-  <DadsTextField
+  <DadsInputText
     v-model="zip"
     label="郵便番号"
     error-message="7 桁の数字で入力してください"
   />
-  <DadsTextField label="メッセージ別表示" error placeholder="error 視覚状態のみ" />
+  <DadsInputText label="メッセージ別表示" error placeholder="error 視覚状態のみ" />
 </div>
 
 ## 状態
 
 <div class="demo">
   <div class="demo-row">
-    <DadsTextField label="Default" placeholder="default" />
-    <DadsTextField label="Disabled" disabled model-value="編集不可" />
-    <DadsTextField label="Readonly" readonly model-value="読取専用" />
+    <DadsInputText label="Default" placeholder="default" />
+    <DadsInputText label="Disabled" disabled model-value="編集不可" />
+    <DadsInputText label="Readonly" readonly model-value="読取専用" />
   </div>
 </div>
 
@@ -108,8 +108,8 @@ const name = ref('')
 利用側で `@mdi/font` の CSS を読み込むことが前提（カタログ側では未ロードのためここでは表示されない）。
 
 ```vue
-<DadsTextField prepend-icon="mdi-magnify" label="検索" placeholder="キーワード" />
-<DadsTextField append-icon="mdi-email" label="メール" type="email" />
+<DadsInputText prepend-icon="mdi-magnify" label="検索" placeholder="キーワード" />
+<DadsInputText append-icon="mdi-email" label="メール" type="email" />
 ```
 
 ## カウンター
@@ -117,7 +117,7 @@ const name = ref('')
 `counter` で最大文字数の目安を表示する。コンポーネント自体は制限を行わないので、`maxlength` と併用する。
 
 <div class="demo">
-  <DadsTextField
+  <DadsInputText
     v-model="memo"
     label="自己紹介"
     placeholder="200 文字以内で入力"
@@ -166,3 +166,14 @@ const name = ref('')
 - `errorMessage` 指定時は `aria-invalid="true"` と `role="alert"` が自動付与される。`error` プロップ単体でも `aria-invalid` は立つ
 - `required` 指定時は視覚バッジと `aria-required="true"` の両方を提供し、補助技術にも必須を伝える
 - ラベルを外部に置く headless 用途では、利用側で `aria-label` を付与してアクセシブル名を必ず確保する
+
+## マイグレーション (DadsTextField → DadsInputText)
+
+旧名 `DadsTextField` は引き続き re-export されているが、`@deprecated` 警告が出る。次のメジャーバージョンで削除予定。CSS クラスも `dads-text-field*` から `dads-input-text*` に変更されている。
+
+```ts
+// 旧 (deprecated)
+import { DadsTextField } from '@dads/vue'
+// 新
+import { DadsInputText } from '@dads/vue'
+```
