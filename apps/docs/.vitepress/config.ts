@@ -33,6 +33,7 @@ const components = {
     { text: 'GlobalMenu', link: '/components/global-menu' },
     { text: 'MegaMenu', link: '/components/mega-menu' },
     { text: 'PageNavigation', link: '/components/page-navigation' },
+    { text: 'TableOfContents', link: '/components/table-of-contents' },
     { text: 'BottomNavigation', link: '/components/bottom-navigation' },
     { text: 'MobileMenu', link: '/components/mobile-menu' },
   ],

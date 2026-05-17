@@ -1,99 +1,27 @@
 # PageNavigation
 
-ページ内の見出しへのアンカーリンク (目次 / Table of Contents) を表すナビゲーション。長い記事や仕様ページの右側に配置し、`href="#section-id"` でページ内の各セクションへジャンプする。`activeId` を指定すると現在地のセクションがハイライトされ、`aria-current="location"` が付与される。
+ページ送り (pagination) を表すナビゲーション。検索結果やテーブル、アーカイブの一覧などで「現在ページ / 総ページ数」を提示し、前後のページや任意のページへ移動できる。Figma 公式 `Page Navigation` フレーム準拠。
+
+> ページ内目次 (Table of Contents) を表現したい場合は [`DadsTableOfContents`](./table-of-contents.md) を使用する。
 
 ## 基本
 
-`items` 配列に `{ id, label }` の組を渡すだけで使える。`href` を省略すると自動で `#${id}` が href に展開されるため、ページ内アンカーリンクとして即利用できる。
+`modelValue` (1-indexed の現在ページ) と `totalPages` を渡すだけで使える。前後ボタン + ページ番号ボタンが描画され、`update:modelValue` イベントで現在ページが更新される。
 
 <script setup>
 import { ref } from 'vue'
 import { DadsPageNavigation } from '@dads/vue'
 
-const items = [
-  { id: 'intro', label: 'はじめに' },
-  { id: 'usage', label: '使い方' },
-  { id: 'api', label: 'API' },
-  { id: 'accessibility', label: 'アクセシビリティ' },
-]
-
-const nestedItems = [
-  {
-    id: 'getting-started',
-    label: 'Getting Started',
-    children: [
-      { id: 'install', label: 'インストール' },
-      { id: 'setup', label: 'セットアップ' },
-    ],
-  },
-  {
-    id: 'reference',
-    label: 'リファレンス',
-    children: [
-      { id: 'props', label: 'Props' },
-      { id: 'events', label: 'Events' },
-    ],
-  },
-  { id: 'faq', label: 'FAQ' },
-]
-
-const activeId = ref('usage')
-const lastClicked = ref('')
-const onItemClick = (item) => {
-  activeId.value = item.id
-  lastClicked.value = `${item.id}: ${item.label}`
-}
+const page1 = ref(1)
+const page2 = ref(10)
+const page3 = ref(50)
+const page4 = ref(1)
+const page5 = ref(5)
 </script>
 
 <div class="demo">
-  <DadsPageNavigation :items="items" />
-</div>
-
-```vue
-<script setup>
-import { DadsPageNavigation } from '@dads/vue'
-
-const items = [
-  { id: 'intro', label: 'はじめに' },
-  { id: 'usage', label: '使い方' },
-  { id: 'api', label: 'API' },
-]
-</script>
-
-<template>
-  <DadsPageNavigation :items="items" />
-</template>
-```
-
-## ネスト
-
-`children` プロパティで 1 階層のネストを表現できる。子項目は左に縦罫線とインデントが付き、視覚的に親子関係を表す。
-
-<div class="demo">
-  <DadsPageNavigation :items="nestedItems" />
-</div>
-
-```ts
-const items = [
-  {
-    id: 'getting-started',
-    label: 'Getting Started',
-    children: [
-      { id: 'install', label: 'インストール' },
-      { id: 'setup', label: 'セットアップ' },
-    ],
-  },
-  { id: 'faq', label: 'FAQ' },
-]
-```
-
-## activeId
-
-現在地のセクション id を `activeId` で渡すと、その項目に `aria-current="location"` が付与され、ハイライト表示される。scroll-spy などの仕組みは呼び出し側で実装する想定 (`IntersectionObserver` 等)。
-
-<div class="demo">
-  <DadsPageNavigation :items="items" :active-id="activeId" @click:item="onItemClick" />
-  <span class="demo-label" style="margin-top:0.5rem">activeId: {{ activeId }} / 最後にクリック: {{ lastClicked || '(none)' }}</span>
+  <DadsPageNavigation v-model="page1" :total-pages="5" />
+  <span class="demo-label" style="margin-top:0.5rem">現在ページ: {{ page1 }} / 5</span>
 </div>
 
 ```vue
@@ -101,64 +29,93 @@ const items = [
 import { ref } from 'vue'
 import { DadsPageNavigation } from '@dads/vue'
 
-const activeId = ref('usage')
-const onItemClick = (item) => {
-  activeId.value = item.id
-}
+const page = ref(1)
 </script>
 
 <template>
-  <DadsPageNavigation :items="items" :active-id="activeId" @click:item="onItemClick" />
+  <DadsPageNavigation v-model="page" :total-pages="5" />
 </template>
 ```
 
-## カスタム href
+## 大量ページ (省略表示)
 
-外部リンクや別ページのアンカーを指す場合は `href` を明示する。`href` が指定されていれば、そちらが優先される。
+`totalPages > maxPageButtons` (既定 7) のとき、現在ページ前後 + 先頭/末尾を残して `…` で省略表示される。
 
-```ts
-const items = [
-  { id: 'intro', label: 'はじめに' }, // href: '#intro' (自動)
-  { id: 'spec', label: '仕様書', href: '/spec/' }, // 別ページへ
-  { id: 'gh', label: 'GitHub', href: 'https://github.com/example' },
-]
-```
-
-## aria-label のカスタマイズ
-
-`ariaLabel` で `<nav>` 要素の `aria-label` を上書きする。デフォルトは `'このページの目次'`。
+<div class="demo">
+  <DadsPageNavigation v-model="page2" :total-pages="50" />
+  <span class="demo-label" style="margin-top:0.5rem">現在ページ: {{ page2 }} / 50</span>
+</div>
 
 ```vue
-<DadsPageNavigation :items="items" aria-label="On this page" />
+<DadsPageNavigation v-model="page" :total-pages="50" />
+```
+
+## 最初 / 最後ボタン
+
+`showFirstLast` を有効にすると、`<<` / `>>` のジャンプボタンが追加される。
+
+<div class="demo">
+  <DadsPageNavigation v-model="page3" :total-pages="100" show-first-last />
+  <span class="demo-label" style="margin-top:0.5rem">現在ページ: {{ page3 }} / 100</span>
+</div>
+
+```vue
+<DadsPageNavigation v-model="page" :total-pages="100" show-first-last />
+```
+
+## ページ番号を非表示にする
+
+`maxPageButtons="0"` を渡すと、ページ番号ボタンを描画せず前後ボタンのみのシンプルな pagination になる。長い記事の前後ページ移動などに適している。
+
+<div class="demo">
+  <DadsPageNavigation v-model="page4" :total-pages="10" :max-page-buttons="0" />
+  <span class="demo-label" style="margin-top:0.5rem">現在ページ: {{ page4 }} / 10</span>
+</div>
+
+```vue
+<DadsPageNavigation v-model="page" :total-pages="10" :max-page-buttons="0" />
+```
+
+## disabled
+
+`disabled` を渡すとすべてのボタンが操作不能になる。
+
+<div class="demo">
+  <DadsPageNavigation v-model="page5" :total-pages="10" disabled />
+</div>
+
+```vue
+<DadsPageNavigation v-model="page" :total-pages="10" disabled />
 ```
 
 ## Props
 
-| Prop        | 型                         | デフォルト           | 説明                                                              |
-| ----------- | -------------------------- | -------------------- | ----------------------------------------------------------------- |
-| `items`     | `DadsPageNavigationItem[]` | (必須)               | 目次項目。フラット / ネストいずれにも対応                         |
-| `activeId`  | `string`                   | `undefined`          | 現在アクティブなセクションの `id`。一致する項目がハイライトされる |
-| `ariaLabel` | `string`                   | `'このページの目次'` | `<nav>` 要素の `aria-label`                                       |
-
-### `DadsPageNavigationItem`
-
-| プロパティ | 型                         | デフォルト | 説明                                             |
-| ---------- | -------------------------- | ---------- | ------------------------------------------------ |
-| `id`       | `string`                   | (必須)     | ページ内 fragment 識別子                         |
-| `label`    | `string`                   | (必須)     | 表示テキスト                                     |
-| `href`     | `string`                   | `#${id}`   | リンク先 URL。省略時は `#${id}` が自動で使われる |
-| `children` | `DadsPageNavigationItem[]` | -          | ネストした子項目                                 |
+| Prop             | 型        | デフォルト       | 説明                                                                   |
+| ---------------- | --------- | ---------------- | ---------------------------------------------------------------------- |
+| `modelValue`     | `number`  | (必須)           | 1-indexed の現在ページ番号 (v-model)                                   |
+| `totalPages`     | `number`  | (必須)           | 総ページ数 (1 以上)                                                    |
+| `maxPageButtons` | `number`  | `7`              | 同時に表示するページ番号ボタンの最大数。`0` でページ番号を非表示にする |
+| `showPrevNext`   | `boolean` | `true`           | 前後ボタンの表示                                                       |
+| `showFirstLast`  | `boolean` | `false`          | 最初 / 最後ボタンの表示                                                |
+| `prevLabel`      | `string`  | `'前のページ'`   | 前ボタンのラベル                                                       |
+| `nextLabel`      | `string`  | `'次のページ'`   | 次ボタンのラベル                                                       |
+| `firstLabel`     | `string`  | `'最初のページ'` | 最初ボタンの aria-label                                                |
+| `lastLabel`      | `string`  | `'最後のページ'` | 最後ボタンの aria-label                                                |
+| `ariaLabel`      | `string`  | `'ページ送り'`   | `<nav>` 要素の `aria-label`                                            |
+| `disabled`       | `boolean` | `false`          | すべてのボタンを無効化                                                 |
 
 ## Events
 
-| Event        | Payload                                             | 説明                                       |
-| ------------ | --------------------------------------------------- | ------------------------------------------ |
-| `click:item` | `(item: DadsPageNavigationItem, event: MouseEvent)` | 目次のリンクがクリックされたときに発火する |
+| Event               | Payload    | 説明                                         |
+| ------------------- | ---------- | -------------------------------------------- |
+| `update:modelValue` | `(number)` | 現在ページが変わったとき (v-model)           |
+| `change`            | `(number)` | `update:modelValue` と同タイミングで発火する |
 
 ## アクセシビリティ
 
-- ルート要素は `<nav>` で、デフォルトで `aria-label="このページの目次"` が付与される (`ariaLabel` で上書き可能)
-- `activeId` に一致する項目には `aria-current="location"` が付与される (W3C で定められたページ内アンカー向けの値)
-- リンクはキーボードフォーカス可能で、フォーカス時には共通のフォーカスリングが表示される
-- forced-colors モードではシステムのリンクカラー (`LinkText`) と Highlight 色が使用される
-- ネストした子項目も同じ `aria-current` ルールに従う。1 ページに複数の目次を置く場合は `ariaLabel` で識別可能な名称を必ず付けること
+- ルート要素は `<nav>` で `aria-label="ページ送り"` が付与される (`ariaLabel` で上書き可能)
+- 現在ページのボタンに `aria-current="page"` が付与される
+- 最初/最後ボタンは見た目がアイコンのみのため `aria-label` (`firstLabel` / `lastLabel`) が付与される
+- 端 (最初/最後ページ) では前後ボタンが native `disabled` 属性で操作不能
+- すべてのボタンはキーボードフォーカス可能で、フォーカス時に共通のフォーカスリングが表示される
+- forced-colors モードでは `LinkText` / `Highlight` / `HighlightText` を使ったハイコントラスト表示に切り替わる
