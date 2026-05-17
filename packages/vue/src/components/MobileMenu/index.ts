@@ -3,4 +3,5 @@ export type {
   DadsMobileMenuProps,
   DadsMobileMenuEmits,
   DadsMobileMenuItem,
+  DadsMobileMenuType,
 } from './DadsMobileMenu.types'

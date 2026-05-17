@@ -260,4 +260,181 @@ describe('DadsMobileMenu', () => {
       trigger.remove()
     })
   })
+
+  // ----------------------------------------------------------------------
+  // type — accordion (default) vs slide (panel-stack navigation per DADS
+  // official spec).
+  // ----------------------------------------------------------------------
+  describe('type variant', () => {
+    const nestedItems: DadsMenuListItem[] = [
+      { label: 'ホーム', href: '/' },
+      {
+        label: 'サービス',
+        children: [
+          { label: 'サービス一覧', href: '/services' },
+          { label: '料金プラン', href: '/services/pricing' },
+        ],
+      },
+      { label: 'お知らせ', href: '/news' },
+    ]
+
+    it('applies the accordion type modifier class by default', () => {
+      createWrapper()
+      expect(queryMenu()?.classList.contains('dads-mobile-menu--type-accordion')).toBe(true)
+    })
+
+    it('applies the slide type modifier class when type="slide"', () => {
+      createWrapper({ type: 'slide', items: nestedItems })
+      expect(queryMenu()?.classList.contains('dads-mobile-menu--type-slide')).toBe(true)
+    })
+
+    it('renders DadsMenuList in accordion mode', () => {
+      const wrapper = createWrapper({ type: 'accordion', items: nestedItems })
+      expect(wrapper.findComponent(DadsMenuList).exists()).toBe(true)
+    })
+
+    it('renders the custom flat slide-list in slide mode (no MenuList)', () => {
+      const wrapper = createWrapper({ type: 'slide', items: nestedItems })
+      expect(wrapper.findComponent(DadsMenuList).exists()).toBe(false)
+      expect(document.body.querySelector('.dads-mobile-menu__slide-list')).not.toBeNull()
+    })
+
+    describe('slide-mode navigation', () => {
+      it('renders the root items at the top of the stack', () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        const items = document.body.querySelectorAll('.dads-mobile-menu__slide-item-label')
+        expect(items).toHaveLength(3)
+        expect(items[0].textContent).toBe('ホーム')
+        expect(items[1].textContent).toBe('サービス')
+        expect(items[2].textContent).toBe('お知らせ')
+      })
+
+      it('shows a chevron next to parent items', () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        const parentItem = document.body.querySelectorAll('.dads-mobile-menu__slide-item')[1]
+        expect(parentItem?.querySelector('.dads-mobile-menu__slide-item-chevron')).not.toBeNull()
+      })
+
+      it('does not show a chevron on leaf items', () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        const leafItem = document.body.querySelectorAll('.dads-mobile-menu__slide-item')[0]
+        expect(leafItem?.querySelector('.dads-mobile-menu__slide-item-chevron')).toBeNull()
+      })
+
+      it('pushes a new panel when a parent item is clicked', async () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        // Click parent "サービス"
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        // After push: should show children labels
+        const items = document.body.querySelectorAll('.dads-mobile-menu__slide-item-label')
+        expect(items).toHaveLength(2)
+        expect(items[0].textContent).toBe('サービス一覧')
+        expect(items[1].textContent).toBe('料金プラン')
+      })
+
+      it('does not emit click:item when a parent item is clicked (only pushes panel)', async () => {
+        const wrapper = createWrapper({ type: 'slide', items: nestedItems })
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        expect(wrapper.emitted('click:item')).toBeFalsy()
+      })
+
+      it('shows the back button after pushing a panel', async () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        expect(document.body.querySelector('.dads-mobile-menu__back')).toBeNull()
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        expect(document.body.querySelector('.dads-mobile-menu__back')).not.toBeNull()
+      })
+
+      it('shows the parent label as panel title after pushing', async () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        const title = document.body.querySelector('.dads-mobile-menu__panel-title')
+        expect(title?.textContent).toBe('サービス')
+      })
+
+      it('returns to the previous panel when back is clicked', async () => {
+        createWrapper({ type: 'slide', items: nestedItems })
+        // Navigate to child
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        // Now click back
+        const backBtn = document.body.querySelector<HTMLElement>('.dads-mobile-menu__back')
+        backBtn?.click()
+        await nextTick()
+        // Should be back at root
+        const items = document.body.querySelectorAll('.dads-mobile-menu__slide-item-label')
+        expect(items).toHaveLength(3)
+        expect(items[0].textContent).toBe('ホーム')
+      })
+
+      it('emits click:item and closes when a leaf is clicked in slide mode', async () => {
+        const wrapper = createWrapper({ type: 'slide', items: nestedItems })
+        // Click leaf "ホーム"
+        const leafItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[0]
+        leafItem?.click()
+        await nextTick()
+        expect(wrapper.emitted('click:item')).toBeTruthy()
+        expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(false)
+      })
+
+      it('resets the panel stack to root when the menu is reopened', async () => {
+        const wrapper = mount(DadsMobileMenu, {
+          props: {
+            modelValue: true,
+            items: nestedItems,
+            type: 'slide',
+          } as DadsMobileMenuProps,
+          attachTo: document.body,
+        })
+        // Navigate into a child panel
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        expect(document.body.querySelector('.dads-mobile-menu__back')).not.toBeNull()
+        // Close and reopen
+        await wrapper.setProps({ modelValue: false })
+        await nextTick()
+        await wrapper.setProps({ modelValue: true })
+        await nextTick()
+        await nextTick()
+        // Should be back at root: no back button visible.
+        expect(document.body.querySelector('.dads-mobile-menu__back')).toBeNull()
+      })
+
+      it('uses the customizable backLabel for the back button', async () => {
+        createWrapper({ type: 'slide', items: nestedItems, backLabel: 'Back' })
+        const parentItem = document.body.querySelectorAll<HTMLElement>(
+          '.dads-mobile-menu__slide-item',
+        )[1]
+        parentItem?.click()
+        await nextTick()
+        const backBtn = document.body.querySelector('.dads-mobile-menu__back')
+        expect(backBtn?.getAttribute('aria-label')).toBe('Back')
+        expect(backBtn?.textContent).toContain('Back')
+      })
+    })
+  })
 })

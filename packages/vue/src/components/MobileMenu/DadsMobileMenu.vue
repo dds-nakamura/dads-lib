@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import DadsMenuList from '../MenuList/DadsMenuList.vue'
 import DadsUtilityLink from '../UtilityLink/DadsUtilityLink.vue'
 import type { DadsMenuListItem } from '../MenuList/DadsMenuList.types'
 import type { DadsUtilityLinkItem } from '../UtilityLink/DadsUtilityLink.types'
-import type { DadsMobileMenuEmits, DadsMobileMenuProps } from './DadsMobileMenu.types'
+import type {
+  DadsMobileMenuEmits,
+  DadsMobileMenuItem,
+  DadsMobileMenuProps,
+} from './DadsMobileMenu.types'
 
 const props = withDefaults(defineProps<DadsMobileMenuProps>(), {
   modelValue: false,
+  type: 'accordion',
   utilityItems: undefined,
   ariaLabel: 'モバイルメニュー',
   closeLabel: '閉じる',
+  backLabel: '戻る',
   showCloseButton: true,
 })
 
@@ -18,21 +24,56 @@ const emit = defineEmits<DadsMobileMenuEmits>()
 
 const panelRef = ref<HTMLElement | null>(null)
 
+const isSlide = computed(() => props.type === 'slide')
+
+// slide-mode navigation stack. Each entry holds the items shown in that
+// panel plus an optional label (used as the panel heading and the announce-
+// able name for the back button). Stack is reset on close so each open starts
+// at the root.
+type SlidePanel = { label?: string; items: DadsMobileMenuItem[] }
+const panelStack = ref<SlidePanel[]>([])
+
+const currentPanel = computed<SlidePanel>(() => {
+  if (panelStack.value.length === 0) {
+    return { items: props.items }
+  }
+  return panelStack.value[panelStack.value.length - 1]
+})
+
+const canGoBack = computed(() => panelStack.value.length > 0)
+
 // Track which element had focus when the menu opened so it can be restored on
-// close — mirrors DadsDrawer / DadsModal focus-management semantics.
+// close — mirrors DadsDrawer / DadsDialog focus-management semantics.
 let previousActive: HTMLElement | null = null
 
 const close = () => {
   emit('update:modelValue', false)
 }
 
-const onMenuItemClick = (item: DadsMenuListItem, event: MouseEvent) => {
+// Accordion-mode click delegate — unchanged from the pre-slide behaviour.
+const onAccordionItemClick = (item: DadsMenuListItem, event: MouseEvent) => {
   emit('click:item', item, event)
   // Auto-close on leaf navigation (no children) — same UX as DadsDrawer so the
   // user does not have to dismiss the menu manually after picking a destination.
   if (!item.children || item.children.length === 0) {
     close()
   }
+}
+
+// Slide-mode click delegate — parent items push a new panel onto the stack,
+// leaves emit + close. The DOM in slide mode is custom (flat button list)
+// rather than DadsMenuList, so we keep child traversal out of MenuList.
+const onSlideItemClick = (item: DadsMobileMenuItem, event: MouseEvent) => {
+  if (item.children && item.children.length > 0) {
+    panelStack.value.push({ label: item.label, items: item.children })
+    return
+  }
+  emit('click:item', item, event)
+  close()
+}
+
+const goBack = () => {
+  panelStack.value.pop()
 }
 
 const onUtilityItemClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent) => {
@@ -69,6 +110,8 @@ watch(
   async (open) => {
     if (open) {
       previousActive = document.activeElement as HTMLElement | null
+      // Reset slide-mode stack so reopening always lands at the root.
+      panelStack.value = []
       await nextTick()
       panelRef.value?.focus()
     } else if (previousActive) {
@@ -84,7 +127,7 @@ watch(
     <Transition name="dads-mobile-menu">
       <div
         v-if="modelValue"
-        class="dads-mobile-menu"
+        :class="['dads-mobile-menu', `dads-mobile-menu--type-${type}`]"
         role="dialog"
         aria-modal="true"
         :aria-label="ariaLabel"
@@ -93,8 +136,22 @@ watch(
       >
         <div class="dads-mobile-menu__overlay" aria-hidden="true" @click="close" />
         <div ref="panelRef" class="dads-mobile-menu__panel" tabindex="-1">
-          <header v-if="showCloseButton" class="dads-mobile-menu__header">
+          <header v-if="showCloseButton || (isSlide && canGoBack)" class="dads-mobile-menu__header">
             <button
+              v-if="isSlide && canGoBack"
+              type="button"
+              class="dads-mobile-menu__back"
+              :aria-label="backLabel"
+              @click="goBack"
+            >
+              <i class="mdi mdi-chevron-left dads-mobile-menu__back-icon" aria-hidden="true" />
+              <span>{{ backLabel }}</span>
+            </button>
+            <h2 v-if="isSlide && currentPanel.label" class="dads-mobile-menu__panel-title">
+              {{ currentPanel.label }}
+            </h2>
+            <button
+              v-if="showCloseButton"
               type="button"
               class="dads-mobile-menu__close"
               :aria-label="closeLabel"
@@ -115,7 +172,50 @@ watch(
             </button>
           </header>
           <nav class="dads-mobile-menu__nav" aria-label="メインナビゲーション">
-            <DadsMenuList :items="items" type="box" @click:item="onMenuItemClick" />
+            <!-- accordion mode (default): delegate to DadsMenuList which
+                 expands children inline. -->
+            <DadsMenuList
+              v-if="!isSlide"
+              :items="items"
+              type="box"
+              @click:item="onAccordionItemClick"
+            />
+            <!-- slide mode: render the current panel's items as a flat list.
+                 Parent items show a chevron and push a new panel; leaves emit
+                 and close. -->
+            <ul v-else class="dads-mobile-menu__slide-list">
+              <li
+                v-for="(item, idx) in currentPanel.items"
+                :key="idx"
+                class="dads-mobile-menu__slide-item-wrap"
+              >
+                <a
+                  v-if="item.href && (!item.children || item.children.length === 0)"
+                  :href="item.href"
+                  class="dads-mobile-menu__slide-item"
+                  @click="onSlideItemClick(item, $event)"
+                >
+                  <span class="dads-mobile-menu__slide-item-label">{{ item.label }}</span>
+                </a>
+                <button
+                  v-else
+                  type="button"
+                  class="dads-mobile-menu__slide-item"
+                  :class="{
+                    'dads-mobile-menu__slide-item--parent':
+                      item.children && item.children.length > 0,
+                  }"
+                  @click="onSlideItemClick(item, $event)"
+                >
+                  <span class="dads-mobile-menu__slide-item-label">{{ item.label }}</span>
+                  <i
+                    v-if="item.children && item.children.length > 0"
+                    class="mdi mdi-chevron-right dads-mobile-menu__slide-item-chevron"
+                    aria-hidden="true"
+                  />
+                </button>
+              </li>
+            </ul>
           </nav>
           <div v-if="utilityItems && utilityItems.length > 0" class="dads-mobile-menu__utility">
             <DadsUtilityLink
@@ -151,9 +251,6 @@ watch(
   }
 
   // -------------------- panel --------------------------------------------
-  // Full-width slide-down panel covering the viewport. On larger screens the
-  // panel narrows but stays anchored to the top so the layout still reads as
-  // a mobile-style menu attached to the Header.
   &__panel {
     position: relative;
     display: flex;
@@ -169,14 +266,45 @@ watch(
     }
   }
 
-  // -------------------- header (close button row) ------------------------
+  // -------------------- header (close + back row) -----------------------
   &__header {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: var(--spacing-8, 0.5rem);
     padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
     border-bottom: 1px solid var(--color-neutral-solid-gray-100, #e5e5e5);
+  }
+
+  &__back {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-4, 0.25rem);
+    min-height: 2.5rem;
+    padding: 0 var(--spacing-8, 0.5rem);
+    border-radius: var(--border-radius-4, 0.25rem);
+    color: var(--color-neutral-solid-gray-800, #1a1a1c);
+    font-size: var(--font-size-14, 0.875rem);
+    margin-inline-end: auto;
+
+    &:hover {
+      background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
+    }
+  }
+
+  &__back-icon {
+    font-size: 1.25em;
+    line-height: 1;
+  }
+
+  &__panel-title {
+    margin: 0;
+    font-size: var(--font-size-16, 1rem);
+    font-weight: 700;
+    line-height: 1.4;
   }
 
   &__close {
@@ -190,6 +318,7 @@ watch(
     height: 2.5rem;
     border-radius: var(--border-radius-4, 0.25rem);
     color: var(--color-neutral-solid-gray-800, #1a1a1c);
+    margin-inline-start: auto;
 
     &:hover {
       background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
@@ -208,6 +337,50 @@ watch(
     padding: var(--spacing-8, 0.5rem) 0;
   }
 
+  // -------------------- slide-mode list ----------------------------------
+  &__slide-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__slide-item-wrap {
+    display: block;
+    border-bottom: 1px solid var(--color-neutral-solid-gray-50, #f3f4f5);
+  }
+
+  &__slide-item {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-12, 0.75rem);
+    width: 100%;
+    min-height: 3rem; // 48px touch target
+    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    color: inherit;
+    text-decoration: none;
+    text-align: start;
+    font: inherit;
+
+    &:hover {
+      background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
+    }
+  }
+
+  &__slide-item-label {
+    flex: 1 1 auto;
+  }
+
+  &__slide-item-chevron {
+    font-size: 1.5em;
+    line-height: 1;
+    color: var(--color-neutral-solid-gray-700, #4a4a4a);
+  }
+
   // -------------------- utility links ------------------------------------
   &__utility {
     padding: var(--spacing-16, 1rem);
@@ -220,7 +393,12 @@ watch(
       border: 1px solid CanvasText;
     }
 
-    &__close {
+    &__close,
+    &__back {
+      border: 1px solid transparent;
+    }
+
+    &__slide-item {
       border: 1px solid transparent;
     }
   }
