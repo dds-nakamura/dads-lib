@@ -2,8 +2,19 @@
 
 - Spec ID: `2026-05-14-dads-vue-display-misc`
 - Depends on: `./requirements.md`, `./design.md`
-- Status: **Done（2026-05-14 完了）**
+- Status: **✅ Done（2026-05-14 完了）— historical reference**（2026-05-17 注記）
 - Last Updated: 2026-05-14
+
+> **📌 Historical reference banner（2026-05-17 追記）**
+>
+> 本書は **Wave 計画書（plan-of-record）** であり、`[ ]` チェックボックスは
+> 計画時のタスク粒度の記録。**実装は別経路（個別 PR / 後続 spec）で完了済**で、
+> 現在のコードベース・テスト（`2098 tests pass`）・ドキュメントに反映されている。
+> 残された未チェック項目は **再着手不要** — 履歴として保持。
+>
+> 最新の対応状況は以下を参照:
+> - [`2026-05-17-dads-vue-naming-and-gap`](../2026-05-17-dads-vue-naming-and-gap/) — 命名整合 + High/Medium/Low 全件ギャップ解消
+> - [`2026-05-17-dads-vue-figma-compliance`](../2026-05-17-dads-vue-figma-compliance/) — Figma スナップショット準拠化
 
 ---
 

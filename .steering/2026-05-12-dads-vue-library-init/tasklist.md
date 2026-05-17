@@ -2,8 +2,17 @@
 
 - Spec ID: `2026-05-12-dads-vue-library-init`
 - Depends on: `./requirements.md`, `./design.md`
-- Status: Draft（承認待ち）
+- Status: **✅ 後続スペックに統合済 — historical reference**（2026-05-17 注記）
 - Last Updated: 2026-05-12
+
+> **📌 Historical reference banner（2026-05-17 追記）**
+>
+> 本書は初期化 spec の原本。**残り `[ ]` 4 件（116 完了済）は後続 spec で吸収され、現在のコードベースに反映済**。詳細は [`2026-05-14-dads-vue-form-inputs`](../2026-05-14-dads-vue-form-inputs/) /
+> [`2026-05-14-dads-vue-navigation-menus`](../2026-05-14-dads-vue-navigation-menus/) /
+> [`2026-05-14-dads-vue-display-misc`](../2026-05-14-dads-vue-display-misc/) /
+> [`2026-05-17-dads-vue-naming-and-gap`](../2026-05-17-dads-vue-naming-and-gap/) /
+> [`2026-05-17-dads-vue-figma-compliance`](../2026-05-17-dads-vue-figma-compliance/) を参照。
+> このファイルは履歴として保持しており、未チェック項目は **再着手不要**。
 
 ---
 
