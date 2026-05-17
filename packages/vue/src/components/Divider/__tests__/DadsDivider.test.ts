@@ -125,4 +125,41 @@ describe('DadsDivider', () => {
       expect(label.text()).toBe('A')
     })
   })
+
+  describe('variant (full-width / inset)', () => {
+    it('applies the full-width modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-divider--full-width')
+    })
+
+    it('applies the inset modifier when variant="inset"', () => {
+      const wrapper = createWrapper({ variant: 'inset' })
+      expect(wrapper.classes()).toContain('dads-divider--inset')
+      expect(wrapper.classes()).not.toContain('dads-divider--full-width')
+    })
+  })
+
+  describe('thickness (1-4)', () => {
+    it('applies thickness-1 by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-divider--thickness-1')
+    })
+
+    it.each([1, 2, 3, 4] as const)('applies thickness-%i modifier', (t) => {
+      const wrapper = createWrapper({ thickness: t })
+      expect(wrapper.classes()).toContain(`dads-divider--thickness-${t}`)
+    })
+  })
+
+  describe('lineStyle (solid / dashed)', () => {
+    it('applies style-solid by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-divider--style-solid')
+    })
+
+    it('applies style-dashed when lineStyle="dashed"', () => {
+      const wrapper = createWrapper({ lineStyle: 'dashed' })
+      expect(wrapper.classes()).toContain('dads-divider--style-dashed')
+    })
+  })
 })

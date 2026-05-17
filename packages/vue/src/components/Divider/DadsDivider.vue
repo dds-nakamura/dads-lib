@@ -5,6 +5,9 @@ import type { DadsDividerProps } from './DadsDivider.types'
 const props = withDefaults(defineProps<DadsDividerProps>(), {
   orientation: 'horizontal',
   color: 'default',
+  variant: 'full-width',
+  thickness: 1,
+  lineStyle: 'solid',
 })
 
 const slots = useSlots()
@@ -18,6 +21,9 @@ const hasLabel = computed(() => Boolean(slots.default) && props.orientation === 
 const rootClasses = computed(() => [
   `dads-divider--${props.orientation}`,
   `dads-divider--${props.color}`,
+  `dads-divider--${props.variant}`,
+  `dads-divider--thickness-${props.thickness}`,
+  `dads-divider--style-${props.lineStyle}`,
   {
     'dads-divider--with-label': hasLabel.value,
   },
@@ -88,15 +94,72 @@ const rootClasses = computed(() => [
   }
 
   // -------------------- color variants -----------------------------------
-  // `--default` is the canonical state — listed explicitly so the modifier is
-  // observable in tests and downstream overrides can target it without leaking
-  // into the strong variant.
+  // For solid lines: use background-color on the line element.
+  // For dashed lines: switch to border-top (border-style supports dashed
+  // while background-color cannot).
   &--default &__line {
     background-color: var(--color-border-default, rgba(0, 0, 0, 0.1));
   }
 
   &--strong &__line {
     background-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+  }
+
+  // -------------------- width variants -----------------------------------
+  &--inset {
+    padding-inline: var(--spacing-16, 1rem);
+  }
+
+  // -------------------- thickness -----------------------------------------
+  &--horizontal#{'.dads-divider--thickness-1'} &__line {
+    height: 1px;
+  }
+  &--horizontal#{'.dads-divider--thickness-2'} &__line {
+    height: 2px;
+  }
+  &--horizontal#{'.dads-divider--thickness-3'} &__line {
+    height: 3px;
+  }
+  &--horizontal#{'.dads-divider--thickness-4'} &__line {
+    height: 4px;
+  }
+  &--vertical#{'.dads-divider--thickness-1'} &__line {
+    width: 1px;
+  }
+  &--vertical#{'.dads-divider--thickness-2'} &__line {
+    width: 2px;
+  }
+  &--vertical#{'.dads-divider--thickness-3'} &__line {
+    width: 3px;
+  }
+  &--vertical#{'.dads-divider--thickness-4'} &__line {
+    width: 4px;
+  }
+
+  // -------------------- line style ---------------------------------------
+  // Dashed lines need a border-style approach instead of background-color
+  // because background-color cannot render dashes. The line element loses
+  // its colored background and gains a colored border edge.
+  &--style-dashed &__line {
+    background-color: transparent !important;
+  }
+
+  &--style-dashed.dads-divider--horizontal &__line {
+    border-top: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
+    height: 0;
+  }
+
+  &--style-dashed.dads-divider--vertical &__line {
+    border-left: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
+    width: 0;
+  }
+
+  &--style-dashed.dads-divider--strong.dads-divider--horizontal &__line {
+    border-top-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+  }
+
+  &--style-dashed.dads-divider--strong.dads-divider--vertical &__line {
+    border-left-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
   }
 
   // -------------------- forced colors ------------------------------------

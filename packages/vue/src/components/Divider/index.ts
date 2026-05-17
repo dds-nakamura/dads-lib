@@ -3,4 +3,7 @@ export type {
   DadsDividerProps,
   DadsDividerOrientation,
   DadsDividerColor,
+  DadsDividerVariant,
+  DadsDividerThickness,
+  DadsDividerStyle,
 } from './DadsDivider.types'
