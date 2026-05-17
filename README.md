@@ -92,6 +92,27 @@ const name = ref('')
 
 詳細は [`packages/vue/README.md`](./packages/vue/README.md) と [VitePress カタログ](./apps/docs) を参照。
 
+### 外部プロジェクトから利用する
+
+`@dads/vue` は npm レジストリに公開していません。配布用 orphan ブランチ `vue-pkg` に push される `vue-v<semver>` tag を Git 経由で参照する形でインストールします。**GitHub と Backlog Git の両方に同一 tag が push** されるため、利用側はどちらの URL を指定しても OK。
+
+```bash
+# GitHub (パブリック)
+npm install "git+https://github.com/dds-nakamura/dads-lib.git#vue-v0.1.0"
+
+# Backlog Git (社内)
+npm install "git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git#vue-v0.1.0"
+```
+
+リリースコマンド (メンテナ向け):
+
+```bash
+./scripts/release-vue.sh 0.1.0                 # origin のみ
+./scripts/release-vue.sh 0.1.0 origin,backlog  # GitHub + Backlog 両方
+```
+
+詳細は [`packages/vue/README.md`](./packages/vue/README.md) の「インストール」「リリース手順」セクション参照。
+
 ---
 
 ## リポジトリ構成

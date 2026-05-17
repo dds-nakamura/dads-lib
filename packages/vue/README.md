@@ -38,7 +38,7 @@ VitePress カタログの sidebar 分類 (4 カテゴリ) に揃えます。
 
 ## インストール
 
-本パッケージは npm レジストリには公開されていません。**Backlog Git の配布用ブランチ `vue-pkg` に push された tag を参照する形でインストール** します（npm / pnpm / yarn いずれも対応）。
+本パッケージは npm レジストリには公開されていません。**配布用 orphan ブランチ `vue-pkg` に push された tag を Git 経由で参照する形でインストール** します（npm / pnpm / yarn いずれも対応）。配布先は **GitHub** と **Backlog Git** の双方に同一 tag が push されます。
 
 ```bash
 # Vue 3 本体 (peer)
@@ -46,19 +46,35 @@ npm install vue
 
 # CSS 変数 (推奨) — 公式 npm から
 npm install @digital-go-jp/design-tokens
+```
 
-# @dads/vue 本体 — Backlog Git の vue-pkg ブランチに打たれた tag から取得
+### GitHub からインストール (パブリック)
+
+```bash
+# HTTPS 経由
+npm install "git+https://github.com/dds-nakamura/dads-lib.git#vue-v0.1.0"
+
+# SSH 経由 (~/.ssh/config に GitHub の鍵を登録済みの場合)
+npm install "git+ssh://git@github.com:dds-nakamura/dads-lib.git#vue-v0.1.0"
+```
+
+### Backlog Git からインストール (社内利用)
+
+```bash
 npm install "git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git#vue-v0.1.0"
 ```
 
+### 補足
+
 - `#vue-v0.1.0` は配布用 tag（`vue-v<semver>` 命名規則）。利用側はブランチ名を意識する必要なし。
 - 配布用 tag は `vue-pkg` ブランチ（main とは履歴を切り離した orphan ブランチ）に打たれる。詳細は下の「リリース手順」参照。
+- GitHub / Backlog どちらの remote にも同じコミット ID で push されているため、tag の SHA は同一。
 - Backlog SSH 認証用に `~/.ssh/config` を整備しておく（CI は Deploy Key を推奨）。
-- 利用側の `package.json` には以下のように記録される:
+- 利用側の `package.json` には以下のように記録される（GitHub の場合）:
   ```jsonc
   {
     "dependencies": {
-      "@dads/vue": "git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git#vue-v0.1.0",
+      "@dads/vue": "git+https://github.com/dds-nakamura/dads-lib.git#vue-v0.1.0",
       "@digital-go-jp/design-tokens": "^1.1.0"
     }
   }
@@ -217,7 +233,11 @@ vue-pkg      ← orphan ブランチ (main とは履歴が独立)
 
 ```bash
 # リポジトリルートで実行
+# (a) origin (GitHub) のみに配布
 ./scripts/release-vue.sh 0.1.0
+
+# (b) GitHub + Backlog の両 remote に同一 tag を配布
+./scripts/release-vue.sh 0.1.0 origin,backlog
 ```
 
 スクリプトが行うこと:
@@ -226,12 +246,22 @@ vue-pkg      ← orphan ブランチ (main とは履歴が独立)
 2. `packages/vue/` の配布対象ファイル（dist / src/styles / package.json / README.md / LICENSE）を一時ディレクトリにステージング
 3. リポジトリを temp dir に clone し、そこで `vue-pkg` ブランチをチェックアウト（無ければ orphan ブランチとして新規作成）
 4. ステージング内容を `vue-pkg` ブランチに全置換 → commit
-5. `vue-v<version>` tag を打って `origin` に push
+5. `vue-v<version>` tag を打って指定された全 remote に push
 6. main ブランチ側にも tag を fetch して可視化
+
+### 既存 tag を別 remote に後追い配布する
+
+最初に GitHub だけにリリースしておき、後から Backlog を追加した場合は、ローカルに同期した tag を手動 push します（再ビルド不要）。
+
+```bash
+git remote add backlog git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git
+git fetch backlog
+git push backlog vue-pkg vue-v0.1.0
+```
 
 メリット:
 
 - ✅ main の `git log` / `git diff` に dist 由来の差分が出ない
-- ✅ Backlog Git は 1 リポジトリで完結
+- ✅ GitHub / Backlog Git どちらの remote でも同じ tag を使える
 - ✅ npm / pnpm / yarn どれでも利用側から install 可能
-- ✅ tag rollback は `git push --delete origin vue-v0.1.0` で完結
+- ✅ tag rollback は `git push --delete <remote> vue-v0.1.0` で完結
