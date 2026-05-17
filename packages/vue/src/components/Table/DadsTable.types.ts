@@ -37,4 +37,19 @@ export interface DadsTableProps {
    * the slot takes precedence so callers can compose richer markup.
    */
   caption?: string
+  /**
+   * Render a loading state covering the table body with skeleton rows.
+   * When `true`, the default slot is hidden and `skeletonRowCount`
+   * skeleton rows are shown. Caller still owns the `<tbody>` markup in
+   * the default slot — the skeleton replaces it visually.
+   */
+  loading?: boolean
+  /** Number of skeleton rows to render when `loading=true`. Default `3`. */
+  skeletonRowCount?: number
+  /**
+   * Number of skeleton columns to render per loading row. Default `4`.
+   * Adjust to match the caller's actual column count for a smoother
+   * visual transition when loading completes.
+   */
+  skeletonColumnCount?: number
 }

@@ -7,7 +7,13 @@ const props = withDefaults(defineProps<DadsTableProps>(), {
   density: 'comfortable',
   bordered: false,
   striped: false,
+  loading: false,
+  skeletonRowCount: 3,
+  skeletonColumnCount: 4,
 })
+
+const skeletonRows = computed(() => Array.from({ length: props.skeletonRowCount }, (_, i) => i))
+const skeletonCols = computed(() => Array.from({ length: props.skeletonColumnCount }, (_, i) => i))
 
 const wrapperClasses = computed(() => ({
   'dads-table-wrapper--sticky-header': props.stickyHeader,
@@ -22,6 +28,7 @@ const rootClasses = computed(() => [
     'dads-table--sticky-header': props.stickyHeader,
     'dads-table--bordered': props.bordered,
     'dads-table--striped': props.striped,
+    'dads-table--loading': props.loading,
   },
 ])
 </script>
@@ -32,7 +39,15 @@ const rootClasses = computed(() => [
       <caption v-if="caption || $slots.caption" class="dads-table__caption">
         <slot name="caption">{{ caption }}</slot>
       </caption>
-      <slot />
+      <slot v-if="!loading" />
+      <tbody v-else class="dads-table__skeleton-body" aria-busy="true" aria-live="polite">
+        <tr v-for="row in skeletonRows" :key="row" class="dads-table__skeleton-row">
+          <td v-for="col in skeletonCols" :key="col" class="dads-table__skeleton-cell">
+            <span class="dads-table__skeleton-bar" aria-hidden="true" />
+            <span class="dads-table__sr-only">読み込み中</span>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -113,6 +128,32 @@ const rootClasses = computed(() => [
     background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
   }
 
+  // ----- loading skeleton -------------------------------------------------
+  // Replaces the body with placeholder rows that pulse subtly so users see
+  // visual progress without reading specific values. We keep the table's
+  // structural classes (density, striped, etc.) so transitions on / off
+  // loading state don't jitter the layout.
+  &__skeleton-bar {
+    display: block;
+    width: 100%;
+    height: 0.875rem;
+    border-radius: var(--border-radius-4, 0.25rem);
+    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.08));
+    animation: dads-table-skeleton-pulse 1.4s ease-in-out infinite;
+  }
+
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   // ----- forced-colors ----------------------------------------------------
   @include base.dads-forced-colors {
     th,
@@ -129,6 +170,16 @@ const rootClasses = computed(() => [
     &--striped tbody tr:nth-child(even) {
       background-color: Canvas;
     }
+  }
+}
+
+@keyframes dads-table-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }
 </style>

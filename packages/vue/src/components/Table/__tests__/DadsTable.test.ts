@@ -234,4 +234,36 @@ describe('DadsTable', () => {
       expect(tables[1].classes()).not.toContain('dads-table--sticky-header')
     })
   })
+
+  describe('loading skeleton', () => {
+    it('does not render the skeleton body by default', () => {
+      const wrapper = mount(DadsTable)
+      expect(wrapper.find('.dads-table__skeleton-body').exists()).toBe(false)
+    })
+
+    it('replaces the default slot with skeleton rows when loading=true', () => {
+      const wrapper = mount(DadsTable, {
+        props: { loading: true },
+        slots: { default: '<tbody class="real-rows"><tr><td>data</td></tr></tbody>' },
+      })
+      expect(wrapper.find('.dads-table__skeleton-body').exists()).toBe(true)
+      expect(wrapper.find('.real-rows').exists()).toBe(false)
+    })
+
+    it('renders the configured number of skeleton rows and columns', () => {
+      const wrapper = mount(DadsTable, {
+        props: { loading: true, skeletonRowCount: 5, skeletonColumnCount: 3 },
+      })
+      const rows = wrapper.findAll('.dads-table__skeleton-row')
+      expect(rows).toHaveLength(5)
+      expect(rows[0].findAll('.dads-table__skeleton-cell')).toHaveLength(3)
+    })
+
+    it('marks the skeleton body as aria-busy="true" + aria-live="polite"', () => {
+      const wrapper = mount(DadsTable, { props: { loading: true } })
+      const body = wrapper.find('.dads-table__skeleton-body')
+      expect(body.attributes('aria-busy')).toBe('true')
+      expect(body.attributes('aria-live')).toBe('polite')
+    })
+  })
 })
