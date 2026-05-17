@@ -18,6 +18,7 @@ const props = withDefaults(defineProps<DadsSelectProps>(), {
   readonly: false,
   required: false,
   error: false,
+  chips: true,
 })
 
 const emit = defineEmits<DadsSelectEmits>()
@@ -311,8 +312,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         @focus="onFocus"
         @blur="onBlur"
       >
+        <i
+          v-if="prefixIcon"
+          :class="['mdi', prefixIcon, 'dads-select__prefix-icon']"
+          aria-hidden="true"
+        />
         <span class="dads-select__value-wrap">
-          <template v-if="multiple && selectedItems.length > 0">
+          <template v-if="multiple && selectedItems.length > 0 && chips">
             <span class="dads-select__tags">
               <span
                 v-for="item in selectedItems"
@@ -332,6 +338,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
                 </button>
               </span>
             </span>
+          </template>
+          <template v-else-if="multiple && selectedItems.length > 0">
+            <span class="dads-select__value">{{
+              selectedItems.map((i) => getItemTitle(i)).join(', ')
+            }}</span>
           </template>
           <template v-else-if="!multiple && selectedItem">
             <span class="dads-select__value">{{ getItemTitle(selectedItem) }}</span>
@@ -460,6 +471,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: flex;
     align-items: center;
     overflow: hidden;
+  }
+
+  &__prefix-icon {
+    flex-shrink: 0;
+    font-size: 1.25em;
+    line-height: 1;
+    color: var(--color-text-secondary, #4d4d4d);
+    margin-inline-end: var(--spacing-8, 0.5rem);
   }
 
   &__value {

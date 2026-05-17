@@ -42,6 +42,17 @@ export interface DadsSelectProps {
   error?: boolean
   disabled?: boolean
   readonly?: boolean
+  /**
+   * Material Design Icons class shown at the start of the trigger
+   * (e.g. `'mdi-magnify'`). Optional decorative icon.
+   */
+  prefixIcon?: string
+  /**
+   * Render the selected values as removable chips inside the trigger when
+   * `multiple=true`. Defaults to `true`. Set `false` to fall back to the
+   * comma-separated text label.
+   */
+  chips?: boolean
 }
 
 export interface DadsSelectEmits {

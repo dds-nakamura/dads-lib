@@ -519,4 +519,32 @@ describe('DadsSelect', () => {
       expect(wrapper.find('.dads-select__option--empty').exists()).toBe(true)
     })
   })
+
+  describe('prefixIcon', () => {
+    it('does not render the prefix icon when prop is omitted', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-select__prefix-icon').exists()).toBe(false)
+    })
+
+    it('renders the prefix icon when prop is set', () => {
+      const wrapper = createWrapper({ prefixIcon: 'mdi-magnify' })
+      const icon = wrapper.find('.dads-select__prefix-icon')
+      expect(icon.exists()).toBe(true)
+      expect(icon.classes()).toContain('mdi-magnify')
+      expect(icon.attributes('aria-hidden')).toBe('true')
+    })
+  })
+
+  describe('chips (multiple)', () => {
+    it('renders chips by default in multiple mode', () => {
+      const wrapper = createWrapper({ multiple: true, modelValue: ['a', 'c'] })
+      expect(wrapper.findAll('.dads-select__tag')).toHaveLength(2)
+    })
+
+    it('falls back to comma-separated text when chips=false', () => {
+      const wrapper = createWrapper({ multiple: true, modelValue: ['a', 'c'], chips: false })
+      expect(wrapper.findAll('.dads-select__tag')).toHaveLength(0)
+      expect(wrapper.find('.dads-select__value').text()).toBe('Apple, Cherry')
+    })
+  })
 })
