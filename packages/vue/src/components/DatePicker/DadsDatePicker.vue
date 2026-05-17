@@ -9,7 +9,24 @@ const props = withDefaults(defineProps<DadsDatePickerProps>(), {
   readonly: false,
   required: false,
   error: false,
+  variant: 'consolidated',
+  locale: 'gregorian',
 })
+
+/**
+ * Map a gregorian year to the matching Japanese era + era-year. Covers
+ * eras that overlap modern web usage (Meiji onward). Returns `null` for
+ * years that fall outside the table so the caller can render a fallback.
+ */
+const toWareki = (year: number): { era: string; year: number } | null => {
+  if (!Number.isFinite(year)) return null
+  if (year >= 2019) return { era: '令和', year: year - 2018 }
+  if (year >= 1989) return { era: '平成', year: year - 1988 }
+  if (year >= 1926) return { era: '昭和', year: year - 1925 }
+  if (year >= 1912) return { era: '大正', year: year - 1911 }
+  if (year >= 1868) return { era: '明治', year: year - 1867 }
+  return null
+}
 
 const emit = defineEmits<DadsDatePickerEmits>()
 
@@ -370,6 +387,8 @@ const onFieldBlur = (event: FocusEvent) => emit('blur', event)
 const rootClasses = computed(() => [
   'dads-date-picker',
   `dads-date-picker--${props.size}`,
+  `dads-date-picker--variant-${props.variant}`,
+  `dads-date-picker--locale-${props.locale}`,
   {
     'dads-date-picker--disabled': props.disabled,
     'dads-date-picker--readonly': props.readonly,
@@ -377,6 +396,16 @@ const rootClasses = computed(() => [
     'dads-date-picker--open': isOpen.value,
   },
 ])
+
+// Japanese era hint for the displayed year (locale='japanese' only). Returns
+// the empty string when the year is empty/invalid or locale is gregorian.
+const warekiHint = computed(() => {
+  if (props.locale !== 'japanese') return ''
+  const yr = Number(yearText.value)
+  if (!Number.isFinite(yr) || yr === 0) return ''
+  const w = toWareki(yr)
+  return w ? `${w.era}${w.year}年` : ''
+})
 </script>
 
 <template>
@@ -416,6 +445,9 @@ const rootClasses = computed(() => [
             @focus="onFieldFocus"
             @blur="onFieldBlur"
           />
+          <span v-if="warekiHint" class="dads-date-picker__wareki" aria-live="polite">
+            {{ warekiHint }}
+          </span>
         </label>
         <label class="dads-date-picker__month">
           <span class="dads-date-picker__label">月</span>
@@ -608,6 +640,33 @@ const rootClasses = computed(() => [
     border: 1px solid var(--color-neutral-solid-gray-600, #595959);
     background-color: var(--_bg);
     padding: 2px 0 2px 2px;
+  }
+
+  // -------------------- variant: separated -------------------------------
+  // separated: drop the unifying border around the trio of fields so each
+  // field reads as an independent input. The calendar button sits beside
+  // them as before. Year / month / day get their own narrow underline.
+  &--variant-separated &__inputs {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    gap: var(--spacing-8, 0.5rem);
+  }
+
+  &--variant-separated &__year,
+  &--variant-separated &__month,
+  &--variant-separated &__day {
+    border: 1px solid var(--color-neutral-solid-gray-600, #595959);
+    border-radius: 0.25rem;
+    padding: 0 0.25rem;
+  }
+
+  // -------------------- locale: japanese (wareki hint) ------------------
+  &__wareki {
+    display: inline-block;
+    margin-inline-start: 0.25rem;
+    font-size: var(--font-size-12, 0.75rem);
+    color: var(--color-text-secondary, #4d4d4d);
   }
 
   &__controls[data-size='sm'] &__inputs {

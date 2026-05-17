@@ -14,6 +14,23 @@ import type { DadsSize } from '../../types/common'
 // the rest of the form input family (TextField / Select / Combobox).
 export type DadsDatePickerSize = Exclude<DadsSize, 'xs'>
 
+/**
+ * Visual variant per official DADS.
+ * - `consolidated` (default): three fields in a single bordered control
+ * - `separated`: three independent borderless field groups (年 / 月 / 日)
+ *   with the calendar button standing alone — denser horizontal layout
+ *   that suits printed-form-style UIs.
+ */
+export type DadsDatePickerVariant = 'consolidated' | 'separated'
+
+/**
+ * Calendar locale display.
+ * - `gregorian` (default): year shown as e.g. `2026`
+ * - `japanese`: year hint shows the matching Japanese era (e.g. `2026 (令和8年)`)
+ *   alongside the gregorian year. The bound value stays ISO `YYYY-MM-DD`.
+ */
+export type DadsDatePickerLocale = 'gregorian' | 'japanese'
+
 export interface DadsDatePickerProps {
   /** Bound value (v-model). ISO `YYYY-MM-DD` string, or `''` when empty. */
   modelValue?: string
@@ -45,6 +62,10 @@ export interface DadsDatePickerProps {
   /** Native `id`. When omitted, an id is generated so the label `for` and
    *  ARIA `aria-describedby` references stay in sync. */
   id?: string
+  /** Visual variant. Default `'consolidated'`. */
+  variant?: DadsDatePickerVariant
+  /** Calendar locale display. Default `'gregorian'`. */
+  locale?: DadsDatePickerLocale
 }
 
 export interface DadsDatePickerEmits {

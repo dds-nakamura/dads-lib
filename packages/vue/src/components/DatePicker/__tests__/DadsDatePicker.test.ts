@@ -411,4 +411,38 @@ describe('DadsDatePicker', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
+
+  describe('variant + locale', () => {
+    it('applies the consolidated variant modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-date-picker--variant-consolidated')
+    })
+
+    it('applies the separated variant modifier when variant="separated"', () => {
+      const wrapper = createWrapper({ variant: 'separated' })
+      expect(wrapper.classes()).toContain('dads-date-picker--variant-separated')
+    })
+
+    it('applies the gregorian locale modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-date-picker--locale-gregorian')
+    })
+
+    it('does not render the wareki hint by default', () => {
+      const wrapper = createWrapper({ modelValue: '2026-05-17' })
+      expect(wrapper.find('.dads-date-picker__wareki').exists()).toBe(false)
+    })
+
+    it('renders the wareki hint when locale="japanese" + valid year', () => {
+      const wrapper = createWrapper({ locale: 'japanese', modelValue: '2026-05-17' })
+      const hint = wrapper.find('.dads-date-picker__wareki')
+      expect(hint.exists()).toBe(true)
+      expect(hint.text()).toBe('令和8年')
+    })
+
+    it('hides the wareki hint when year is empty', () => {
+      const wrapper = createWrapper({ locale: 'japanese', modelValue: '' })
+      expect(wrapper.find('.dads-date-picker__wareki').exists()).toBe(false)
+    })
+  })
 })

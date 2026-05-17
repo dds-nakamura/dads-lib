@@ -3,4 +3,6 @@ export type {
   DadsDatePickerProps,
   DadsDatePickerEmits,
   DadsDatePickerSize,
+  DadsDatePickerVariant,
+  DadsDatePickerLocale,
 } from './DadsDatePicker.types'
