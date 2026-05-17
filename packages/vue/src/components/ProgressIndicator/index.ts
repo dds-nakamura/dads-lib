@@ -3,4 +3,5 @@ export type {
   DadsProgressIndicatorProps,
   DadsProgressIndicatorVariant,
   DadsProgressIndicatorSize,
+  DadsProgressIndicatorColor,
 } from './DadsProgressIndicator.types'

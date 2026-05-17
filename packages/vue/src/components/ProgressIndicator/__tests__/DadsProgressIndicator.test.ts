@@ -280,4 +280,19 @@ describe('DadsProgressIndicator', () => {
       expect((fills[1].element as HTMLElement).style.width).toBe('80%')
     })
   })
+
+  describe('color variant', () => {
+    it('applies the primary color modifier by default', () => {
+      const wrapper = createWrapper({ value: 50 })
+      expect(wrapper.classes()).toContain('dads-progress-indicator--color-primary')
+    })
+
+    it.each(['primary', 'secondary', 'success', 'error', 'warning'] as const)(
+      'applies dads-progress-indicator--color-%s',
+      (c) => {
+        const wrapper = createWrapper({ value: 50, color: c })
+        expect(wrapper.classes()).toContain(`dads-progress-indicator--color-${c}`)
+      },
+    )
+  })
 })

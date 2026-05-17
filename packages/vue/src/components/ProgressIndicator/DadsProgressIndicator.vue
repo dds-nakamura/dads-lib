@@ -5,6 +5,7 @@ import type { DadsProgressIndicatorProps } from './DadsProgressIndicator.types'
 const props = withDefaults(defineProps<DadsProgressIndicatorProps>(), {
   variant: 'linear',
   size: 'md',
+  color: 'primary',
   showLabel: false,
 })
 
@@ -35,6 +36,7 @@ const rootClasses = computed(() => [
   'dads-progress-indicator',
   `dads-progress-indicator--${props.variant}`,
   `dads-progress-indicator--${props.size}`,
+  `dads-progress-indicator--color-${props.color}`,
   {
     'dads-progress-indicator--indeterminate': isIndeterminate.value,
   },
@@ -198,6 +200,41 @@ const displayLabel = computed(() => {
     stroke-dasharray: 80, 200; // ~80% covered, 200% offset cycle
     transition: none;
     animation: dads-progress-circular-dash 1.4s ease-in-out infinite;
+  }
+
+  // -------------------- color variants -----------------------------------
+  // Each semantic color overrides both the linear fill background and the
+  // circular fill stroke. Track / background remains the same tinted gray
+  // across all colors for visual consistency.
+  &--color-primary &__bar-fill {
+    background-color: var(--color-brand-primary, #0017c1);
+  }
+  &--color-primary &__circle-fill {
+    stroke: var(--color-brand-primary, #0017c1);
+  }
+  &--color-secondary &__bar-fill {
+    background-color: var(--color-brand-secondary, #595959);
+  }
+  &--color-secondary &__circle-fill {
+    stroke: var(--color-brand-secondary, #595959);
+  }
+  &--color-success &__bar-fill {
+    background-color: var(--color-success, #00876f);
+  }
+  &--color-success &__circle-fill {
+    stroke: var(--color-success, #00876f);
+  }
+  &--color-error &__bar-fill {
+    background-color: var(--color-error, #ec0000);
+  }
+  &--color-error &__circle-fill {
+    stroke: var(--color-error, #ec0000);
+  }
+  &--color-warning &__bar-fill {
+    background-color: var(--color-warning, #c47600);
+  }
+  &--color-warning &__circle-fill {
+    stroke: var(--color-warning, #c47600);
   }
 
   // -------------------- forced-colors ------------------------------------

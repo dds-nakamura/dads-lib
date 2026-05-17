@@ -1,7 +1,12 @@
 /**
  * Type definitions for DadsProgressIndicator.
  */
-import type { DadsSize } from '../../types/common'
+import type { DadsSemanticColor, DadsSize } from '../../types/common'
+
+/**
+ * Semantic color of the progress fill. Defaults to `'primary'`.
+ */
+export type DadsProgressIndicatorColor = DadsSemanticColor
 
 export type DadsProgressIndicatorVariant = 'linear' | 'circular'
 
@@ -22,6 +27,8 @@ export interface DadsProgressIndicatorProps {
   value?: number
   /** Component size. Defaults to 'md'. */
   size?: DadsProgressIndicatorSize
+  /** Semantic color of the fill / arc. Defaults to 'primary'. */
+  color?: DadsProgressIndicatorColor
   /**
    * Custom text rendered next to the indicator when `showLabel` is true.
    * When omitted, the component falls back to `${value}%` for determinate
