@@ -38,6 +38,13 @@ export interface DadsImageProps {
   objectFit?: DadsImageObjectFit
   /** Optional caption rendered as `<figcaption>` underneath the image. */
   caption?: string
+  /**
+   * Show an animated skeleton placeholder until the image's `load` event fires.
+   * The skeleton is a subtle horizontal shimmer rendered behind the still-
+   * transparent `<img>`, eliminating the blank-frame flash on slow networks.
+   * Default `true`. Set to `false` to keep the original static background.
+   */
+  showSkeleton?: boolean
 }
 
 export interface DadsImageEmits {

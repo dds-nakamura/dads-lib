@@ -182,4 +182,40 @@ describe('DadsImage', () => {
       expect(wrapper.classes()).toContain('dads-image--fit-contain')
     })
   })
+
+  describe('loading skeleton', () => {
+    it('applies the skeleton modifier before the image loads (default showSkeleton=true)', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-image--skeleton')
+      expect(wrapper.classes()).not.toContain('dads-image--loaded')
+    })
+
+    it('switches from skeleton to loaded when the <img> load event fires', async () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-image--skeleton')
+      await wrapper.find('img').trigger('load')
+      await nextTick()
+      expect(wrapper.classes()).toContain('dads-image--loaded')
+      expect(wrapper.classes()).not.toContain('dads-image--skeleton')
+    })
+
+    it('does not apply skeleton when showSkeleton=false', () => {
+      const wrapper = createWrapper({ showSkeleton: false })
+      expect(wrapper.classes()).not.toContain('dads-image--skeleton')
+    })
+
+    it('stops the skeleton after an error event so the placeholder is visible', async () => {
+      const wrapper = createWrapper({ placeholder: PLACEHOLDER })
+      await wrapper.find('img').trigger('error')
+      await nextTick()
+      expect(wrapper.classes()).not.toContain('dads-image--skeleton')
+      expect(wrapper.classes()).toContain('dads-image--loaded')
+    })
+
+    it('shows skeleton on the figure wrapper when caption is set', () => {
+      const wrapper = createWrapper({ caption: 'photo' })
+      expect(wrapper.classes()).toContain('dads-image--skeleton')
+      expect(wrapper.element.tagName).toBe('FIGURE')
+    })
+  })
 })
