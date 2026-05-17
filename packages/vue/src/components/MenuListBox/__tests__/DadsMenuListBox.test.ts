@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsMenuListBox from '../DadsMenuListBox.vue'
 import type { DadsMenuListBoxItem, DadsMenuListBoxProps } from '../DadsMenuListBox.types'
 
@@ -358,6 +359,80 @@ describe('DadsMenuListBox', () => {
       expect(surface.exists()).toBe(true)
       // No v-show display:none should be applied in standalone mode.
       expect((surface.element as HTMLElement).style.display).not.toBe('none')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    // The component is a non-landmark surface (used inside a nav / dialog by
+    // callers); for axe to skip the `region` rule we mount inside a real
+    // landmark wrapper rather than at the bare component root.
+    const mountInLandmark = (props: Partial<DadsMenuListBoxProps> = {}) =>
+      mount(
+        {
+          components: { DadsMenuListBox },
+          props: ['boxProps'],
+          template: `<nav aria-label="テスト用ナビ"><DadsMenuListBox v-bind="boxProps" /></nav>`,
+        },
+        {
+          props: { boxProps: { items: sampleItems, ...props } },
+          attachTo: document.body,
+        },
+      )
+
+    it('has no violations in standalone mode with aria-label', async () => {
+      const wrapper = mountInLandmark({ ariaLabel: 'メインメニュー' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with item descriptions and icons', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'カテゴリ一覧',
+        items: [
+          { label: 'ホーム', iconName: 'mdi-home', description: 'トップページに戻ります' },
+          { label: 'ニュース', iconName: 'mdi-newspaper', description: '最新のお知らせ' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with an active item', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'メニュー',
+        items: [
+          { label: 'ホーム', href: '/', active: true },
+          { label: 'ニュース', href: '/news' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled item', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'メニュー',
+        items: [
+          { label: 'ホーム', href: '/' },
+          { label: '準備中', disabled: true },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in opener mode when open', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'ユーザーメニュー',
+        triggerLabel: 'メニューを開く',
+        modelValue: true,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in opener mode when closed', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'ユーザーメニュー',
+        triggerLabel: 'メニューを開く',
+        modelValue: false,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

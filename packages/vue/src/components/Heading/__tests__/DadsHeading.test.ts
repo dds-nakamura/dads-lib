@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsHeading from '../DadsHeading.vue'
 import type { DadsHeadingProps } from '../DadsHeading.types'
 
@@ -408,6 +409,29 @@ describe('DadsHeading', () => {
       expect(title.find('.dads-heading__icon i.mdi.mdi-bookmark').exists()).toBe(true)
       expect(title.find('.dads-heading__text').text()).toBe('メインタイトル')
       expect(title.find('.dads-heading__chip .badge').text()).toBe('NEW')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it.each(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const)(
+      'has no violations with as=%s',
+      async (as) => {
+        const wrapper = createWrapper({ as }, { default: '見出し' })
+        expect(await axe(wrapper.element)).toHaveNoViolations()
+      },
+    )
+
+    it('has no violations with shoulder + subtitle (hgroup wrapper)', async () => {
+      const wrapper = createWrapper(
+        { as: 'h1', shoulder: 'カテゴリA', subtitle: '補足説明' },
+        { default: 'メインタイトル' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with an icon glyph', async () => {
+      const wrapper = createWrapper({ as: 'h2', icon: 'mdi-bookmark' }, { default: 'タイトル' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

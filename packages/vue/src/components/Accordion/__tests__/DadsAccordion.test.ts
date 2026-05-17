@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsAccordion from '../DadsAccordion.vue'
 import type { DadsAccordionItem, DadsAccordionProps } from '../DadsAccordion.types'
@@ -358,6 +359,51 @@ describe('DadsAccordion', () => {
       expect(link.exists()).toBe(true)
       expect(link.attributes('href')).toBe('#top')
       expect(link.text()).toBe('ページのトップへ戻る')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations when all panels are collapsed', async () => {
+      const wrapper = createWrapper({ modelValue: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when a single panel is open', async () => {
+      const wrapper = createWrapper(
+        { modelValue: 'a' },
+        { 'panel-a': '<p>A の内容</p>', 'panel-b': '<p>B の内容</p>', 'panel-c': '<p>C の内容</p>' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in multiple mode with two panels open', async () => {
+      const wrapper = createWrapper(
+        { type: 'multiple', modelValue: ['a', 'c'] },
+        { 'panel-a': '<p>A の内容</p>', 'panel-b': '<p>B の内容</p>', 'panel-c': '<p>C の内容</p>' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled item', async () => {
+      const wrapper = createWrapper({
+        modelValue: '',
+        items: [
+          { id: 'a', title: 'A' },
+          { id: 'b', title: 'B (準備中)', disabled: true },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a return link in an open panel', async () => {
+      const wrapper = createWrapper(
+        {
+          modelValue: 'a',
+          returnLink: { label: 'ページのトップへ戻る', href: '#top' },
+        },
+        { 'panel-a': '<p>A の内容</p>' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
