@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import type {
   DadsNotificationBannerColor,
   DadsNotificationBannerEmits,
@@ -9,6 +9,7 @@ import type {
 const props = withDefaults(defineProps<DadsNotificationBannerProps>(), {
   modelValue: true,
   color: 'info',
+  style: 'standard',
   closable: true,
   closeLabel: '閉じる',
 })
@@ -30,6 +31,7 @@ const defaultIconClass = computed(() => DEFAULT_ICONS[props.color])
 const rootClasses = computed(() => [
   'dads-notification-banner',
   `dads-notification-banner--${props.color}`,
+  `dads-notification-banner--style-${props.style}`,
 ])
 
 // `alert` interrupts assistive tech right away; `status` waits until the user
@@ -43,9 +45,44 @@ const ariaRole = computed(() =>
 // Warnings still use `polite` so they don't talk over the user's current task.
 const ariaLive = computed(() => (props.color === 'error' ? 'assertive' : 'polite'))
 
+// Resolve the timestamp into ISO + display strings exactly once per value
+// change. Strings are passed through verbatim (caller decides format).
+const timestampParts = computed(() => {
+  if (props.timestamp === undefined) return null
+  if (props.timestamp instanceof Date) {
+    return {
+      iso: props.timestamp.toISOString(),
+      display: props.timestamp.toLocaleString(),
+    }
+  }
+  return { iso: props.timestamp, display: props.timestamp }
+})
+
+// localStorage persistence — opt-in via persistKey. Run on mount so SSR-
+// rendered pages don't touch window.
+onMounted(() => {
+  if (!props.persistKey) return
+  if (typeof window === 'undefined') return
+  try {
+    if (window.localStorage.getItem(props.persistKey) === 'closed') {
+      emit('update:modelValue', false)
+    }
+  } catch {
+    // localStorage can throw in privacy-restricted contexts (e.g. Safari
+    // private browsing). Silently fall back to in-memory state.
+  }
+})
+
 const onClose = () => {
   emit('update:modelValue', false)
   emit('close')
+  if (props.persistKey && typeof window !== 'undefined') {
+    try {
+      window.localStorage.setItem(props.persistKey, 'closed')
+    } catch {
+      // See onMounted comment.
+    }
+  }
 }
 </script>
 
@@ -63,6 +100,9 @@ const onClose = () => {
         </p>
         <p v-if="message || $slots.default" class="dads-notification-banner__message">
           <slot>{{ message }}</slot>
+        </p>
+        <p v-if="timestampParts" class="dads-notification-banner__timestamp">
+          <time :datetime="timestampParts.iso">{{ timestampParts.display }}</time>
         </p>
       </div>
       <div v-if="$slots.action" class="dads-notification-banner__action">
@@ -154,6 +194,13 @@ $dads-notification-banner-colors: (
     font-size: var(--font-size-14, 0.875rem);
   }
 
+  &__timestamp {
+    margin: var(--spacing-4, 0.25rem) 0 0;
+    font-size: var(--font-size-12, 0.75rem);
+    color: var(--color-text-secondary, #4d4d4d);
+    line-height: 1.4;
+  }
+
   &__action {
     flex-shrink: 0;
     align-self: center;
@@ -183,9 +230,20 @@ $dads-notification-banner-colors: (
     $fg: list.nth($tokens, 1);
     $bg: list.nth($tokens, 2);
 
-    &--#{$name} {
+    // standard style: tinted background with colored border.
+    &--style-standard.dads-notification-banner--#{$name} {
       background-color: var(#{$bg});
       border-color: var(#{$fg});
+    }
+
+    // color-chip style: white background with a vertical color bar on the
+    // inline-start edge. Border-left provides the accent without needing
+    // an extra DOM element.
+    &--style-color-chip.dads-notification-banner--#{$name} {
+      background-color: var(--color-bg-surface, #fff);
+      border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+      border-inline-start: 4px solid var(#{$fg});
+      padding-inline-start: calc(var(--spacing-16, 1rem) - 3px);
     }
 
     &--#{$name} .dads-notification-banner__icon,

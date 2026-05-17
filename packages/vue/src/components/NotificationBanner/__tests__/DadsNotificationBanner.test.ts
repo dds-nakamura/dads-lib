@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { h, nextTick } from 'vue'
 import DadsNotificationBanner from '../DadsNotificationBanner.vue'
@@ -216,6 +216,94 @@ describe('DadsNotificationBanner', () => {
       await wrapper.setProps({ modelValue: false })
       await nextTick()
       expect(findRoot(wrapper).exists()).toBe(false)
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // style — DADS specifies 'standard' (tinted background + colored border)
+  // and 'color-chip' (white background + left color accent bar).
+  // ----------------------------------------------------------------------
+  describe('style variant', () => {
+    it('applies the standard style modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(findRoot(wrapper).classes()).toContain('dads-notification-banner--style-standard')
+    })
+
+    it('applies the color-chip style modifier when style="color-chip"', () => {
+      const wrapper = createWrapper({ style: 'color-chip' })
+      expect(findRoot(wrapper).classes()).toContain('dads-notification-banner--style-color-chip')
+      expect(findRoot(wrapper).classes()).not.toContain('dads-notification-banner--style-standard')
+    })
+
+    it('keeps the color modifier independent of the style modifier', () => {
+      const wrapper = createWrapper({ color: 'success', style: 'color-chip' })
+      const classes = findRoot(wrapper).classes()
+      expect(classes).toContain('dads-notification-banner--success')
+      expect(classes).toContain('dads-notification-banner--style-color-chip')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // timestamp — rendered inside <time datetime>. Accepts string or Date.
+  // ----------------------------------------------------------------------
+  describe('timestamp', () => {
+    it('does not render a timestamp element when prop is omitted', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-notification-banner__timestamp').exists()).toBe(false)
+    })
+
+    it('renders a string timestamp as both visible text and datetime attribute', () => {
+      const wrapper = createWrapper({ timestamp: '2026-05-17T10:30:00+09:00' })
+      const time = wrapper.find('.dads-notification-banner__timestamp time')
+      expect(time.exists()).toBe(true)
+      expect(time.attributes('datetime')).toBe('2026-05-17T10:30:00+09:00')
+      expect(time.text()).toBe('2026-05-17T10:30:00+09:00')
+    })
+
+    it('renders a Date timestamp with ISO datetime and locale-formatted text', () => {
+      const d = new Date('2026-05-17T01:30:00Z')
+      const wrapper = createWrapper({ timestamp: d })
+      const time = wrapper.find('.dads-notification-banner__timestamp time')
+      expect(time.attributes('datetime')).toBe(d.toISOString())
+      expect(time.text()).toBe(d.toLocaleString())
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // persistKey — opt-in localStorage persistence of the closed state.
+  // ----------------------------------------------------------------------
+  describe('persistKey', () => {
+    beforeEach(() => {
+      window.localStorage.clear()
+    })
+
+    it('does not touch localStorage when persistKey is omitted', () => {
+      const setSpy = vi.spyOn(Storage.prototype, 'setItem')
+      const wrapper = createWrapper({ modelValue: true })
+      // Manually close.
+      wrapper.find('.dads-notification-banner__close').trigger('click')
+      expect(setSpy).not.toHaveBeenCalled()
+      setSpy.mockRestore()
+    })
+
+    it('writes "closed" to localStorage when closed with persistKey set', async () => {
+      const wrapper = createWrapper({ modelValue: true, persistKey: 'notice-2026-05-17' })
+      await wrapper.find('.dads-notification-banner__close').trigger('click')
+      expect(window.localStorage.getItem('notice-2026-05-17')).toBe('closed')
+    })
+
+    it('emits update:modelValue=false on mount when persistKey is already closed', async () => {
+      window.localStorage.setItem('notice-existing', 'closed')
+      const wrapper = createWrapper({ modelValue: true, persistKey: 'notice-existing' })
+      await nextTick()
+      const events = wrapper.emitted('update:modelValue')
+      expect(events?.[0]?.[0]).toBe(false)
+    })
+
+    it('does not emit on mount when persistKey is set but not yet closed', async () => {
+      const wrapper = createWrapper({ modelValue: true, persistKey: 'notice-fresh' })
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
     })
   })
 })

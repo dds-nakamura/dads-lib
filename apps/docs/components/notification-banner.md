@@ -100,6 +100,67 @@ const visible = ref(true)
 </template>
 ```
 
+## デザインスタイル (style) [NEW]
+
+公式 DADS は 2 つのスタイルを定義する。`style` プロップで切替 (デフォルト `'standard'`)。
+
+- `'standard'`: 角丸ボーダー + 塗りつぶし背景 (色チップなし)。視覚的に強く目立つ。
+- `'color-chip'`: 白背景 + 左端にカラーアクセントバー。静的なお知らせ・情報パネルに向く控えめなスタイル。
+
+<div class="demo">
+  <span class="demo-label">style="standard" (default)</span>
+  <DadsNotificationBanner color="info" message="標準スタイル" :closable="false" />
+  <span class="demo-label" style="margin-top:1rem">style="color-chip"</span>
+  <DadsNotificationBanner color="info" style="color-chip" message="カラーチップスタイル" :closable="false" />
+  <DadsNotificationBanner color="success" style="color-chip" message="完了通知 (color-chip)" :closable="false" />
+  <DadsNotificationBanner color="warning" style="color-chip" message="警告 (color-chip)" :closable="false" />
+</div>
+
+```vue
+<DadsNotificationBanner color="success" style="color-chip" message="保存しました" />
+```
+
+## タイムスタンプ (timestamp) [NEW]
+
+`timestamp` プロップに ISO 文字列または Date を渡すと、本文の下に `<time datetime>` でレンダリングされる。
+
+<div class="demo">
+  <DadsNotificationBanner
+    color="info"
+    title="メンテナンスのお知らせ"
+    message="2026 年 5 月 17 日 22:00〜23:00 にサーバメンテナンスを実施します。"
+    timestamp="2026-05-17T10:30:00+09:00"
+    :closable="false"
+  />
+</div>
+
+```vue
+<DadsNotificationBanner
+  color="info"
+  title="メンテナンス"
+  message="..."
+  timestamp="2026-05-17T10:30:00+09:00"
+/>
+
+<!-- Date オブジェクトを渡すと自動で locale 整形 + ISO datetime 出力 -->
+<DadsNotificationBanner :timestamp="new Date()" message="..." />
+```
+
+## 閉じた状態を保持 (persistKey) [NEW]
+
+`persistKey` を指定すると、閉じる操作で `localStorage` にキー (`'closed'`) が書き込まれ、次回マウント時に自動で非表示状態を復元する (ユーザーが手動で `localStorage.removeItem(persistKey)` するか、別のキーに変更するまで)。
+
+```vue
+<DadsNotificationBanner
+  color="info"
+  title="新機能のご案内"
+  message="2026 年 5 月リリースの新機能をご紹介します"
+  persist-key="notice-2026-05-new-feature"
+/>
+```
+
+SSR ページや プライベートブラウジング (`localStorage` 例外) にも安全にフォールバックする。
+
 ## 閉じるボタン非表示
 
 `closable` を `false` にすると閉じるボタンを描画しない。常時表示するシステム告知などに使う。
@@ -140,14 +201,17 @@ const visible = ref(true)
 
 ## Props
 
-| Prop         | 型                                                         | デフォルト | 説明                                                         |
-| ------------ | ---------------------------------------------------------- | ---------- | ------------------------------------------------------------ |
-| `modelValue` | `boolean`                                                  | `true`     | 表示状態。`v-model` のターゲット                             |
-| `color`      | `'success' \| 'error' \| 'warning' \| 'info' \| 'neutral'` | `'info'`   | セマンティックカラー。背景色・テキスト色・既定アイコンを決定 |
-| `title`      | `string`                                                   | -          | メッセージ上部に表示する太字タイトル                         |
-| `message`    | `string`                                                   | -          | 本文テキスト。`default` slot 指定時はそちらが優先される      |
-| `closable`   | `boolean`                                                  | `true`     | 閉じるボタンの表示有無                                       |
-| `closeLabel` | `string`                                                   | `'閉じる'` | 閉じるボタンの `aria-label`                                  |
+| Prop         | 型                                                         | デフォルト   | 説明                                                             |
+| ------------ | ---------------------------------------------------------- | ------------ | ---------------------------------------------------------------- |
+| `modelValue` | `boolean`                                                  | `true`       | 表示状態。`v-model` のターゲット                                 |
+| `color`      | `'success' \| 'error' \| 'warning' \| 'info' \| 'neutral'` | `'info'`     | セマンティックカラー。背景色・テキスト色・既定アイコンを決定     |
+| `style`      | `'standard' \| 'color-chip'`                               | `'standard'` | デザインスタイル                                                 |
+| `title`      | `string`                                                   | -            | メッセージ上部に表示する太字タイトル                             |
+| `message`    | `string`                                                   | -            | 本文テキスト。`default` slot 指定時はそちらが優先される          |
+| `closable`   | `boolean`                                                  | `true`       | 閉じるボタンの表示有無                                           |
+| `closeLabel` | `string`                                                   | `'閉じる'`   | 閉じるボタンの `aria-label`                                      |
+| `timestamp`  | `string \| Date`                                           | -            | 本文下に `<time datetime>` で表示。Date は自動で ISO+locale 整形 |
+| `persistKey` | `string`                                                   | -            | 指定時、閉じた状態を `localStorage` に保持し次回マウント時に復元 |
 
 ## Events
 
