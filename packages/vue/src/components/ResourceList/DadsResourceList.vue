@@ -94,8 +94,8 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
           </div>
         </component>
         <component
-          v-if="entry.item.action"
           :is="entry.item.action.href ? 'a' : 'button'"
+          v-if="entry.item.action"
           :type="entry.item.action.href ? undefined : 'button'"
           :href="entry.item.action.href"
           :aria-label="entry.item.action.label"

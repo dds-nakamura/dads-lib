@@ -156,7 +156,7 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
     @keydown="onKeydown"
   >
     <header v-if="hasHeader" class="dads-image-slider__header">
-      <component v-if="heading" :is="headingTag" class="dads-image-slider__heading">
+      <component :is="headingTag" v-if="heading" class="dads-image-slider__heading">
         {{ heading }}
       </component>
       <a v-if="hasShowAll" :href="showAllHref" class="dads-image-slider__show-all">

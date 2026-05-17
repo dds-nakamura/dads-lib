@@ -208,7 +208,7 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     @keydown="onKeydown"
   >
     <header v-if="heading || hasShowAll" class="dads-carousel__header">
-      <component v-if="heading" :is="headingTag" class="dads-carousel__heading">
+      <component :is="headingTag" v-if="heading" class="dads-carousel__heading">
         {{ heading }}
       </component>
       <a v-if="hasShowAll" :href="showAllHref" class="dads-carousel__show-all">
