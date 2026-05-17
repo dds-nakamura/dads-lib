@@ -6,13 +6,16 @@
  * it does not clutter the initial viewport. The default `aria-label` is
  * Japanese to match DADS conventions; override via `ariaLabel` for i18n.
  *
- * NOTE: The DADS official spec marks this component as deprecated. We still
- * ship it for parity with the design system, but new screens should consider
- * native scroll affordances first.
+ * ⚠️ Deprecated by the official DADS spec. New screens should prefer
+ * DadsTableOfContents / DadsPageNavigation, skip links, or DadsHeaderContainer
+ * `sticky` mode instead. Shipped for parity / existing implementations only.
+ *
+ * @deprecated Per official DADS guidance.
  */
 
 export type DadsScrollTopButtonPosition = 'bottom-right' | 'bottom-left'
 
+/** @deprecated Per official DADS guidance. See file-level comment. */
 export interface DadsScrollTopButtonProps {
   /**
    * Number of pixels the window must be scrolled down before the button
