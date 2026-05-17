@@ -2,7 +2,7 @@
 
 DADS (デジタル庁デザインシステム) の Vue 3 コンポーネントライブラリ。
 
-> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **1973 tests pass (52 ファイル)** / 23 コンポーネントが vitest-axe a11y テスト済
+> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **2098 tests pass (52 ファイル)** / **全 52 コンポーネントが vitest-axe a11y テスト済 (100% カバレッジ)**
 
 ## 特徴
 
@@ -88,42 +88,79 @@ import { DadsButton, DadsInputText } from '@dads/vue'
 
 ## a11y テスト (vitest-axe)
 
-`vitest-axe` で WCAG 違反を自動検出するテストを 23 コンポーネント (≈126 ケース) に追加済:
+**全 52 コンポーネントが `vitest-axe` で WCAG 違反を自動検出するテスト済 (100% カバレッジ, 約 250 ケース)**。各コンポーネントの主要状態 (label / hint / required / error / disabled / 主要バリアント) を網羅。
 
-### Foundation (2026-05-13 以前)
+### Form (13 件)
 
-| コンポーネント      | ケース数 | カバー範囲                                                                        |
-| ------------------- | -------- | --------------------------------------------------------------------------------- |
-| Button              | 5        | text-label / icon-only+aria-label / disabled / loading / anchor                   |
-| InputText           | 6        | label / hint / required / error / disabled / aria-label fallback                  |
-| Dialog              | 5        | title+labelledby / header-slot fallback / persistent / footer / 4 size プリセット |
-| DatePicker          | 4        | 主要状態 (label / required / error / disabled)                                    |
-| SearchBox           | 5        | label / suggestions / clearable / category 並置 / 必須                            |
-| HamburgerMenuButton | 3        | default / icon-only / mobile-conditional バリアント                               |
-| ChipLabel           | 2        | プレーン / 必須拡張                                                               |
-| ScrollTopButton     | 2        | 表示 / 非表示状態                                                                 |
-| TableControl        | 2        | フィルタ / ソート連動                                                             |
+| コンポーネント | ケース数 | カバー範囲                                                                          |
+| -------------- | -------- | ----------------------------------------------------------------------------------- |
+| Button         | 5        | text-label / icon-only+aria-label / disabled / loading / anchor                     |
+| InputText      | 6        | label / hint / required / error / disabled / aria-label fallback                    |
+| Textarea       | 6        | label / hint / required / error / disabled / counter                                |
+| Select         | 7        | label / hint / required / error / disabled / 単一選択 / multiple+chips              |
+| Checkbox       | 7        | label / hint / required / error / disabled / checked / indeterminate                |
+| CheckboxGroup  | 6        | legend / hint / required / error / disabled / 一部選択                              |
+| Radio          | 7        | label / hint / description / required / error / disabled / checked                  |
+| RadioGroup     | 7        | legend / hint / required / error / disabled / visually-hidden legend / descriptions |
+| FileUpload     | 6        | label / hint / required / error / disabled / プレビュー                             |
+| Combobox       | 6        | label / hint / required / error / disabled / multiple+chips                         |
+| ColorPicker    | 3        | label / swatches / disabled                                                         |
+| DatePicker     | 4        | 主要状態 (label / required / error / disabled)                                      |
+| SearchBox      | 5        | label / suggestions / clearable / category 並置 / 必須                              |
 
-### Form / Navigation / Display 追加 (2026-05-17)
+### Navigation (17 件)
 
-| コンポーネント     | ケース数 | カバー範囲                                                                               |
-| ------------------ | -------- | ---------------------------------------------------------------------------------------- |
-| Radio              | 7        | label / hint / description / required / error / disabled / checked                       |
-| RadioGroup         | 7        | legend / hint / required / error / disabled / visually-hidden legend / descriptions      |
-| Checkbox           | 7        | label / hint / required / error / disabled / checked / indeterminate                     |
-| CheckboxGroup      | 6        | legend / hint / required / error / disabled / 一部選択                                   |
-| Select             | 7        | label / hint / required / error / disabled / 単一選択 / multiple+chips                   |
-| Textarea           | 6        | label / hint / required / error / disabled / counter                                     |
-| Combobox           | 6        | label / hint / required / error / disabled / multiple+chips                              |
-| FileUpload         | 6        | label / hint / required / error / disabled / プレビュー                                  |
-| Drawer             | 6        | flat / title / nested / placement=right / placement=full / disabled item                 |
-| MobileMenu         | 6        | accordion 平坦 / utility / aria-label / close 非表示 / slide+nested / slide サブメニュー |
-| NotificationBanner | 9        | デフォルト + 5 色 / closable=false / color-chip / timestamp                              |
-| Heading            | 8        | h1〜h6 各 1 / shoulder+subtitle / icon                                                   |
-| Accordion          | 5        | 全閉 / 単一展開 / multiple 複数展開 / disabled item / return link                        |
-| MenuListBox        | 6        | standalone+aria-label / description+icon / active / disabled / opener 開閉               |
+| コンポーネント      | ケース数 | カバー範囲                                                                               |
+| ------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| HeaderContainer     | 7        | logoLabel / anchor logo / no menu toggle / 4 variants                                    |
+| Drawer              | 6        | flat / title / nested / placement=right / placement=full / disabled item                 |
+| Breadcrumb          | 4        | default / custom separator / aria-label / disabled item                                  |
+| StepNavigation      | 4        | horizontal / vertical / non-clickable / 4 statuses                                       |
+| Tab                 | 5        | horizontal / vertical / icons / disabled tab / keepAlive                                 |
+| LanguageSelector    | 5        | closed / open / colorScheme / cornerShape / disabled                                     |
+| MenuList            | 4        | flat / size=small / section dividers / accordion                                         |
+| MenuListBox         | 6        | standalone / description+icon / active / disabled / opener 開閉                          |
+| HamburgerMenuButton | 3        | default / icon-only / mobile-conditional バリアント                                      |
+| UtilityLink         | 4        | single / icon+external / list / mixed external                                           |
+| ScrollTopButton     | 2        | 表示 / 非表示状態                                                                        |
+| GlobalMenu          | 4        | flat / active item / disabled / parent + children                                        |
+| MegaMenu            | 4        | closed / open / aria-label / single-column                                               |
+| PageNavigation      | 5        | first page / middle ellipses / first-last buttons / disabled / single page               |
+| TableOfContents     | 4        | flat / nested / active / custom aria-label                                               |
+| BottomNavigation 🚫 | 4        | button items / anchor items / aria-label / disabled item                                 |
+| MobileMenu          | 6        | accordion 平坦 / utility / aria-label / close 非表示 / slide+nested / slide サブメニュー |
 
-**TODO**: 残り 29 コンポーネントの a11y テスト追加。次の候補は Display 系 (Card / Tab / Breadcrumb / PageNavigation / Disclosure / DescriptionList 等) と特化型コンポーネント (EmergencyBanner / Tooltip / Carousel / ImageSlider 等)。
+### Feedback (5 件)
+
+| コンポーネント     | ケース数 | カバー範囲                                                             |
+| ------------------ | -------- | ---------------------------------------------------------------------- |
+| NotificationBanner | 9        | デフォルト + 5 色 / closable=false / color-chip / timestamp            |
+| Dialog             | 5        | title+labelledby / header-slot fallback / persistent / footer / 4 size |
+| Tooltip            | 7        | closed / open / 4 positions / disabled                                 |
+| ProgressIndicator  | 4        | determinate linear / indeterminate / circular+label / boundaries       |
+| EmergencyBanner    | 5        | message only / title+message / CTA / closable / external link          |
+
+### Display (17 件)
+
+| コンポーネント  | ケース数 | カバー範囲                                                                   |
+| --------------- | -------- | ---------------------------------------------------------------------------- |
+| Card            | 4        | outlined / header+footer / elevated / clickable                              |
+| Heading         | 8        | h1〜h6 各 1 / shoulder+subtitle / icon                                       |
+| Divider         | 4        | horizontal / vertical / label slot / aria-label                              |
+| Table           | 5        | basic / caption / sticky / compact+bordered+striped / loading                |
+| Accordion       | 5        | 全閉 / 単一展開 / multiple 複数展開 / disabled item / return link            |
+| ChipLabel       | 2        | プレーン / 必須拡張                                                          |
+| ChipTag         | 4        | plain / clickable / closable / outlined                                      |
+| Chip            | 4        | plain / clickable / closable / disabled (clickable+closable は anti-pattern) |
+| Disclosure      | 4        | collapsed / open / controlled / disabled                                     |
+| DescriptionList | 4        | horizontal / vertical / bullet / bordered                                    |
+| Image           | 3        | descriptive alt / decorative alt / caption (figure)                          |
+| ImageSlider     | 4        | default / arrows+indicators / show-all link / no heading + aria-label        |
+| Carousel        | 4        | single mode / aria-label / container+heading / multi mode                    |
+| List            | 4        | flat unordered / nested / ordered / spacing                                  |
+| Blockquote      | 3        | quote / cite / citeUrl                                                       |
+| ResourceList    | 4        | basic / linked / style=list / thumbnails                                     |
+| TableControl    | 2        | フィルタ / ソート連動                                                        |
 
 ## アイコン
 
