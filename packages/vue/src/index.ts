@@ -17,7 +17,17 @@ export * from './components/Radio'
 export * from './components/RadioGroup'
 export * from './components/FileUpload'
 export * from './components/Combobox'
-export * from './components/Header'
+export * from './components/HeaderContainer'
+// Deprecated alias: DadsHeader は公式 slug が `header-container` のため
+// DadsHeaderContainer にリネームされた (2026-05-17)。次のメジャーで削除予定。
+/** @deprecated Use {@link DadsHeaderContainer} instead. Will be removed in a future major. */
+export { default as DadsHeader } from './components/HeaderContainer/DadsHeaderContainer.vue'
+export type {
+  /** @deprecated Use {@link DadsHeaderContainerProps} instead. */
+  DadsHeaderContainerProps as DadsHeaderProps,
+  /** @deprecated Use {@link DadsHeaderContainerEmits} instead. */
+  DadsHeaderContainerEmits as DadsHeaderEmits,
+} from './components/HeaderContainer/DadsHeaderContainer.types'
 export * from './components/Drawer'
 export * from './components/Breadcrumb'
 export * from './components/StepNavigation'

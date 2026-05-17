@@ -1,39 +1,45 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { DadsHeaderEmits, DadsHeaderProps } from './DadsHeader.types'
+import type {
+  DadsHeaderContainerEmits,
+  DadsHeaderContainerProps,
+} from './DadsHeaderContainer.types'
 
-const props = withDefaults(defineProps<DadsHeaderProps>(), {
+const props = withDefaults(defineProps<DadsHeaderContainerProps>(), {
   sticky: true,
   showMenuToggle: true,
   menuToggleLabel: 'メニューを開く',
 })
 
-const emit = defineEmits<DadsHeaderEmits>()
+const emit = defineEmits<DadsHeaderContainerEmits>()
 
-const rootClasses = computed(() => ['dads-header', { 'dads-header--sticky': props.sticky }])
+const rootClasses = computed(() => [
+  'dads-header-container',
+  { 'dads-header-container--sticky': props.sticky },
+])
 
 const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
 </script>
 
 <template>
   <header :class="rootClasses">
-    <div class="dads-header__inner">
+    <div class="dads-header-container__inner">
       <button
         v-if="showMenuToggle"
         type="button"
-        class="dads-header__menu-toggle"
+        class="dads-header-container__menu-toggle"
         :aria-label="menuToggleLabel"
         @click="onMenuClick"
       >
         <i class="mdi mdi-menu" aria-hidden="true" />
       </button>
-      <div v-if="$slots.logo" class="dads-header__logo">
+      <div v-if="$slots.logo" class="dads-header-container__logo">
         <slot name="logo" />
       </div>
-      <nav v-if="$slots.nav" class="dads-header__nav" aria-label="メインナビゲーション">
+      <nav v-if="$slots.nav" class="dads-header-container__nav" aria-label="メインナビゲーション">
         <slot name="nav" />
       </nav>
-      <div v-if="$slots.actions" class="dads-header__actions">
+      <div v-if="$slots.actions" class="dads-header-container__actions">
         <slot name="actions" />
       </div>
     </div>
@@ -46,9 +52,9 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
 
 // Mobile / desktop boundary. The hamburger toggle is hidden at and above
 // this width — keep in sync with the spec ("max-width: 768px 想定").
-$dads-header-breakpoint: 768px;
+$dads-header-container-breakpoint: 768px;
 
-.dads-header {
+.dads-header-container {
   background-color: var(--color-bg-surface, #fff);
   border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
@@ -58,7 +64,7 @@ $dads-header-breakpoint: 768px;
   &--sticky {
     position: sticky;
     top: 0;
-    // Keep the header above scrollable content but below modal overlays.
+    // Keep the header above scrollable content but below dialog overlays.
     z-index: 100;
   }
 
@@ -99,7 +105,7 @@ $dads-header-breakpoint: 768px;
       background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
     }
 
-    @media (min-width: #{$dads-header-breakpoint}) {
+    @media (min-width: #{$dads-header-container-breakpoint}) {
       display: none;
     }
   }

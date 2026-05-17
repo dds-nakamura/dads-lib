@@ -19,7 +19,7 @@ const components = {
     { text: 'SearchBox', link: '/components/search-box' },
   ],
   Navigation: [
-    { text: 'Header', link: '/components/header' },
+    { text: 'HeaderContainer', link: '/components/header-container' },
     { text: 'Drawer', link: '/components/drawer' },
     { text: 'Breadcrumb', link: '/components/breadcrumb' },
     { text: 'StepNavigation', link: '/components/step-navigation' },

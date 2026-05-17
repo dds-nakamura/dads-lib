@@ -1,6 +1,6 @@
-# Header
+# HeaderContainer
 
-アプリケーション上部に配置するヘッダーレイアウト。ロゴ・ナビゲーション・アクションの 3 スロットと、モバイル用ハンバーガーボタンを提供する。
+アプリケーション上部に配置するヘッダーレイアウト。ロゴ・ナビゲーション・アクションの 3 スロットと、モバイル用ハンバーガーボタンを提供する。公式 slug は `header-container`。旧名 `DadsHeader` は deprecated として併存する。
 
 ## 基本
 
@@ -8,7 +8,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { DadsHeader, DadsButton } from '@dads/vue'
+import { DadsHeaderContainer, DadsButton } from '@dads/vue'
 
 const lastMenuClickAt = ref('-')
 const onMenuClick = () => {
@@ -17,24 +17,24 @@ const onMenuClick = () => {
 </script>
 
 <div class="demo">
-  <DadsHeader :sticky="false" @click:menu="onMenuClick">
+  <DadsHeaderContainer :sticky="false" @click:menu="onMenuClick">
     <template #logo>
       <strong>dads-lib</strong>
     </template>
-  </DadsHeader>
+  </DadsHeaderContainer>
 </div>
 
 ```vue
 <script setup>
-import { DadsHeader } from '@dads/vue'
+import { DadsHeaderContainer } from '@dads/vue'
 </script>
 
 <template>
-  <DadsHeader @click:menu="onMenuClick">
+  <DadsHeaderContainer @click:menu="onMenuClick">
     <template #logo>
       <strong>dads-lib</strong>
     </template>
-  </DadsHeader>
+  </DadsHeaderContainer>
 </template>
 ```
 
@@ -43,7 +43,7 @@ import { DadsHeader } from '@dads/vue'
 3 つのスロットを全て埋めた典型的なヘッダー構成。`nav` は内部で `<nav aria-label="メインナビゲーション">` としてレンダリングされる。
 
 <div class="demo">
-  <DadsHeader :sticky="false" @click:menu="onMenuClick">
+  <DadsHeaderContainer :sticky="false" @click:menu="onMenuClick">
     <template #logo>
       <strong>dads-lib</strong>
     </template>
@@ -56,11 +56,11 @@ import { DadsHeader } from '@dads/vue'
       <DadsButton variant="outline" size="sm">ログイン</DadsButton>
       <DadsButton size="sm">登録</DadsButton>
     </template>
-  </DadsHeader>
+  </DadsHeaderContainer>
 </div>
 
 ```vue
-<DadsHeader>
+<DadsHeaderContainer>
   <template #logo><strong>dads-lib</strong></template>
   <template #nav>
     <a href="#home">ホーム</a>
@@ -70,7 +70,7 @@ import { DadsHeader } from '@dads/vue'
     <DadsButton variant="outline" size="sm">ログイン</DadsButton>
     <DadsButton size="sm">登録</DadsButton>
   </template>
-</DadsHeader>
+</DadsHeaderContainer>
 ```
 
 ## sticky の無効化
@@ -79,9 +79,9 @@ import { DadsHeader } from '@dads/vue'
 
 <div class="demo">
   <span class="demo-label">sticky=false（このカタログ内の他例も非 sticky で表示）</span>
-  <DadsHeader :sticky="false">
+  <DadsHeaderContainer :sticky="false">
     <template #logo><strong>非 sticky なヘッダー</strong></template>
-  </DadsHeader>
+  </DadsHeaderContainer>
 </div>
 
 ## ハンバーガーボタンの抑止
@@ -89,12 +89,12 @@ import { DadsHeader } from '@dads/vue'
 `showMenuToggle="false"` にするとモバイルでもハンバーガーボタンを描画しない。サイドメニューを持たないシンプルなアプリで利用する。
 
 <div class="demo">
-  <DadsHeader :sticky="false" :show-menu-toggle="false">
+  <DadsHeaderContainer :sticky="false" :show-menu-toggle="false">
     <template #logo><strong>メニューボタン無し</strong></template>
     <template #actions>
       <DadsButton variant="text" size="sm">ヘルプ</DadsButton>
     </template>
-  </DadsHeader>
+  </DadsHeaderContainer>
 </div>
 
 ## ハンバーガー aria-label のカスタマイズ
@@ -102,15 +102,15 @@ import { DadsHeader } from '@dads/vue'
 `menuToggleLabel` でハンバーガーボタンの `aria-label` を上書きできる。多言語対応や、より具体的なラベルを与えたい場合に利用する。
 
 <div class="demo">
-  <DadsHeader :sticky="false" menu-toggle-label="Open navigation drawer">
+  <DadsHeaderContainer :sticky="false" menu-toggle-label="Open navigation drawer">
     <template #logo><strong>カスタム aria-label</strong></template>
-  </DadsHeader>
+  </DadsHeaderContainer>
 </div>
 
 ```vue
-<DadsHeader menu-toggle-label="Open navigation drawer">
+<DadsHeaderContainer menu-toggle-label="Open navigation drawer">
   <template #logo><strong>App</strong></template>
-</DadsHeader>
+</DadsHeaderContainer>
 ```
 
 ## イベントハンドリング
@@ -118,9 +118,9 @@ import { DadsHeader } from '@dads/vue'
 ハンバーガーボタン押下時に `click:menu` が発火する。Drawer の開閉は親コンポーネント側の責務。
 
 <div class="demo">
-  <DadsHeader :sticky="false" @click:menu="onMenuClick">
+  <DadsHeaderContainer :sticky="false" @click:menu="onMenuClick">
     <template #logo><strong>クリックでイベント発火</strong></template>
-  </DadsHeader>
+  </DadsHeaderContainer>
   <span class="demo-label" style="margin-top:0.5rem">最後にメニューが押された時刻: {{ lastMenuClickAt }}</span>
 </div>
 
@@ -153,3 +153,14 @@ import { DadsHeader } from '@dads/vue'
 - ハンバーガーは実体が `<button type="button">` のためキーボード操作（Enter / Space）が自動で効く
 - ハンバーガー内のアイコンは `aria-hidden="true"` で、ボタン自身は `aria-label` でアクセシブル名を保持する
 - Drawer 開閉などの状態管理は親側の責務 — `aria-expanded` を付与する場合は親でラップして設定する
+
+## マイグレーション (DadsHeader → DadsHeaderContainer)
+
+旧名 `DadsHeader` は引き続き re-export されているが、`@deprecated` 警告が出る。次のメジャーバージョンで削除予定。CSS クラスも `dads-header*` から `dads-header-container*` に変更されている。
+
+```ts
+// 旧 (deprecated)
+import { DadsHeader } from '@dads/vue'
+// 新
+import { DadsHeaderContainer } from '@dads/vue'
+```

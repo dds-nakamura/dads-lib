@@ -1,10 +1,13 @@
 /**
- * Props / Emits for the DadsHeader layout component.
+ * Props / Emits for the DadsHeaderContainer layout component.
  *
  * Layout components do not take a `size` prop — sizing is determined by the
  * inner content and the surrounding application chrome.
+ *
+ * 公式 slug は `header-container`。旧名 `DadsHeader` は deprecated alias と
+ * して併存する。
  */
-export interface DadsHeaderProps {
+export interface DadsHeaderContainerProps {
   /** Stick to the top of the viewport on scroll. Defaults to true. */
   sticky?: boolean
   /**
@@ -17,7 +20,7 @@ export interface DadsHeaderProps {
   menuToggleLabel?: string
 }
 
-export interface DadsHeaderEmits {
+export interface DadsHeaderContainerEmits {
   /**
    * Fired when the hamburger button is activated (click / Enter / Space).
    * Drawer open/close is the parent's responsibility.
