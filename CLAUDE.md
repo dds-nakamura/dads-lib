@@ -49,7 +49,7 @@
 
 | パッケージ              | パス                        | 用途                                                   |
 | ----------------------- | --------------------------- | ------------------------------------------------------ |
-| `@dads/vue`             | `packages/vue/`             | ★ 26 個の Vue 3 コンポーネント実装 (本体)              |
+| `@dads/vue`             | `packages/vue/`             | ★ 50 個の Vue 3 コンポーネント実装 (本体)              |
 | `@dads/tokens`          | `packages/tokens/`          | `@digital-go-jp/design-tokens` の薄ラッパ              |
 | `@dads/tailwind-plugin` | `packages/tailwind-plugin/` | `@digital-go-jp/tailwind-theme-plugin` の薄ラッパ (v3) |
 | `@dads/docs`            | `apps/docs/`                | VitePress カタログ (26 コンポーネントの demo + API)    |

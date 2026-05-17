@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-17-dads-vue-figma-compliance`
 - Created: 2026-05-17
-- Status: **In Progress**
+- Status: **Done (2026-05-17)**
 
 ---
 
@@ -118,14 +118,14 @@ export interface DadsPageNavigationEmits {
 
 ## 5. 受け入れ基準
 
-- [ ] **AC-H1** `DadsTableOfContents` で旧テストが pass
-- [ ] **AC-H2** 新 `DadsPageNavigation` (pagination) のテスト 15 件以上 / すべて pass
-- [ ] **AC-H3** docs に `/components/page-navigation` (pagination) と `/components/table-of-contents` の両ページが存在し、ビルド成功
-- [ ] **AC-M1** `DadsTab` で `orientation='vertical'` 指定時に `aria-orientation="vertical"` + ArrowUp/Down で active 切替
-- [ ] **AC-M2** `DadsChip` で `<slot name="leading">` にアバター挿入できる
-- [ ] **AC-L1** `DadsImage` で load 前は skeleton、load 後はフェードイン
-- [ ] **AC-L2** `DadsTableControl` で preset 表示 + reset 動作
-- [ ] **AC-Full** `pnpm typecheck && pnpm lint && pnpm test && pnpm build` グリーン
+- [x] **AC-H1** `DadsTableOfContents` で旧テストが pass (21 件)
+- [x] **AC-H2** 新 `DadsPageNavigation` (pagination) のテスト 23 件 pass
+- [x] **AC-H3** docs に `/components/page-navigation` (pagination) と `/components/table-of-contents` の両ページが存在し、ビルド成功 (50 ページ)
+- [x] **AC-M1** `DadsTab` で `orientation='vertical'` 指定時に `aria-orientation="vertical"` + ArrowUp/Down で active 切替 (テスト +6)
+- [x] **AC-M2** `DadsChip` の既存 `prepend` slot がアバター挿入に十分。docs にメーラ宛先/CC 例を追加 (コード変更不要)
+- [x] **AC-L1** `DadsImage` で load 前は skeleton、load 後はフェードイン (テスト +5)
+- [x] **AC-L2** `DadsTableControl` で preset 表示 + reset 動作 (テスト +9)
+- [x] **AC-Full** `pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build` すべてグリーン (1585 tests)
 
 ---
 

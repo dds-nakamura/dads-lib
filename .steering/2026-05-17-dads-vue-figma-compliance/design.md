@@ -2,7 +2,7 @@
 
 - Spec ID: `2026-05-17-dads-vue-figma-compliance`
 - Depends on: `./requirements.md`
-- Status: **In Progress**
+- Status: **Done (2026-05-17)**
 
 ---
 
