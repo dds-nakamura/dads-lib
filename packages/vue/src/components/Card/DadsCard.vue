@@ -45,11 +45,17 @@ const onKeydown = (event: KeyboardEvent) => {
     @click="onActivate"
     @keydown="onKeydown"
   >
+    <div v-if="$slots.image" class="dads-card__image">
+      <slot name="image" />
+    </div>
     <header v-if="$slots.header" class="dads-card__header">
       <slot name="header" />
     </header>
     <div class="dads-card__body">
       <slot />
+    </div>
+    <div v-if="$slots.sub" class="dads-card__sub">
+      <slot name="sub" />
     </div>
     <footer v-if="$slots.footer" class="dads-card__footer">
       <slot name="footer" />
@@ -147,10 +153,33 @@ const onKeydown = (event: KeyboardEvent) => {
   }
 
   // -------------------- slots / sections --------------------------------
+  // Image region (top): no padding so the asset fills the card width.
+  // Children (typically <img>) are sized by the caller; we just clip the
+  // top corners so they follow the card's border-radius.
+  &__image {
+    overflow: hidden;
+    border-top-left-radius: var(--border-radius-8, 0.5rem);
+    border-top-right-radius: var(--border-radius-8, 0.5rem);
+
+    > :first-child {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
   &__header {
     padding: var(--spacing-16, 1rem);
     border-bottom: 1px solid var(--color-border-divider, #e5e5e5);
     font-weight: 700;
+  }
+
+  // Sub area (between body and footer). Typically holds a link list or a
+  // secondary action group per DADS spec.
+  &__sub {
+    padding: 0 var(--spacing-16, 1rem) var(--spacing-12, 0.75rem);
+    border-top: 1px solid var(--color-border-divider, #e5e5e5);
+    padding-top: var(--spacing-12, 0.75rem);
   }
 
   &__body {

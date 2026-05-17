@@ -208,4 +208,47 @@ describe('DadsCard', () => {
       expect(payload).toBeInstanceOf(KeyboardEvent)
     })
   })
+
+  describe('image slot', () => {
+    it('does not render the image wrapper when slot is empty', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-card__image').exists()).toBe(false)
+    })
+
+    it('renders the image slot above the header', () => {
+      const wrapper = createWrapper(
+        {},
+        { image: '<img class="hero" src="" alt="" />', default: 'body' },
+      )
+      const image = wrapper.find('.dads-card__image')
+      expect(image.exists()).toBe(true)
+      expect(image.find('img.hero').exists()).toBe(true)
+      // image is first child of the card root
+      expect(wrapper.element.firstElementChild?.classList.contains('dads-card__image')).toBe(true)
+    })
+  })
+
+  describe('sub slot', () => {
+    it('does not render the sub wrapper when slot is empty', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-card__sub').exists()).toBe(false)
+    })
+
+    it('renders the sub slot between body and footer', () => {
+      const wrapper = createWrapper(
+        {},
+        { default: 'body', sub: '<a class="more" href="/x">続きを見る</a>', footer: 'F' },
+      )
+      const sub = wrapper.find('.dads-card__sub')
+      expect(sub.exists()).toBe(true)
+      expect(sub.find('a.more').exists()).toBe(true)
+      // body → sub → footer order
+      const children = Array.from(wrapper.element.children)
+      const bodyIdx = children.findIndex((c) => c.classList.contains('dads-card__body'))
+      const subIdx = children.findIndex((c) => c.classList.contains('dads-card__sub'))
+      const footerIdx = children.findIndex((c) => c.classList.contains('dads-card__footer'))
+      expect(bodyIdx).toBeLessThan(subIdx)
+      expect(subIdx).toBeLessThan(footerIdx)
+    })
+  })
 })
