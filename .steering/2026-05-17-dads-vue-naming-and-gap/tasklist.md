@@ -46,12 +46,30 @@
 - [x] M17. resource-list (kind/selected/disabled/action)
 - [x] M18. carousel multi mode (visibleCount + track layout)
 
-## Phase 5: Low 13 件 (別セッション)
+## Phase 5: Low 13 件 (Done — 2026-05-17 第 3 セッション)
 
-- [ ] L1-L13. 要点 (該当なし or 軽微) — gap-report-aggregated.md 参照
+実装あり (3 件):
 
-## 累計成果 (2 セッション)
+- [x] L-button. xs サイズ確認 (実装済み確認のみ; `DadsSize` に xs 含有、CSS に `--xs` 28px 定義済み)
+- [x] L-language-selector. `colorScheme` (`light-blue` / `light-green` / `light-gray`) + `cornerShape` (`rounded` / `pill` / `square`) 追加
+- [x] L-radio. `description` (label 直下の説明文) + RadioGroup `legendVisuallyHidden` 追加
 
-- **テスト**: 1585 → 1863 (+278)
-- **コミット**: 31 (本セッション分 14 + Medium 段 17)
+Deprecated 警告強化 (2 件):
+
+- [x] L-bottom-navigation. docs に `danger` バナー + 代替案 (HamburgerMenuButton + MobileMenu / HeaderContainer + GlobalMenu / Tab) を追記。types に `@deprecated` JSDoc
+- [x] L-scroll-top-button. docs に `danger` バナー + 代替案 (TableOfContents / PageNavigation / skip-link / Header sticky) を追記。types に `@deprecated` JSDoc
+
+「該当なし」確認のみ (6 件):
+
+- [x] L-blockquote / L-checkbox / L-description-list / L-disclosure / L-textarea / L-utility-link. 各 docs 冒頭に「✅ 公式仕様充足」ステータスバナーを追加
+
+評価結論 (2 件):
+
+- [x] L-mega-menu. 公式仕様準備中のため追加 prop 評価不能。docs に「🚧 公式仕様準備中」バナー追加。公式仕様確定後に再評価
+- [x] L-heading. 公式中核仕様は H3 (Phase 3) で実装済 (shoulder/subtitle/icon/chip/size + hgroup)。Low では追加なし
+
+## 累計成果 (3 セッション)
+
+- **テスト**: 1585 → 1881 (+296、Low 段で +10)
+- **コミット**: 31 + Low 段
 - **検証**: 全工程グリーン
