@@ -6,6 +6,7 @@ const props = withDefaults(defineProps<DadsCarouselProps>(), {
   modelValue: 0,
   type: 'key-visual',
   mode: 'single',
+  visibleCount: 3,
   headingLevel: 2,
   autoPlay: false,
   interval: 5000,
@@ -28,7 +29,11 @@ if (props.autoPlay && (import.meta as ImportMeta & { env?: { DEV?: boolean } }).
 
 // Container type requires a heading per official spec — warn in dev when the
 // caller forgets to pass one so the structural contract is enforceable.
-if (props.type === 'container' && !props.heading && (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV) {
+if (
+  props.type === 'container' &&
+  !props.heading &&
+  (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV
+) {
   console.warn(
     '[DadsCarousel] type="container" は heading プロップを必須とします。' +
       'スライド群を囲むコンテナの見出しを必ず指定してください。',
@@ -154,6 +159,25 @@ const headingTag = computed(() => `h${props.headingLevel}` as const)
 
 const hasShowAll = computed(() => Boolean(props.showAllLabel) && Boolean(props.showAllHref))
 
+const isMulti = computed(() => props.mode === 'multi')
+
+// Visible count clamped to [1, total]. In single mode we hard-code 1 so the
+// viewport math below stays a single source of truth for both modes.
+const effectiveVisible = computed(() => {
+  if (!isMulti.value) return 1
+  return Math.max(1, Math.min(props.visibleCount, total.value || 1))
+})
+
+// CSS custom properties drive the multi-mode layout: each slide gets a
+// flex-basis of (100% / visible) and the track translates by (index * basis).
+const multiTrackStyle = computed<Record<string, string> | undefined>(() => {
+  if (!isMulti.value) return undefined
+  return {
+    '--dads-carousel-visible': String(effectiveVisible.value),
+    transform: `translateX(calc(-${safeIndex.value} * (100% / var(--dads-carousel-visible))))`,
+  }
+})
+
 const slideClasses = (idx: number) => [
   'dads-carousel__slide',
   {
@@ -192,17 +216,19 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
       </a>
     </header>
     <div class="dads-carousel__viewport" aria-live="polite">
-      <div
-        v-for="idx in indices"
-        :id="slideId(idx)"
-        :key="idx"
-        role="group"
-        aria-roledescription="slide"
-        :aria-label="slideAriaLabel(idx)"
-        :aria-hidden="idx === safeIndex ? undefined : 'true'"
-        :class="slideClasses(idx)"
-      >
-        <slot :index="idx" :is-active="idx === safeIndex" />
+      <div class="dads-carousel__track" :style="multiTrackStyle">
+        <div
+          v-for="idx in indices"
+          :id="slideId(idx)"
+          :key="idx"
+          role="group"
+          aria-roledescription="slide"
+          :aria-label="slideAriaLabel(idx)"
+          :aria-hidden="!isMulti && idx !== safeIndex ? 'true' : undefined"
+          :class="slideClasses(idx)"
+        >
+          <slot :index="idx" :is-active="idx === safeIndex" />
+        </div>
       </div>
     </div>
 
@@ -317,6 +343,13 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     overflow: hidden;
   }
 
+  // Track wraps every slide in a horizontal flex row. The single-mode CSS
+  // relies on display: none for inactive slides and never reads the track's
+  // own layout. Multi mode flips the track to flex and translates it.
+  &__track {
+    width: 100%;
+  }
+
   &__slide {
     display: none;
     width: 100%;
@@ -324,6 +357,23 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     &--active {
       display: block;
     }
+  }
+
+  // -------------------- multi-mode layout --------------------------------
+  // Render every slide in a flex row, each with a flex-basis derived from
+  // --dads-carousel-visible (set inline). Translate the track to scroll the
+  // active slide into view. Smooth transition makes the next/prev arrows
+  // feel like a real horizontal scroll without manual scroll handling.
+  &--mode-multi &__track {
+    display: flex;
+    transition: transform 0.25s ease;
+    will-change: transform;
+  }
+
+  &--mode-multi &__slide {
+    display: block;
+    flex: 0 0 calc(100% / var(--dads-carousel-visible, 1));
+    width: auto;
   }
 
   // -------------------- arrow buttons ------------------------------------

@@ -423,4 +423,55 @@ describe('DadsCarousel', () => {
       expect(link.text()).toBe('すべて見る')
     })
   })
+
+  describe('multi mode layout', () => {
+    it('does not render the track element layout style in single mode', () => {
+      const wrapper = createWrapper()
+      const track = wrapper.find('.dads-carousel__track')
+      expect(track.exists()).toBe(true)
+      // single mode does not apply the inline transform/translate.
+      expect((track.element as HTMLElement).style.transform).toBe('')
+    })
+
+    it('applies inline transform/translateX on the track in multi mode', () => {
+      const wrapper = createWrapper({ mode: 'multi', visibleCount: 3, modelValue: 1 })
+      const track = wrapper.find('.dads-carousel__track')
+      const style = (track.element as HTMLElement).style
+      // visibleCount is exposed via CSS custom property
+      expect(style.getPropertyValue('--dads-carousel-visible')).toBe('3')
+      // transform references the active index 1
+      expect(style.transform).toContain('translateX')
+      expect(style.transform).toContain('-1')
+    })
+
+    it('keeps slides visible (no aria-hidden) in multi mode', () => {
+      const wrapper = createWrapper({ mode: 'multi', visibleCount: 3 })
+      const slides = wrapper.findAll('.dads-carousel__slide')
+      expect(slides.length).toBeGreaterThan(0)
+      // In multi mode no slide should be aria-hidden — they're all visible.
+      slides.forEach((s) => {
+        expect(s.attributes('aria-hidden')).toBeUndefined()
+      })
+    })
+
+    it('marks non-active slides aria-hidden in single mode', () => {
+      const wrapper = createWrapper({ modelValue: 0 })
+      const slides = wrapper.findAll('.dads-carousel__slide')
+      // 0 is active, 1 and 2 are hidden
+      expect(slides[0].attributes('aria-hidden')).toBeUndefined()
+      expect(slides[1].attributes('aria-hidden')).toBe('true')
+    })
+
+    it('clamps visibleCount to total slides when larger', () => {
+      const wrapper = createWrapper({
+        mode: 'multi',
+        visibleCount: 99,
+        itemCount: 3,
+      })
+      const track = wrapper.find('.dads-carousel__track')
+      expect((track.element as HTMLElement).style.getPropertyValue('--dads-carousel-visible')).toBe(
+        '3',
+      )
+    })
+  })
 })

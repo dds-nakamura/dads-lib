@@ -26,11 +26,8 @@ export type DadsCarouselType = 'key-visual' | 'container'
 
 /**
  * Carousel の表示モード。
- * - `single`: 一度に 1 枚のスライドだけを表示 (デフォルト、現行動作)
- * - `multi`: 複数スライドを横並びで表示 (旧仕様の image-slider 相当)
- *
- * Note: 本実装の `multi` モードは現状 `single` と同等のレイアウトで描画する
- * (modifier class のみ付与)。完全な複数スライド可視化は将来のリリースで対応。
+ * - `single`: 一度に 1 枚のスライドだけを表示 (デフォルト)
+ * - `multi`: 複数スライドを横並びで表示。`visibleCount` で同時表示枚数を指定
  */
 export type DadsCarouselMode = 'single' | 'multi'
 
@@ -51,6 +48,11 @@ export interface DadsCarouselProps {
    * 表示モード。`single` (デフォルト) または `multi`。
    */
   mode?: DadsCarouselMode
+  /**
+   * `mode='multi'` のときに同時に見えるスライド枚数。デフォルト `3`。
+   * `single` モードでは無視される。
+   */
+  visibleCount?: number
   /**
    * Container type の見出しテキスト。`type='container'` で必須。
    */
