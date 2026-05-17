@@ -308,4 +308,19 @@ describe('DadsInputText', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
+
+  describe('align variant', () => {
+    it('applies the vertical align modifier by default', () => {
+      const wrapper = createWrapper({ label: 'L', modelValue: '' })
+      expect(wrapper.classes()).toContain('dads-input-text--align-vertical')
+    })
+
+    it.each(['vertical', 'horizontal-left', 'horizontal-right', 'fixed-label'] as const)(
+      'applies dads-input-text--align-%s when align=%s',
+      (a) => {
+        const wrapper = createWrapper({ label: 'L', modelValue: '', align: a })
+        expect(wrapper.classes()).toContain(`dads-input-text--align-${a}`)
+      },
+    )
+  })
 })

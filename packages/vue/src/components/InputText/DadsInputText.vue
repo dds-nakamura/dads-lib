@@ -9,7 +9,31 @@ const props = withDefaults(defineProps<DadsInputTextProps>(), {
   readonly: false,
   required: false,
   error: false,
+  align: 'vertical',
 })
+
+// Official DADS a11y guidance discourages both `placeholder` and `maxlength`:
+//  - placeholder: low-contrast, disappears on focus, harms cognitive load
+//  - maxlength: silently truncates user input without feedback
+// We do not remove the props (callers may have valid reasons), but surface
+// a one-time dev warning per mount so misuse is visible.
+const __metaEnv = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env
+if (__metaEnv?.DEV) {
+  if (props.placeholder !== undefined) {
+    console.warn(
+      '[DadsInputText] placeholder は公式 DADS で非推奨です。' +
+        'プレースホルダーテキストはフォーカス時に消え、コントラスト不足で読みにくく、' +
+        '入力の手がかりとして機能しにくいため、`hint` プロップで代替してください。',
+    )
+  }
+  if (props.maxlength !== undefined) {
+    console.warn(
+      '[DadsInputText] maxlength は公式 DADS で非推奨です。' +
+        '入力が黙って切り詰められユーザーに通知されないため、' +
+        '`counter` で残り文字数を表示しバックエンド検証で上限を伝える方式を検討してください。',
+    )
+  }
+}
 
 const emit = defineEmits<DadsInputTextEmits>()
 
@@ -37,6 +61,7 @@ const describedBy = computed(() => {
 const rootClasses = computed(() => [
   'dads-input-text',
   `dads-input-text--${props.size}`,
+  `dads-input-text--align-${props.align}`,
   {
     'dads-input-text--disabled': props.disabled,
     'dads-input-text--readonly': props.readonly,
@@ -129,6 +154,41 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   gap: var(--spacing-4, 0.25rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-text-primary, #1a1a1a);
+
+  // -------------------- alignment ---------------------------------------
+  // vertical (default) stays as flex-direction: column.
+  // horizontal-* variants swap to a label-row + control-column grid.
+  &--align-horizontal-left,
+  &--align-horizontal-right,
+  &--align-fixed-label {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
+  }
+
+  &--align-horizontal-left &__label,
+  &--align-horizontal-right &__label,
+  &--align-fixed-label &__label {
+    align-self: center;
+    margin-bottom: 0;
+  }
+
+  &--align-horizontal-right &__label {
+    text-align: end;
+  }
+
+  &--align-fixed-label {
+    grid-template-columns: 8rem 1fr;
+  }
+
+  // The footer should span both columns regardless of alignment so it
+  // doesn't squeeze under the label.
+  &--align-horizontal-left &__footer,
+  &--align-horizontal-right &__footer,
+  &--align-fixed-label &__footer {
+    grid-column: 2;
+  }
 
   // -------------------- label & required marker --------------------------
   &__label {

@@ -5,4 +5,5 @@ export type {
   DadsInputTextSize,
   DadsInputTextType,
   DadsInputTextInputmode,
+  DadsInputTextAlign,
 } from './DadsInputText.types'

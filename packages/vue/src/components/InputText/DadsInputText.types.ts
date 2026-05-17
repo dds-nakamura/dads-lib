@@ -17,6 +17,16 @@ export type DadsInputTextInputmode =
   | 'email'
   | 'url'
 
+/**
+ * Label vs input alignment per official DADS spec.
+ * - `vertical` (default): label sits above the input on its own line
+ * - `horizontal-left`: label left-aligned beside the input
+ * - `horizontal-right`: label right-aligned beside the input
+ * - `fixed-label`: label has a fixed width (~8rem) and inputs align on
+ *   the right edge — for dense forms with many short fields
+ */
+export type DadsInputTextAlign = 'vertical' | 'horizontal-left' | 'horizontal-right' | 'fixed-label'
+
 export interface DadsInputTextProps {
   /** Bound value (v-model). */
   modelValue?: string | number
@@ -62,6 +72,11 @@ export interface DadsInputTextProps {
   /** Show a counter `current / counter` below the input. The component does
    *  not enforce the limit; pair with `maxlength` to do so. */
   counter?: number
+  /**
+   * Label / input alignment. Defaults to `'vertical'` (matches existing
+   * behaviour). See {@link DadsInputTextAlign} for the full list.
+   */
+  align?: DadsInputTextAlign
 }
 
 export interface DadsInputTextEmits {
