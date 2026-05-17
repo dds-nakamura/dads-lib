@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsImageSlider from '../DadsImageSlider.vue'
 import type { DadsImageSliderProps, DadsImageSliderSlide } from '../DadsImageSlider.types'
@@ -340,6 +341,36 @@ describe('DadsImageSlider', () => {
       const link = both.find('a.dads-image-slider__show-all')
       expect(link.attributes('href')).toBe('/x')
       expect(link.text()).toBe('すべて')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations in the default configuration', async () => {
+      const wrapper = createWrapper({ heading: 'おすすめのギャラリー' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with arrows and indicators', async () => {
+      const wrapper = createWrapper({
+        heading: 'お知らせ',
+        showArrows: true,
+        showIndicators: true,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with show-all link', async () => {
+      const wrapper = createWrapper({
+        heading: 'ピックアップ',
+        showAllLabel: '一覧で見る',
+        showAllHref: '/gallery',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a custom aria-label and no heading', async () => {
+      const wrapper = createWrapper({ ariaLabel: '画像ギャラリー' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

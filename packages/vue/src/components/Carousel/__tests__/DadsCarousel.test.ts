@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { h } from 'vue'
 import DadsCarousel from '../DadsCarousel.vue'
 import type { DadsCarouselProps } from '../DadsCarousel.types'
@@ -472,6 +473,39 @@ describe('DadsCarousel', () => {
       expect((track.element as HTMLElement).style.getPropertyValue('--dads-carousel-visible')).toBe(
         '3',
       )
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const slideRenderer = ({ index }: { index: number }) => h('p', `Slide ${index + 1}`)
+
+    it('has no violations in default single mode', async () => {
+      const wrapper = createWrapper({}, { default: slideRenderer })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with custom aria-label', async () => {
+      const wrapper = createWrapper(
+        { ariaLabel: '主要なお知らせ' },
+        { default: slideRenderer },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in container type with heading', async () => {
+      const wrapper = createWrapper(
+        { type: 'container', heading: 'おすすめ情報' },
+        { default: slideRenderer },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in multi mode', async () => {
+      const wrapper = createWrapper(
+        { mode: 'multi', visibleCount: 2, itemCount: 5 },
+        { default: slideRenderer },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsTab from '../DadsTab.vue'
 import type { DadsTabItem, DadsTabProps } from '../DadsTab.types'
@@ -403,6 +404,58 @@ describe('DadsTab', () => {
       })
       const tab = wrapper.find('[role="tab"]')
       expect(tab.find('.dads-tab__label').text()).toBe('Home')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const panelSlots = {
+      'panel-overview': '<p>概要パネル</p>',
+      'panel-details': '<p>詳細パネル</p>',
+      'panel-history': '<p>履歴パネル</p>',
+    }
+
+    it('has no violations with a horizontal tablist', async () => {
+      const wrapper = createWrapper({}, panelSlots)
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a vertical tablist', async () => {
+      const wrapper = createWrapper({ orientation: 'vertical' }, panelSlots)
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with icons', async () => {
+      const wrapper = createWrapper(
+        {
+          items: [
+            { value: 'home', label: 'ホーム', icon: 'mdi-home' },
+            { value: 'settings', label: '設定', icon: 'mdi-cog' },
+          ],
+          modelValue: 'home',
+        },
+        { 'panel-home': '<p>ホーム</p>', 'panel-settings': '<p>設定</p>' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled tab', async () => {
+      const wrapper = createWrapper(
+        {
+          items: [
+            { value: 'a', label: 'A' },
+            { value: 'b', label: 'B', disabled: true },
+            { value: 'c', label: 'C' },
+          ],
+          modelValue: 'a',
+        },
+        { 'panel-a': '<p>A</p>', 'panel-b': '<p>B</p>', 'panel-c': '<p>C</p>' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with keepAlive panels', async () => {
+      const wrapper = createWrapper({ keepAlive: true }, panelSlots)
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
