@@ -1,8 +1,8 @@
 # @dads/docs
 
-`@dads/vue` の VitePress カタログ。49 コンポーネントの API リファレンスとライブデモ。
+`@dads/vue` の VitePress カタログ。52 コンポーネントの API リファレンスとライブデモ。
 
-> Status: **DADS 公式 46 件完全カバー + 独自 4 件 = 計 49 コンポーネント** のフルデモ完成 (Form / Navigation / Feedback / Display)。
+> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** のフルデモ完成 (Form / Navigation / Feedback / Display) + 命名整合 (Modal→Dialog / Header→HeaderContainer / TextField→InputText / Chip→ChipLabel+ChipTag) + 全件ギャップ解消 (High 9 / Medium 17 / Low 13)。
 
 ## 起動
 
@@ -22,11 +22,11 @@ pnpm --filter @dads/docs preview
 ```
 apps/docs/
 ├── .vitepress/
-│   ├── config.ts                 sidebar / nav 定義 (4 カテゴリ)
+│   ├── config.ts                 sidebar / nav 定義 (4 カテゴリ: Form 13 / Navigation 17 / Feedback 5 / Display 17)
 │   └── theme/
 │       ├── index.ts              @dads/tokens/css + @dads/vue/styles を global load
 │       └── custom.css            デモ用ユーティリティ (.demo / .demo-row / .demo-label)
-├── components/                   全 49 ファイル フルデモ
+├── components/                   全 52 ファイル フルデモ
 │   ├── button.md                 例: variant × size × color × state
 │   └── ...
 ├── index.md                      ホーム (hero + features)

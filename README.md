@@ -4,7 +4,7 @@
 
 DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tailwind-theme-plugin）と、それを Vue 3 SFC として実装した `@dads/vue` パッケージを 1 つのリポジトリで管理する。
 
-> Status: **DADS 公式 46 件完全カバー + 独自 4 件 + DadsTableOfContents = 計 50 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 (2026-05-17) 完了 / **1585 テスト pass** / VitePress カタログに 50 件すべてのフルデモ掲載
+> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **1881 テスト pass (52 ファイル)** / VitePress カタログに 52 件すべてのフルデモ掲載
 
 公式: <https://design.digital.go.jp/dads/>
 
@@ -12,12 +12,12 @@ DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tai
 
 ## パッケージ一覧
 
-| パッケージ                                            | 役割                                                                  | 公開    |
-| ----------------------------------------------------- | --------------------------------------------------------------------- | ------- |
-| [`@dads/vue`](./packages/vue)                         | 50 個の Vue 3 コンポーネント実装 (公式 46 + 独自 4 + TableOfContents) | private |
-| [`@dads/tokens`](./packages/tokens)                   | `@digital-go-jp/design-tokens` の再 export                            | private |
-| [`@dads/tailwind-plugin`](./packages/tailwind-plugin) | Tailwind v3 用プラグインラッパ                                        | private |
-| [`@dads/docs`](./apps/docs)                           | VitePress カタログ (デモ + API doc)                                   | private |
+| パッケージ                                            | 役割                                                                                                                                   | 公開    |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| [`@dads/vue`](./packages/vue)                         | 52 個の Vue 3 コンポーネント実装 (公式 46 + 独自 6: Chip alias / CheckboxGroup / RadioGroup / ColorPicker / TableOfContents / Tooltip) | private |
+| [`@dads/tokens`](./packages/tokens)                   | `@digital-go-jp/design-tokens` の再 export                                                                                             | private |
+| [`@dads/tailwind-plugin`](./packages/tailwind-plugin) | Tailwind v3 用プラグインラッパ                                                                                                         | private |
+| [`@dads/docs`](./apps/docs)                           | VitePress カタログ (デモ + API doc)                                                                                                    | private |
 
 `private: true` でロックされており、npm 公開は無効化されている。初期リリースは workspace 内利用と `file:` / GitHub Packages 経由を想定。
 
@@ -41,7 +41,7 @@ pnpm install
 | コマンド            | 内容                                                     |
 | ------------------- | -------------------------------------------------------- |
 | `pnpm build`        | `pnpm -r run build` — 全パッケージビルド                 |
-| `pnpm test`         | `@dads/vue` の Vitest を実行 (50 ファイル / 1585 テスト) |
+| `pnpm test`         | `@dads/vue` の Vitest を実行 (52 ファイル / 1881 テスト) |
 | `pnpm typecheck`    | 全パッケージで `tsc --noEmit` / `vue-tsc --noEmit`       |
 | `pnpm lint`         | `eslint .` (ESLint 9 flat config / L3 strictness)        |
 | `pnpm format`       | `prettier --write .`                                     |
@@ -65,7 +65,7 @@ pnpm --filter @dads/docs build        # VitePress static build
 // main.ts
 import { createApp } from 'vue'
 import '@dads/tokens/css' // CSS 変数を :root に注入
-import '@dads/vue/styles' // 50 コンポーネントの CSS
+import '@dads/vue/styles' // 52 コンポーネントの CSS
 import App from './App.vue'
 
 createApp(App).mount('#app')
@@ -73,7 +73,10 @@ createApp(App).mount('#app')
 
 ```vue
 <script setup lang="ts">
-import { DadsButton, DadsTextField, DadsModal } from '@dads/vue'
+// 命名整合 (2026-05-17 spec): DadsTextField → DadsInputText、
+// DadsModal → DadsDialog、DadsHeader → DadsHeaderContainer は公式 slug
+// に合わせて改名。旧名は @deprecated alias として一定期間併存します。
+import { DadsButton, DadsInputText, DadsDialog } from '@dads/vue'
 import { ref } from 'vue'
 
 const open = ref(false)
@@ -81,9 +84,9 @@ const name = ref('')
 </script>
 
 <template>
-  <DadsTextField v-model="name" label="名前" required />
+  <DadsInputText v-model="name" label="名前" required />
   <DadsButton @click="open = true">送信</DadsButton>
-  <DadsModal v-model="open" title="確認">送信してよろしいですか？</DadsModal>
+  <DadsDialog v-model="open" title="確認">送信してよろしいですか？</DadsDialog>
 </template>
 ```
 
@@ -133,7 +136,7 @@ dads-lib/
 2. **実装サンプル**: `design-system-example-components-html/` の HTML/CSS/JS を一次参照
 3. **デザイントークン**: `design-tokens/` を上流ソースとし、`@dads/tokens` 経由で読む
 4. **新規コード**: TDD 推奨 — `packages/vue/src/components/*/__tests__/*.test.ts` を先に書く
-5. **a11y**: Button / TextField / Modal は `vitest-axe` テスト済。他 23 コンポーネントは TODO
+5. **a11y**: 現在 9 コンポーネント (Button / ChipLabel / DatePicker / Dialog / HamburgerMenuButton / InputText / ScrollTopButton / SearchBox / TableControl) が `vitest-axe` テスト済。残り 43 コンポーネントは TODO
 6. **「準備中」コンポーネントの視覚仕様**: `dads-document-figma/<ページ名>/<ページ名>.png` を `Read` で参照（再取得は [`scripts/README.md`](./scripts/README.md) 参照）
 
 詳細は [`CLAUDE.md`](./CLAUDE.md) を参照。
@@ -146,10 +149,10 @@ dads-lib/
 
 - `typecheck` (4 packages)
 - `lint` / `format:check`
-- `test` (`@dads/vue` / 1585 tests)
+- `test` (`@dads/vue` / 1881 tests)
 - `build` (`@dads/tokens` → `@dads/vue` → `@dads/docs`)
 
-ローカル CI 相当のフル実行: ~88 秒 (M2 Mac)。
+ローカル CI 相当のフル実行: ~100 秒 (M2 Mac)。
 
 ---
 

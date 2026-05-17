@@ -1,7 +1,9 @@
 import { defineConfig } from 'vitepress'
 
-// 26 コンポーネントを 6 カテゴリにグルーピング (DADS 公式の分類に準拠)
-// 入力 / ナビゲーション / 表示 / フィードバック / その他
+// 52 コンポーネント (DADS 公式 46 + 独自 6) を 4 カテゴリにグルーピング。
+// 公式分類 (入力 / ナビゲーション / 表示 / フィードバック) に沿って配置。
+// TableOfContents は Navigation 内、TableControl は Display 内、Chip alias は
+// Display 末尾 (deprecated 明示)。
 const components = {
   Form: [
     { text: 'Button', link: '/components/button' },
