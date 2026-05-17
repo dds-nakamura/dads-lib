@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsChip from '../DadsChip.vue'
 import type { DadsChipProps } from '../DadsChip.types'
 
@@ -201,5 +202,32 @@ describe('DadsChip', () => {
       expect(wrapper.find('.dads-chip__append').exists()).toBe(false)
       expect(wrapper.find('.dads-chip__close').exists()).toBe(true)
     })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations as a plain label chip', async () => {
+      const wrapper = createWrapper()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when clickable (button semantics)', async () => {
+      const wrapper = createWrapper({ clickable: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when closable', async () => {
+      const wrapper = createWrapper({ closable: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled (non-clickable)', async () => {
+      const wrapper = createWrapper({ disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    // Intentional gap: `clickable: true` + `closable: true` violates the
+    // `nested-interactive` axe rule (chip becomes a `<button>` containing a
+    // `<button>` close trigger). Callers should pick one interaction model;
+    // documented as a known anti-pattern in the Chip docs page.
   })
 })

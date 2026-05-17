@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsLanguageSelector from '../DadsLanguageSelector.vue'
 import type {
@@ -320,6 +321,41 @@ describe('DadsLanguageSelector', () => {
       const wrapper = createWrapper({ options: [] })
       await wrapper.find('button').trigger('click')
       expect(wrapper.findAll('a.dads-language-selector__item')).toHaveLength(0)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsLanguageSelectorProps> = {}) =>
+      mount(DadsLanguageSelector, {
+        props: { options: defaultOptions, ...props } as DadsLanguageSelectorProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations when closed', async () => {
+      const wrapper = mountInBody({ modelValue: 'ja' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when open', async () => {
+      const wrapper = mountInBody({ modelValue: 'ja' })
+      await wrapper.find('button').trigger('click')
+      await nextTick()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in light-green color scheme', async () => {
+      const wrapper = mountInBody({ modelValue: 'ja', colorScheme: 'light-green' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with pill corner shape', async () => {
+      const wrapper = mountInBody({ modelValue: 'ja', cornerShape: 'pill' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled', async () => {
+      const wrapper = mountInBody({ modelValue: 'ja', disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsChipTag from '../DadsChipTag.vue'
 import type { DadsChipTagProps } from '../DadsChipTag.types'
 
@@ -212,6 +213,28 @@ describe('DadsChipTag', () => {
     it('applies appearance-outlined when prop is outlined', () => {
       const wrapper = createWrapper({ appearance: 'outlined' })
       expect(wrapper.classes()).toContain('dads-chip-tag--appearance-outlined')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations as a plain tag', async () => {
+      const wrapper = createWrapper()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when clickable', async () => {
+      const wrapper = createWrapper({ clickable: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when closable', async () => {
+      const wrapper = createWrapper({ closable: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in outlined appearance', async () => {
+      const wrapper = createWrapper({ appearance: 'outlined' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

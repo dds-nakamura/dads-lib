@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsDisclosure from '../DadsDisclosure.vue'
 import type { DadsDisclosureProps } from '../DadsDisclosure.types'
@@ -220,6 +221,38 @@ describe('DadsDisclosure', () => {
       const summaries = wrapper.findAll('summary')
       const ids = summaries.map((s) => s.attributes('id'))
       expect(new Set(ids).size).toBe(ids.length)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (
+      props: Partial<DadsDisclosureProps> = {},
+      slots: Record<string, string> = { default: '<p>本文が入ります。</p>' },
+    ) =>
+      mount(DadsDisclosure, {
+        props: { title: '詳細を見る', ...props } as DadsDisclosureProps,
+        slots,
+        attachTo: document.body,
+      })
+
+    it('has no violations when collapsed', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when initially open', async () => {
+      const wrapper = mountInBody({ defaultOpen: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when controlled-open', async () => {
+      const wrapper = mountInBody({ modelValue: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled', async () => {
+      const wrapper = mountInBody({ disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

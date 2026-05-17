@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsColorPicker from '../DadsColorPicker.vue'
 import { DADS_DEFAULT_SWATCHES } from '../DadsColorPicker.types'
 
@@ -132,6 +133,36 @@ describe('DadsColorPicker', () => {
       const firstSwatch = wrapper.find('.dads-color-picker__swatch')
       await firstSwatch.trigger('click')
       expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (
+      props: Partial<{
+        modelValue: string
+        swatches: string[]
+        disabled: boolean
+        label: string
+      }> = {},
+    ) =>
+      mount(DadsColorPicker, {
+        props: { modelValue: '#000000', label: '色を選択', ...props },
+        attachTo: document.body,
+      })
+
+    it('has no violations with a label', async () => {
+      const wrapper = mountInBody({ label: '背景色' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with the default swatch grid', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled', async () => {
+      const wrapper = mountInBody({ disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

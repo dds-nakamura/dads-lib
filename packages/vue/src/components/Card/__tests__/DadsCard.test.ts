@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsCard from '../DadsCard.vue'
 import type { DadsCardProps } from '../DadsCard.types'
@@ -249,6 +250,38 @@ describe('DadsCard', () => {
       const footerIdx = children.findIndex((c) => c.classList.contains('dads-card__footer'))
       expect(bodyIdx).toBeLessThan(subIdx)
       expect(subIdx).toBeLessThan(footerIdx)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsCardProps> = {}, slots: Record<string, string> = {}) =>
+      mount(DadsCard, {
+        props: props as DadsCardProps,
+        slots: { default: '<p>カードの本文です。</p>', ...slots },
+        attachTo: document.body,
+      })
+
+    it('has no violations with default outlined card', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with header and footer slots', async () => {
+      const wrapper = mountInBody(
+        {},
+        { header: '<h2>カードタイトル</h2>', footer: '<a href="/details">詳細を見る</a>' },
+      )
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with elevated variant', async () => {
+      const wrapper = mountInBody({ variant: 'elevated', elevation: 3 })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when clickable with ariaLabel', async () => {
+      const wrapper = mountInBody({ clickable: true, ariaLabel: '詳細を表示' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
