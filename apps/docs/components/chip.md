@@ -134,6 +134,32 @@ import { DadsChip } from '@dads/vue'
 </DadsChip>
 ```
 
+## アバター付きチップ (宛先 / CC 等の人物選択 UI)
+
+`prepend` スロットに `<img>` を差し込むことで、メーラの「宛先 / CC」入力欄に並ぶような **アバター + 名前 + × 削除** のチップを表現できる。DADS 公式 Figma `Chip Tag` の Examples セクションに掲載されている人物選択パターンと整合する用法。
+
+```vue
+<DadsChip closable color="secondary" @close="removeRecipient(user)">
+  <template #prepend>
+    <img :src="user.avatarUrl" alt="" class="recipient-avatar" />
+  </template>
+  {{ user.name }}
+</DadsChip>
+
+<style>
+.recipient-avatar {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+</style>
+```
+
+- `prepend` スロットには **`aria-hidden="true"`** が自動付与されるため、アバター画像の `alt=""` (decorative) で正しく扱える
+- 名前テキストはデフォルトスロット (label) に置く → スクリーンリーダーは「田中太郎、削除」のように読み上げる
+- `color="secondary"` がメーラ系 UI で最も馴染む配色 (落ち着いたグレー)
+
 ## Props
 
 | Prop         | 型                                                              | デフォルト  | 説明                                               |
