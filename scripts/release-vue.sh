@@ -203,12 +203,16 @@ echo
 echo "✓ Released ${TAG}"
 echo
 echo "Push results:"
-for r in "${SUCCEEDED[@]}"; do
-  echo "  ✓ ${r}  ($(remote_url_for "${r}"))"
-done
-for r in "${FAILED[@]}"; do
-  echo "  ✗ ${r}  ($(remote_url_for "${r}"))  — failed"
-done
+if [[ ${#SUCCEEDED[@]} -gt 0 ]]; then
+  for r in "${SUCCEEDED[@]}"; do
+    echo "  ✓ ${r}  ($(remote_url_for "${r}"))"
+  done
+fi
+if [[ ${#FAILED[@]} -gt 0 ]]; then
+  for r in "${FAILED[@]}"; do
+    echo "  ✗ ${r}  ($(remote_url_for "${r}"))  — failed"
+  done
+fi
 
 cat <<EOF
 
@@ -226,6 +230,6 @@ To distribute an existing tag to a new remote later:
   git push <remote> ${BRANCH} ${TAG}
 EOF
 
-if [[ ${#FAILED[@]} -gt 0 ]]; then
+if [[ ${#FAILED[@]:-0} -gt 0 ]]; then
   exit 1
 fi
