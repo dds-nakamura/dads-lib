@@ -1,21 +1,23 @@
 /**
- * Public Props / Emits types for DadsModal.
+ * Public Props / Emits types for DadsDialog.
  *
- * The modal renders a centered dialog over an overlay — toggled by
+ * The dialog renders a centered panel over an overlay — toggled by
  * `modelValue` — with three slots (default body, header, footer) and four
  * size presets. The shape mirrors the DADS HTML reference, with a
  * `persistent` escape hatch so callers can opt out of dismissal on Esc /
  * overlay-click for irreversible flows.
+ *
+ * 公式 slug は `dialog`。旧名 `DadsModal` は deprecated alias として併存する。
  */
 
 /** Width preset. `fullscreen` covers the viewport. */
-export type DadsModalSize = 'sm' | 'md' | 'lg' | 'fullscreen'
+export type DadsDialogSize = 'sm' | 'md' | 'lg' | 'fullscreen'
 
-export interface DadsModalProps {
+export interface DadsDialogProps {
   /** Open state. Acts as v-model. */
   modelValue?: boolean
   /** Width preset. Defaults to 'md'. */
-  size?: DadsModalSize
+  size?: DadsDialogSize
   /** Header title. Used both as the visible heading and as aria-labelledby target. */
   title?: string
   /** When true, disables Esc / overlay-click dismissal. The close button still works. */
@@ -26,7 +28,7 @@ export interface DadsModalProps {
   closeLabel?: string
 }
 
-export interface DadsModalEmits {
+export interface DadsDialogEmits {
   (e: 'update:modelValue', value: boolean): void
   (e: 'close'): void
   (e: 'open'): void

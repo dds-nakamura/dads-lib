@@ -23,7 +23,19 @@ export * from './components/Breadcrumb'
 export * from './components/StepNavigation'
 export * from './components/Tab'
 export * from './components/NotificationBanner'
-export * from './components/Modal'
+export * from './components/Dialog'
+// Deprecated alias: DadsModal は公式 slug が `dialog` のため DadsDialog にリネーム
+// された (2026-05-17)。次のメジャーで削除予定。
+/** @deprecated Use {@link DadsDialog} instead. Will be removed in a future major. */
+export { default as DadsModal } from './components/Dialog/DadsDialog.vue'
+export type {
+  /** @deprecated Use {@link DadsDialogProps} instead. */
+  DadsDialogProps as DadsModalProps,
+  /** @deprecated Use {@link DadsDialogEmits} instead. */
+  DadsDialogEmits as DadsModalEmits,
+  /** @deprecated Use {@link DadsDialogSize} instead. */
+  DadsDialogSize as DadsModalSize,
+} from './components/Dialog/DadsDialog.types'
 export * from './components/Tooltip'
 export * from './components/ProgressIndicator'
 export * from './components/Card'

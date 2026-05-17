@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { nextTick, ref, useId, watch } from 'vue'
-import type { DadsModalEmits, DadsModalProps } from './DadsModal.types'
+import type { DadsDialogEmits, DadsDialogProps } from './DadsDialog.types'
 
-const props = withDefaults(defineProps<DadsModalProps>(), {
+const props = withDefaults(defineProps<DadsDialogProps>(), {
   modelValue: false,
   size: 'md',
   persistent: false,
@@ -10,11 +10,11 @@ const props = withDefaults(defineProps<DadsModalProps>(), {
   closeLabel: '閉じる',
 })
 
-const emit = defineEmits<DadsModalEmits>()
+const emit = defineEmits<DadsDialogEmits>()
 
 const panelRef = ref<HTMLElement | null>(null)
 
-// Track which element had focus when the modal opened so it can be restored
+// Track which element had focus when the dialog opened so it can be restored
 // on close. Module-scoped via closure rather than reactive — there is no UI
 // concern that needs to react to changes here.
 let previousActive: HTMLElement | null = null
@@ -52,7 +52,7 @@ const onTabTrap = (event: KeyboardEvent) => {
   const focusables = collectFocusables()
   if (focusables.length === 0) {
     // Nothing focusable inside — keep focus on the panel itself so it cannot
-    // escape the modal.
+    // escape the dialog.
     event.preventDefault()
     panelRef.value?.focus()
     return
@@ -89,39 +89,39 @@ watch(
 
 <template>
   <Teleport to="body">
-    <Transition name="dads-modal">
+    <Transition name="dads-dialog">
       <div
         v-if="modelValue"
-        class="dads-modal"
-        :class="`dads-modal--${size}`"
+        class="dads-dialog"
+        :class="`dads-dialog--${size}`"
         role="dialog"
         aria-modal="true"
         :aria-labelledby="title ? titleId : undefined"
         @keydown.esc="onEsc"
         @keydown="onTabTrap"
       >
-        <div class="dads-modal__overlay" aria-hidden="true" @click="onOverlayClick" />
-        <div ref="panelRef" class="dads-modal__panel" tabindex="-1">
-          <header v-if="title || $slots.header || closable" class="dads-modal__header">
+        <div class="dads-dialog__overlay" aria-hidden="true" @click="onOverlayClick" />
+        <div ref="panelRef" class="dads-dialog__panel" tabindex="-1">
+          <header v-if="title || $slots.header || closable" class="dads-dialog__header">
             <slot name="header">
-              <h2 v-if="title" :id="titleId" class="dads-modal__title">
+              <h2 v-if="title" :id="titleId" class="dads-dialog__title">
                 {{ title }}
               </h2>
             </slot>
             <button
               v-if="closable"
               type="button"
-              class="dads-modal__close"
+              class="dads-dialog__close"
               :aria-label="closeLabel"
               @click="close"
             >
               <i class="mdi mdi-close" aria-hidden="true" />
             </button>
           </header>
-          <div class="dads-modal__body">
+          <div class="dads-dialog__body">
             <slot />
           </div>
-          <footer v-if="$slots.footer" class="dads-modal__footer">
+          <footer v-if="$slots.footer" class="dads-dialog__footer">
             <slot name="footer" />
           </footer>
         </div>
@@ -134,7 +134,7 @@ watch(
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
-.dads-modal {
+.dads-dialog {
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -259,20 +259,20 @@ watch(
 }
 
 // -------------------- transition ---------------------------------------
-.dads-modal-enter-active,
-.dads-modal-leave-active {
+.dads-dialog-enter-active,
+.dads-dialog-leave-active {
   transition: opacity 0.2s ease;
 
-  .dads-modal__panel {
+  .dads-dialog__panel {
     transition: transform 0.2s ease;
   }
 }
 
-.dads-modal-enter-from,
-.dads-modal-leave-to {
+.dads-dialog-enter-from,
+.dads-dialog-leave-to {
   opacity: 0;
 
-  .dads-modal__panel {
+  .dads-dialog__panel {
     transform: scale(0.95);
   }
 }

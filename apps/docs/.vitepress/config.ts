@@ -39,7 +39,7 @@ const components = {
   ],
   Feedback: [
     { text: 'NotificationBanner', link: '/components/notification-banner' },
-    { text: 'Modal', link: '/components/modal' },
+    { text: 'Dialog', link: '/components/dialog' },
     { text: 'Tooltip', link: '/components/tooltip' },
     { text: 'ProgressIndicator', link: '/components/progress-indicator' },
     { text: 'EmergencyBanner', link: '/components/emergency-banner' },
