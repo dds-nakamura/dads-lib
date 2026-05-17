@@ -69,6 +69,11 @@ export * from './components/Heading'
 export * from './components/Divider'
 export * from './components/Table'
 export * from './components/Accordion'
+export * from './components/ChipLabel'
+export * from './components/ChipTag'
+// Deprecated alias: 旧 DadsChip は label と tag を兼用していたが、公式は
+// chip-label / chip-tag を別 slug として定義しているため分離した
+// (2026-05-17)。次のメジャーで削除予定。
 export * from './components/Chip'
 export * from './components/ColorPicker'
 export * from './components/DatePicker'
