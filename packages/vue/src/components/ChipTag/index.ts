@@ -4,4 +4,5 @@ export type {
   DadsChipTagEmits,
   DadsChipTagSize,
   DadsChipTagColor,
+  DadsChipTagAppearance,
 } from './DadsChipTag.types'

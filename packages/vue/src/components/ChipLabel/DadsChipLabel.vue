@@ -5,12 +5,14 @@ import type { DadsChipLabelProps } from './DadsChipLabel.types'
 const props = withDefaults(defineProps<DadsChipLabelProps>(), {
   size: 'md',
   color: 'primary',
+  appearance: 'filled',
 })
 
 const rootClasses = computed(() => [
   'dads-chip-label',
   `dads-chip-label--${props.size}`,
   `dads-chip-label--${props.color}`,
+  `dads-chip-label--appearance-${props.appearance}`,
 ])
 </script>
 
@@ -102,13 +104,21 @@ $dads-chip-label-colors: (
     align-items: center;
   }
 
-  // -------------------- color generated rules ----------------------------
+  // -------------------- color × appearance generated rules ---------------
   @each $name, $tokens in $dads-chip-label-colors {
     $base: list.nth($tokens, 1);
     $bg: list.nth($tokens, 2);
 
-    &--#{$name} {
+    // filled: tinted background + colored text/border
+    &--appearance-filled.dads-chip-label--#{$name} {
       background-color: var(#{$bg});
+      color: var(#{$base});
+      border-color: var(#{$base});
+    }
+
+    // outlined: transparent background + colored border + colored text
+    &--appearance-outlined.dads-chip-label--#{$name} {
+      background-color: transparent;
       color: var(#{$base});
       border-color: var(#{$base});
     }

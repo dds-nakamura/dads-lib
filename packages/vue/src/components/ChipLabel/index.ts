@@ -3,4 +3,5 @@ export type {
   DadsChipLabelProps,
   DadsChipLabelSize,
   DadsChipLabelColor,
+  DadsChipLabelAppearance,
 } from './DadsChipLabel.types'

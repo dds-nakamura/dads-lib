@@ -202,4 +202,16 @@ describe('DadsChipTag', () => {
       expect(wrapper.find('.dads-chip-tag__close').exists()).toBe(true)
     })
   })
+
+  describe('appearance', () => {
+    it('applies appearance-filled by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-chip-tag--appearance-filled')
+    })
+
+    it('applies appearance-outlined when prop is outlined', () => {
+      const wrapper = createWrapper({ appearance: 'outlined' })
+      expect(wrapper.classes()).toContain('dads-chip-tag--appearance-outlined')
+    })
+  })
 })

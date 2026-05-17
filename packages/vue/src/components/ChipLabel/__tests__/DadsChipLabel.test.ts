@@ -109,4 +109,16 @@ describe('DadsChipLabel', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
+
+  describe('appearance', () => {
+    it('applies appearance-filled by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-chip-label--appearance-filled')
+    })
+
+    it('applies appearance-outlined when prop is outlined', () => {
+      const wrapper = createWrapper({ appearance: 'outlined' })
+      expect(wrapper.classes()).toContain('dads-chip-label--appearance-outlined')
+    })
+  })
 })

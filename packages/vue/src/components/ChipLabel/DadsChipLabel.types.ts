@@ -18,9 +18,18 @@ export type DadsChipLabelSize = Exclude<DadsSize, 'xs'>
 
 export type DadsChipLabelColor = DadsSemanticColor
 
+/**
+ * Visual treatment.
+ * - `filled` (default): tinted background + text in the semantic color
+ * - `outlined`: transparent background + colored border + colored text
+ */
+export type DadsChipLabelAppearance = 'filled' | 'outlined'
+
 export interface DadsChipLabelProps {
   /** Size token. Default: `md`. */
   size?: DadsChipLabelSize
   /** Semantic color. Default: `primary`. */
   color?: DadsChipLabelColor
+  /** Visual treatment. Default: `'filled'`. */
+  appearance?: DadsChipLabelAppearance
 }

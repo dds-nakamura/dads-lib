@@ -17,6 +17,13 @@ export type DadsChipTagSize = Exclude<DadsSize, 'xs'>
 
 export type DadsChipTagColor = DadsSemanticColor
 
+/**
+ * Visual treatment.
+ * - `filled` (default): tinted background + colored border + colored text
+ * - `outlined`: transparent background + colored border + colored text
+ */
+export type DadsChipTagAppearance = 'filled' | 'outlined'
+
 export interface DadsChipTagProps {
   /** Size token. Default: `md`. */
   size?: DadsChipTagSize
@@ -35,6 +42,8 @@ export interface DadsChipTagProps {
   closeLabel?: string
   /** Accessible name for the tag itself (clickable variants). */
   ariaLabel?: string
+  /** Visual treatment. Default: `'filled'`. */
+  appearance?: DadsChipTagAppearance
 }
 
 export interface DadsChipTagEmits {

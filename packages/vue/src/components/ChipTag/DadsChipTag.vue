@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<DadsChipTagProps>(), {
   clickable: false,
   disabled: false,
   closeLabel: '削除',
+  appearance: 'filled',
 })
 
 const emit = defineEmits<DadsChipTagEmits>()
@@ -17,6 +18,7 @@ const rootClasses = computed(() => [
   'dads-chip-tag',
   `dads-chip-tag--${props.size}`,
   `dads-chip-tag--${props.color}`,
+  `dads-chip-tag--appearance-${props.appearance}`,
   {
     'dads-chip-tag--clickable': props.clickable,
   },
@@ -218,13 +220,21 @@ $dads-chip-tag-colors: (
     pointer-events: none;
   }
 
-  // -------------------- color generated rules ----------------------------
+  // -------------------- color × appearance generated rules ---------------
   @each $name, $tokens in $dads-chip-tag-colors {
     $base: list.nth($tokens, 1);
     $bg: list.nth($tokens, 2);
 
-    &--#{$name} {
+    // filled: tinted background + colored border + colored text
+    &--appearance-filled.dads-chip-tag--#{$name} {
       background-color: var(#{$bg});
+      color: var(#{$base});
+      border-color: var(#{$base});
+    }
+
+    // outlined: transparent background, same border + text
+    &--appearance-outlined.dads-chip-tag--#{$name} {
+      background-color: transparent;
       color: var(#{$base});
       border-color: var(#{$base});
     }
