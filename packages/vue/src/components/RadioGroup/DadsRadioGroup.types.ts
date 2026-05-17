@@ -11,12 +11,19 @@ export interface DadsRadioGroupItem {
   /** Disable this item only. The group's `disabled` prop overrides this when true. */
   disabled?: boolean
   hint?: string
+  /** Secondary descriptive text rendered under the item label and exposed via
+   *  `aria-describedby`. Forwarded to the child DadsRadio's `description`. */
+  description?: string
 }
 
 export interface DadsRadioGroupProps {
   modelValue?: DadsRadioGroupValue | null
   items: DadsRadioGroupItem[]
   legend?: string
+  /** Visually hide the legend (it stays in the DOM and remains the accessible
+   *  group name for screen readers). Use when the group is labeled visually
+   *  by adjacent UI but a legend is still needed for a11y. */
+  legendVisuallyHidden?: boolean
   /** Layout direction of the radios. Defaults to 'vertical'. */
   direction?: DadsRadioGroupDirection
   size?: DadsRadioSize

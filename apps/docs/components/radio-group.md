@@ -37,6 +37,15 @@ const hintItems = [
   { value: 'b', label: 'プラン B', hint: '法人向け' },
 ]
 
+const descValue = ref('')
+const descItems = [
+  { value: 'free', label: '無料プラン', description: '月額 ¥0 / 月間 1,000 リクエストまで' },
+  { value: 'pro', label: 'Pro プラン', description: '月額 ¥980 / 月間 50,000 リクエストまで' },
+  { value: 'biz', label: 'Business プラン', description: '月額 ¥4,800 / 月間 500,000 リクエストまで' },
+]
+
+const hiddenLegendValue = ref('')
+
 const disabledValue = ref('orange')
 
 const errorValue = ref('')
@@ -116,6 +125,41 @@ const items = [
   />
 </div>
 
+## 説明 (description)
+
+`items[i].description` で各選択肢の説明文をラベル直下に表示できる。プラン選択リストなど、各項目に詳細説明が必要な場面で使う。`aria-describedby` 経由でスクリーンリーダーにも読み上げられる。
+
+<div class="demo">
+  <DadsRadioGroup
+    v-model="descValue"
+    legend="プランを選択"
+    :items="descItems"
+  />
+</div>
+
+## Legend を視覚的に隠す
+
+`legendVisuallyHidden` を `true` にすると、`<legend>` を DOM に残したまま視覚的に非表示にする。隣接する UI で視覚的にラベル付けされているが、a11y 上はグループ名が必要な場合に使う。
+
+<div class="demo">
+  <DadsRadioGroup
+    v-model="hiddenLegendValue"
+    legend="好きな果物を選んでください"
+    legend-visually-hidden
+    :items="fruitItems"
+    direction="horizontal"
+  />
+</div>
+
+```vue
+<DadsRadioGroup
+  v-model="value"
+  legend="好きな果物を選んでください"
+  legend-visually-hidden
+  :items="items"
+/>
+```
+
 ## 状態
 
 `required` / `disabled` / `error` + `errorMessage` の組み合わせで状態を表現する。
@@ -150,20 +194,21 @@ const items = [
 
 ## Props
 
-| Prop           | 型                                    | デフォルト   | 説明                                                     |
-| -------------- | ------------------------------------- | ------------ | -------------------------------------------------------- |
-| `modelValue`   | `string \| number \| boolean \| null` | -            | 選択中の値 (`v-model` 対応)                              |
-| `items`        | `DadsRadioGroupItem[]`                | -            | 必須。各要素は `{ value, label, disabled?, hint? }`      |
-| `legend`       | `string`                              | -            | `<legend>` テキスト。グループのアクセシブル名            |
-| `direction`    | `'vertical' \| 'horizontal'`          | `'vertical'` | 並びの方向                                               |
-| `size`         | `'lg' \| 'md' \| 'sm'`                | `'md'`       | サイズ (全 radio に伝播)                                 |
-| `hint`         | `string`                              | -            | グループ直下のヒント。エラー表示時は隠れる               |
-| `errorMessage` | `string`                              | -            | エラーメッセージ。指定時は自動的にエラー状態になる       |
-| `required`     | `boolean`                             | `false`      | `<legend>` 内に必須バッジを表示                          |
-| `error`        | `boolean`                             | `false`      | エラー視覚状態を強制 (各 radio にも伝播)                 |
-| `disabled`     | `boolean`                             | `false`      | グループ全体を無効化 (`<fieldset disabled>` 経由)        |
-| `name`         | `string`                              | -            | 全 radio に共有する `name`。省略時はユニーク値が自動生成 |
-| `id`           | `string`                              | -            | `<fieldset>` の `id`。省略時は自動生成                   |
+| Prop                   | 型                                    | デフォルト   | 説明                                                              |
+| ---------------------- | ------------------------------------- | ------------ | ----------------------------------------------------------------- |
+| `modelValue`           | `string \| number \| boolean \| null` | -            | 選択中の値 (`v-model` 対応)                                       |
+| `items`                | `DadsRadioGroupItem[]`                | -            | 必須。各要素は `{ value, label, disabled?, hint?, description? }` |
+| `legend`               | `string`                              | -            | `<legend>` テキスト。グループのアクセシブル名                     |
+| `legendVisuallyHidden` | `boolean`                             | `false`      | `<legend>` を DOM に残したまま視覚的に隠す                        |
+| `direction`            | `'vertical' \| 'horizontal'`          | `'vertical'` | 並びの方向                                                        |
+| `size`                 | `'lg' \| 'md' \| 'sm'`                | `'md'`       | サイズ (全 radio に伝播)                                          |
+| `hint`                 | `string`                              | -            | グループ直下のヒント。エラー表示時は隠れる                        |
+| `errorMessage`         | `string`                              | -            | エラーメッセージ。指定時は自動的にエラー状態になる                |
+| `required`             | `boolean`                             | `false`      | `<legend>` 内に必須バッジを表示                                   |
+| `error`                | `boolean`                             | `false`      | エラー視覚状態を強制 (各 radio にも伝播)                          |
+| `disabled`             | `boolean`                             | `false`      | グループ全体を無効化 (`<fieldset disabled>` 経由)                 |
+| `name`                 | `string`                              | -            | 全 radio に共有する `name`。省略時はユニーク値が自動生成          |
+| `id`                   | `string`                              | -            | `<fieldset>` の `id`。省略時は自動生成                            |
 
 ## Events
 

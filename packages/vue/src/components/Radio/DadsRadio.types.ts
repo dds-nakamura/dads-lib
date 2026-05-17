@@ -12,6 +12,13 @@ export interface DadsRadioProps {
   value: DadsRadioValue
   size?: DadsRadioSize
   label?: string
+  /** Secondary descriptive text rendered below the label. Distinct from `hint`
+   *  (which sits under the whole control in the footer), `description` belongs
+   *  to the option itself and is exposed via `aria-describedby` so screen
+   *  readers announce it when the radio gains focus. Use for selection list
+   *  items where each option carries its own explanatory paragraph (e.g. plan
+   *  picker, settings list). */
+  description?: string
   hint?: string
   errorMessage?: string
   required?: boolean

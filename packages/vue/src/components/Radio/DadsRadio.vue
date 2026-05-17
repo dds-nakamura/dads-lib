@@ -18,15 +18,20 @@ const generatedId = useId()
 const radioId = computed(() => props.id ?? `dads-radio-${generatedId}`)
 const hintId = computed(() => `${radioId.value}-hint`)
 const errorId = computed(() => `${radioId.value}-error`)
+const descriptionId = computed(() => `${radioId.value}-description`)
 
 const isError = computed(() => props.error || !!props.errorMessage)
 
 const isChecked = computed(() => props.modelValue === props.value)
 
 const describedBy = computed(() => {
-  if (isError.value && props.errorMessage) return errorId.value
-  if (props.hint) return hintId.value
-  return undefined
+  // Compose every available descriptor so screen readers announce the option's
+  // own description plus the surrounding hint / error in source order.
+  const ids: string[] = []
+  if (props.description) ids.push(descriptionId.value)
+  if (isError.value && props.errorMessage) ids.push(errorId.value)
+  else if (props.hint) ids.push(hintId.value)
+  return ids.length > 0 ? ids.join(' ') : undefined
 })
 
 const rootClasses = computed(() => [
@@ -73,9 +78,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         @blur="onBlur"
       />
       <span class="dads-radio__indicator" aria-hidden="true" />
-      <span v-if="label || required" class="dads-radio__text">
-        <template v-if="label">{{ label }}</template>
-        <span v-if="required" class="dads-radio__required" aria-hidden="true">必須</span>
+      <span v-if="label || required || description" class="dads-radio__text">
+        <span class="dads-radio__title">
+          <template v-if="label">{{ label }}</template>
+          <span v-if="required" class="dads-radio__required" aria-hidden="true">必須</span>
+        </span>
+        <span v-if="description" :id="descriptionId" class="dads-radio__description">{{
+          description
+        }}</span>
       </span>
     </label>
 
@@ -155,10 +165,24 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- text -------------------------------------------
+  // The label / required marker share a row; an optional description sits on
+  // the line below. Flex column so they stack neatly.
   &__text {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--spacing-4, 0.25rem);
+  }
+
+  &__title {
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-8, 0.5rem);
+  }
+
+  &__description {
+    color: var(--color-text-secondary, #4d4d4d);
+    font-size: var(--font-size-14, 0.875rem);
+    line-height: var(--line-height-150, 1.5);
   }
 
   &__required {

@@ -64,6 +64,27 @@ const fruit = ref('apple')
   />
 </div>
 
+## 説明 (description)
+
+`description` はオプションごとの説明文をラベル直下に表示する。`hint` がコントロール全体に対する補足であるのに対し、`description` は **そのラジオ項目固有** の説明で、フォーカス時にスクリーンリーダーが `aria-describedby` 経由で読み上げる。プラン選択リストなど、各項目に詳細説明が必要な場面で使う。
+
+<div class="demo">
+  <DadsRadio
+    v-model="plan"
+    value="free"
+    name="plan-desc"
+    label="無料プラン"
+    description="月額 ¥0 / 月間 1,000 リクエストまで"
+  />
+  <DadsRadio
+    v-model="plan"
+    value="pro"
+    name="plan-desc"
+    label="Pro プラン"
+    description="月額 ¥980 / 月間 50,000 リクエストまで"
+  />
+</div>
+
 ## 必須
 
 `required` を指定するとラベル右に「必須」マーカーを表示し、`aria-required="true"` を付与する。
@@ -106,6 +127,7 @@ const fruit = ref('apple')
 | `value`        | `string \| number \| boolean`         | -          | このラジオを表す値 (必須)。選択時に emit される              |
 | `size`         | `'lg' \| 'md' \| 'sm'`                | `'md'`     | サイズ                                                       |
 | `label`        | `string`                              | -          | ラベルテキスト                                               |
+| `description`  | `string`                              | -          | ラベル直下の説明文 (`aria-describedby` で紐付け)             |
 | `hint`         | `string`                              | -          | 補足テキスト (`aria-describedby` で紐付け)                   |
 | `errorMessage` | `string`                              | -          | エラーメッセージ。指定時は `role="alert"` で読み上げ         |
 | `required`     | `boolean`                             | `false`    | 必須マーカーを表示し `aria-required` を付与                  |

@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<DadsRadioGroupProps>(), {
   required: false,
   error: false,
   disabled: false,
+  legendVisuallyHidden: false,
 })
 
 const emit = defineEmits<DadsRadioGroupEmits>()
@@ -59,7 +60,11 @@ const onSelect = (value: DadsRadioGroupValue) => {
     :aria-invalid="isError || undefined"
     :aria-describedby="describedBy"
   >
-    <legend v-if="legend" class="dads-radio-group__legend">
+    <legend
+      v-if="legend"
+      class="dads-radio-group__legend"
+      :class="{ 'dads-radio-group__legend--visually-hidden': legendVisuallyHidden }"
+    >
       {{ legend }}
       <span v-if="required" class="dads-radio-group__required" aria-hidden="true">必須</span>
     </legend>
@@ -72,6 +77,7 @@ const onSelect = (value: DadsRadioGroupValue) => {
         :value="item.value"
         :label="item.label"
         :hint="item.hint"
+        :description="item.description"
         :disabled="item.disabled || disabled"
         :size="size"
         :name="resolvedName"
@@ -118,6 +124,21 @@ const onSelect = (value: DadsRadioGroupValue) => {
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
+
+    // Visually hide while keeping it in the a11y tree. Mirrors the canonical
+    // "sr-only" pattern so screen readers still announce the group label.
+    &--visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
   }
 
   &__required {

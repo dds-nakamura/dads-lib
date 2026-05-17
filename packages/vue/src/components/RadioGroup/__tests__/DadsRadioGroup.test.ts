@@ -284,6 +284,46 @@ describe('DadsRadioGroup', () => {
     })
   })
 
+  describe('item description', () => {
+    it('forwards item.description to the corresponding DadsRadio', () => {
+      const wrapper = createWrapper({
+        items: [
+          { value: 'a', label: 'A', description: 'A プランの説明文' },
+          { value: 'b', label: 'B' },
+        ],
+      })
+      const descs = wrapper.findAll('.dads-radio__description')
+      expect(descs).toHaveLength(1)
+      expect(descs[0].text()).toBe('A プランの説明文')
+    })
+  })
+
+  describe('legendVisuallyHidden', () => {
+    it('keeps the <legend> in the DOM when visually hidden', () => {
+      const wrapper = createWrapper({ legend: '質問', legendVisuallyHidden: true })
+      const legend = wrapper.find('legend')
+      expect(legend.exists()).toBe(true)
+      expect(legend.text()).toContain('質問')
+    })
+
+    it('applies the visually-hidden modifier class', () => {
+      const wrapper = createWrapper({ legend: '質問', legendVisuallyHidden: true })
+      const legend = wrapper.find('legend')
+      expect(legend.classes()).toContain('dads-radio-group__legend--visually-hidden')
+    })
+
+    it('omits the visually-hidden modifier by default', () => {
+      const wrapper = createWrapper({ legend: '質問' })
+      const legend = wrapper.find('legend')
+      expect(legend.classes()).not.toContain('dads-radio-group__legend--visually-hidden')
+    })
+
+    it('does not render a legend at all when legend prop is omitted (regardless of flag)', () => {
+      const wrapper = createWrapper({ legendVisuallyHidden: true })
+      expect(wrapper.find('legend').exists()).toBe(false)
+    })
+  })
+
   describe('value types', () => {
     it('handles number values correctly', async () => {
       const wrapper = createWrapper({

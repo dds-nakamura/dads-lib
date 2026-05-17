@@ -161,6 +161,57 @@ describe('DadsRadio', () => {
     })
   })
 
+  describe('description', () => {
+    it('renders the description under the label when provided', () => {
+      const wrapper = createWrapper({ label: 'プランA', description: '月額 ¥980 / 5GB' })
+      const desc = wrapper.find('.dads-radio__description')
+      expect(desc.exists()).toBe(true)
+      expect(desc.text()).toBe('月額 ¥980 / 5GB')
+    })
+
+    it('does not render description when not provided', () => {
+      const wrapper = createWrapper({ label: 'はい' })
+      expect(wrapper.find('.dads-radio__description').exists()).toBe(false)
+    })
+
+    it('includes the description id in aria-describedby', () => {
+      const wrapper = createWrapper({ label: 'プランA', description: '5GB プラン' })
+      const descId = wrapper.find('.dads-radio__description').attributes('id')
+      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
+      expect(describedBy.split(' ')).toContain(descId)
+    })
+
+    it('combines description and hint ids in aria-describedby', () => {
+      const wrapper = createWrapper({
+        label: 'プランA',
+        description: '5GB プラン',
+        hint: '後から変更可能',
+      })
+      const descId = wrapper.find('.dads-radio__description').attributes('id')
+      const hintId = wrapper.find('.dads-radio__hint').attributes('id')
+      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
+      const ids = describedBy.split(' ')
+      expect(ids).toContain(descId)
+      expect(ids).toContain(hintId)
+    })
+
+    it('prefers errorMessage over hint, while keeping description id', () => {
+      const wrapper = createWrapper({
+        label: 'プランA',
+        description: '5GB プラン',
+        hint: 'ヒント',
+        errorMessage: 'エラー',
+      })
+      const descId = wrapper.find('.dads-radio__description').attributes('id')
+      const errorId = wrapper.find('.dads-radio__error').attributes('id')
+      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
+      const ids = describedBy.split(' ')
+      expect(ids).toContain(descId)
+      expect(ids).toContain(errorId)
+      expect(wrapper.find('.dads-radio__hint').exists()).toBe(false)
+    })
+  })
+
   describe('group behavior', () => {
     it('checks only the radio whose value matches modelValue across the same name', () => {
       const wrapper = mount({
