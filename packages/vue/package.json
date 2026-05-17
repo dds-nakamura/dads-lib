@@ -1,7 +1,7 @@
 {
   "name": "@dads/vue",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "DADS (デジタル庁デザインシステム) Vue 3 コンポーネントライブラリ",
   "sideEffects": [
@@ -34,7 +34,13 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.4.0",
+    "@digital-go-jp/design-tokens": "^1.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@digital-go-jp/design-tokens": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

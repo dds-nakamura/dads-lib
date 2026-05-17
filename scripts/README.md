@@ -268,3 +268,51 @@ pnpm vendor:status -- --quiet     # drift 時のみ出力 (CI 用)
 
 する。`VENDORED.md` のフォーマット変更には弱い (列順を変えると追従が必要) ので、
 `scripts/vendor-status.mjs` 冒頭のコメントと併せて修正すること。
+
+---
+
+## release-vue.sh
+
+`@dads/vue` を Backlog Git の `vue-pkg` orphan ブランチへリリースするスクリプト。
+
+### 背景
+
+`@dads/vue` は npm レジストリには公開せず、**Backlog Git の tag を直接参照する形** で利用側に install してもらう運用（ISMS 制約で社内 npm レジストリを立てられないため）。
+
+ただし dist を `main` にコミットすると差分ノイズが激しいため、配布物は **`vue-pkg` という orphan ブランチに置く**（main とは履歴が独立）。
+
+### 実行
+
+```bash
+./scripts/release-vue.sh 0.1.0
+```
+
+### 動作
+
+1. `pnpm --filter @dads/vue build` を実行
+2. `packages/vue/{dist,src/styles,package.json,README.md,LICENSE}` を一時ディレクトリにステージング
+3. リポジトリを一時 clone し、`vue-pkg` ブランチをチェックアウト（無ければ orphan ブランチを新規作成）
+4. ブランチ内容を全置換 → commit
+5. `vue-v<version>` tag を打って `origin` に push
+6. 利用側ローカルリポジトリにも tag を fetch
+
+### 利用側のインストール
+
+```bash
+npm install "git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git#vue-v0.1.0"
+```
+
+tag だけ参照するので利用側は `vue-pkg` ブランチ名を意識する必要なし。
+
+### Rollback
+
+```bash
+# tag だけ消す (vue-pkg ブランチ自体は残す)
+git push --delete origin vue-v0.1.0
+```
+
+### 注意
+
+- スクリプトは作業ディレクトリを汚さない（temp clone 上で操作する）
+- 同じ tag を 2 度切ろうとするとエラーで停止する
+- 初回実行時は `vue-pkg` ブランチが無いため、orphan ブランチとして自動作成される
