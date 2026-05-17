@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsSelect from '../DadsSelect.vue'
 import type { DadsSelectItem, DadsSelectProps } from '../DadsSelect.types'
@@ -545,6 +546,55 @@ describe('DadsSelect', () => {
       const wrapper = createWrapper({ multiple: true, modelValue: ['a', 'c'], chips: false })
       expect(wrapper.findAll('.dads-select__tag')).toHaveLength(0)
       expect(wrapper.find('.dads-select__value').text()).toBe('Apple, Cherry')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = createWrapper({ label: '果物', modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint message', async () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        hint: 'いずれか選んでください',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({ label: '果物', required: true, modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        errorMessage: '必須項目です',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = createWrapper({ label: '果物', disabled: true, modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a selected value', async () => {
+      const wrapper = createWrapper({ label: '果物', modelValue: 'a' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in multiple mode with chips', async () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        multiple: true,
+        modelValue: ['a', 'c'],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

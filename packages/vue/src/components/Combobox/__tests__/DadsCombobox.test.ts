@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsCombobox from '../DadsCombobox.vue'
 import type { DadsComboboxItem, DadsComboboxProps } from '../DadsCombobox.types'
@@ -575,6 +576,50 @@ describe('DadsCombobox', () => {
       expect((wrapper.find('input').element as HTMLInputElement).value).toBe('Apple')
       await wrapper.setProps({ modelValue: 'b' })
       expect((wrapper.find('input').element as HTMLInputElement).value).toBe('Banana')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = createWrapper({ label: '果物', modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint message', async () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        hint: '頭文字を入力して候補を絞り込めます',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({ label: '果物', required: true, modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        errorMessage: '必須項目です',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = createWrapper({ label: '果物', disabled: true, modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in multi-select mode with chips', async () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        multiple: true,
+        modelValue: ['a', 'b'],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

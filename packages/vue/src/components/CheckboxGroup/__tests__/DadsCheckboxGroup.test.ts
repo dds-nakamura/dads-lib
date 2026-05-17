@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsCheckboxGroup from '../DadsCheckboxGroup.vue'
 import DadsCheckbox from '../../Checkbox/DadsCheckbox.vue'
 import type { DadsCheckboxGroupItem, DadsCheckboxGroupProps } from '../DadsCheckboxGroup.types'
@@ -260,6 +261,57 @@ describe('DadsCheckboxGroup', () => {
       for (const cb of wrapper.findAllComponents(DadsCheckbox)) {
         expect(cb.props('name')).toBe('fruits')
       }
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible legend', async () => {
+      const wrapper = createWrapper({ legend: '好きな果物', modelValue: [] })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint', async () => {
+      const wrapper = createWrapper({
+        legend: '好きな果物',
+        hint: '複数選択できます',
+        modelValue: [],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({
+        legend: '好きな果物',
+        required: true,
+        modelValue: [],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state', async () => {
+      const wrapper = createWrapper({
+        legend: '好きな果物',
+        errorMessage: '1 つ以上選択してください',
+        modelValue: [],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled', async () => {
+      const wrapper = createWrapper({
+        legend: '好きな果物',
+        disabled: true,
+        modelValue: [],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with some items selected', async () => {
+      const wrapper = createWrapper({
+        legend: '好きな果物',
+        modelValue: ['apple', 'banana'],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 

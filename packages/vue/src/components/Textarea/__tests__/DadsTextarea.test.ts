@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsTextarea from '../DadsTextarea.vue'
 import type { DadsTextareaProps } from '../DadsTextarea.types'
@@ -296,6 +297,51 @@ describe('DadsTextarea', () => {
       expect(textarea.attributes('name')).toBe('memo')
       expect(textarea.attributes('autocomplete')).toBe('off')
       expect(textarea.attributes('maxlength')).toBe('200')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = createWrapper({ label: '備考', modelValue: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint message', async () => {
+      const wrapper = createWrapper({
+        label: '備考',
+        hint: '200 文字以内で入力してください',
+        modelValue: '',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({ label: '備考', required: true, modelValue: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = createWrapper({
+        label: '備考',
+        errorMessage: '必須項目です',
+        modelValue: '',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = createWrapper({ label: '備考', disabled: true, modelValue: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a counter', async () => {
+      const wrapper = createWrapper({
+        label: '備考',
+        counter: 200,
+        maxlength: 200,
+        modelValue: 'こんにちは',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

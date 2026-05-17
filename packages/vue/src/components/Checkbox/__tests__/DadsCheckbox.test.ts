@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsCheckbox from '../DadsCheckbox.vue'
 import type { DadsCheckboxProps } from '../DadsCheckbox.types'
@@ -267,6 +268,43 @@ describe('DadsCheckbox', () => {
       const input = wrapper.find('input')
       expect(input.attributes('name')).toBe('agree')
       expect(input.attributes('value')).toBe('yes')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = createWrapper({ label: '同意する' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint', async () => {
+      const wrapper = createWrapper({ label: '同意する', hint: '後から変更できます' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({ label: '同意する', required: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = createWrapper({ label: '同意する', errorMessage: '必須項目です' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = createWrapper({ label: '同意する', disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in checked state', async () => {
+      const wrapper = createWrapper({ label: '同意する', modelValue: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in indeterminate state', async () => {
+      const wrapper = createWrapper({ label: '同意する', indeterminate: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 

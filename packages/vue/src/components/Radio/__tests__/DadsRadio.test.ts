@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsRadio from '../DadsRadio.vue'
 import type { DadsRadioProps } from '../DadsRadio.types'
 
@@ -251,6 +252,72 @@ describe('DadsRadio', () => {
       const wrapper = createWrapper()
       await wrapper.find('input').trigger('blur')
       expect(wrapper.emitted('blur')).toHaveLength(1)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = createWrapper({ label: 'はい', value: 'yes', modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint message', async () => {
+      const wrapper = createWrapper({
+        label: '同意する',
+        hint: '後から変更できます',
+        value: 'agree',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a description', async () => {
+      const wrapper = createWrapper({
+        label: 'プランA',
+        description: '月額 ¥980 / 5GB',
+        value: 'a',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({
+        label: 'はい',
+        required: true,
+        value: 'yes',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = createWrapper({
+        label: 'はい',
+        errorMessage: '必須項目です',
+        value: 'yes',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = createWrapper({
+        label: 'はい',
+        disabled: true,
+        value: 'yes',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when checked', async () => {
+      const wrapper = createWrapper({
+        label: 'はい',
+        value: 'yes',
+        modelValue: 'yes',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 

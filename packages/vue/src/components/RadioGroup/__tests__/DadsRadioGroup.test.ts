@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsRadioGroup from '../DadsRadioGroup.vue'
 import type { DadsRadioGroupItem, DadsRadioGroupProps } from '../DadsRadioGroup.types'
 
@@ -321,6 +322,70 @@ describe('DadsRadioGroup', () => {
     it('does not render a legend at all when legend prop is omitted (regardless of flag)', () => {
       const wrapper = createWrapper({ legendVisuallyHidden: true })
       expect(wrapper.find('legend').exists()).toBe(false)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible legend', async () => {
+      const wrapper = createWrapper({ legend: '果物を選んでください', modelValue: null })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with hint and legend', async () => {
+      const wrapper = createWrapper({
+        legend: '果物',
+        hint: 'いずれか選んでください',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({
+        legend: '果物',
+        required: true,
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state', async () => {
+      const wrapper = createWrapper({
+        legend: '果物',
+        errorMessage: '必須項目です',
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled', async () => {
+      const wrapper = createWrapper({
+        legend: '果物',
+        disabled: true,
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with visually-hidden legend', async () => {
+      const wrapper = createWrapper({
+        legend: '果物',
+        legendVisuallyHidden: true,
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with item descriptions', async () => {
+      const wrapper = createWrapper({
+        legend: 'プランを選んでください',
+        items: [
+          { value: 'a', label: 'プラン A', description: '月額 ¥980' },
+          { value: 'b', label: 'プラン B', description: '月額 ¥1,980' },
+        ],
+        modelValue: null,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 

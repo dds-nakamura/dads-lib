@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsFileUpload from '../DadsFileUpload.vue'
 import type { DadsFileUploadProps } from '../DadsFileUpload.types'
 
@@ -393,6 +394,45 @@ describe('DadsFileUpload', () => {
       const file = makeFile('a.txt', 100)
       const wrapper = createWrapper({ modelValue: file, showFileSize: false })
       expect(wrapper.find('.dads-file-upload__file-size').exists()).toBe(false)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a visible label', async () => {
+      const wrapper = createWrapper({ label: '添付ファイル' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a hint message', async () => {
+      const wrapper = createWrapper({
+        label: '添付ファイル',
+        hint: 'PDF または画像をアップロードしてください (10MB まで)',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when required', async () => {
+      const wrapper = createWrapper({ label: '添付ファイル', required: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in error state with a message', async () => {
+      const wrapper = createWrapper({
+        label: '添付ファイル',
+        errorMessage: 'ファイルを選択してください',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in disabled state', async () => {
+      const wrapper = createWrapper({ label: '添付ファイル', disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a selected file preview', async () => {
+      const file = makeFile('report.txt', 1024)
+      const wrapper = createWrapper({ label: '添付ファイル', modelValue: file })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
