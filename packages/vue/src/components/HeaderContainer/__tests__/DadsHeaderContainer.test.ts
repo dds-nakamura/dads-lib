@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsHeaderContainer from '../DadsHeaderContainer.vue'
 import type { DadsHeaderContainerProps } from '../DadsHeaderContainer.types'
 
@@ -267,5 +268,30 @@ describe('DadsHeaderContainer', () => {
       expect(wrapper.find('.dads-header-container__utility .util').exists()).toBe(true)
       expect(wrapper.find('.dads-header-container__actions .cta').exists()).toBe(true)
     })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with a default logo label', async () => {
+      const wrapper = createWrapper({ logoLabel: 'デジタル庁' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with logoLabel + logoHref (anchor)', async () => {
+      const wrapper = createWrapper({ logoLabel: 'デジタル庁', logoHref: '/' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with menu toggle hidden', async () => {
+      const wrapper = createWrapper({ logoLabel: 'デジタル庁', showMenuToggle: false })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it.each(['wide-full', 'wide-slim', 'medium', 'compact'] as const)(
+      'has no violations with variant=%s',
+      async (variant) => {
+        const wrapper = createWrapper({ logoLabel: 'デジタル庁', variant })
+        expect(await axe(wrapper.element)).toHaveNoViolations()
+      },
+    )
   })
 })

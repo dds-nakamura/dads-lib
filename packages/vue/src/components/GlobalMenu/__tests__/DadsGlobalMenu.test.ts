@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsGlobalMenu from '../DadsGlobalMenu.vue'
 import type { DadsGlobalMenuItem, DadsGlobalMenuProps } from '../DadsGlobalMenu.types'
 
@@ -279,6 +280,54 @@ describe('DadsGlobalMenu', () => {
         items: [{ label: 'ホーム', href: '/', frontIcon: 'mdi-home' }],
       })
       expect(wrapper.find('.dads-global-menu__front-icon').attributes('aria-hidden')).toBe('true')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsGlobalMenuProps> = {}) =>
+      mount(DadsGlobalMenu, {
+        props: { items: sampleItems, ...props } as DadsGlobalMenuProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations with flat link items', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with an active (aria-current=page) item', async () => {
+      const wrapper = mountInBody({
+        items: [
+          { label: 'ホーム', href: '/', active: true },
+          { label: 'サービス', href: '/services' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled item', async () => {
+      const wrapper = mountInBody({
+        items: [
+          { label: 'ホーム', href: '/' },
+          { label: '準備中', disabled: true },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a parent + children (haspopup)', async () => {
+      const wrapper = mountInBody({
+        items: [
+          {
+            label: 'サービス',
+            children: [
+              { label: '一覧', href: '/services' },
+              { label: '料金プラン', href: '/services/pricing' },
+            ],
+          },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsBottomNavigation from '../DadsBottomNavigation.vue'
 import type {
   DadsBottomNavigationItem,
@@ -192,6 +193,35 @@ describe('DadsBottomNavigation', () => {
       const wrapper = createWrapper({ items: anchorItems, modelValue: 'home' })
       await wrapper.findAll('a.dads-bottom-navigation__item')[2].trigger('click')
       expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with button items', async () => {
+      const wrapper = createWrapper()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with anchor items (href)', async () => {
+      const wrapper = createWrapper({
+        items: items.map((i) => ({ ...i, href: `/${i.id}` })),
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with custom aria-label', async () => {
+      const wrapper = createWrapper({ ariaLabel: 'メインナビゲーション' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled item', async () => {
+      const wrapper = createWrapper({
+        items: [
+          { id: 'home', label: 'ホーム', iconName: 'mdi-home' },
+          { id: 'soon', label: '準備中', iconName: 'mdi-clock', disabled: true },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

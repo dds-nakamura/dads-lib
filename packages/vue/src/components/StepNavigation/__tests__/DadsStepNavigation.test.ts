@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsStepNavigation from '../DadsStepNavigation.vue'
 import type { DadsStepNavigationProps, DadsStepNavigationStep } from '../DadsStepNavigation.types'
 
@@ -296,6 +297,41 @@ describe('DadsStepNavigation', () => {
       const items = wrapper.findAll('.dads-step-navigation__item')
       expect(items[0]?.attributes('aria-current')).toBeUndefined()
       expect(items[1]?.attributes('aria-current')).toBe('step')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsStepNavigationProps> = {}) =>
+      mount(DadsStepNavigation, {
+        props: { steps: defaultSteps, ...props } as DadsStepNavigationProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations in horizontal orientation', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in vertical orientation', async () => {
+      const wrapper = mountInBody({ orientation: 'vertical' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when not clickable (inert <div> steps)', async () => {
+      const wrapper = mountInBody({ clickable: false })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with all 4 statuses present', async () => {
+      const wrapper = mountInBody({
+        steps: [
+          { title: 'A', status: 'done' },
+          { title: 'B', status: 'error' },
+          { title: 'C', status: 'current' },
+          { title: 'D', status: 'pending' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

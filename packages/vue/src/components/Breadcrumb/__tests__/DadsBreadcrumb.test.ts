@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsBreadcrumb from '../DadsBreadcrumb.vue'
 import type { DadsBreadcrumbItem, DadsBreadcrumbProps } from '../DadsBreadcrumb.types'
 
@@ -264,6 +265,40 @@ describe('DadsBreadcrumb', () => {
       expect(items[0]?.find('.dads-breadcrumb__separator').exists()).toBe(true)
       expect(items[1]?.find('.dads-breadcrumb__separator').exists()).toBe(true)
       expect(items[2]?.find('.dads-breadcrumb__separator').exists()).toBe(false)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsBreadcrumbProps> = {}) =>
+      mount(DadsBreadcrumb, {
+        props: { items: sampleItems, ...props } as DadsBreadcrumbProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations with default items', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a custom separator', async () => {
+      const wrapper = mountInBody({ separator: '>' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a custom aria-label', async () => {
+      const wrapper = mountInBody({ ariaLabel: '現在のページ位置' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled item', async () => {
+      const wrapper = mountInBody({
+        items: [
+          { title: 'ホーム', href: '/' },
+          { title: '準備中', disabled: true },
+          { title: '詳細' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsMegaMenu from '../DadsMegaMenu.vue'
 import type { DadsMegaMenuColumn, DadsMegaMenuProps } from '../DadsMegaMenu.types'
@@ -290,6 +291,41 @@ describe('DadsMegaMenu', () => {
       const payload = events?.[0]
       expect((payload?.[0] as { label: string }).label).toBe('概要')
       expect(payload?.[1]).toBeInstanceOf(MouseEvent)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const createMegaMenu = (props: Partial<DadsMegaMenuProps> = {}) =>
+      mount(DadsMegaMenu, {
+        props: {
+          triggerLabel: 'サービス',
+          columns: sampleColumns,
+          ...props,
+        } as DadsMegaMenuProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations when closed', async () => {
+      const wrapper = createMegaMenu({ modelValue: false })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when open', async () => {
+      const wrapper = createMegaMenu({ modelValue: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with custom aria-label', async () => {
+      const wrapper = createMegaMenu({ modelValue: true, ariaLabel: 'サイト全体メニュー' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with single-column layout', async () => {
+      const wrapper = createMegaMenu({
+        modelValue: true,
+        columns: [{ heading: 'メニュー', items: [{ label: 'ホーム', href: '/' }] }],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

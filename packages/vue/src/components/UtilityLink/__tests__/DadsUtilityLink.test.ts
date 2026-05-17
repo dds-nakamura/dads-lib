@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsUtilityLink from '../DadsUtilityLink.vue'
 import type { DadsUtilityLinkItem, DadsUtilityLinkProps } from '../DadsUtilityLink.types'
 
@@ -241,6 +242,44 @@ describe('DadsUtilityLink', () => {
       expect(hrefs).not.toContain('/single')
       expect(wrapper.text()).not.toContain('単一リンク')
       expect(wrapper.text()).toContain('お問合わせ')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsUtilityLinkProps>) =>
+      mount(DadsUtilityLink, {
+        props: props as DadsUtilityLinkProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations in single-link mode', async () => {
+      const wrapper = mountInBody({ href: '/contact', label: 'お問合わせ' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with icon and external markers', async () => {
+      const wrapper = mountInBody({
+        href: 'https://example.com',
+        label: '外部リソース',
+        iconName: 'mdi-help-circle-outline',
+        external: true,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in list mode', async () => {
+      const wrapper = mountInBody({ items: sampleItems })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with mixed external items in list mode', async () => {
+      const wrapper = mountInBody({
+        items: [
+          { label: 'お問合わせ', href: '/contact' },
+          { label: '外部サイト', href: 'https://example.com', external: true },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

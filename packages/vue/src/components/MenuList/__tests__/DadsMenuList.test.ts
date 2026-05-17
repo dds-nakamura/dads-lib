@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsMenuList from '../DadsMenuList.vue'
 import type { DadsMenuListItem, DadsMenuListProps } from '../DadsMenuList.types'
 
@@ -393,6 +394,57 @@ describe('DadsMenuList', () => {
       })
       expect(wrapper.find('a.dads-menu-list__item').exists()).toBe(false)
       expect(wrapper.find('button.dads-menu-list__item').exists()).toBe(false)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    // MenuList is a non-landmark surface used inside <nav> / <dialog> / etc.
+    // Wrap in a nav landmark so axe's `region` rule is satisfied.
+    const mountInLandmark = (props: Partial<DadsMenuListProps> = {}) =>
+      mount(
+        {
+          components: { DadsMenuList },
+          props: ['listProps'],
+          template: `<nav aria-label="テスト用"><DadsMenuList v-bind="listProps" /></nav>`,
+        },
+        {
+          props: { listProps: { items: sampleItems, ...props } },
+          attachTo: document.body,
+        },
+      )
+
+    it('has no violations with a default link list', async () => {
+      const wrapper = mountInLandmark({ ariaLabel: 'メニュー' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with size="small"', async () => {
+      const wrapper = mountInLandmark({ ariaLabel: 'メニュー', size: 'small' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with section dividers and titles', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'メニュー',
+        items: [
+          { label: 'sec1', divider: { title: '基本' } },
+          { label: 'ホーム', href: '/' },
+          { label: 'sec2', divider: true },
+          { label: 'お問い合わせ', href: '/contact' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with accordion items', async () => {
+      const wrapper = mountInLandmark({
+        ariaLabel: 'メニュー',
+        items: [
+          { label: 'カテゴリ', itemKind: 'accordion', expanded: true },
+          { label: 'ホーム', href: '/' },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

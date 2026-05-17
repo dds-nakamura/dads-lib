@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsPageNavigation from '../DadsPageNavigation.vue'
 import type { DadsPageNavigationProps } from '../DadsPageNavigation.types'
 
@@ -215,6 +216,39 @@ describe('DadsPageNavigation (pagination)', () => {
       })
       expect(wrapper.find('.dads-page-navigation__btn--prev').text()).toContain('Prev')
       expect(wrapper.find('.dads-page-navigation__btn--next').text()).toContain('Next')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsPageNavigationProps> = {}) =>
+      mount(DadsPageNavigation, {
+        props: { modelValue: 1, totalPages: 10, ...props } as DadsPageNavigationProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations on the first page', async () => {
+      const wrapper = mountInBody({ modelValue: 1, totalPages: 10 })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in the middle of a range with ellipses', async () => {
+      const wrapper = mountInBody({ modelValue: 5, totalPages: 20 })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with first/last jump buttons', async () => {
+      const wrapper = mountInBody({ modelValue: 3, totalPages: 10, showFirstLast: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations when disabled', async () => {
+      const wrapper = mountInBody({ disabled: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with totalPages=1 (single page)', async () => {
+      const wrapper = mountInBody({ modelValue: 1, totalPages: 1 })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
