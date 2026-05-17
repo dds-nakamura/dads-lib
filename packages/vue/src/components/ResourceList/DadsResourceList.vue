@@ -1,33 +1,67 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { DadsResourceListItem, DadsResourceListProps } from './DadsResourceList.types'
+import type {
+  DadsResourceListEmits,
+  DadsResourceListItem,
+  DadsResourceListProps,
+} from './DadsResourceList.types'
 
 const props = withDefaults(defineProps<DadsResourceListProps>(), {
   variant: 'frame',
 })
+
+const emit = defineEmits<DadsResourceListEmits>()
 
 // Pre-compute the per-item render flags so the template stays declarative.
 const renderedItems = computed(() =>
   props.items.map((item, index) => ({
     item,
     index,
-    isLink: Boolean(item.href),
+    isLink: Boolean(item.href) && !item.disabled,
     hasMedia: Boolean(item.thumbnail) || Boolean(item.iconName),
     hasTags: Array.isArray(item.tags) && item.tags.length > 0,
+    kind: item.kind ?? 'information',
+    rowClass: [
+      'dads-resource-list',
+      `dads-resource-list--kind-${item.kind ?? 'information'}`,
+      {
+        'dads-resource-list--selected': item.selected,
+        'dads-resource-list--disabled': item.disabled,
+      },
+    ],
   })),
 )
 
-const isLinkItem = (item: DadsResourceListItem) => Boolean(item.href)
+const isLinkItem = (item: DadsResourceListItem) => Boolean(item.href) && !item.disabled
+
+const onItemClick = (item: DadsResourceListItem, index: number, event: MouseEvent) => {
+  if (item.disabled) {
+    event.preventDefault()
+    return
+  }
+  emit('click:item', item, index, event)
+}
+
+const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEvent) => {
+  if (item.disabled) {
+    event.preventDefault()
+    return
+  }
+  emit('click:action', item, index, event)
+}
 </script>
 
 <template>
   <ul class="dads-resource-list-group" :data-style="variant" :aria-label="ariaLabel">
     <li v-for="entry in renderedItems" :key="entry.index" class="dads-resource-list-group__item">
-      <div class="dads-resource-list" :data-style="variant">
+      <div :class="entry.rowClass" :data-style="variant">
         <component
           :is="isLinkItem(entry.item) ? 'a' : 'div'"
           :href="isLinkItem(entry.item) ? entry.item.href : undefined"
+          :aria-current="entry.item.selected ? 'true' : undefined"
+          :aria-disabled="entry.item.disabled || undefined"
           class="dads-resource-list__body"
+          @click="onItemClick(entry.item, entry.index, $event)"
         >
           <img
             v-if="entry.item.thumbnail"
@@ -58,6 +92,23 @@ const isLinkItem = (item: DadsResourceListItem) => Boolean(item.href)
           <div v-if="entry.item.date" class="dads-resource-list__sub">
             <p>{{ entry.item.date }}</p>
           </div>
+        </component>
+        <component
+          v-if="entry.item.action"
+          :is="entry.item.action.href ? 'a' : 'button'"
+          :type="entry.item.action.href ? undefined : 'button'"
+          :href="entry.item.action.href"
+          :aria-label="entry.item.action.label"
+          :disabled="!entry.item.action.href && entry.item.disabled ? true : undefined"
+          class="dads-resource-list__action"
+          @click="onActionClick(entry.item, entry.index, $event)"
+        >
+          <i
+            v-if="entry.item.action.iconName"
+            :class="['mdi', entry.item.action.iconName]"
+            aria-hidden="true"
+          />
+          <span v-else>{{ entry.item.action.label }}</span>
         </component>
       </div>
     </li>
@@ -243,6 +294,47 @@ const isLinkItem = (item: DadsResourceListItem) => Boolean(item.href)
 
   &__sub > * {
     margin: 0;
+  }
+
+  // ---------- kind + state ------------------------------------------------
+  &--kind-form &__body {
+    cursor: pointer;
+  }
+
+  &--selected {
+    background-color: var(--color-info-bg, #e8eaf6);
+    border-color: var(--color-brand-primary, #0017c1);
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // ---------- trailing action button -------------------------------------
+  &__action {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0 var(--spacing-12, 0.75rem);
+    margin-inline: var(--spacing-8, 0.5rem);
+    border-radius: var(--border-radius-4, 0.25rem);
+    color: var(--color-brand-primary, #0017c1);
+    background-color: transparent;
+    font: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: var(--color-info-bg, rgba(0, 23, 193, 0.06));
+    }
   }
 
   // ---------- forced colors ---------------------------------------------

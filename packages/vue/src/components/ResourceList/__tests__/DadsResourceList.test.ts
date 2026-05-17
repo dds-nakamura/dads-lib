@@ -220,4 +220,83 @@ describe('DadsResourceList', () => {
       expect(root.attributes('aria-label')).toBeUndefined()
     })
   })
+
+  describe('kind / selected / disabled / action', () => {
+    it('applies kind-information modifier by default', () => {
+      const wrapper = createWrapper({ items: [{ title: 'A' }] })
+      expect(wrapper.find('.dads-resource-list').classes()).toContain(
+        'dads-resource-list--kind-information',
+      )
+    })
+
+    it('applies kind-form modifier when item.kind="form"', () => {
+      const wrapper = createWrapper({ items: [{ title: 'A', kind: 'form' }] })
+      expect(wrapper.find('.dads-resource-list').classes()).toContain(
+        'dads-resource-list--kind-form',
+      )
+    })
+
+    it('applies selected modifier + aria-current when item.selected=true', () => {
+      const wrapper = createWrapper({
+        items: [{ title: 'A', href: '/a', selected: true }],
+      })
+      const row = wrapper.find('.dads-resource-list')
+      expect(row.classes()).toContain('dads-resource-list--selected')
+      const body = wrapper.find('.dads-resource-list__body')
+      expect(body.attributes('aria-current')).toBe('true')
+    })
+
+    it('applies disabled modifier + aria-disabled when item.disabled=true', () => {
+      const wrapper = createWrapper({
+        items: [{ title: 'A', href: '/a', disabled: true }],
+      })
+      expect(wrapper.find('.dads-resource-list').classes()).toContain(
+        'dads-resource-list--disabled',
+      )
+    })
+
+    it('renders trailing action button when item.action is provided', () => {
+      const wrapper = createWrapper({
+        items: [
+          {
+            title: 'A',
+            action: { label: 'ダウンロード', iconName: 'mdi-download' },
+          },
+        ],
+      })
+      const action = wrapper.find('button.dads-resource-list__action')
+      expect(action.exists()).toBe(true)
+      expect(action.attributes('aria-label')).toBe('ダウンロード')
+      expect(action.find('i.mdi.mdi-download').exists()).toBe(true)
+    })
+
+    it('renders action as <a> when href is provided', () => {
+      const wrapper = createWrapper({
+        items: [{ title: 'A', action: { label: 'PDF', href: '/a.pdf' } }],
+      })
+      const link = wrapper.find('a.dads-resource-list__action')
+      expect(link.exists()).toBe(true)
+      expect(link.attributes('href')).toBe('/a.pdf')
+    })
+
+    it('emits click:action when action button is clicked', async () => {
+      const wrapper = createWrapper({
+        items: [{ title: 'A', action: { label: 'X' } }],
+      })
+      await wrapper.find('button.dads-resource-list__action').trigger('click')
+      const emitted = wrapper.emitted('click:action')
+      expect(emitted).toBeTruthy()
+      expect(emitted?.[0]?.[1]).toBe(0)
+    })
+
+    it('emits click:item when the body is clicked', async () => {
+      const wrapper = createWrapper({
+        items: [{ title: 'A', href: '/a' }],
+      })
+      await wrapper.find('a.dads-resource-list__body').trigger('click')
+      const emitted = wrapper.emitted('click:item')
+      expect(emitted).toBeTruthy()
+      expect(emitted?.[0]?.[1]).toBe(0)
+    })
+  })
 })

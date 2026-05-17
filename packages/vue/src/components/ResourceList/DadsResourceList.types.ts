@@ -22,6 +22,23 @@
 /** Visual treatment of each row. Mirrors the HTML reference `data-style`. */
 export type DadsResourceListStyle = 'frame' | 'list'
 
+/**
+ * Item kind per official DADS Figma.
+ * - `information` (default): static read-only entry (document / news)
+ * - `form`: actionable entry (selectable + optional right-side action)
+ */
+export type DadsResourceListItemKind = 'information' | 'form'
+
+/** Optional trailing action button rendered to the right of the item. */
+export interface DadsResourceListAction {
+  /** aria-label (also the visible text when `iconName` is omitted). */
+  label: string
+  /** Material Design Icons class for an icon-only action (`mdi-download` etc). */
+  iconName?: string
+  /** href — when set, renders as `<a>`; otherwise as `<button>` for click event. */
+  href?: string
+}
+
 /** Shape of a single entry in the resource list. */
 export interface DadsResourceListItem {
   /** Visible title. Required because every item must be identifiable. */
@@ -38,6 +55,14 @@ export interface DadsResourceListItem {
   tags?: string[]
   /** Material Design Icons class name (e.g. `"mdi-file-document"`). Used when `thumbnail` is absent. */
   iconName?: string
+  /** Item kind (Information vs Form per Figma). Default `'information'`. */
+  kind?: DadsResourceListItemKind
+  /** Marks the item as currently selected (adds `aria-current="true"` + visual highlight). */
+  selected?: boolean
+  /** Visually dim, skip emit / navigation. */
+  disabled?: boolean
+  /** Optional trailing action button (download / external link / inline button). */
+  action?: DadsResourceListAction
 }
 
 export interface DadsResourceListProps {
@@ -47,4 +72,11 @@ export interface DadsResourceListProps {
   variant?: DadsResourceListStyle
   /** Accessible label for the root `<ul>`. Recommended for screen readers. */
   ariaLabel?: string
+}
+
+export interface DadsResourceListEmits {
+  /** Emitted when the title link is activated (only for non-disabled items). */
+  (e: 'click:item', item: DadsResourceListItem, index: number, event: MouseEvent): void
+  /** Emitted when the trailing action button is activated. */
+  (e: 'click:action', item: DadsResourceListItem, index: number, event: MouseEvent): void
 }
