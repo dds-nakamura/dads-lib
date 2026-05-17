@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
-import type { DadsTableControlEmits, DadsTableControlProps } from './DadsTableControl.types'
+import type {
+  DadsTableControlEmits,
+  DadsTableControlPreset,
+  DadsTableControlProps,
+} from './DadsTableControl.types'
 
 const props = withDefaults(defineProps<DadsTableControlProps>(), {
   searchQuery: '',
@@ -8,6 +12,9 @@ const props = withDefaults(defineProps<DadsTableControlProps>(), {
   pageSize: 10,
   pageSizeOptions: () => [10, 25, 50, 100],
   searchPlaceholder: '検索',
+  presets: () => [],
+  showReset: true,
+  resetLabel: '検索条件をリセット',
   showSearch: true,
   showPageSize: true,
   showPagination: true,
@@ -72,6 +79,17 @@ const statusText = computed(() => {
   if (props.totalItems === 0) return '0 件'
   return `${rangeStart.value}-${rangeEnd.value} / ${props.totalItems} 件`
 })
+
+const onPresetClick = (preset: DadsTableControlPreset) => {
+  emit('update:search', preset.query)
+  emit('click:preset', preset)
+}
+
+const onReset = () => {
+  if (!props.searchQuery) return
+  emit('update:search', '')
+  emit('reset')
+}
 </script>
 
 <template>
@@ -90,6 +108,28 @@ const statusText = computed(() => {
             :placeholder="searchPlaceholder"
             @input="onSearchInput"
           />
+          <button
+            v-if="showReset && searchQuery"
+            type="button"
+            class="dads-table-control__reset"
+            :aria-label="resetLabel"
+            @click="onReset"
+          >
+            <i class="mdi mdi-close-circle" aria-hidden="true" />
+          </button>
+        </div>
+        <div v-if="presets.length > 0" class="dads-table-control__presets" role="list">
+          <button
+            v-for="(preset, idx) in presets"
+            :key="`${preset.label}-${idx}`"
+            type="button"
+            role="listitem"
+            class="dads-table-control__preset"
+            :aria-pressed="searchQuery === preset.query"
+            @click="onPresetClick(preset)"
+          >
+            {{ preset.label }}
+          </button>
         </div>
       </div>
 
@@ -200,6 +240,67 @@ const statusText = computed(() => {
 
     &:focus-visible {
       outline: none !important;
+    }
+  }
+
+  // -------------------- reset button (search 横の ✕) --------------------
+  &__reset {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-right: var(--spacing-4, 0.25rem);
+    border-radius: 50%;
+    background-color: transparent;
+    color: var(--color-text-secondary, #4d4d4d);
+    font-size: 1.1rem;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-text-primary, #1a1a1a);
+      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+    }
+  }
+
+  // -------------------- preset chips (検索プリセット) --------------------
+  &__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-4, 0.25rem);
+    margin-top: var(--spacing-4, 0.25rem);
+  }
+
+  &__preset {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    padding: 0 var(--spacing-8, 0.5rem);
+    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+    border-radius: var(--border-radius-pill, 999px);
+    background-color: var(--color-bg-surface, #fff);
+    color: var(--color-text-primary, #1a1a1a);
+    font-size: var(--font-size-12, 0.75rem);
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+
+    &:hover {
+      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+    }
+
+    &[aria-pressed='true'] {
+      background-color: var(--color-info-bg, rgba(0, 23, 193, 0.08));
+      border-color: var(--color-brand-primary, #0017c1);
+      color: var(--color-brand-primary, #0017c1);
     }
   }
 

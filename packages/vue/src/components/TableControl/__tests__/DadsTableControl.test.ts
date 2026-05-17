@@ -194,4 +194,79 @@ describe('DadsTableControl', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
+
+  describe('reset button', () => {
+    it('is hidden when searchQuery is empty', () => {
+      const wrapper = createWrapper({ searchQuery: '' })
+      expect(wrapper.find('.dads-table-control__reset').exists()).toBe(false)
+    })
+
+    it('shows when searchQuery is non-empty (default showReset=true)', () => {
+      const wrapper = createWrapper({ searchQuery: 'hello' })
+      const btn = wrapper.find('.dads-table-control__reset')
+      expect(btn.exists()).toBe(true)
+      expect(btn.attributes('aria-label')).toBe('検索条件をリセット')
+    })
+
+    it('does not render when showReset=false even with a query present', () => {
+      const wrapper = createWrapper({ searchQuery: 'hello', showReset: false })
+      expect(wrapper.find('.dads-table-control__reset').exists()).toBe(false)
+    })
+
+    it('emits update:search with empty string + reset event on click', async () => {
+      const wrapper = createWrapper({ searchQuery: 'tokyo' })
+      await wrapper.find('.dads-table-control__reset').trigger('click')
+      expect(wrapper.emitted('update:search')?.[0]).toEqual([''])
+      expect(wrapper.emitted('reset')?.[0]).toEqual([])
+    })
+
+    it('honors custom resetLabel', () => {
+      const wrapper = createWrapper({ searchQuery: 'x', resetLabel: 'Clear' })
+      expect(wrapper.find('.dads-table-control__reset').attributes('aria-label')).toBe('Clear')
+    })
+  })
+
+  describe('presets', () => {
+    it('renders nothing when presets is empty (default)', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-table-control__presets').exists()).toBe(false)
+    })
+
+    it('renders one button per preset', () => {
+      const wrapper = createWrapper({
+        presets: [
+          { label: '東京', query: 'tokyo' },
+          { label: '大阪', query: 'osaka' },
+        ],
+      })
+      const btns = wrapper.findAll('.dads-table-control__preset')
+      expect(btns).toHaveLength(2)
+      expect(btns[0].text()).toBe('東京')
+      expect(btns[1].text()).toBe('大阪')
+    })
+
+    it('marks the active preset with aria-pressed when its query matches searchQuery', () => {
+      const wrapper = createWrapper({
+        searchQuery: 'osaka',
+        presets: [
+          { label: '東京', query: 'tokyo' },
+          { label: '大阪', query: 'osaka' },
+        ],
+      })
+      const btns = wrapper.findAll('.dads-table-control__preset')
+      expect(btns[0].attributes('aria-pressed')).toBe('false')
+      expect(btns[1].attributes('aria-pressed')).toBe('true')
+    })
+
+    it('emits update:search and click:preset on preset click', async () => {
+      const presets = [
+        { label: '東京', query: 'tokyo' },
+        { label: '大阪', query: 'osaka' },
+      ]
+      const wrapper = createWrapper({ presets })
+      await wrapper.findAll('.dads-table-control__preset')[1].trigger('click')
+      expect(wrapper.emitted('update:search')?.[0]).toEqual(['osaka'])
+      expect(wrapper.emitted('click:preset')?.[0]).toEqual([presets[1]])
+    })
+  })
 })

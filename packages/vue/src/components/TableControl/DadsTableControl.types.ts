@@ -11,6 +11,20 @@
  *  形で検索・ページサイズ・ページ送りの最小 API を提供する。)
  */
 
+/**
+ * Saved search preset (検索プリセット).
+ *
+ * Rendered as a row of chip-style buttons below the search input. Clicking a
+ * preset replaces `searchQuery` with `query` and emits both `update:search`
+ * (so v-model:search updates) and `click:preset` (for analytics / side
+ * effects). Matches the DADS Figma `Table Control` "検索プリセットを表示"
+ * example.
+ */
+export interface DadsTableControlPreset {
+  label: string
+  query: string
+}
+
 export interface DadsTableControlProps {
   /** Bound search query (v-model:search). */
   searchQuery?: string
@@ -24,6 +38,19 @@ export interface DadsTableControlProps {
   pageSizeOptions?: number[]
   /** Placeholder text for the search input. Default: `'検索'`. */
   searchPlaceholder?: string
+  /**
+   * Saved search presets. When provided, they render as a row of small
+   * buttons below the search input. Click → sets `searchQuery` to the
+   * preset's `query` value.
+   */
+  presets?: DadsTableControlPreset[]
+  /**
+   * Show the reset (✕) button inside the search input. Default `true`.
+   * The button is hidden automatically when `searchQuery` is empty.
+   */
+  showReset?: boolean
+  /** Accessible label for the reset button. Default `'検索条件をリセット'`. */
+  resetLabel?: string
   /** Show the search box. Default: `true`. */
   showSearch?: boolean
   /** Show the page-size selector. Default: `true`. */
@@ -39,4 +66,8 @@ export interface DadsTableControlEmits {
   (e: 'update:page', value: number): void
   /** Page size changed. */
   (e: 'update:pageSize', value: number): void
+  /** Emitted when a preset chip is clicked (search is also updated). */
+  (e: 'click:preset', preset: DadsTableControlPreset): void
+  /** Emitted when the reset button is pressed. */
+  (e: 'reset'): void
 }
