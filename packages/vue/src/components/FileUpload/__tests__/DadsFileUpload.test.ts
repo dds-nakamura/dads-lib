@@ -369,4 +369,30 @@ describe('DadsFileUpload', () => {
       expect(wrapper.find('input[type="file"]').attributes('aria-describedby')).toBe(hintId)
     })
   })
+
+  describe('expandDropArea + showFileSize', () => {
+    it('applies the expand-drop modifier when expandDropArea=true', () => {
+      const wrapper = createWrapper({ expandDropArea: true })
+      expect(wrapper.find('.dads-file-upload').classes()).toContain('dads-file-upload--expand-drop')
+    })
+
+    it('does not apply expand-drop modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-file-upload').classes()).not.toContain(
+        'dads-file-upload--expand-drop',
+      )
+    })
+
+    it('shows file size by default in the preview list', () => {
+      const file = makeFile('a.txt', 100)
+      const wrapper = createWrapper({ modelValue: file })
+      expect(wrapper.find('.dads-file-upload__file-size').exists()).toBe(true)
+    })
+
+    it('hides file size when showFileSize=false', () => {
+      const file = makeFile('a.txt', 100)
+      const wrapper = createWrapper({ modelValue: file, showFileSize: false })
+      expect(wrapper.find('.dads-file-upload__file-size').exists()).toBe(false)
+    })
+  })
 })

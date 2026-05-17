@@ -35,6 +35,16 @@ export interface DadsFileUploadProps {
   buttonText?: string
   /** Helper text rendered next to the trigger inside the drop zone. */
   dropzoneText?: string
+  /**
+   * Expand the dropzone to cover the entire viewport during drag-over
+   * so users can drop a file anywhere on the page. Defaults to `false`.
+   */
+  expandDropArea?: boolean
+  /**
+   * Show the formatted file size (e.g. `"12.3 KB"`) next to each selected
+   * file in the preview list. Defaults to `true`.
+   */
+  showFileSize?: boolean
 }
 
 export interface DadsFileUploadEmits {

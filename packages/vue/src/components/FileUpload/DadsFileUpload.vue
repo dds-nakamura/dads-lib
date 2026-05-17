@@ -11,6 +11,8 @@ const props = withDefaults(defineProps<DadsFileUploadProps>(), {
   error: false,
   buttonText: 'ファイルを選択',
   dropzoneText: 'またはここにファイルをドロップ',
+  expandDropArea: false,
+  showFileSize: true,
 })
 
 const emit = defineEmits<DadsFileUploadEmits>()
@@ -51,6 +53,8 @@ const rootClasses = computed(() => [
     'dads-file-upload--disabled': props.disabled,
     'dads-file-upload--readonly': props.readonly,
     'dads-file-upload--error': isError.value,
+    'dads-file-upload--expand-drop': props.expandDropArea,
+    'dads-file-upload--dragover': isDragover.value && props.expandDropArea,
   },
 ])
 
@@ -218,7 +222,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         class="dads-file-upload__file-item"
       >
         <span class="dads-file-upload__file-name">{{ file.name }}</span>
-        <span class="dads-file-upload__file-size">{{ formatSize(file.size) }}</span>
+        <span v-if="showFileSize" class="dads-file-upload__file-size">{{
+          formatSize(file.size)
+        }}</span>
         <button
           type="button"
           class="dads-file-upload__remove"
@@ -485,6 +491,25 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- error --------------------------------------------
   &--error &__dropzone {
     border-color: var(--color-error, #ec0000);
+  }
+
+  // -------------------- expandDropArea ----------------------------------
+  // When the user drags any file over the page, the dropzone expands to
+  // cover the viewport so the drop target is unmissable. Adds a translucent
+  // overlay + highlighted border so it remains visually distinct from the
+  // surrounding page content.
+  &--expand-drop.dads-file-upload--dragover &__dropzone {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    margin: 0;
+    background-color: rgba(0, 23, 193, 0.06);
+    border-width: 4px;
+    border-style: dashed;
+    border-color: var(--color-brand-primary, #0017c1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   // -------------------- forced colors ------------------------------------
