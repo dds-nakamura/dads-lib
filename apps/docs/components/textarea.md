@@ -2,6 +2,10 @@
 
 複数行のテキスト入力。ラベル / ヒント / エラー / 文字数カウンタ / 自動リサイズに対応する。
 
+::: tip ✅ 公式仕様充足
+公式 DADS のパーツ (入力フィールド / 項目ラベル / 要否ラベル / サポートテキスト / 文字数カウンター / エラーテキスト) をすべて props (`label` / `required` / `hint` / `counter` / `errorMessage`) でカバーしています。さらに `autoResize` / `minRows` / `maxRows` / `resize` などの実用拡張も完備しており、公式仕様を満たしています。
+:::
+
 ## 基本
 
 <script setup>

@@ -2,6 +2,10 @@
 
 用語とその説明を対にして表示するための説明リスト。`DadsDescriptionList` はネイティブ `<dl>` / `<dt>` / `<dd>` の薄いラッパで、`items` プロップから自動生成するモードと、スロットでマークアップを直接書くモードの 2 通りを提供する。
 
+::: tip ✅ 公式仕様充足
+公式 DADS のガイドラインは「準備中」ですが、本コンポーネントは公式 HTML リファレンス (`design-system-example-components-html`) と整合した `layout` (horizontal/vertical) / `marker` (none/bullet/custom) / `bordered` のバリエーションを提供しており、現状で公式仕様を満たしています。
+:::
+
 ## 基本
 
 `items` に `{ term, description }` の配列を渡すだけで、用語と説明のペアが描画される。

@@ -2,6 +2,10 @@
 
 オン / オフの 2 状態に加え、第三の `indeterminate` (混在) 状態にも対応するチェックボックス。ラベル・ヒント・エラーメッセージを内包し、ネイティブ `<input type="checkbox">` をベースに ARIA 属性を付与する。
 
+::: tip ✅ 公式仕様充足
+公式 DADS のパーツ (L/M/S の 3 サイズ・ラベル・ヒント・エラーメッセージ・必須・無効・読み取り専用・indeterminate) およびイベント (change/focus/blur) を完全に満たしています。`DadsCheckboxGroup` も legend/direction/size の統一を含む公式準拠です。
+:::
+
 ## 基本
 
 `v-model` でブール値を双方向バインドする。

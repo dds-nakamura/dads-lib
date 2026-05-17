@@ -6,6 +6,10 @@
 - Escape キー / 領域外クリックでパネルが閉じる
 - 項目クリック時は `click:item` を emit し、自動的にパネルが閉じる
 
+::: info 🚧 公式仕様準備中
+公式 DADS のガイドラインは「準備中」、Figma スナップショットも未提供のため、確定仕様が乏しい状態です。本コンポーネントは WAI-ARIA Authoring Practices の「Disclosure (Show/Hide)」相当として最低限の機能を提供しています。公式仕様が確定次第、追加 prop / variant を再評価します。
+:::
+
 ## 基本
 
 `triggerLabel` と `columns` を渡すだけで動作する。v-model でパネルの開閉状態を双方向バインドできる。
