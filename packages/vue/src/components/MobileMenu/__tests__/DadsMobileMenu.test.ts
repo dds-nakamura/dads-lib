@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsMobileMenu from '../DadsMobileMenu.vue'
 import DadsMenuList from '../../MenuList/DadsMenuList.vue'
@@ -435,6 +436,66 @@ describe('DadsMobileMenu', () => {
         expect(backBtn?.getAttribute('aria-label')).toBe('Back')
         expect(backBtn?.textContent).toContain('Back')
       })
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const slideNestedItems: DadsMenuListItem[] = [
+      { label: 'ホーム', href: '/' },
+      {
+        label: 'サービス',
+        children: [
+          { label: 'サービス一覧', href: '/services' },
+          { label: '料金プラン', href: '/services/pricing' },
+        ],
+      },
+    ]
+
+    it('has no violations with flat items (accordion type)', async () => {
+      createWrapper()
+      const menu = queryMenu()
+      expect(menu).not.toBeNull()
+      expect(await axe(menu as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with utility items', async () => {
+      createWrapper({ utilityItems })
+      const menu = queryMenu()
+      expect(menu).not.toBeNull()
+      expect(await axe(menu as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with custom aria-label', async () => {
+      createWrapper({ ariaLabel: 'メインナビゲーション' })
+      const menu = queryMenu()
+      expect(menu).not.toBeNull()
+      expect(await axe(menu as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations when close button is hidden', async () => {
+      createWrapper({ showCloseButton: false })
+      const menu = queryMenu()
+      expect(menu).not.toBeNull()
+      expect(await axe(menu as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with slide type and nested items', async () => {
+      createWrapper({ type: 'slide', items: slideNestedItems })
+      const menu = queryMenu()
+      expect(menu).not.toBeNull()
+      expect(await axe(menu as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations after navigating into a slide submenu', async () => {
+      createWrapper({ type: 'slide', items: slideNestedItems })
+      const parentItem = document.body.querySelectorAll<HTMLElement>(
+        '.dads-mobile-menu__slide-item',
+      )[1]
+      parentItem?.click()
+      await nextTick()
+      const menu = queryMenu()
+      expect(menu).not.toBeNull()
+      expect(await axe(menu as Element)).toHaveNoViolations()
     })
   })
 })

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsDrawer from '../DadsDrawer.vue'
 import DadsDrawerItem from '../DadsDrawerItem.vue'
@@ -416,6 +417,56 @@ describe('DadsDrawer', () => {
         .split(/\s+/)
         .filter((c) => /^dads-drawer--(left|right|full)$/.test(c))
       expect(placementClasses).toEqual(['dads-drawer--right'])
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with flat items and a fallback aria-label', async () => {
+      createWrapper()
+      const drawer = queryDrawer()
+      expect(drawer).not.toBeNull()
+      expect(await axe(drawer as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a title (aria-label wired)', async () => {
+      createWrapper({ title: 'メインメニュー' })
+      const drawer = queryDrawer()
+      expect(drawer).not.toBeNull()
+      expect(await axe(drawer as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with nested items', async () => {
+      createWrapper({ title: 'メニュー', items: nestedItems })
+      const drawer = queryDrawer()
+      expect(drawer).not.toBeNull()
+      expect(await axe(drawer as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations when placement is right', async () => {
+      createWrapper({ title: 'フィルタ', placement: 'right' })
+      const drawer = queryDrawer()
+      expect(drawer).not.toBeNull()
+      expect(await axe(drawer as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations when placement is full', async () => {
+      createWrapper({ title: 'メニュー', placement: 'full' })
+      const drawer = queryDrawer()
+      expect(drawer).not.toBeNull()
+      expect(await axe(drawer as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a disabled item', async () => {
+      createWrapper({
+        title: 'メニュー',
+        items: [
+          { label: 'ホーム', href: '/' },
+          { label: '準備中', disabled: true },
+        ],
+      })
+      const drawer = queryDrawer()
+      expect(drawer).not.toBeNull()
+      expect(await axe(drawer as Element)).toHaveNoViolations()
     })
   })
 })

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { h, nextTick } from 'vue'
 import DadsNotificationBanner from '../DadsNotificationBanner.vue'
 import type {
@@ -304,6 +305,44 @@ describe('DadsNotificationBanner', () => {
       const wrapper = createWrapper({ modelValue: true, persistKey: 'notice-fresh' })
       await nextTick()
       expect(wrapper.emitted('update:modelValue')).toBeFalsy()
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations with default info color', async () => {
+      const wrapper = createWrapper({ message: 'システムメッセージ' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it.each(['success', 'error', 'warning', 'info', 'neutral'] as const)(
+      'has no violations with color=%s',
+      async (color) => {
+        const wrapper = createWrapper({ color, title: 'お知らせ', message: 'メッセージ本文' })
+        expect(await axe(wrapper.element)).toHaveNoViolations()
+      },
+    )
+
+    it('has no violations when not closable', async () => {
+      const wrapper = createWrapper({ closable: false, message: 'お知らせ' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with color-chip style', async () => {
+      const wrapper = createWrapper({
+        style: 'color-chip',
+        title: 'お知らせ',
+        message: 'メッセージ本文',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a timestamp', async () => {
+      const wrapper = createWrapper({
+        title: 'お知らせ',
+        message: 'メッセージ本文',
+        timestamp: '2026-05-17T10:00:00+09:00',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
