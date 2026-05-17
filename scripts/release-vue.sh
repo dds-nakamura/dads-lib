@@ -60,8 +60,8 @@ fi
 
 # ---------- build ----------
 echo "==> Building @dads/vue v${VERSION}..."
-pnpm --filter @dads/vue clean
-pnpm --filter @dads/vue build
+pnpm --filter @dads/vue run clean
+pnpm --filter @dads/vue run build
 
 if [[ ! -d "${PKG_DIR}/dist" ]]; then
   echo "Error: build did not produce ${PKG_DIR}/dist" >&2
