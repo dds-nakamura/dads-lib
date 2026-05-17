@@ -186,19 +186,52 @@ const current = ref(0)
 </DadsCarousel>
 ```
 
+## type / mode (公式仕様準拠) [NEW]
+
+公式 DADS は 2 軸の組み合わせを定義する。
+
+- **type**: `'key-visual'` (デフォルト、フラッグシップ用) / `'container'` (見出し付きパネル)
+- **mode**: `'single'` (デフォルト、1 枚ずつ) / `'multi'` (複数並列、本実装は将来拡張)
+
+```vue
+<DadsCarousel
+  type="container"
+  heading="お知らせ"
+  :heading-level="2"
+  show-all-label="一覧へ"
+  show-all-href="/news"
+  :item-count="3"
+>
+  <template #default="{ index }">...</template>
+</DadsCarousel>
+```
+
+`type="container"` は **`heading` 必須** (dev mode で console.warn)。
+ヘッダ右側に `showAllLabel` + `showAllHref` 両方指定でリンクを表示。
+
+## 自動再生について (公式非推奨)
+
+`autoPlay` プロップは互換性のため残っているが、**公式 DADS では自動再生機能を備えていないと明言** されているため、使用すると dev mode で console.warn が出力される。アクセシビリティ上、モーション過敏症ユーザーへの配慮として手動操作を基本とすることを強く推奨する。
+
 ## Props
 
-| Prop             | 型        | デフォルト     | 説明                                             |
-| ---------------- | --------- | -------------- | ------------------------------------------------ |
-| `modelValue`     | `number`  | `0`            | 現在表示中のスライドインデックス (v-model 対象)  |
-| `itemCount`      | `number`  | (必須)         | スライド総数。スロットがこの回数だけ呼び出される |
-| `autoPlay`       | `boolean` | `false`        | `interval` ms ごとに自動遷移                     |
-| `interval`       | `number`  | `5000`         | 自動再生の間隔 (ms)                              |
-| `pauseOnHover`   | `boolean` | `true`         | ホバー中に自動再生を一時停止                     |
-| `showArrows`     | `boolean` | `true`         | 左右の矢印ボタンを表示                           |
-| `showIndicators` | `boolean` | `true`         | ドットインジケータを表示                         |
-| `loop`           | `boolean` | `true`         | 末尾の次で先頭にラップする                       |
-| `ariaLabel`      | `string`  | `'カルーセル'` | アクセシブル名 (`aria-label`)                    |
+| Prop             | 型                            | デフォルト     | 説明                                               |
+| ---------------- | ----------------------------- | -------------- | -------------------------------------------------- |
+| `modelValue`     | `number`                      | `0`            | 現在表示中のスライドインデックス (v-model 対象)    |
+| `itemCount`      | `number`                      | (必須)         | スライド総数。スロットがこの回数だけ呼び出される   |
+| `type`           | `'key-visual' \| 'container'` | `'key-visual'` | 用途タイプ。container は heading 必須              |
+| `mode`           | `'single' \| 'multi'`         | `'single'`     | 表示モード (multi は将来拡張)                      |
+| `heading`        | `string`                      | -              | container type の見出し                            |
+| `headingLevel`   | `1 \| 2 \| 3 \| 4 \| 5 \| 6`  | `2`            | 見出しの HTML レベル                               |
+| `showAllLabel`   | `string`                      | -              | 「すべて見る」リンクのラベル (href とセットで指定) |
+| `showAllHref`    | `string`                      | -              | 「すべて見る」リンクの href                        |
+| `autoPlay`       | `boolean`                     | `false`        | **公式非推奨**: `interval` ms ごとに自動遷移       |
+| `interval`       | `number`                      | `5000`         | 自動再生の間隔 (ms)                                |
+| `pauseOnHover`   | `boolean`                     | `true`         | ホバー中に自動再生を一時停止                       |
+| `showArrows`     | `boolean`                     | `true`         | 左右の矢印ボタンを表示                             |
+| `showIndicators` | `boolean`                     | `true`         | ドットインジケータを表示                           |
+| `loop`           | `boolean`                     | `true`         | 末尾の次で先頭にラップする                         |
+| `ariaLabel`      | `string`                      | `'カルーセル'` | アクセシブル名 (`aria-label`)                      |
 
 ## Events
 

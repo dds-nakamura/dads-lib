@@ -341,4 +341,86 @@ describe('DadsCarousel', () => {
       expect(new Set(ids).size).toBe(ids.length)
     })
   })
+
+  // ----------------------------------------------------------------------
+  // type — key-visual (default) / container per official DADS spec.
+  // ----------------------------------------------------------------------
+  describe('type variant', () => {
+    it('applies the key-visual type modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-carousel--type-key-visual')
+    })
+
+    it('applies the container type modifier when type="container"', () => {
+      const wrapper = createWrapper({ type: 'container', heading: 'タイトル' })
+      expect(wrapper.classes()).toContain('dads-carousel--type-container')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // mode — single (default) / multi per official DADS spec.
+  // ----------------------------------------------------------------------
+  describe('mode variant', () => {
+    it('applies the single mode modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-carousel--mode-single')
+    })
+
+    it('applies the multi mode modifier when mode="multi"', () => {
+      const wrapper = createWrapper({ mode: 'multi' })
+      expect(wrapper.classes()).toContain('dads-carousel--mode-multi')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // heading + headingLevel — container type displays a heading; level
+  // controls the HTML element (h1..h6).
+  // ----------------------------------------------------------------------
+  describe('heading', () => {
+    it('does not render a header when heading is omitted', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-carousel__header').exists()).toBe(false)
+    })
+
+    it('renders heading text inside an <h2> by default', () => {
+      const wrapper = createWrapper({ heading: 'おすすめスライド' })
+      const header = wrapper.find('.dads-carousel__header')
+      expect(header.exists()).toBe(true)
+      const headingEl = header.find('h2.dads-carousel__heading')
+      expect(headingEl.exists()).toBe(true)
+      expect(headingEl.text()).toBe('おすすめスライド')
+    })
+
+    it.each([1, 2, 3, 4, 5, 6] as const)(
+      'renders the heading as <h%i> when headingLevel=%i',
+      (level) => {
+        const wrapper = createWrapper({ heading: 'T', headingLevel: level })
+        expect(wrapper.find(`h${level}.dads-carousel__heading`).exists()).toBe(true)
+      },
+    )
+  })
+
+  // ----------------------------------------------------------------------
+  // showAll link — "すべてのスライド" navigation per official spec.
+  // ----------------------------------------------------------------------
+  describe('showAll link', () => {
+    it('does not render the link when only label or only href is provided', () => {
+      const wrapperLabelOnly = createWrapper({ showAllLabel: 'すべて見る' })
+      expect(wrapperLabelOnly.find('.dads-carousel__show-all').exists()).toBe(false)
+
+      const wrapperHrefOnly = createWrapper({ showAllHref: '/all' })
+      expect(wrapperHrefOnly.find('.dads-carousel__show-all').exists()).toBe(false)
+    })
+
+    it('renders the link as <a href> when both label and href are provided', () => {
+      const wrapper = createWrapper({
+        showAllLabel: 'すべて見る',
+        showAllHref: '/all',
+      })
+      const link = wrapper.find('a.dads-carousel__show-all')
+      expect(link.exists()).toBe(true)
+      expect(link.attributes('href')).toBe('/all')
+      expect(link.text()).toBe('すべて見る')
+    })
+  })
 })

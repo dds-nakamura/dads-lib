@@ -4,6 +4,9 @@ import type { DadsCarouselEmits, DadsCarouselProps } from './DadsCarousel.types'
 
 const props = withDefaults(defineProps<DadsCarouselProps>(), {
   modelValue: 0,
+  type: 'key-visual',
+  mode: 'single',
+  headingLevel: 2,
   autoPlay: false,
   interval: 5000,
   pauseOnHover: true,
@@ -12,6 +15,25 @@ const props = withDefaults(defineProps<DadsCarouselProps>(), {
   loop: true,
   ariaLabel: 'カルーセル',
 })
+
+// Dev-mode warning: official DADS specifies the carousel does NOT auto-play.
+// We do not remove the prop (existing callers depend on it) but flag misuse
+// so consumers can make an informed choice.
+if (props.autoPlay && (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV) {
+  console.warn(
+    '[DadsCarousel] autoPlay は公式 DADS で非推奨です。' +
+      'モーション過敏症ユーザーへの配慮として、手動操作を基本とすることを推奨します。',
+  )
+}
+
+// Container type requires a heading per official spec — warn in dev when the
+// caller forgets to pass one so the structural contract is enforceable.
+if (props.type === 'container' && !props.heading && (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV) {
+  console.warn(
+    '[DadsCarousel] type="container" は heading プロップを必須とします。' +
+      'スライド群を囲むコンテナの見出しを必ず指定してください。',
+  )
+}
 
 const emit = defineEmits<DadsCarouselEmits>()
 
@@ -122,6 +144,16 @@ watch(
 
 const indices = computed(() => Array.from({ length: total.value }, (_, idx) => idx))
 
+const rootClasses = computed(() => [
+  'dads-carousel',
+  `dads-carousel--type-${props.type}`,
+  `dads-carousel--mode-${props.mode}`,
+])
+
+const headingTag = computed(() => `h${props.headingLevel}` as const)
+
+const hasShowAll = computed(() => Boolean(props.showAllLabel) && Boolean(props.showAllHref))
+
 const slideClasses = (idx: number) => [
   'dads-carousel__slide',
   {
@@ -143,7 +175,7 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
 
 <template>
   <section
-    class="dads-carousel"
+    :class="rootClasses"
     :aria-label="ariaLabel"
     aria-roledescription="carousel"
     tabindex="0"
@@ -151,6 +183,14 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     @mouseleave="onMouseLeave"
     @keydown="onKeydown"
   >
+    <header v-if="heading || hasShowAll" class="dads-carousel__header">
+      <component v-if="heading" :is="headingTag" class="dads-carousel__heading">
+        {{ heading }}
+      </component>
+      <a v-if="hasShowAll" :href="showAllHref" class="dads-carousel__show-all">
+        {{ showAllLabel }}
+      </a>
+    </header>
     <div class="dads-carousel__viewport" aria-live="polite">
       <div
         v-for="idx in indices"
@@ -225,6 +265,50 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
   overflow: hidden;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-text-primary, #1a1a1a);
+
+  // -------------------- type variants -----------------------------------
+  // key-visual (default): full-bleed flagship area. No outer chrome — slide
+  // content owns its own visual composition.
+  // container: bounded panel with a header section above the viewport.
+  &--type-container {
+    border: 1px solid var(--color-border-divider, #d6d6d6);
+  }
+
+  // -------------------- header (heading + show-all) ---------------------
+  // Only rendered when at least one of heading or showAllLabel/Href is set.
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spacing-8, 0.5rem);
+    padding: var(--spacing-16, 1rem);
+    border-bottom: 1px solid var(--color-border-divider, #d6d6d6);
+
+    .dads-carousel--type-key-visual & {
+      // For key-visual type the header is optional and sits without divider.
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &__heading {
+    margin: 0;
+    font-size: var(--font-size-20, 1.25rem);
+    font-weight: 700;
+    line-height: var(--line-height-130, 1.3);
+  }
+
+  &__show-all {
+    color: var(--color-brand-primary, #0017c1);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-size: var(--font-size-14, 0.875rem);
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
   // -------------------- viewport / slides --------------------------------
   &__viewport {
