@@ -53,8 +53,18 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
   >
     <ul class="dads-menu-list" :style="rootStyle">
       <li v-for="(item, idx) in items" :key="idx">
+        <template v-if="item.divider">
+          <div
+            v-if="typeof item.divider === 'object' && item.divider.title"
+            class="dads-menu-list__section"
+            role="presentation"
+          >
+            <span class="dads-menu-list__section-title">{{ item.divider.title }}</span>
+          </div>
+          <hr v-else class="dads-menu-list__divider" />
+        </template>
         <a
-          v-if="isAnchor(item)"
+          v-else-if="isAnchor(item)"
           v-bind="itemAttrs(item)"
           :href="item.href"
           :aria-current="item.active ? 'page' : undefined"
@@ -126,8 +136,18 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
   </component>
   <ul v-else class="dads-menu-list" :style="rootStyle">
     <li v-for="(item, idx) in items" :key="idx">
+      <template v-if="item.divider">
+        <div
+          v-if="typeof item.divider === 'object' && item.divider.title"
+          class="dads-menu-list__section"
+          role="presentation"
+        >
+          <span class="dads-menu-list__section-title">{{ item.divider.title }}</span>
+        </div>
+        <hr v-else class="dads-menu-list__divider" />
+      </template>
       <a
-        v-if="isAnchor(item)"
+        v-else-if="isAnchor(item)"
         v-bind="itemAttrs(item)"
         :href="item.href"
         :aria-current="item.active ? 'page' : undefined"
@@ -218,6 +238,30 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
   line-height: 1.3;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   letter-spacing: 0;
+
+  // -------------------- divider / section --------------------------------
+  // Plain horizontal rule between menu groups.
+  &__divider {
+    margin: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+    border: 0;
+    border-top: 1px solid var(--color-border-divider, #d6d6d6);
+  }
+
+  // Section header (divider + bold category title).
+  &__section {
+    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem) var(--spacing-4, 0.25rem);
+    border-top: 1px solid var(--color-border-divider, #d6d6d6);
+    margin-top: var(--spacing-4, 0.25rem);
+  }
+
+  &__section-title {
+    font-size: var(--font-size-12, 0.75rem);
+    font-weight: 700;
+    color: var(--color-text-secondary, #4d4d4d);
+    text-transform: none;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+  }
 
   &__item,
   &__item:any-link {

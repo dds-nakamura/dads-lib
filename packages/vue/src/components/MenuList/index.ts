@@ -5,4 +5,6 @@ export type {
   DadsMenuListEmits,
   DadsMenuListType,
   DadsMenuListSize,
+  DadsMenuListSectionConfig,
+  DadsMenuListItemKind,
 } from './DadsMenuList.types'

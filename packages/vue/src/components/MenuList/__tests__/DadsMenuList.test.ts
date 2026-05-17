@@ -355,4 +355,44 @@ describe('DadsMenuList', () => {
       expect(btn.attributes('disabled')).toBeDefined()
     })
   })
+
+  describe('divider / section', () => {
+    it('renders an <hr> when item.divider === true', () => {
+      const wrapper = mount(DadsMenuList, {
+        props: {
+          items: [
+            { label: 'A', href: '/a' },
+            { label: 'sep', divider: true },
+            { label: 'B', href: '/b' },
+          ],
+        },
+      })
+      expect(wrapper.find('hr.dads-menu-list__divider').exists()).toBe(true)
+    })
+
+    it('renders a section header when item.divider has a title', () => {
+      const wrapper = mount(DadsMenuList, {
+        props: {
+          items: [
+            { label: 'A', href: '/a' },
+            { label: 'section1', divider: { title: '設定' } },
+            { label: 'B', href: '/b' },
+          ],
+        },
+      })
+      const section = wrapper.find('.dads-menu-list__section')
+      expect(section.exists()).toBe(true)
+      expect(section.find('.dads-menu-list__section-title').text()).toBe('設定')
+    })
+
+    it('does not render anchor or button for divider items', () => {
+      const wrapper = mount(DadsMenuList, {
+        props: {
+          items: [{ label: 'd', divider: true }],
+        },
+      })
+      expect(wrapper.find('a.dads-menu-list__item').exists()).toBe(false)
+      expect(wrapper.find('button.dads-menu-list__item').exists()).toBe(false)
+    })
+  })
 })

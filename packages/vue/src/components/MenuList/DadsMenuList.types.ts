@@ -17,9 +17,31 @@ export type DadsMenuListType = 'standard' | 'box'
 /** メニュー項目サイズ。 */
 export type DadsMenuListSize = 'regular' | 'small'
 
+/**
+ * セクション区切り。`true` で divider のみ、オブジェクトでカテゴリータイトル
+ * を伴うセクション見出しとして描画する。
+ */
+export type DadsMenuListSectionConfig = true | { title: string }
+
+/**
+ * 項目の意味的な種別 (公式 DADS の「アイコン仕様は挙動別に一貫性を保つ必要」
+ * への配慮)。
+ * - `link`: ナビゲーション (デフォルト)。`href` の有無で <a>/<button> を選択。
+ * - `accordion`: 開閉トリガー。`endIcon` がシェブロン系であることが期待される。
+ */
+export type DadsMenuListItemKind = 'link' | 'accordion'
+
 export interface DadsMenuListItem {
   /** 表示テキスト (必須)。 */
   label: string
+  /**
+   * セクション区切りとして描画する。`true` で divider のみ、
+   * `{ title }` でカテゴリータイトル付きセクションヘッダになる。
+   * セクションアイテムは `label` を SR の見出しテキストとして使う。
+   */
+  divider?: DadsMenuListSectionConfig
+  /** 項目の意味的種別。デフォルト `'link'`。 */
+  itemKind?: DadsMenuListItemKind
   /** href を指定すると `<a>` として描画、未指定時は `<button>` として描画。 */
   href?: string
   /** 現在地ハイライト (`data-current` + `aria-current="page"`)。 */
