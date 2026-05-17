@@ -19,7 +19,10 @@
     "typecheck": "pnpm -r run typecheck",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "figma:export": "node --env-file-if-exists=.env scripts/figma-export.mjs",
+    "figma:login": "node --env-file-if-exists=.env scripts/figma-login.mjs",
+    "figma:pw-export": "node --env-file-if-exists=.env scripts/figma-playwright-export.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
@@ -28,6 +31,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
+    "playwright": "^1.60.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.59.3",

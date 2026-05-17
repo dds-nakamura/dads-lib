@@ -23,6 +23,26 @@ Thumbs.db
 # Runtime artifacts from dads-document-html local server
 /dads-document-html/.server.pid
 
+# Local env (figma token 等)
+.env
+.env.local
+
+# Playwright auth state (Figma ログインクッキー)
+scripts/.figma-auth.json
+test-results/
+playwright-report/
+
+# Figma エクスポートの実体は手元生成物。
+# 共有が必要なら個別に git add する (manifest.json は版管理してもよい)。
+/dads-document-figma/*.png
+/dads-document-figma/*.jpg
+/dads-document-figma/*.svg
+/dads-document-figma/*.pdf
+/dads-document-figma/**/*.png
+/dads-document-figma/**/*.jpg
+/dads-document-figma/**/*.svg
+/dads-document-figma/**/*.pdf
+
 # IDE
 .idea/
 .vscode/*

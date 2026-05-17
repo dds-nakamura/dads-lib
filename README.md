@@ -104,9 +104,16 @@ dads-lib/
 │
 ├── dads-document-md/                       ★ 公式仕様 (MD / Claude が第一参照)
 ├── dads-document-html/                     公式仕様 (HTML / ビジュアル確認用)
+├── dads-document-figma/                    Figma PNG スナップショット (gitignore / 各環境で生成)
 ├── design-system-example-components-html/  公式実装サンプル (vendor)
 ├── design-tokens/                          公式 design-tokens 上流 (vendor)
 ├── tailwind-theme-plugin/                  公式 tailwind プラグイン上流 (vendor)
+│
+├── scripts/                                リポジトリ運用ユーティリティ
+│   ├── figma-export.mjs                    Figma REST API 経由のエクスポート
+│   ├── figma-login.mjs                     Playwright 用認証取得 (1 回だけ)
+│   ├── figma-playwright-export.mjs         Playwright 経由のエクスポート (rate limit 回避)
+│   └── README.md                           スクリプト詳細
 │
 ├── .changeset/                             Changesets 設定
 ├── .github/workflows/ci.yml                CI (typecheck/lint/test/build)
@@ -127,6 +134,7 @@ dads-lib/
 3. **デザイントークン**: `design-tokens/` を上流ソースとし、`@dads/tokens` 経由で読む
 4. **新規コード**: TDD 推奨 — `packages/vue/src/components/*/__tests__/*.test.ts` を先に書く
 5. **a11y**: Button / TextField / Modal は `vitest-axe` テスト済。他 23 コンポーネントは TODO
+6. **「準備中」コンポーネントの視覚仕様**: `dads-document-figma/<ページ名>/<ページ名>.png` を `Read` で参照（再取得は [`scripts/README.md`](./scripts/README.md) 参照）
 
 詳細は [`CLAUDE.md`](./CLAUDE.md) を参照。
 

@@ -33,6 +33,14 @@
   - **生の JSON が必要なとき** → `design-tokens/figma/tokens.json` を直接読む
 - **自前でカラーコードやスペーシング値を定義しない**。必ず上流のトークンを参照すること。
 
+### ビジュアル仕様は `dads-document-figma/` を参照する (2026-05-17 追加)
+
+- DADS 公式 Figma ファイルから自動エクスポートした **PNG スナップショット 42 件** が `dads-document-figma/<ページ名>/<ページ名>.png` に格納されている（gitignore 対象 / 各環境で生成）。
+- 用途: 公式 MD が **「ガイドラインは準備中です」** とだけ書いてあるコンポーネント（chip-tag, tab, combobox, mega-menu, page-navigation, table-control, image, dialog 等）の**ビジュアル仕様確認**。
+- `Read` ツールは PNG をマルチモーダルに直接読めるため、`dads-document-md/` だけでは不足する状態・バリエーション情報を補完できる。
+- 再取得: `pnpm figma:pw-export`（事前に `pnpm figma:login` で認証保存が必要、初回 1 回）。詳細は [scripts/README.md](./scripts/README.md)。
+- ファイル存在しない環境では `dads-document-md/` + WAI-ARIA Authoring Practices を真実の源とする（過去の方針どおり）。
+
 ---
 
 ## monorepo 構成 (2026-05-13 追加)
@@ -122,6 +130,16 @@ dads-lib/
 │   ├── style-dictionary/                  ビルド設定（config.json, transform.ts）
 │   └── examples/                          tokens.css 利用サンプル（plain HTML/CSS）
 │
+├── dads-document-figma/                   ★ Figma スナップショット（gitignore / 各環境で生成）
+│   ├── <ページ名>/<ページ名>.png            42 件: Foundation / 各コンポーネントのビジュアル仕様
+│   └── playwright-manifest.json           fileKey / exportedAt / ページ一覧
+│
+├── scripts/                               リポジトリ運用ユーティリティ
+│   ├── figma-export.mjs                   Figma REST API 経由のエクスポート
+│   ├── figma-login.mjs                    Playwright 用認証取得 (1 回だけ実行)
+│   ├── figma-playwright-export.mjs        Playwright 経由のエクスポート (rate limit 回避)
+│   └── README.md                          スクリプトの使い方詳細
+│
 └── tailwind-theme-plugin/                 ★ Tailwind 用デザイントークンプラグイン
     ├── examples/                          v3 サンプル
     └── examples-v4/                       v4 サンプル                   （内部で design-tokens を参照）
@@ -173,6 +191,7 @@ dads-lib/
    - **任意のトークン値を確認したい** → `design-tokens/figma/tokens.json` を直接 grep / Read
 6. **アクセシビリティ確認**: `dads-document-md/dads/webaccessibility/index.md` の要件を満たしているか確認。
 7. **実機確認**: 必要なら HTML 側のローカルサーバ（`dads-document-html/start-server.sh`）で正しい見た目と比較。
+8. **ビジュアル仕様の補完**: MD が「準備中」のコンポーネントは `dads-document-figma/<ページ名>/` の PNG を `Read` してビジュアル仕様を取得（環境に存在する場合のみ）。
 
 ---
 
