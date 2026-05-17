@@ -4,6 +4,8 @@ import type { DadsListItem, DadsListProps } from './DadsList.types'
 
 const props = withDefaults(defineProps<DadsListProps>(), {
   type: 'unordered',
+  spacing: '4',
+  nestingMarker: true,
 })
 
 // The DADS HTML reference uses `data-marker="number"` on the `<ul>` to flip
@@ -11,6 +13,29 @@ const props = withDefaults(defineProps<DadsListProps>(), {
 // same selectors work whether the consumer styles via tokens or via the
 // vendored CSS directly.
 const dataMarker = computed(() => (props.type === 'ordered' ? 'number' : undefined))
+
+// Official DADS guidance discourages `<ol>` since the platform's number
+// markers aren't exposed as copyable text. Surface a dev warning so callers
+// can switch to type='unordered' + pre-rendered numbering when SR copyability
+// matters.
+if (
+  props.type === 'ordered' &&
+  (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV
+) {
+  console.warn(
+    '[DadsList] type="ordered" は公式 DADS 推奨外です。' +
+      '番号がコピー可能なテキストにならないため、type="unordered" + ' +
+      'pre-rendered な番号付きラベルの利用を検討してください。',
+  )
+}
+
+const rootClasses = computed(() => [
+  'dads-list',
+  `dads-list--spacing-${props.spacing}`,
+  {
+    'dads-list--no-nesting-marker': !props.nestingMarker,
+  },
+])
 
 // Helper for templates — items can be plain strings or `DadsListItem`s; this
 // normalises both shapes into `{ label, children }` so the template stays
@@ -24,8 +49,9 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
 <template>
   <component
     :is="type === 'ordered' ? 'ol' : 'ul'"
-    class="dads-list"
+    :class="rootClasses"
     :data-marker="dataMarker"
+    :data-spacing="spacing"
     :start="type === 'ordered' ? start : undefined"
   >
     <template v-if="hasItems">
@@ -60,11 +86,25 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
   overflow-wrap: anywhere;
 
   // Per-item vertical rhythm. The DADS reference exposes 4 / 8 / 12px
-  // spacing presets via `data-spacing`; we default to the densest preset
-  // (4px) so the component matches the reference out of the box.
-  > li {
+  // spacing presets via `data-spacing`; the spacing prop selects one.
+  &--spacing-4 > li {
     padding-top: var(--spacing-4, 0.25rem);
     padding-bottom: var(--spacing-4, 0.25rem);
+  }
+  &--spacing-8 > li {
+    padding-top: var(--spacing-8, 0.5rem);
+    padding-bottom: var(--spacing-8, 0.5rem);
+  }
+  &--spacing-12 > li {
+    padding-top: var(--spacing-12, 0.75rem);
+    padding-bottom: var(--spacing-12, 0.75rem);
+  }
+
+  // Nested level marker control: when `nestingMarker=false`, force the same
+  // marker style on every level (disc only).
+  &--no-nesting-marker,
+  &--no-nesting-marker .dads-list {
+    list-style-type: disc;
   }
 
   // ----- numbered (data-marker="number") ----------------------------------

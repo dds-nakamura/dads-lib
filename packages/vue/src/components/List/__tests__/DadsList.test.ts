@@ -254,4 +254,30 @@ describe('DadsList', () => {
       expect(directNested).toHaveLength(0)
     })
   })
+
+  describe('spacing', () => {
+    it('applies the spacing-4 modifier + data-spacing="4" by default', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS })
+      expect(wrapper.classes()).toContain('dads-list--spacing-4')
+      expect(wrapper.attributes('data-spacing')).toBe('4')
+    })
+
+    it.each(['4', '8', '12'] as const)('applies dads-list--spacing-%s + data-spacing="%s"', (s) => {
+      const wrapper = createWrapper({ items: STRING_ITEMS, spacing: s })
+      expect(wrapper.classes()).toContain(`dads-list--spacing-${s}`)
+      expect(wrapper.attributes('data-spacing')).toBe(s)
+    })
+  })
+
+  describe('nestingMarker', () => {
+    it('does not apply the no-nesting-marker class by default', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS })
+      expect(wrapper.classes()).not.toContain('dads-list--no-nesting-marker')
+    })
+
+    it('applies the no-nesting-marker class when nestingMarker=false', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS, nestingMarker: false })
+      expect(wrapper.classes()).toContain('dads-list--no-nesting-marker')
+    })
+  })
 })

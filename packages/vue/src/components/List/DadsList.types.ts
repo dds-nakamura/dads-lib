@@ -39,6 +39,12 @@ export interface DadsListItem {
  */
 export type DadsListType = 'unordered' | 'ordered'
 
+/**
+ * Per-item vertical spacing (px). Mirrors the official DADS
+ * `data-spacing="4|8|12"` scale. Defaults to `4`.
+ */
+export type DadsListSpacing = '4' | '8' | '12'
+
 export interface DadsListProps {
   /**
    * Variant of the list. Mirrors the DADS `data-marker` distinction
@@ -62,4 +68,16 @@ export interface DadsListProps {
    * of the underlying `<ol>` element. Ignored for `unordered` lists.
    */
   start?: number
+  /**
+   * Per-item vertical spacing (px). One of `'4'` (default, dense), `'8'`,
+   * `'12'`. Mirrors the official DADS `data-spacing` scale.
+   */
+  spacing?: DadsListSpacing
+  /**
+   * Whether nested levels rotate through a marker sequence (disc → circle →
+   * square per native browser default). Defaults to `true`. Set `false` to
+   * suppress the cascade and keep a single marker style throughout.
+   * Only affects `type='unordered'`.
+   */
+  nestingMarker?: boolean
 }
