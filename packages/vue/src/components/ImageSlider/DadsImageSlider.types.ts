@@ -36,6 +36,17 @@ export interface DadsImageSliderProps {
   loop?: boolean
   /** スライダ全体のアクセシブル名 (`aria-label`)。 */
   ariaLabel?: string
+  /**
+   * セクション見出し。指定時はスライダ上部に `<h{headingLevel}>` で描画される。
+   * 公式 DADS は image-slider が見出しを伴うことを想定している。
+   */
+  heading?: string
+  /** 見出しの HTML レベル (1-6)。デフォルト `2`。 */
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6
+  /** 「すべてのスライド」リンクのラベル (showAllHref とセットで指定)。 */
+  showAllLabel?: string
+  /** 「すべてのスライド」リンクの href。 */
+  showAllHref?: string
 }
 
 export interface DadsImageSliderEmits {

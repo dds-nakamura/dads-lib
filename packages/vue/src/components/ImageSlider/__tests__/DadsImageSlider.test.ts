@@ -314,4 +314,32 @@ describe('DadsImageSlider', () => {
       )
     })
   })
+
+  describe('heading + showAll', () => {
+    it('does not render a header when neither heading nor showAll is set', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-image-slider__header').exists()).toBe(false)
+    })
+
+    it('renders heading text inside an <h2> by default', () => {
+      const wrapper = createWrapper({ heading: 'おすすめ画像' })
+      expect(wrapper.find('h2.dads-image-slider__heading').text()).toBe('おすすめ画像')
+    })
+
+    it.each([1, 2, 3, 4, 5, 6] as const)('renders heading as h%i when level=%i', (level) => {
+      const wrapper = createWrapper({ heading: 'T', headingLevel: level })
+      expect(wrapper.find(`h${level}.dads-image-slider__heading`).exists()).toBe(true)
+    })
+
+    it('renders showAll link only when both label and href are provided', () => {
+      const labelOnly = createWrapper({ showAllLabel: 'すべて' })
+      expect(labelOnly.find('.dads-image-slider__show-all').exists()).toBe(false)
+      const hrefOnly = createWrapper({ showAllHref: '/x' })
+      expect(hrefOnly.find('.dads-image-slider__show-all').exists()).toBe(false)
+      const both = createWrapper({ showAllLabel: 'すべて', showAllHref: '/x' })
+      const link = both.find('a.dads-image-slider__show-all')
+      expect(link.attributes('href')).toBe('/x')
+      expect(link.text()).toBe('すべて')
+    })
+  })
 })

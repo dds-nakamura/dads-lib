@@ -15,7 +15,12 @@ const props = withDefaults(defineProps<DadsImageSliderProps>(), {
   showIndicators: true,
   loop: true,
   ariaLabel: 'イメージスライダー',
+  headingLevel: 2,
 })
+
+const headingTag = computed(() => `h${props.headingLevel}` as const)
+const hasShowAll = computed(() => Boolean(props.showAllLabel) && Boolean(props.showAllHref))
+const hasHeader = computed(() => Boolean(props.heading) || hasShowAll.value)
 
 const emit = defineEmits<DadsImageSliderEmits>()
 
@@ -150,6 +155,14 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
     @mouseleave="onMouseLeave"
     @keydown="onKeydown"
   >
+    <header v-if="hasHeader" class="dads-image-slider__header">
+      <component v-if="heading" :is="headingTag" class="dads-image-slider__heading">
+        {{ heading }}
+      </component>
+      <a v-if="hasShowAll" :href="showAllHref" class="dads-image-slider__show-all">
+        {{ showAllLabel }}
+      </a>
+    </header>
     <div class="dads-image-slider__viewport" aria-live="polite">
       <div
         v-for="(slide, idx) in slides"
@@ -225,6 +238,35 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
   overflow: hidden;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-text-primary, #1a1a1a);
+
+  // -------------------- header (heading + show-all) ---------------------
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spacing-8, 0.5rem);
+    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    border-bottom: 1px solid var(--color-border-divider, #d6d6d6);
+  }
+
+  &__heading {
+    margin: 0;
+    font-size: var(--font-size-20, 1.25rem);
+    font-weight: 700;
+    line-height: var(--line-height-130, 1.3);
+  }
+
+  &__show-all {
+    color: var(--color-brand-primary, #0017c1);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-size: var(--font-size-14, 0.875rem);
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
   // -------------------- viewport / slides --------------------------------
   &__viewport {
