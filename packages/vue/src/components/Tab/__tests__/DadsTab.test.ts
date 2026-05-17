@@ -343,4 +343,66 @@ describe('DadsTab', () => {
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(2)
     })
   })
+
+  describe('orientation', () => {
+    it('defaults to horizontal and sets aria-orientation', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-tab--horizontal')
+      expect(wrapper.find('[role="tablist"]').attributes('aria-orientation')).toBe('horizontal')
+    })
+
+    it('applies the vertical modifier class and aria-orientation when prop is vertical', () => {
+      const wrapper = createWrapper({ orientation: 'vertical' })
+      expect(wrapper.classes()).toContain('dads-tab--vertical')
+      expect(wrapper.find('[role="tablist"]').attributes('aria-orientation')).toBe('vertical')
+    })
+
+    it('navigates horizontally with ArrowLeft/ArrowRight (default)', async () => {
+      const wrapper = createWrapper()
+      const list = wrapper.find('[role="tablist"]')
+      await list.trigger('keydown', { key: 'ArrowRight' })
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe('details')
+      await list.trigger('keydown', { key: 'ArrowUp' })
+      // ArrowUp is a no-op for horizontal
+      expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+    })
+
+    it('navigates vertically with ArrowUp/ArrowDown when orientation=vertical', async () => {
+      const wrapper = createWrapper({ orientation: 'vertical' })
+      const list = wrapper.find('[role="tablist"]')
+      await list.trigger('keydown', { key: 'ArrowDown' })
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe('details')
+      await list.trigger('keydown', { key: 'ArrowRight' })
+      // ArrowRight is a no-op for vertical
+      expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+    })
+  })
+
+  describe('icon support', () => {
+    it('renders an <i> with mdi class when item.icon is set', () => {
+      const wrapper = createWrapper({
+        items: [
+          { value: 'a', label: 'A', icon: 'mdi-home' },
+          { value: 'b', label: 'B' },
+        ],
+        modelValue: 'a',
+      })
+      const tabs = wrapper.findAll('[role="tab"]')
+      const firstIcon = tabs[0].find('i.mdi')
+      expect(firstIcon.exists()).toBe(true)
+      expect(firstIcon.classes()).toContain('mdi-home')
+      expect(firstIcon.attributes('aria-hidden')).toBe('true')
+      // Second tab without icon
+      expect(tabs[1].find('i.mdi').exists()).toBe(false)
+    })
+
+    it('keeps the label visible alongside the icon', () => {
+      const wrapper = createWrapper({
+        items: [{ value: 'a', label: 'Home', icon: 'mdi-home' }],
+        modelValue: 'a',
+      })
+      const tab = wrapper.find('[role="tab"]')
+      expect(tab.find('.dads-tab__label').text()).toBe('Home')
+    })
+  })
 })

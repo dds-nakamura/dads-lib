@@ -3,6 +3,7 @@ import { computed, nextTick, ref, useId } from 'vue'
 import type { DadsTabEmits, DadsTabItem, DadsTabProps, DadsTabValue } from './DadsTab.types'
 
 const props = withDefaults(defineProps<DadsTabProps>(), {
+  orientation: 'horizontal',
   keepAlive: false,
   ariaLabel: 'タブ',
 })
@@ -46,11 +47,16 @@ const onKeydown = (event: KeyboardEvent) => {
 
   let nextIdx: number | null = null
 
+  // Pick navigation keys per orientation: horizontal cycles with Left/Right,
+  // vertical cycles with Up/Down (per WAI-ARIA tabs pattern).
+  const nextKey = props.orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight'
+  const prevKey = props.orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft'
+
   switch (event.key) {
-    case 'ArrowRight':
+    case nextKey:
       nextIdx = enabledIndices[(safeEnabledIdx + 1) % enabledIndices.length]
       break
-    case 'ArrowLeft':
+    case prevKey:
       nextIdx = enabledIndices[(safeEnabledIdx - 1 + enabledIndices.length) % enabledIndices.length]
       break
     case 'Home':
@@ -89,8 +95,14 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
 </script>
 
 <template>
-  <div class="dads-tab">
-    <div role="tablist" class="dads-tab__list" :aria-label="ariaLabel" @keydown="onKeydown">
+  <div class="dads-tab" :class="`dads-tab--${orientation}`">
+    <div
+      role="tablist"
+      class="dads-tab__list"
+      :aria-label="ariaLabel"
+      :aria-orientation="orientation"
+      @keydown="onKeydown"
+    >
       <button
         v-for="item in items"
         :id="tabId(item.value)"
@@ -105,7 +117,8 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
         :class="tabClasses(item)"
         @click="onSelect(item)"
       >
-        {{ item.label }}
+        <i v-if="item.icon" :class="['mdi', item.icon, 'dads-tab__icon']" aria-hidden="true" />
+        <span class="dads-tab__label">{{ item.label }}</span>
       </button>
     </div>
 
@@ -137,12 +150,26 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-text-primary, #1a1a1a);
 
+  // Vertical orientation: tablist on the side, panels next to it.
+  &--vertical {
+    flex-direction: row;
+    gap: var(--spacing-16, 1rem);
+  }
+
   // -------------------- tablist ------------------------------------------
   &__list {
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-4, 0.25rem);
     border-bottom: 1px solid var(--color-border-divider, #d6d6d6);
+  }
+
+  &--vertical &__list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border-divider, #d6d6d6);
+    min-width: 12rem;
   }
 
   // -------------------- tab button ---------------------------------------
@@ -154,6 +181,7 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--spacing-8, 0.5rem);
     min-height: 2.75rem; // 44px
     padding: 0 var(--spacing-16, 1rem);
     font-size: var(--font-size-16, 1rem);
@@ -202,6 +230,35 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     }
   }
 
+  // Vertical orientation: stack tabs, indicator is a 2px left border via ::after.
+  &--vertical &__tab {
+    justify-content: flex-start;
+    min-height: 2.5rem;
+    border-radius: var(--border-radius-4, 0.25rem) 0 0 var(--border-radius-4, 0.25rem);
+
+    &::after {
+      top: var(--spacing-4, 0.25rem);
+      right: -1px;
+      bottom: var(--spacing-4, 0.25rem);
+      left: auto;
+      width: 2px;
+      height: auto;
+    }
+  }
+
+  // -------------------- icon ---------------------------------------------
+  &__icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  &__label {
+    display: inline-block;
+  }
+
   // -------------------- panels -------------------------------------------
   &__panels {
     flex: 1 1 auto;
@@ -213,10 +270,19 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     padding: var(--spacing-16, 1rem) 0;
   }
 
+  &--vertical &__panel {
+    padding: 0 var(--spacing-16, 1rem);
+  }
+
   // -------------------- forced colors ------------------------------------
   @include base.dads-forced-colors {
     .dads-tab__list {
       border-bottom: 1px solid CanvasText;
+    }
+
+    .dads-tab--vertical .dads-tab__list {
+      border-bottom: none;
+      border-right: 1px solid CanvasText;
     }
 
     .dads-tab__tab--active::after {
