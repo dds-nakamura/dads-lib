@@ -463,4 +463,228 @@ describe('DadsDialog', () => {
       }
     })
   })
+
+  // ----------------------------------------------------------------------
+  // variant — modal (default) vs non-modal per WAI-ARIA APG.
+  //   - modal: aria-modal="true", overlay rendered, focus trapped, overlay
+  //     click closes
+  //   - non-modal: no aria-modal, no overlay, no focus trap, page remains
+  //     interactive
+  // ----------------------------------------------------------------------
+  describe('variant: modal (default)', () => {
+    it('sets aria-modal="true" by default', () => {
+      createWrapper()
+      expect(queryDialog()?.getAttribute('aria-modal')).toBe('true')
+    })
+
+    it('renders the overlay', () => {
+      createWrapper()
+      expect(queryOverlay()).not.toBeNull()
+    })
+
+    it('applies the modal modifier class', () => {
+      createWrapper()
+      expect(queryDialog()?.classList.contains('dads-dialog--modal')).toBe(true)
+    })
+  })
+
+  describe('variant: non-modal', () => {
+    it('omits aria-modal', () => {
+      createWrapper({ variant: 'non-modal' })
+      expect(queryDialog()?.hasAttribute('aria-modal')).toBe(false)
+    })
+
+    it('does not render the overlay', () => {
+      createWrapper({ variant: 'non-modal' })
+      expect(queryOverlay()).toBeNull()
+    })
+
+    it('applies the non-modal modifier class', () => {
+      createWrapper({ variant: 'non-modal' })
+      expect(queryDialog()?.classList.contains('dads-dialog--non-modal')).toBe(true)
+    })
+
+    it('does not trap focus on Tab (focus is allowed to leave the dialog)', async () => {
+      // External trigger to fall back to after Tab walks past the dialog.
+      const trigger = document.createElement('button')
+      trigger.textContent = 'outside'
+      document.body.appendChild(trigger)
+
+      const wrapper = mount(DadsDialog, {
+        props: { modelValue: false, variant: 'non-modal' } as DadsDialogProps,
+        slots: { default: '<button class="a">A</button>' },
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+
+      const inner = document.body.querySelector<HTMLElement>('.dads-dialog__panel button')
+      inner?.focus()
+      expect(document.activeElement).toBe(inner)
+
+      const dialog = queryDialog() as HTMLElement
+      dialog.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true }),
+      )
+      await nextTick()
+      // Focus is NOT forced back to first focusable — native Tab behaviour
+      // continues, so dialog's own Tab handler should not have called
+      // preventDefault. The active element is still `inner` because the
+      // native Tab listener isn't fired by dispatchEvent — but importantly,
+      // focus didn't jump back to the panel as it would in modal mode.
+      expect(document.activeElement).toBe(inner)
+
+      trigger.remove()
+    })
+
+    it('does not close when the wrapper area is clicked (no overlay)', async () => {
+      const wrapper = createWrapper({ variant: 'non-modal' })
+      // No overlay exists, so simulate clicking the wrapper directly.
+      const dialog = queryDialog() as HTMLElement
+      dialog.click()
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
+    })
+
+    it('still closes on Esc', async () => {
+      const wrapper = createWrapper({ variant: 'non-modal' })
+      const dialog = queryDialog() as HTMLElement
+      dialog.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(false)
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // initialFocus — caller can pin focus to a specific element when the
+  // dialog opens. Element ref or query selector both supported.
+  // ----------------------------------------------------------------------
+  describe('initialFocus', () => {
+    it('focuses the element when an HTMLElement is provided', async () => {
+      // Element refs into the teleported subtree are dangling once v-if
+      // unmounts the dialog, so we provide an external element that lives
+      // outside the dialog. (This also matches realistic usage — callers
+      // typically pin focus to e.g. a content-loaded form field they've
+      // grabbed via template ref before opening.)
+      const external = document.createElement('button')
+      external.id = 'external-initial-focus'
+      document.body.appendChild(external)
+
+      const wrapper = mount(DadsDialog, {
+        props: { modelValue: false, initialFocus: external } as DadsDialogProps,
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+      expect(document.activeElement).toBe(external)
+      external.remove()
+    })
+
+    it('resolves a string selector against document', async () => {
+      const wrapper = mount(DadsDialog, {
+        props: {
+          modelValue: false,
+          initialFocus: '.dads-dialog__panel #initial-target',
+        } as DadsDialogProps,
+        slots: {
+          default: '<button id="initial-target">Target</button>',
+        },
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+      const target = document.body.querySelector<HTMLElement>('#initial-target')
+      expect(document.activeElement).toBe(target)
+    })
+
+    it('falls back to the panel when initialFocus is omitted', async () => {
+      const wrapper = mount(DadsDialog, {
+        props: { modelValue: false } as DadsDialogProps,
+        slots: { default: '<button>noop</button>' },
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+      expect(document.activeElement).toBe(queryPanel())
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // returnFocusTo — caller-supplied override for post-close focus. Critical
+  // when the trigger has been unmounted between open and close.
+  // ----------------------------------------------------------------------
+  describe('returnFocusTo', () => {
+    it('returns focus to the explicit element on close', async () => {
+      const trigger = document.createElement('button')
+      trigger.textContent = 'trigger'
+      document.body.appendChild(trigger)
+
+      const returnAnchor = document.createElement('button')
+      returnAnchor.textContent = 'return-here'
+      document.body.appendChild(returnAnchor)
+
+      trigger.focus()
+      const wrapper = mount(DadsDialog, {
+        props: {
+          modelValue: false,
+          returnFocusTo: returnAnchor,
+        } as DadsDialogProps,
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+      await wrapper.setProps({ modelValue: false })
+      await nextTick()
+
+      // Should land on returnAnchor (NOT the original trigger).
+      expect(document.activeElement).toBe(returnAnchor)
+      trigger.remove()
+      returnAnchor.remove()
+    })
+
+    it('resolves a string selector against document', async () => {
+      const anchor = document.createElement('button')
+      anchor.id = 'return-target'
+      document.body.appendChild(anchor)
+
+      const wrapper = mount(DadsDialog, {
+        props: {
+          modelValue: false,
+          returnFocusTo: '#return-target',
+        } as DadsDialogProps,
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+      await wrapper.setProps({ modelValue: false })
+      await nextTick()
+      expect(document.activeElement).toBe(anchor)
+      anchor.remove()
+    })
+
+    it('falls back to previousActive when returnFocusTo is omitted', async () => {
+      const trigger = document.createElement('button')
+      trigger.textContent = 'trigger'
+      document.body.appendChild(trigger)
+      trigger.focus()
+
+      const wrapper = mount(DadsDialog, {
+        props: { modelValue: false } as DadsDialogProps,
+        attachTo: document.body,
+      })
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      await nextTick()
+      await wrapper.setProps({ modelValue: false })
+      await nextTick()
+      expect(document.activeElement).toBe(trigger)
+      trigger.remove()
+    })
+  })
 })

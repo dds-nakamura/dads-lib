@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { nextTick, ref, useId, watch } from 'vue'
-import type { DadsDialogEmits, DadsDialogProps } from './DadsDialog.types'
+import { computed, nextTick, ref, useId, watch } from 'vue'
+import type { DadsDialogEmits, DadsDialogFocusTarget, DadsDialogProps } from './DadsDialog.types'
 
 const props = withDefaults(defineProps<DadsDialogProps>(), {
   modelValue: false,
   size: 'md',
+  variant: 'modal',
   persistent: false,
   closable: true,
   closeLabel: '閉じる',
@@ -13,6 +14,8 @@ const props = withDefaults(defineProps<DadsDialogProps>(), {
 const emit = defineEmits<DadsDialogEmits>()
 
 const panelRef = ref<HTMLElement | null>(null)
+
+const isModal = computed(() => props.variant === 'modal')
 
 // Track which element had focus when the dialog opened so it can be restored
 // on close. Module-scoped via closure rather than reactive — there is no UI
@@ -35,6 +38,10 @@ const onEsc = () => {
 }
 
 const onOverlayClick = () => {
+  // Non-modal dialogs don't render an opaque overlay, but the wrapper still
+  // exists for layout — clicks on it should not dismiss the dialog because
+  // the user might be aiming at underlying page content.
+  if (!isModal.value) return
   if (props.persistent) return
   close()
 }
@@ -47,7 +54,18 @@ const collectFocusables = (): HTMLElement[] => {
   return Array.from(panelRef.value.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
 }
 
+const resolveFocusTarget = (target: DadsDialogFocusTarget | undefined): HTMLElement | null => {
+  if (!target) return null
+  if (typeof target === 'string') {
+    return document.querySelector<HTMLElement>(target)
+  }
+  return target
+}
+
 const onTabTrap = (event: KeyboardEvent) => {
+  // Per WAI-ARIA APG: non-modal dialogs do not trap focus — the user must
+  // be able to Tab into surrounding page content.
+  if (!isModal.value) return
   if (event.key !== 'Tab') return
   const focusables = collectFocusables()
   if (focusables.length === 0) {
@@ -77,10 +95,22 @@ watch(
     if (open) {
       previousActive = document.activeElement as HTMLElement | null
       await nextTick()
-      panelRef.value?.focus()
+      // Prefer the caller-supplied initial-focus target, falling back to the
+      // panel so screen-reader users always land inside the dialog.
+      const initial = resolveFocusTarget(props.initialFocus)
+      ;(initial ?? panelRef.value)?.focus()
       emit('open')
-    } else if (previousActive) {
-      previousActive.focus()
+    } else {
+      // Prefer the caller-supplied return target. This is the only safe path
+      // when the trigger was unmounted between open and close — otherwise
+      // restoring focus to the (now-gone) previousActive would silently land
+      // focus on `<body>`.
+      const explicitReturn = resolveFocusTarget(props.returnFocusTo)
+      if (explicitReturn) {
+        explicitReturn.focus()
+      } else if (previousActive) {
+        previousActive.focus()
+      }
       previousActive = null
     }
   },
@@ -93,14 +123,19 @@ watch(
       <div
         v-if="modelValue"
         class="dads-dialog"
-        :class="`dads-dialog--${size}`"
+        :class="[`dads-dialog--${size}`, `dads-dialog--${variant}`]"
         role="dialog"
-        aria-modal="true"
+        :aria-modal="isModal ? 'true' : undefined"
         :aria-labelledby="title ? titleId : undefined"
         @keydown.esc="onEsc"
         @keydown="onTabTrap"
       >
-        <div class="dads-dialog__overlay" aria-hidden="true" @click="onOverlayClick" />
+        <div
+          v-if="isModal"
+          class="dads-dialog__overlay"
+          aria-hidden="true"
+          @click="onOverlayClick"
+        />
         <div ref="panelRef" class="dads-dialog__panel" tabindex="-1">
           <header v-if="title || $slots.header || closable" class="dads-dialog__header">
             <slot name="header">
@@ -167,6 +202,19 @@ watch(
     &:focus {
       outline: none;
     }
+  }
+
+  // -------------------- variant modifiers --------------------------------
+  // Non-modal dialogs sit inline with surrounding content (no backdrop,
+  // pointer-events: none on the wrapper so clicks pass through to the page),
+  // while the panel itself accepts interaction.
+  &--non-modal {
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &--non-modal &__panel {
+    pointer-events: auto;
   }
 
   // -------------------- size modifiers -----------------------------------

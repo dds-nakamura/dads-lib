@@ -125,16 +125,58 @@ const open = ref(false)
 | `header`  | ヘッダ領域。指定すると `title` プロップによる見出しを差し替える            |
 | `footer`  | フッタ領域。指定された場合のみレンダリングされる（アクションボタン配置用） |
 
+## variant: modal vs non-modal
+
+WAI-ARIA Dialog Pattern の 2 形態をサポートする (`variant` プロップ、デフォルト `'modal'`)。
+
+- **`modal`** (デフォルト): `aria-modal="true"` を付与しオーバーレイを描画、フォーカスをダイアログ内にトラップ。背景クリックや Esc で閉じる。
+- **`non-modal`**: `aria-modal` を付与せず、オーバーレイも描画しない。フォーカストラップなし、背景のページは引き続き操作可能。インスペクタ・ピッカー・タグ編集パネルなど、ユーザがダイアログを開いたまま周辺コンテンツとも対話する用途向け。Esc では閉じる。
+
+```vue
+<DadsDialog v-model="open" variant="non-modal" title="プロパティ">
+  ...
+</DadsDialog>
+```
+
+## フォーカス管理: initialFocus / returnFocusTo
+
+WAI-ARIA APG 推奨に従い、開閉時のフォーカス先をカスタマイズできる。指定がない場合は安全なデフォルト (パネル本体 / 直前の active 要素) にフォールバックする。
+
+- **`initialFocus`** (`HTMLElement | string`): ダイアログが開いた直後にフォーカスを当てる要素。文字列は `document.querySelector` で解決される。未指定時はパネル自体 (`tabindex="-1"`) にフォーカス。
+- **`returnFocusTo`** (`HTMLElement | string`): ダイアログを閉じた後にフォーカスを戻す要素。トリガーがダイアログ表示中にアンマウントされる場合 (例: メニューから開いてメニューを閉じる) に必須。未指定時は「開いた時にフォーカスを持っていた要素」へ自動で戻す。
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const dialogOpen = ref(false)
+const firstFieldRef = ref(null)
+const summarySectionRef = ref(null)
+</script>
+
+<DadsDialog
+  v-model="dialogOpen"
+  title="設定変更"
+  :initial-focus="firstFieldRef"
+  :return-focus-to="summarySectionRef"
+>
+  <DadsInputText ref="firstFieldRef" label="表示名" />
+</DadsDialog>
+```
+
 ## Props
 
-| Prop         | 型                                     | デフォルト | 説明                                                         |
-| ------------ | -------------------------------------- | ---------- | ------------------------------------------------------------ |
-| `modelValue` | `boolean`                              | `false`    | 開閉状態。`v-model` で双方向バインド                         |
-| `size`       | `'sm' \| 'md' \| 'lg' \| 'fullscreen'` | `'md'`     | 幅プリセット                                                 |
-| `title`      | `string`                               | -          | ヘッダ見出し。`aria-labelledby` のターゲットにも使用         |
-| `persistent` | `boolean`                              | `false`    | `true` で ESC キー・オーバーレイクリックでの閉じる操作を抑止 |
-| `closable`   | `boolean`                              | `true`     | ヘッダの閉じるボタンを表示するか                             |
-| `closeLabel` | `string`                               | `'閉じる'` | 閉じるボタンの `aria-label`                                  |
+| Prop            | 型                                     | デフォルト | 説明                                                               |
+| --------------- | -------------------------------------- | ---------- | ------------------------------------------------------------------ |
+| `modelValue`    | `boolean`                              | `false`    | 開閉状態。`v-model` で双方向バインド                               |
+| `size`          | `'sm' \| 'md' \| 'lg' \| 'fullscreen'` | `'md'`     | 幅プリセット                                                       |
+| `variant`       | `'modal' \| 'non-modal'`               | `'modal'`  | WAI-ARIA Dialog Pattern バリアント                                 |
+| `title`         | `string`                               | -          | ヘッダ見出し。`aria-labelledby` のターゲットにも使用               |
+| `persistent`    | `boolean`                              | `false`    | `true` で ESC キー・オーバーレイクリックでの閉じる操作を抑止       |
+| `closable`      | `boolean`                              | `true`     | ヘッダの閉じるボタンを表示するか                                   |
+| `closeLabel`    | `string`                               | `'閉じる'` | 閉じるボタンの `aria-label`                                        |
+| `initialFocus`  | `HTMLElement \| string`                | -          | 開いた直後にフォーカスする要素 (要素 ref または querySelector)     |
+| `returnFocusTo` | `HTMLElement \| string`                | -          | 閉じた後にフォーカスを戻す要素。指定が無い場合は直前の active 要素 |
 
 ## Events
 
@@ -146,10 +188,11 @@ const open = ref(false)
 
 ## アクセシビリティ
 
-- ルート要素に `role="dialog"` と `aria-modal="true"` を付与し、`title` を渡した場合は `aria-labelledby` で見出しと関連付ける。
-- 開いた瞬間にパネルへフォーカスを移動し、`Tab` / `Shift+Tab` でフォーカスをダイアログ内にトラップする。
-- 閉じた際は、開く直前にフォーカスを持っていた要素へ自動で戻す。
-- ESC キーで閉じる（`persistent` 指定時を除く）。オーバーレイクリックでも同様に閉じる。
+- `variant='modal'` (デフォルト): ルート要素に `role="dialog"` と `aria-modal="true"` を付与し、`Tab` / `Shift+Tab` でフォーカスをダイアログ内にトラップ。`title` を渡した場合は `aria-labelledby` で見出しと関連付ける。
+- `variant='non-modal'`: `aria-modal` は付与せず、フォーカストラップも行わない。背景のページは引き続き操作可能 (オーバーレイは描画されない)。
+- 開いた瞬間に `initialFocus` で指定した要素 (省略時はパネル本体) へフォーカスを移動する。
+- 閉じた際は `returnFocusTo` で指定した要素 (省略時は開く直前にフォーカスを持っていた要素) へ自動で戻す。
+- ESC キーで閉じる（`persistent` 指定時を除く）。`modal` ではオーバーレイクリックでも同様に閉じる。
 - 閉じるボタンには既定で `aria-label="閉じる"` が設定される。多言語対応時は `closeLabel` を指定する。
 
 ## マイグレーション (DadsModal → DadsDialog)
