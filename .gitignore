@@ -8,9 +8,9 @@ pnpm-debug.log
 dist/
 coverage/
 
-# VitePress
-.vitepress/cache
-.vitepress/dist
+# VitePress (monorepo: use **/ so apps/*/.vitepress/ も対象になる)
+**/.vitepress/cache
+**/.vitepress/dist
 
 # OS
 .DS_Store
