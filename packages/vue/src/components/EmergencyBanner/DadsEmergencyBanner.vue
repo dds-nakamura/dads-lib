@@ -1,18 +1,31 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type {
   DadsEmergencyBannerEmits,
   DadsEmergencyBannerProps,
 } from './DadsEmergencyBanner.types'
 
-withDefaults(defineProps<DadsEmergencyBannerProps>(), {
+const props = withDefaults(defineProps<DadsEmergencyBannerProps>(), {
   modelValue: true,
   closable: false,
   closeLabel: '閉じる',
   iconName: 'mdi-alert',
   ariaLabel: '緊急情報',
+  linkExternal: false,
 })
 
 const emit = defineEmits<DadsEmergencyBannerEmits>()
+
+const timestampParts = computed(() => {
+  if (props.timestamp === undefined) return null
+  if (props.timestamp instanceof Date) {
+    return {
+      iso: props.timestamp.toISOString(),
+      display: props.timestamp.toLocaleString(),
+    }
+  }
+  return { iso: props.timestamp, display: props.timestamp }
+})
 
 // The banner is `role="alert"` + `aria-live="assertive"` unconditionally:
 // the DADS spec restricts this component to life-or-property emergencies,
@@ -34,6 +47,9 @@ const onClose = () => {
       aria-live="assertive"
       :aria-label="ariaLabel"
     >
+      <p v-if="timestampParts" class="dads-emergency-banner__timestamp">
+        <time :datetime="timestampParts.iso">{{ timestampParts.display }}</time>
+      </p>
       <header v-if="title || $slots.title" class="dads-emergency-banner__header">
         <h2 class="dads-emergency-banner__heading">
           <i
@@ -50,8 +66,21 @@ const onClose = () => {
         </p>
       </div>
       <div v-if="linkLabel && linkHref" class="dads-emergency-banner__action">
-        <a class="dads-emergency-banner__button" :href="linkHref">
+        <a
+          class="dads-emergency-banner__button"
+          :href="linkHref"
+          :target="linkExternal ? '_blank' : undefined"
+          :rel="linkExternal ? 'noopener noreferrer' : undefined"
+        >
           {{ linkLabel }}
+          <i
+            v-if="linkExternal"
+            class="mdi mdi-open-in-new dads-emergency-banner__external-icon"
+            aria-hidden="true"
+          />
+          <span v-if="linkExternal" class="dads-emergency-banner__sr-only">
+            （新規タブで開く）
+          </span>
         </a>
       </div>
       <button
@@ -101,6 +130,32 @@ const onClose = () => {
   &__header {
     display: grid;
     row-gap: 0.5rem;
+  }
+
+  &__timestamp {
+    margin: 0;
+    font-size: var(--font-size-14, 0.875rem);
+    color: var(--color-neutral-solid-gray-700, #555);
+    line-height: 1.4;
+  }
+
+  &__external-icon {
+    font-size: 1em;
+    line-height: 1;
+    margin-inline-start: 0.25rem;
+    vertical-align: middle;
+  }
+
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   &__heading {

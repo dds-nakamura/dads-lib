@@ -30,6 +30,17 @@ export interface DadsEmergencyBannerProps {
   iconName?: string
   /** aria-label for the banner root. Default `'緊急情報'`. */
   ariaLabel?: string
+  /**
+   * Timestamp shown above the heading. Pass either an ISO string (used
+   * verbatim) or a `Date` (auto-formatted to locale text + ISO datetime).
+   */
+  timestamp?: string | Date
+  /**
+   * When true, the CTA link opens in a new tab with `target="_blank"` and
+   * `rel="noopener noreferrer"`, and the visible label gets the official
+   * 「新規タブで開く」external icon. Default `false`.
+   */
+  linkExternal?: boolean
 }
 
 export interface DadsEmergencyBannerEmits {

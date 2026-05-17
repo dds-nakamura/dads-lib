@@ -188,4 +188,57 @@ describe('DadsEmergencyBanner', () => {
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
   })
+
+  describe('timestamp', () => {
+    it('does not render timestamp when prop is omitted', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-emergency-banner__timestamp').exists()).toBe(false)
+    })
+
+    it('renders a string timestamp inside <time datetime>', () => {
+      const wrapper = createWrapper({ timestamp: '2026-05-17T10:00:00+09:00' })
+      const time = wrapper.find('.dads-emergency-banner__timestamp time')
+      expect(time.exists()).toBe(true)
+      expect(time.attributes('datetime')).toBe('2026-05-17T10:00:00+09:00')
+      expect(time.text()).toBe('2026-05-17T10:00:00+09:00')
+    })
+
+    it('renders a Date timestamp with ISO datetime + locale display', () => {
+      const d = new Date('2026-05-17T01:00:00Z')
+      const wrapper = createWrapper({ timestamp: d })
+      const time = wrapper.find('.dads-emergency-banner__timestamp time')
+      expect(time.attributes('datetime')).toBe(d.toISOString())
+      expect(time.text()).toBe(d.toLocaleString())
+    })
+  })
+
+  describe('linkExternal', () => {
+    it('does not set target/rel when linkExternal is false (default)', () => {
+      const wrapper = createWrapper({ linkLabel: '詳細', linkHref: '/x' })
+      const link = wrapper.find('.dads-emergency-banner__button')
+      expect(link.attributes('target')).toBeUndefined()
+      expect(link.attributes('rel')).toBeUndefined()
+    })
+
+    it('sets target="_blank" + rel="noopener noreferrer" when linkExternal=true', () => {
+      const wrapper = createWrapper({
+        linkLabel: '詳細',
+        linkHref: 'https://example.gov.jp',
+        linkExternal: true,
+      })
+      const link = wrapper.find('.dads-emergency-banner__button')
+      expect(link.attributes('target')).toBe('_blank')
+      expect(link.attributes('rel')).toBe('noopener noreferrer')
+    })
+
+    it('renders the external icon + SR-only label when linkExternal=true', () => {
+      const wrapper = createWrapper({
+        linkLabel: '詳細',
+        linkHref: 'https://example.gov.jp',
+        linkExternal: true,
+      })
+      expect(wrapper.find('.dads-emergency-banner__external-icon').exists()).toBe(true)
+      expect(wrapper.find('.dads-emergency-banner__sr-only').text()).toContain('新規タブで開く')
+    })
+  })
 })
