@@ -4,7 +4,7 @@
 
 DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tailwind-theme-plugin）と、それを Vue 3 SFC として実装した `@dads/vue` パッケージを 1 つのリポジトリで管理する。
 
-> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **1881 テスト pass (52 ファイル)** / VitePress カタログに 52 件すべてのフルデモ掲載
+> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **1973 テスト pass (52 ファイル)** / VitePress カタログに 52 件すべてのフルデモ掲載
 
 公式: <https://design.digital.go.jp/dads/>
 
@@ -41,7 +41,7 @@ pnpm install
 | コマンド            | 内容                                                     |
 | ------------------- | -------------------------------------------------------- |
 | `pnpm build`        | `pnpm -r run build` — 全パッケージビルド                 |
-| `pnpm test`         | `@dads/vue` の Vitest を実行 (52 ファイル / 1881 テスト) |
+| `pnpm test`         | `@dads/vue` の Vitest を実行 (52 ファイル / 1973 テスト) |
 | `pnpm typecheck`    | 全パッケージで `tsc --noEmit` / `vue-tsc --noEmit`       |
 | `pnpm lint`         | `eslint .` (ESLint 9 flat config / L3 strictness)        |
 | `pnpm format`       | `prettier --write .`                                     |
@@ -136,7 +136,7 @@ dads-lib/
 2. **実装サンプル**: `design-system-example-components-html/` の HTML/CSS/JS を一次参照
 3. **デザイントークン**: `design-tokens/` を上流ソースとし、`@dads/tokens` 経由で読む
 4. **新規コード**: TDD 推奨 — `packages/vue/src/components/*/__tests__/*.test.ts` を先に書く
-5. **a11y**: 現在 9 コンポーネント (Button / ChipLabel / DatePicker / Dialog / HamburgerMenuButton / InputText / ScrollTopButton / SearchBox / TableControl) が `vitest-axe` テスト済。残り 43 コンポーネントは TODO
+5. **a11y**: 現在 23 コンポーネント (Accordion / Button / Checkbox / CheckboxGroup / ChipLabel / Combobox / DatePicker / Dialog / Drawer / FileUpload / HamburgerMenuButton / Heading / InputText / MenuListBox / MobileMenu / NotificationBanner / Radio / RadioGroup / ScrollTopButton / SearchBox / Select / TableControl / Textarea) が `vitest-axe` テスト済。残り 29 コンポーネントは TODO
 6. **「準備中」コンポーネントの視覚仕様**: `dads-document-figma/<ページ名>/<ページ名>.png` を `Read` で参照（再取得は [`scripts/README.md`](./scripts/README.md) 参照）
 
 詳細は [`CLAUDE.md`](./CLAUDE.md) を参照。
@@ -149,7 +149,7 @@ dads-lib/
 
 - `typecheck` (4 packages)
 - `lint` / `format:check`
-- `test` (`@dads/vue` / 1881 tests)
+- `test` (`@dads/vue` / 1973 tests)
 - `build` (`@dads/tokens` → `@dads/vue` → `@dads/docs`)
 
 ローカル CI 相当のフル実行: ~100 秒 (M2 Mac)。

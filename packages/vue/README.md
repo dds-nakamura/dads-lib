@@ -2,7 +2,7 @@
 
 DADS (デジタル庁デザインシステム) の Vue 3 コンポーネントライブラリ。
 
-> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **1881 tests pass (52 ファイル)** / 9 コンポーネントが vitest-axe a11y テスト済
+> Status: **DADS 公式 46 件完全カバー + 独自 6 件 = 計 52 コンポーネント** — Spec 1〜3 (Form-Inputs / Navigation-Menus / Display-Misc) + Figma 準拠化 + 命名整合 + 全件ギャップ解消 (High 9 / Medium 17 / Low 13) 完了 (〜2026-05-17) / **1973 tests pass (52 ファイル)** / 23 コンポーネントが vitest-axe a11y テスト済
 
 ## 特徴
 
@@ -88,7 +88,9 @@ import { DadsButton, DadsInputText } from '@dads/vue'
 
 ## a11y テスト (vitest-axe)
 
-`vitest-axe` で WCAG 違反を自動検出するテストを 9 コンポーネント (34 ケース) に追加済:
+`vitest-axe` で WCAG 違反を自動検出するテストを 23 コンポーネント (≈126 ケース) に追加済:
+
+### Foundation (2026-05-13 以前)
 
 | コンポーネント      | ケース数 | カバー範囲                                                                        |
 | ------------------- | -------- | --------------------------------------------------------------------------------- |
@@ -102,7 +104,26 @@ import { DadsButton, DadsInputText } from '@dads/vue'
 | ScrollTopButton     | 2        | 表示 / 非表示状態                                                                 |
 | TableControl        | 2        | フィルタ / ソート連動                                                             |
 
-**TODO**: 残り 43 コンポーネントの a11y テスト追加。優先順位は Form / Navigation 系 (Radio・Checkbox・RadioGroup・CheckboxGroup・Select・Textarea・Combobox・FileUpload・Drawer・MobileMenu・NotificationBanner・Heading・Accordion・MenuListBox 等) を高位とする。
+### Form / Navigation / Display 追加 (2026-05-17)
+
+| コンポーネント     | ケース数 | カバー範囲                                                                               |
+| ------------------ | -------- | ---------------------------------------------------------------------------------------- |
+| Radio              | 7        | label / hint / description / required / error / disabled / checked                       |
+| RadioGroup         | 7        | legend / hint / required / error / disabled / visually-hidden legend / descriptions      |
+| Checkbox           | 7        | label / hint / required / error / disabled / checked / indeterminate                     |
+| CheckboxGroup      | 6        | legend / hint / required / error / disabled / 一部選択                                   |
+| Select             | 7        | label / hint / required / error / disabled / 単一選択 / multiple+chips                   |
+| Textarea           | 6        | label / hint / required / error / disabled / counter                                     |
+| Combobox           | 6        | label / hint / required / error / disabled / multiple+chips                              |
+| FileUpload         | 6        | label / hint / required / error / disabled / プレビュー                                  |
+| Drawer             | 6        | flat / title / nested / placement=right / placement=full / disabled item                 |
+| MobileMenu         | 6        | accordion 平坦 / utility / aria-label / close 非表示 / slide+nested / slide サブメニュー |
+| NotificationBanner | 9        | デフォルト + 5 色 / closable=false / color-chip / timestamp                              |
+| Heading            | 8        | h1〜h6 各 1 / shoulder+subtitle / icon                                                   |
+| Accordion          | 5        | 全閉 / 単一展開 / multiple 複数展開 / disabled item / return link                        |
+| MenuListBox        | 6        | standalone+aria-label / description+icon / active / disabled / opener 開閉               |
+
+**TODO**: 残り 29 コンポーネントの a11y テスト追加。次の候補は Display 系 (Card / Tab / Breadcrumb / PageNavigation / Disclosure / DescriptionList 等) と特化型コンポーネント (EmergencyBanner / Tooltip / Carousel / ImageSlider 等)。
 
 ## アイコン
 
