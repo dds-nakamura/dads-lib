@@ -173,4 +173,99 @@ describe('DadsHeaderContainer', () => {
       expect(wrapper.find('.dads-header-container__actions').exists()).toBe(true)
     })
   })
+
+  // ----------------------------------------------------------------------
+  // variant — 4 public variants per official DADS spec. The modifier class
+  // drives layout (max-width, min-height) in SCSS.
+  // ----------------------------------------------------------------------
+  describe('variant', () => {
+    it('applies the wide-full modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-header-container--wide-full')
+    })
+
+    it.each(['wide-full', 'wide-slim', 'medium', 'compact'] as const)(
+      'applies the %s modifier when variant=%s',
+      (variant) => {
+        const wrapper = createWrapper({ variant })
+        expect(wrapper.classes()).toContain(`dads-header-container--${variant}`)
+      },
+    )
+
+    it('only applies one variant modifier at a time', () => {
+      const wrapper = createWrapper({ variant: 'medium' })
+      const variantClasses = wrapper
+        .classes()
+        .filter((c) => /^dads-header-container--(wide-full|wide-slim|medium|compact)$/.test(c))
+      expect(variantClasses).toEqual(['dads-header-container--medium'])
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // logo — convenience props (logoLabel / logoHref) layered on top of the
+  // existing #logo slot. Slot wins when both are supplied.
+  // ----------------------------------------------------------------------
+  describe('logo convenience props', () => {
+    it('does not render the logo wrapper when neither prop nor slot is set', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-header-container__logo').exists()).toBe(false)
+    })
+
+    it('renders logoLabel as <strong> when no href is provided', () => {
+      const wrapper = createWrapper({ logoLabel: 'dads-lib' })
+      const logo = wrapper.find('.dads-header-container__logo')
+      expect(logo.exists()).toBe(true)
+      const text = logo.find('.dads-header-container__logo-text')
+      expect(text.element.tagName).toBe('STRONG')
+      expect(text.text()).toBe('dads-lib')
+    })
+
+    it('renders logoLabel as <a href> when logoHref is provided', () => {
+      const wrapper = createWrapper({ logoLabel: 'dads-lib', logoHref: '/' })
+      const text = wrapper.find('.dads-header-container__logo-text')
+      expect(text.element.tagName).toBe('A')
+      expect(text.attributes('href')).toBe('/')
+      expect(text.text()).toBe('dads-lib')
+    })
+
+    it('lets the #logo slot override the prop-based logo content', () => {
+      const wrapper = createWrapper(
+        { logoLabel: 'プロップ値' },
+        { logo: '<img class="brand-svg" alt="" />' },
+      )
+      const logo = wrapper.find('.dads-header-container__logo')
+      expect(logo.find('img.brand-svg').exists()).toBe(true)
+      expect(logo.find('.dads-header-container__logo-text').exists()).toBe(false)
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // utility — new slot dedicated to utility-link / language-selector /
+  // search-box / login-button content. Distinct from `actions`.
+  // ----------------------------------------------------------------------
+  describe('utility slot', () => {
+    it('does not render the utility wrapper when the slot is empty', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-header-container__utility').exists()).toBe(false)
+    })
+
+    it('renders the utility slot when provided', () => {
+      const wrapper = createWrapper({}, { utility: '<a class="util" href="/lang">日本語</a>' })
+      const util = wrapper.find('.dads-header-container__utility')
+      expect(util.exists()).toBe(true)
+      expect(util.find('a.util').text()).toBe('日本語')
+    })
+
+    it('renders utility and actions independently when both are provided', () => {
+      const wrapper = createWrapper(
+        {},
+        {
+          utility: '<a class="util" href="/login">ログイン</a>',
+          actions: '<button class="cta">登録</button>',
+        },
+      )
+      expect(wrapper.find('.dads-header-container__utility .util').exists()).toBe(true)
+      expect(wrapper.find('.dads-header-container__actions .cta').exists()).toBe(true)
+    })
+  })
 })

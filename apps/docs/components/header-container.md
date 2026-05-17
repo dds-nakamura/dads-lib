@@ -124,21 +124,108 @@ import { DadsHeaderContainer } from '@dads/vue'
   <span class="demo-label" style="margin-top:0.5rem">最後にメニューが押された時刻: {{ lastMenuClickAt }}</span>
 </div>
 
+## 幅・密度バリアント (variant) [NEW]
+
+公式 DADS は 4 つのバリアントを定義する (`variant` プロップ、デフォルト `'wide-full'`)。
+
+| variant     | 用途                                                               | 最大幅 | 最小高さ |
+| ----------- | ------------------------------------------------------------------ | ------ | -------- |
+| `wide-full` | 全幅・通常高さ。ポータルトップやランディング                       | -      | 64px     |
+| `wide-slim` | 全幅・コンパクト高さ。サブページや高情報密度アプリ                 | -      | 48px     |
+| `medium`    | 中央寄せ (max-width: 1280px)。一般的なコンテンツページ             | 1280px | 56px     |
+| `compact`   | 最小ヘッダ・モバイル相当の高さ。`utility` スロットは自動で非表示化 | -      | 40px     |
+
+<div class="demo">
+  <span class="demo-label">variant="wide-slim"</span>
+  <DadsHeaderContainer :sticky="false" variant="wide-slim">
+    <template #logo><strong>wide-slim 例</strong></template>
+  </DadsHeaderContainer>
+  <span class="demo-label" style="margin-top:1rem">variant="medium" (中央寄せ)</span>
+  <DadsHeaderContainer :sticky="false" variant="medium">
+    <template #logo><strong>medium 例</strong></template>
+  </DadsHeaderContainer>
+  <span class="demo-label" style="margin-top:1rem">variant="compact"</span>
+  <DadsHeaderContainer :sticky="false" variant="compact">
+    <template #logo><strong>compact 例</strong></template>
+  </DadsHeaderContainer>
+</div>
+
+```vue
+<DadsHeaderContainer variant="medium">
+  <template #logo><strong>App</strong></template>
+</DadsHeaderContainer>
+```
+
+## ロゴ便利プロップ (logoLabel / logoHref) [NEW]
+
+シンプルなテキストロゴ + リンクのみを置く場合、`#logo` スロットの代わりに `logoLabel` / `logoHref` プロップで宣言できる。両方指定時は `<a href>` でラップされたテキストロゴが描画される。
+
+<div class="demo">
+  <DadsHeaderContainer :sticky="false" logo-label="dads-lib" logo-href="/" />
+</div>
+
+```vue
+<!-- テキスト + リンク (props だけで完結) -->
+<DadsHeaderContainer logo-label="dads-lib" logo-href="/" />
+
+<!-- 画像 + テキスト等の複雑なロゴはスロット -->
+<DadsHeaderContainer>
+  <template #logo>
+    <img src="/logo.svg" alt="" />
+    <span>サービス名</span>
+  </template>
+</DadsHeaderContainer>
+```
+
+`#logo` スロットが指定されている場合は props を上書きする。
+
+## utility スロット [NEW]
+
+utility-link / language-selector / search-box / login-button 等のセカンダリ要素を `actions` から分離して配置できる。compact バリアントでは自動的に非表示になる。
+
+<div class="demo">
+  <DadsHeaderContainer :sticky="false" logo-label="dads-lib" logo-href="/">
+    <template #utility>
+      <a href="#login" style="margin-right:1rem">ログイン</a>
+      <a href="#lang">English</a>
+    </template>
+    <template #actions>
+      <DadsButton size="sm">登録</DadsButton>
+    </template>
+  </DadsHeaderContainer>
+</div>
+
+```vue
+<DadsHeaderContainer logo-label="App" logo-href="/">
+  <template #utility>
+    <a href="/login">ログイン</a>
+    <a href="/lang">English</a>
+  </template>
+  <template #actions>
+    <DadsButton>登録</DadsButton>
+  </template>
+</DadsHeaderContainer>
+```
+
 ## Slot
 
-| Slot      | 説明                                                                   |
-| --------- | ---------------------------------------------------------------------- |
-| `logo`    | ロゴ・サービス名表示領域。空のとき wrapper 自体が描画されない          |
-| `nav`     | メインナビゲーション。`<nav aria-label="メインナビゲーション">` で囲む |
-| `actions` | 右寄せの操作領域（ログイン・通知・アバター等）                         |
+| Slot      | 説明                                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------------------ |
+| `logo`    | ロゴ・サービス名表示領域。空のとき wrapper 自体が描画されない。`logoLabel`/`logoHref` プロップを上書き |
+| `nav`     | メインナビゲーション。`<nav aria-label="メインナビゲーション">` で囲む                                 |
+| `utility` | 補助領域 (utility-link / 言語切替 / 検索 / ログインボタン等)。compact 時は非表示                       |
+| `actions` | 右寄せの操作領域 (CTA ボタン・アバター等)                                                              |
 
 ## Props
 
-| Prop              | 型        | デフォルト         | 説明                                       |
-| ----------------- | --------- | ------------------ | ------------------------------------------ |
-| `sticky`          | `boolean` | `true`             | スクロール時にビューポート上端へ吸着させる |
-| `showMenuToggle`  | `boolean` | `true`             | モバイル用ハンバーガーボタンを描画する     |
-| `menuToggleLabel` | `string`  | `'メニューを開く'` | ハンバーガーボタンの `aria-label`          |
+| Prop              | 型                                                    | デフォルト         | 説明                                                 |
+| ----------------- | ----------------------------------------------------- | ------------------ | ---------------------------------------------------- |
+| `sticky`          | `boolean`                                             | `true`             | スクロール時にビューポート上端へ吸着させる           |
+| `showMenuToggle`  | `boolean`                                             | `true`             | モバイル用ハンバーガーボタンを描画する               |
+| `menuToggleLabel` | `string`                                              | `'メニューを開く'` | ハンバーガーボタンの `aria-label`                    |
+| `variant`         | `'wide-full' \| 'wide-slim' \| 'medium' \| 'compact'` | `'wide-full'`      | Header の幅・高さ・密度バリアント (公式 4 パターン)  |
+| `logoLabel`       | `string`                                              | -                  | テキストロゴ。`#logo` スロットがある場合は無視される |
+| `logoHref`        | `string`                                              | -                  | `logoLabel` を `<a href>` でラップ                   |
 
 ## Events
 

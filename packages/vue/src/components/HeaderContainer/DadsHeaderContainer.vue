@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useSlots } from 'vue'
 import type {
   DadsHeaderContainerEmits,
   DadsHeaderContainerProps,
@@ -9,14 +9,22 @@ const props = withDefaults(defineProps<DadsHeaderContainerProps>(), {
   sticky: true,
   showMenuToggle: true,
   menuToggleLabel: 'メニューを開く',
+  variant: 'wide-full',
 })
 
 const emit = defineEmits<DadsHeaderContainerEmits>()
 
+const slots = useSlots()
+
 const rootClasses = computed(() => [
   'dads-header-container',
+  `dads-header-container--${props.variant}`,
   { 'dads-header-container--sticky': props.sticky },
 ])
+
+// Logo is rendered from either the slot (rich content) or the convenience
+// props. We render the wrapper only when one of those sources is present.
+const hasLogo = computed(() => Boolean(slots.logo) || Boolean(props.logoLabel))
 
 const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
 </script>
@@ -33,12 +41,23 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
       >
         <i class="mdi mdi-menu" aria-hidden="true" />
       </button>
-      <div v-if="$slots.logo" class="dads-header-container__logo">
-        <slot name="logo" />
+      <div v-if="hasLogo" class="dads-header-container__logo">
+        <slot name="logo">
+          <component
+            :is="logoHref ? 'a' : 'strong'"
+            :href="logoHref"
+            class="dads-header-container__logo-text"
+          >
+            {{ logoLabel }}
+          </component>
+        </slot>
       </div>
       <nav v-if="$slots.nav" class="dads-header-container__nav" aria-label="メインナビゲーション">
         <slot name="nav" />
       </nav>
+      <div v-if="$slots.utility" class="dads-header-container__utility">
+        <slot name="utility" />
+      </div>
       <div v-if="$slots.actions" class="dads-header-container__actions">
         <slot name="actions" />
       </div>
@@ -75,6 +94,7 @@ $dads-header-container-breakpoint: 768px;
     gap: var(--spacing-16, 1rem);
     min-height: 3.5rem; // 56px — comfortable touch target on mobile
     padding: 0 var(--spacing-16, 1rem);
+    margin: 0 auto;
     // The actions slot is pushed by `margin-left: auto`, so flex-wrap on
     // the inner row lets the actions drop onto a second line at sub-768px
     // viewports instead of pushing the document horizontally.
@@ -84,6 +104,32 @@ $dads-header-container-breakpoint: 768px;
       gap: var(--spacing-8, 0.5rem);
       padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
     }
+  }
+
+  // -------------------- variant ------------------------------------------
+  // wide-full: full-width, generous height (default flagship layout).
+  &--wide-full &__inner {
+    max-width: none;
+    min-height: 4rem; // 64px
+  }
+
+  // wide-slim: full-width but compact height for content-dense apps.
+  &--wide-slim &__inner {
+    max-width: none;
+    min-height: 3rem; // 48px
+  }
+
+  // medium: centered content area with a sensible max-width.
+  &--medium &__inner {
+    max-width: 1280px;
+    min-height: 3.5rem; // 56px
+  }
+
+  // compact: smallest header, mobile-aligned heights even on desktop.
+  &--compact &__inner {
+    max-width: none;
+    min-height: 2.5rem; // 40px
+    padding: 0 var(--spacing-12, 0.75rem);
   }
 
   // -------------------- hamburger menu toggle (mobile only) --------------
@@ -110,11 +156,23 @@ $dads-header-container-breakpoint: 768px;
     }
   }
 
-  // -------------------- logo / nav / actions slots -----------------------
+  // -------------------- logo / nav / utility / actions slots ------------
   &__logo {
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
+  }
+
+  &__logo-text {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 700;
+
+    &:hover[href] {
+      text-decoration: underline;
+    }
   }
 
   &__nav {
@@ -124,13 +182,37 @@ $dads-header-container-breakpoint: 768px;
     min-width: 0; // allow nav children to truncate instead of overflowing
   }
 
+  // Utility area (utility-links / language-selector / search-box / login).
+  // Sits between nav and actions in default markup order. Pushed right when
+  // no nav consumes the flex slack.
+  &__utility {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-8, 0.5rem);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    margin-left: auto;
+
+    // compact variant hides utility to keep the header minimal.
+    .dads-header-container--compact & {
+      display: none;
+    }
+  }
+
   &__actions {
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-8, 0.5rem);
-    margin-left: auto;
     flex-shrink: 0;
     flex-wrap: wrap;
+
+    // When utility is rendered, it already consumed the margin-left:auto
+    // push, so actions should sit immediately after it (no auto-push).
+    .dads-header-container__utility ~ & {
+      margin-left: 0;
+    }
+    // Otherwise (no utility), actions should be pushed to the end.
+    margin-left: auto;
 
     @media (max-width: 767px) {
       gap: var(--spacing-4, 0.25rem);
