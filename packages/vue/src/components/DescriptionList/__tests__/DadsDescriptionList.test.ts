@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsDescriptionList from '../DadsDescriptionList.vue'
 import type {
   DadsDescriptionListItem,
@@ -237,6 +238,34 @@ describe('DadsDescriptionList', () => {
       expect(wrapper.find('.fallback').exists()).toBe(false)
       await wrapper.setProps({ items: undefined })
       expect(wrapper.find('.fallback').exists()).toBe(true)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsDescriptionListProps> = {}) =>
+      mount(DadsDescriptionList, {
+        props: props as DadsDescriptionListProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations in horizontal layout with items', async () => {
+      const wrapper = mountInBody({ items: ITEMS })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in vertical layout', async () => {
+      const wrapper = mountInBody({ items: ITEMS, layout: 'vertical' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with bullet markers', async () => {
+      const wrapper = mountInBody({ items: ITEMS, marker: 'bullet' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with bordered rows', async () => {
+      const wrapper = mountInBody({ items: ITEMS, bordered: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

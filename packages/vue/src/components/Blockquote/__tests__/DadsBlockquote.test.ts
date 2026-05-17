@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsBlockquote from '../DadsBlockquote.vue'
 import type { DadsBlockquoteProps } from '../DadsBlockquote.types'
 
@@ -150,6 +151,30 @@ describe('DadsBlockquote', () => {
       // Must match the class name from
       //   design-system-example-components-html/src/components/blockquote/blockquote.css
       expect(wrapper.find('.dads-blockquote').exists()).toBe(true)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsBlockquoteProps> = {}) =>
+      mount(DadsBlockquote, { props: props as DadsBlockquoteProps, attachTo: document.body })
+
+    it('has no violations with quote text only', async () => {
+      const wrapper = mountInBody({ quote: '引用文の本文です。' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with cite (plain text)', async () => {
+      const wrapper = mountInBody({ quote: '引用文', cite: '〇〇白書 2024' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with citeUrl link', async () => {
+      const wrapper = mountInBody({
+        quote: '引用文',
+        cite: '公式サイト',
+        citeUrl: 'https://example.com',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

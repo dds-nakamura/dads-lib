@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsImage from '../DadsImage.vue'
 import type { DadsImageProps } from '../DadsImage.types'
@@ -216,6 +217,29 @@ describe('DadsImage', () => {
       const wrapper = createWrapper({ caption: 'photo' })
       expect(wrapper.classes()).toContain('dads-image--skeleton')
       expect(wrapper.element.tagName).toBe('FIGURE')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsImageProps> = {}) =>
+      mount(DadsImage, {
+        props: { src: SRC, alt: 'サンプル画像', ...props } as DadsImageProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations with descriptive alt text', async () => {
+      const wrapper = mountInBody({ alt: '東京駅の外観' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with empty alt (decorative image)', async () => {
+      const wrapper = mountInBody({ alt: '' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with caption (figure wrapper)', async () => {
+      const wrapper = mountInBody({ alt: '統計図', caption: '令和5年度 利用者数' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

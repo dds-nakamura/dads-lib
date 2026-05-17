@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsList from '../DadsList.vue'
 import type { DadsListItem, DadsListProps } from '../DadsList.types'
 
@@ -278,6 +279,31 @@ describe('DadsList', () => {
     it('applies the no-nesting-marker class when nestingMarker=false', () => {
       const wrapper = createWrapper({ items: STRING_ITEMS, nestingMarker: false })
       expect(wrapper.classes()).toContain('dads-list--no-nesting-marker')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsListProps> = {}) =>
+      mount(DadsList, { props: props as DadsListProps, attachTo: document.body })
+
+    it('has no violations with a flat unordered list', async () => {
+      const wrapper = mountInBody({ items: STRING_ITEMS })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a nested list (children)', async () => {
+      const wrapper = mountInBody({ items: NESTED_ITEMS })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with type="ordered"', async () => {
+      const wrapper = mountInBody({ type: 'ordered', items: STRING_ITEMS })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with spacing="12"', async () => {
+      const wrapper = mountInBody({ items: STRING_ITEMS, spacing: '12' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

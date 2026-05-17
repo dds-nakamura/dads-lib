@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsDivider from '../DadsDivider.vue'
 import type { DadsDividerProps } from '../DadsDivider.types'
 
@@ -160,6 +161,35 @@ describe('DadsDivider', () => {
     it('applies style-dashed when lineStyle="dashed"', () => {
       const wrapper = createWrapper({ lineStyle: 'dashed' })
       expect(wrapper.classes()).toContain('dads-divider--style-dashed')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsDividerProps> = {}, slots: Record<string, string> = {}) =>
+      mount(DadsDivider, {
+        props: props as DadsDividerProps,
+        slots,
+        attachTo: document.body,
+      })
+
+    it('has no violations in horizontal orientation (decorative)', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in vertical orientation', async () => {
+      const wrapper = mountInBody({ orientation: 'vertical' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a label slot', async () => {
+      const wrapper = mountInBody({}, { default: 'OR' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with an explicit aria-label', async () => {
+      const wrapper = mountInBody({ ariaLabel: 'セクション区切り' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
