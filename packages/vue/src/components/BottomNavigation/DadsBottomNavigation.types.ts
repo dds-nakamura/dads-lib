@@ -1,9 +1,13 @@
 /**
  * Type definitions for DadsBottomNavigation.
  *
- * Note: The DADS spec marks bottom-navigation as a deprecated component
- * (アクセシビリティ・ユーザビリティ観点で非推奨)。Provided here for parity
- * with the official component catalog. Use with care.
+ * ⚠️ Deprecated by the official DADS spec for accessibility/usability
+ * reasons. Prefer DadsHamburgerMenuButton + DadsMobileMenu for mobile
+ * navigation, or DadsHeaderContainer / DadsGlobalMenu / DadsTab depending
+ * on the use case. Kept here for parity with the official component
+ * catalog and existing implementations only.
+ *
+ * @deprecated Per official DADS guidance.
  */
 
 export interface DadsBottomNavigationItem {
@@ -25,6 +29,7 @@ export interface DadsBottomNavigationItem {
   disabled?: boolean
 }
 
+/** @deprecated Per official DADS guidance. See file-level comment. */
 export interface DadsBottomNavigationProps {
   /** Currently active item id (v-model target). */
   modelValue?: string
