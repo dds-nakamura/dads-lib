@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { defineComponent, h, nextTick } from 'vue'
 import DadsTooltip from '../DadsTooltip.vue'
 import type { DadsTooltipPosition, DadsTooltipProps } from '../DadsTooltip.types'
@@ -340,6 +341,56 @@ describe('DadsTooltip', () => {
       // to be assigned (the px values may be 0 or negative, that's fine).
       expect(tip.style.top.endsWith('px')).toBe(true)
       expect(tip.style.left.endsWith('px')).toBe(true)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    // Tooltip teleports its bubble into document.body, separately from the
+    // trigger. Test each subtree scoped (mirrors DadsDialog pattern) so axe's
+    // `region` rule does not trip over the unwrapped body.
+    const focusTrigger = async () => {
+      ;(queryTrigger() as HTMLButtonElement).focus()
+      await nextTick()
+      await nextTick()
+    }
+
+    it('has no violations on the trigger wrap when closed', async () => {
+      createWrapper()
+      const wrap = queryWrap()
+      expect(wrap).not.toBeNull()
+      expect(await axe(wrap as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations on the trigger wrap when open', async () => {
+      createWrapper({ text: '保存ボタンの説明' })
+      await focusTrigger()
+      const wrap = queryWrap()
+      expect(await axe(wrap as Element)).toHaveNoViolations()
+    })
+
+    it('has no violations on the teleported tooltip element when open', async () => {
+      createWrapper({ text: '保存ボタンの説明' })
+      await focusTrigger()
+      const tip = queryTooltip()
+      expect(tip).not.toBeNull()
+      expect(await axe(tip as Element)).toHaveNoViolations()
+    })
+
+    it.each(['top', 'bottom', 'left', 'right'] as const)(
+      'has no violations on the tooltip with position=%s',
+      async (position) => {
+        createWrapper({ text: 'メモ', position })
+        await focusTrigger()
+        const tip = queryTooltip()
+        expect(await axe(tip as Element)).toHaveNoViolations()
+      },
+    )
+
+    it('has no violations on the trigger when disabled (no tooltip rendered)', async () => {
+      createWrapper({ text: 'メモ', disabled: true })
+      await focusTrigger()
+      const wrap = queryWrap()
+      expect(await axe(wrap as Element)).toHaveNoViolations()
     })
   })
 })

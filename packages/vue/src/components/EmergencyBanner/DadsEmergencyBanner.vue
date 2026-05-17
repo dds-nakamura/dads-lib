@@ -40,7 +40,7 @@ const onClose = () => {
 
 <template>
   <Transition name="dads-emergency-banner">
-    <article
+    <div
       v-if="modelValue"
       class="dads-emergency-banner"
       role="alert"
@@ -92,7 +92,7 @@ const onClose = () => {
       >
         <i class="mdi mdi-close" aria-hidden="true" />
       </button>
-    </article>
+    </div>
   </Transition>
 </template>
 

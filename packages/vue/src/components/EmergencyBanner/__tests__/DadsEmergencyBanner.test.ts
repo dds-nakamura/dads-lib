@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import { h, nextTick } from 'vue'
 import DadsEmergencyBanner from '../DadsEmergencyBanner.vue'
 import type { DadsEmergencyBannerProps } from '../DadsEmergencyBanner.types'
@@ -239,6 +240,53 @@ describe('DadsEmergencyBanner', () => {
       })
       expect(wrapper.find('.dads-emergency-banner__external-icon').exists()).toBe(true)
       expect(wrapper.find('.dads-emergency-banner__sr-only').text()).toContain('新規タブで開く')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (
+      props: Partial<DadsEmergencyBannerProps> = {},
+      slots: Record<string, unknown> = {},
+    ) =>
+      mount(DadsEmergencyBanner, {
+        props: {
+          message: '○○地区に避難準備情報が発令されました',
+          ...props,
+        } as DadsEmergencyBannerProps,
+        slots,
+        attachTo: document.body,
+      })
+
+    it('has no violations with default message only', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with title + message', async () => {
+      const wrapper = mountInBody({ title: '緊急情報' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a CTA link', async () => {
+      const wrapper = mountInBody({
+        linkLabel: '詳細を確認',
+        linkHref: '/emergency',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with closable enabled', async () => {
+      const wrapper = mountInBody({ closable: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with an external link', async () => {
+      const wrapper = mountInBody({
+        linkLabel: '気象庁のサイトを開く',
+        linkHref: 'https://example.gov.jp',
+        linkExternal: true,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })
