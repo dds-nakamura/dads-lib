@@ -1,6 +1,6 @@
-export { default as DadsPageNavigation } from './DadsPageNavigation.vue'
+export { default as DadsTableOfContents } from './DadsTableOfContents.vue'
 export type {
-  DadsPageNavigationProps,
-  DadsPageNavigationEmits,
-  DadsPageNavigationItem,
-} from './DadsPageNavigation.types'
+  DadsTableOfContentsProps,
+  DadsTableOfContentsEmits,
+  DadsTableOfContentsItem,
+} from './DadsTableOfContents.types'

@@ -5,7 +5,7 @@
  *   `#${id}` が自動で使用される。
  * - `children` を持つ項目はネスト構造として描画される (UL が入れ子になる)。
  */
-export interface DadsPageNavigationItem {
+export interface DadsTableOfContentsItem {
   /** ページ内 fragment id (必須)。`href` 省略時は `#${id}` が href になる。 */
   id: string
   /** 表示テキスト。 */
@@ -16,12 +16,12 @@ export interface DadsPageNavigationItem {
    */
   href?: string
   /** ネストした子項目。 */
-  children?: DadsPageNavigationItem[]
+  children?: DadsTableOfContentsItem[]
 }
 
-export interface DadsPageNavigationProps {
+export interface DadsTableOfContentsProps {
   /** 目次項目。フラットまたはネスト構造のいずれにも対応する。 */
-  items: DadsPageNavigationItem[]
+  items: DadsTableOfContentsItem[]
   /**
    * 現在アクティブなセクションの `id`。一致する項目に
    * `aria-current="location"` と active クラスが付与される。
@@ -32,7 +32,7 @@ export interface DadsPageNavigationProps {
   ariaLabel?: string
 }
 
-export interface DadsPageNavigationEmits {
+export interface DadsTableOfContentsEmits {
   /** 目次内のリンクがクリックされたときに発火。 */
-  (e: 'click:item', item: DadsPageNavigationItem, event: MouseEvent): void
+  (e: 'click:item', item: DadsTableOfContentsItem, event: MouseEvent): void
 }

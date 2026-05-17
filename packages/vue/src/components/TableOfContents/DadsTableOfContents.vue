@@ -1,41 +1,41 @@
 <script setup lang="ts">
 import type {
-  DadsPageNavigationEmits,
-  DadsPageNavigationItem,
-  DadsPageNavigationProps,
-} from './DadsPageNavigation.types'
+  DadsTableOfContentsEmits,
+  DadsTableOfContentsItem,
+  DadsTableOfContentsProps,
+} from './DadsTableOfContents.types'
 
-const props = withDefaults(defineProps<DadsPageNavigationProps>(), {
+const props = withDefaults(defineProps<DadsTableOfContentsProps>(), {
   activeId: undefined,
   ariaLabel: 'このページの目次',
 })
 
-const emit = defineEmits<DadsPageNavigationEmits>()
+const emit = defineEmits<DadsTableOfContentsEmits>()
 
 // `href` が省略された項目は `#${id}` を自動で組み立てる。consumer 側で
 // 外部 URL や別ページのアンカーを指したい場合のみ明示的に上書きできる。
-const resolveHref = (item: DadsPageNavigationItem): string => item.href ?? `#${item.id}`
+const resolveHref = (item: DadsTableOfContentsItem): string => item.href ?? `#${item.id}`
 
-const isActive = (item: DadsPageNavigationItem): boolean =>
+const isActive = (item: DadsTableOfContentsItem): boolean =>
   props.activeId !== undefined && props.activeId === item.id
 
-const handleClick = (item: DadsPageNavigationItem, event: MouseEvent) => {
+const handleClick = (item: DadsTableOfContentsItem, event: MouseEvent) => {
   emit('click:item', item, event)
 }
 </script>
 
 <template>
-  <nav class="dads-page-navigation" :aria-label="ariaLabel">
-    <ul class="dads-page-navigation__list">
+  <nav class="dads-table-of-contents" :aria-label="ariaLabel">
+    <ul class="dads-table-of-contents__list">
       <li
         v-for="item in items"
         :key="item.id"
-        class="dads-page-navigation__item"
-        :class="{ 'dads-page-navigation__item--active': isActive(item) }"
+        class="dads-table-of-contents__item"
+        :class="{ 'dads-table-of-contents__item--active': isActive(item) }"
       >
         <a
-          class="dads-page-navigation__link"
-          :class="{ 'dads-page-navigation__link--active': isActive(item) }"
+          class="dads-table-of-contents__link"
+          :class="{ 'dads-table-of-contents__link--active': isActive(item) }"
           :href="resolveHref(item)"
           :aria-current="isActive(item) ? 'location' : undefined"
           @click="handleClick(item, $event)"
@@ -43,17 +43,17 @@ const handleClick = (item: DadsPageNavigationItem, event: MouseEvent) => {
         >
         <ul
           v-if="item.children && item.children.length > 0"
-          class="dads-page-navigation__list dads-page-navigation__list--nested"
+          class="dads-table-of-contents__list dads-table-of-contents__list--nested"
         >
           <li
             v-for="child in item.children"
             :key="child.id"
-            class="dads-page-navigation__item dads-page-navigation__item--nested"
-            :class="{ 'dads-page-navigation__item--active': isActive(child) }"
+            class="dads-table-of-contents__item dads-table-of-contents__item--nested"
+            :class="{ 'dads-table-of-contents__item--active': isActive(child) }"
           >
             <a
-              class="dads-page-navigation__link dads-page-navigation__link--nested"
-              :class="{ 'dads-page-navigation__link--active': isActive(child) }"
+              class="dads-table-of-contents__link dads-table-of-contents__link--nested"
+              :class="{ 'dads-table-of-contents__link--active': isActive(child) }"
               :href="resolveHref(child)"
               :aria-current="isActive(child) ? 'location' : undefined"
               @click="handleClick(child, $event)"
@@ -70,7 +70,7 @@ const handleClick = (item: DadsPageNavigationItem, event: MouseEvent) => {
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
-.dads-page-navigation {
+.dads-table-of-contents {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
   line-height: var(--line-height-150, 1.5);
@@ -132,16 +132,16 @@ const handleClick = (item: DadsPageNavigationItem, event: MouseEvent) => {
 
   // -------------------- forced colors -----------------------------------
   @include base.dads-forced-colors {
-    .dads-page-navigation__link {
+    .dads-table-of-contents__link {
       color: LinkText;
     }
 
-    .dads-page-navigation__link--active {
+    .dads-table-of-contents__link--active {
       color: CanvasText;
       background-color: Highlight;
     }
 
-    .dads-page-navigation__list--nested {
+    .dads-table-of-contents__list--nested {
       border-left-color: CanvasText;
     }
   }
