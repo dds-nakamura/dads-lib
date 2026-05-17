@@ -43,6 +43,31 @@ export interface DadsSearchBoxProps {
    *  accessible name when `label` is not provided (mirrors the HTML reference
    *  which renders a `dads-u-visually-hidden` span next to the icon). */
   buttonLabel?: string
+  /**
+   * Render a × clear button at the trailing edge of the input when the
+   * value is non-empty. Default `false`. The button emits
+   * `update:modelValue=""` and re-focuses the input.
+   */
+  clearable?: boolean
+  /** aria-label for the clear button. Default: `クリア`. */
+  clearLabel?: string
+  /**
+   * Optional autocomplete suggestion list shown below the input. The
+   * caller filters / fetches the list reactively; the component renders
+   * each entry as a clickable item that, when selected, emits
+   * `update:modelValue` + `search` + `select:suggestion`.
+   */
+  suggestions?: string[]
+  /**
+   * Optional category dropdown rendered before the input
+   * (`<select>` of strings). When provided, the selected category
+   * is exposed via `update:category` + emitted on `search`.
+   */
+  categories?: string[]
+  /** Currently selected category (v-model:category). */
+  category?: string
+  /** Placeholder for the category select. Default: `カテゴリ`. */
+  categoryPlaceholder?: string
 }
 
 export interface DadsSearchBoxEmits {
@@ -53,4 +78,8 @@ export interface DadsSearchBoxEmits {
   (e: 'search', value: string): void
   (e: 'focus', event: FocusEvent): void
   (e: 'blur', event: FocusEvent): void
+  /** v-model:category — fires when the category select changes. */
+  (e: 'update:category', value: string): void
+  /** Fires when the user picks an item from the suggestion list. */
+  (e: 'select:suggestion', value: string): void
 }

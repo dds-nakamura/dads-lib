@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue'
+import { computed, ref, useId } from 'vue'
 import DadsButton from '../Button/DadsButton.vue'
 import type { DadsSearchBoxEmits, DadsSearchBoxProps } from './DadsSearchBox.types'
 
@@ -11,9 +11,38 @@ const props = withDefaults(defineProps<DadsSearchBoxProps>(), {
   required: false,
   error: false,
   buttonLabel: '検索',
+  clearable: false,
+  clearLabel: 'クリア',
+  category: '',
+  categoryPlaceholder: 'カテゴリ',
 })
 
 const emit = defineEmits<DadsSearchBoxEmits>()
+
+const inputRef = ref<HTMLInputElement | null>(null)
+const hasSuggestions = computed(
+  () => Array.isArray(props.suggestions) && props.suggestions.length > 0,
+)
+const hasCategories = computed(() => Array.isArray(props.categories) && props.categories.length > 0)
+const isClearShown = computed(
+  () => props.clearable && !!props.modelValue && !props.disabled && !props.readonly,
+)
+
+const onCategoryChange = (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value
+  emit('update:category', value)
+}
+
+const onSuggestionSelect = (value: string) => {
+  emit('update:modelValue', value)
+  emit('select:suggestion', value)
+  emit('search', value)
+}
+
+const onClear = () => {
+  emit('update:modelValue', '')
+  inputRef.value?.focus()
+}
 
 // One id per instance so the label `for` and aria references stay stable.
 const generatedId = useId()
@@ -75,6 +104,17 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     </label>
 
     <div class="dads-search-box__row">
+      <select
+        v-if="hasCategories"
+        class="dads-search-box__category"
+        :value="category"
+        :disabled="disabled || undefined"
+        :aria-label="categoryPlaceholder"
+        @change="onCategoryChange"
+      >
+        <option value="" disabled hidden>{{ categoryPlaceholder }}</option>
+        <option v-for="c in categories" :key="c" :value="c">{{ c }}</option>
+      </select>
       <div class="dads-search-box__fields">
         <label class="dads-search-box__input">
           <svg
@@ -92,6 +132,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
           <span v-if="!label" class="dads-u-visually-hidden">{{ buttonLabel }}</span>
           <input
             :id="inputId"
+            ref="inputRef"
             type="search"
             class="dads-search-box__field"
             :name="name"
@@ -107,7 +148,28 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
             @focus="onFocus"
             @blur="onBlur"
           />
+          <button
+            v-if="isClearShown"
+            type="button"
+            class="dads-search-box__clear"
+            :aria-label="clearLabel"
+            @click="onClear"
+          >
+            ×
+          </button>
         </label>
+        <ul v-if="hasSuggestions" class="dads-search-box__suggestions" role="listbox">
+          <li
+            v-for="(s, idx) in suggestions"
+            :key="idx"
+            class="dads-search-box__suggestion"
+            role="option"
+            tabindex="-1"
+            @mousedown.prevent="onSuggestionSelect(s)"
+          >
+            {{ s }}
+          </li>
+        </ul>
       </div>
 
       <DadsButton
@@ -305,6 +367,61 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- error --------------------------------------------
   &--error &__input {
     border-color: var(--color-error, #ec0000);
+  }
+
+  // -------------------- clear button + suggestions + category -----------
+  &__clear {
+    @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    color: var(--color-text-secondary, #4d4d4d);
+    font-size: 1rem;
+    margin-inline-end: var(--spacing-4, 0.25rem);
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__category {
+    @include ring.dads-focus-ring;
+    flex-shrink: 0;
+    padding: 0 var(--spacing-8, 0.5rem);
+    min-height: 2.5rem;
+    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border-radius: var(--border-radius-4, 0.25rem);
+    background-color: var(--color-bg-surface, #fff);
+    font: inherit;
+  }
+
+  &__suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border-top: 0;
+    border-radius: 0 0 var(--border-radius-4, 0.25rem) var(--border-radius-4, 0.25rem);
+    background-color: var(--color-bg-surface, #fff);
+    max-height: 16rem;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  &__suggestion {
+    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    cursor: pointer;
+    font: inherit;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    }
   }
 
   // -------------------- forced colors ------------------------------------

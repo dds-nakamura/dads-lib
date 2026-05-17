@@ -315,4 +315,70 @@ describe('DadsSearchBox', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
+
+  describe('clearable', () => {
+    it('does not render clear button by default', () => {
+      const wrapper = createWrapper({ modelValue: 'foo' })
+      expect(wrapper.find('.dads-search-box__clear').exists()).toBe(false)
+    })
+
+    it('renders clear button when clearable=true and value is non-empty', () => {
+      const wrapper = createWrapper({ clearable: true, modelValue: 'foo' })
+      expect(wrapper.find('.dads-search-box__clear').exists()).toBe(true)
+    })
+
+    it('does not render clear button when value is empty', () => {
+      const wrapper = createWrapper({ clearable: true, modelValue: '' })
+      expect(wrapper.find('.dads-search-box__clear').exists()).toBe(false)
+    })
+
+    it('emits update:modelValue="" when clear button is clicked', async () => {
+      const wrapper = createWrapper({ clearable: true, modelValue: 'foo' })
+      await wrapper.find('.dads-search-box__clear').trigger('click')
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe('')
+    })
+  })
+
+  describe('suggestions', () => {
+    it('does not render the suggestion list by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-search-box__suggestions').exists()).toBe(false)
+    })
+
+    it('renders one option per suggestion when provided', () => {
+      const wrapper = createWrapper({ suggestions: ['apple', 'banana', 'cherry'] })
+      const items = wrapper.findAll('.dads-search-box__suggestion')
+      expect(items).toHaveLength(3)
+      expect(items[1].text()).toBe('banana')
+    })
+
+    it('emits update:modelValue + search + select:suggestion on mousedown', async () => {
+      const wrapper = createWrapper({ suggestions: ['x', 'y'] })
+      await wrapper.find('.dads-search-box__suggestion').trigger('mousedown')
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe('x')
+      expect(wrapper.emitted('select:suggestion')?.[0]?.[0]).toBe('x')
+      expect(wrapper.emitted('search')?.[0]?.[0]).toBe('x')
+    })
+  })
+
+  describe('categories', () => {
+    it('does not render the category select by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-search-box__category').exists()).toBe(false)
+    })
+
+    it('renders the category select with one option per category', () => {
+      const wrapper = createWrapper({ categories: ['全文', 'タイトル'] })
+      const select = wrapper.find('select.dads-search-box__category')
+      expect(select.exists()).toBe(true)
+      expect(select.findAll('option')).toHaveLength(3) // placeholder + 2
+    })
+
+    it('emits update:category when the select changes', async () => {
+      const wrapper = createWrapper({ categories: ['全文', 'タイトル'] })
+      const select = wrapper.find('select.dads-search-box__category')
+      await select.setValue('タイトル')
+      expect(wrapper.emitted('update:category')?.[0]?.[0]).toBe('タイトル')
+    })
+  })
 })
