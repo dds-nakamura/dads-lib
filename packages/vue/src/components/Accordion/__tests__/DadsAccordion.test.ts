@@ -330,4 +330,34 @@ describe('DadsAccordion', () => {
       expect(new Set(ids).size).toBe(ids.length)
     })
   })
+
+  describe('size', () => {
+    it('applies the size-m modifier by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-accordion--size-m')
+    })
+
+    it.each(['l', 'm', 's', 'xs'] as const)('applies dads-accordion--size-%s', (s) => {
+      const wrapper = createWrapper({ size: s })
+      expect(wrapper.classes()).toContain(`dads-accordion--size-${s}`)
+    })
+  })
+
+  describe('returnLink', () => {
+    it('does not render a return link by default', () => {
+      const wrapper = createWrapper({ modelValue: 'a' })
+      expect(wrapper.find('.dads-accordion__return-link').exists()).toBe(false)
+    })
+
+    it('renders the return link in every open panel when prop is set', () => {
+      const wrapper = createWrapper({
+        modelValue: 'a',
+        returnLink: { label: 'ページのトップへ戻る', href: '#top' },
+      })
+      const link = wrapper.find('.dads-accordion__return-link a')
+      expect(link.exists()).toBe(true)
+      expect(link.attributes('href')).toBe('#top')
+      expect(link.text()).toBe('ページのトップへ戻る')
+    })
+  })
 })

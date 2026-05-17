@@ -4,4 +4,6 @@ export type {
   DadsAccordionItem,
   DadsAccordionProps,
   DadsAccordionType,
+  DadsAccordionSize,
+  DadsAccordionReturnLink,
 } from './DadsAccordion.types'

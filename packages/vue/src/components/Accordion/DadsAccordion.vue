@@ -9,6 +9,7 @@ import type {
 const props = withDefaults(defineProps<DadsAccordionProps>(), {
   modelValue: () => '',
   type: 'single',
+  size: 'm',
 })
 
 const emit = defineEmits<DadsAccordionEmits>()
@@ -100,7 +101,7 @@ const itemClasses = (item: DadsAccordionItem) => [
 </script>
 
 <template>
-  <div class="dads-accordion">
+  <div :class="['dads-accordion', `dads-accordion--size-${size}`]">
     <div v-for="(item, idx) in items" :key="item.id" :class="itemClasses(item)">
       <h3 class="dads-accordion__heading">
         <button
@@ -128,6 +129,9 @@ const itemClasses = (item: DadsAccordionItem) => [
         :aria-labelledby="headerId(item.id)"
       >
         <slot :name="`panel-${item.id}`" />
+        <p v-if="returnLink" class="dads-accordion__return-link">
+          <a :href="returnLink.href">{{ returnLink.label }}</a>
+        </p>
       </div>
     </div>
   </div>
@@ -206,6 +210,58 @@ const itemClasses = (item: DadsAccordionItem) => [
     justify-content: center;
     font-size: var(--font-size-20, 1.25rem);
     color: var(--color-text-secondary, #4d4d4d);
+  }
+
+  // -------------------- size variants ------------------------------------
+  // Per official DADS scale L/M/S/XS — drives header padding + icon size.
+  &--size-l &__header {
+    min-height: 4rem;
+    padding: var(--spacing-16, 1rem) var(--spacing-16, 1rem);
+    font-size: var(--font-size-18, 1.125rem);
+  }
+  &--size-l &__icon {
+    font-size: var(--font-size-24, 1.5rem);
+  }
+  &--size-m &__header {
+    min-height: 3rem;
+    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    font-size: var(--font-size-16, 1rem);
+  }
+  &--size-m &__icon {
+    font-size: var(--font-size-20, 1.25rem);
+  }
+  &--size-s &__header {
+    min-height: 2.5rem;
+    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
+  }
+  &--size-s &__icon {
+    font-size: var(--font-size-18, 1.125rem);
+  }
+  &--size-xs &__header {
+    min-height: 2rem;
+    padding: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
+  }
+  &--size-xs &__icon {
+    font-size: var(--font-size-16, 1rem);
+  }
+
+  // -------------------- return link -------------------------------------
+  &__return-link {
+    margin: var(--spacing-16, 1rem) 0 0;
+    text-align: end;
+
+    a {
+      color: var(--color-brand-primary, #0017c1);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-size: var(--font-size-14, 0.875rem);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   // -------------------- panel --------------------------------------------

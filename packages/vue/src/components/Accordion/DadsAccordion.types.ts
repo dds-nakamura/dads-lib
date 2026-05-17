@@ -5,6 +5,20 @@
 /** Accordion behavior. `single` keeps at most one panel open at a time. */
 export type DadsAccordionType = 'single' | 'multiple'
 
+/**
+ * Accordion size token (icon + padding). Mirrors the DADS 4-step scale.
+ */
+export type DadsAccordionSize = 'l' | 'm' | 's' | 'xs'
+
+/**
+ * Optional "return link" rendered at the bottom of an open panel — a
+ * back-to-top affordance for long accordion content per the DADS spec.
+ */
+export interface DadsAccordionReturnLink {
+  label: string
+  href: string
+}
+
 export interface DadsAccordionItem {
   /** Unique identifier used for v-model and slot names (`panel-{id}`). */
   id: string
@@ -25,6 +39,13 @@ export interface DadsAccordionProps {
   items: DadsAccordionItem[]
   /** Open behavior. Defaults to `'single'`. */
   type?: DadsAccordionType
+  /** Size token. Defaults to `'m'`. Drives header icon size + vertical padding. */
+  size?: DadsAccordionSize
+  /**
+   * When provided, renders a "return link" at the bottom of every open panel
+   * (e.g. "ページのトップへ戻る"). Pass as a `{ label, href }` object.
+   */
+  returnLink?: DadsAccordionReturnLink
 }
 
 export interface DadsAccordionEmits {
