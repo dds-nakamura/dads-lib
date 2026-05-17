@@ -22,7 +22,8 @@
     "release": "changeset publish",
     "figma:export": "node --env-file-if-exists=.env scripts/figma-export.mjs",
     "figma:login": "node --env-file-if-exists=.env scripts/figma-login.mjs",
-    "figma:pw-export": "node --env-file-if-exists=.env scripts/figma-playwright-export.mjs"
+    "figma:pw-export": "node --env-file-if-exists=.env scripts/figma-playwright-export.mjs",
+    "vendor:status": "node scripts/vendor-status.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
