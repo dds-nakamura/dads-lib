@@ -43,6 +43,9 @@ const stateItems = [
   { label: '操作不可', disabled: true },
 ]
 
+const dropdownOpen = ref(false)
+const dropdownOpenEnd = ref(false)
+
 const onItemClick = (item) => {
   lastClicked.value = item.label
 }
@@ -152,12 +155,67 @@ const items = [{ label: 'メニュー項目1' }, { label: 'メニュー項目2' 
 />
 ```
 
+## オープナー付き (ドロップダウン) [NEW]
+
+`triggerLabel` を指定すると、ボックス上部にオープナーボタンが追加され、クリックで開閉する **ドロップダウン式メニュー** になる。`v-model` で開閉状態を制御。
+
+<div class="demo">
+  <span class="demo-label">placement="start" (デフォルト)</span>
+  <DadsMenuListBox
+    v-model="dropdownOpen"
+    :items="iconItems"
+    aria-label="ドロップダウン"
+    trigger-label="メニュー"
+    trigger-icon="mdi-menu"
+  />
+  <span class="demo-label" style="margin-top:2rem">placement="end" (右端揃え)</span>
+  <DadsMenuListBox
+    v-model="dropdownOpenEnd"
+    :items="iconItems"
+    aria-label="ドロップダウン (右端)"
+    trigger-label="設定"
+    placement="end"
+  />
+</div>
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const open = ref(false)
+</script>
+
+<template>
+  <DadsMenuListBox
+    v-model="open"
+    :items="items"
+    trigger-label="メニュー"
+    trigger-icon="mdi-menu"
+    aria-label="メニュー一覧"
+  />
+</template>
+```
+
+オープナー有り (Opener mode) では以下が自動で適用される:
+
+- トリガー `<button>` に `aria-expanded` / `aria-controls` を付与
+- 開いている間のみ surface を表示 (`v-show` ベース)
+- 開閉時に `open` / `close` イベント発火
+- `placement='end'` で右端揃え (デフォルト `'start'` は左端揃え)
+- トリガー右端のシェブロンが開閉状態に応じて回転
+
+`triggerLabel` を渡さない場合は従来通り **常時表示の Standalone mode** で動作する (後方互換)。
+
 ## Props
 
-| Prop        | 型                      | デフォルト | 説明                                              |
-| ----------- | ----------------------- | ---------- | ------------------------------------------------- |
-| `items`     | `DadsMenuListBoxItem[]` | -          | 必須。メニュー項目の配列                          |
-| `ariaLabel` | `string`                | -          | `<ul role="menu">` に適用されるアクセシブルラベル |
+| Prop           | 型                      | デフォルト | 説明                                                          |
+| -------------- | ----------------------- | ---------- | ------------------------------------------------------------- |
+| `items`        | `DadsMenuListBoxItem[]` | -          | 必須。メニュー項目の配列                                      |
+| `ariaLabel`    | `string`                | -          | `<ul role="menu">` に適用されるアクセシブルラベル             |
+| `modelValue`   | `boolean`               | `false`    | 開閉状態 (Opener mode のみ。v-model)。standalone では常時表示 |
+| `triggerLabel` | `string`                | -          | 指定時、トリガーボタンが描画され Opener mode になる           |
+| `triggerIcon`  | `string`                | -          | トリガーボタンの MDI クラス名 (`'mdi-menu'` 等)               |
+| `triggerSize`  | `'sm' \| 'md' \| 'lg'`  | `'md'`     | トリガーボタンのサイズ                                        |
+| `placement`    | `'start' \| 'end'`      | `'start'`  | Surface の整列位置 (Opener mode のみ有効)                     |
 
 ### `DadsMenuListBoxItem` の型
 
@@ -172,9 +230,12 @@ const items = [{ label: 'メニュー項目1' }, { label: 'メニュー項目2' 
 
 ## Events
 
-| Event        | Payload                                                         | 説明                                                          |
-| ------------ | --------------------------------------------------------------- | ------------------------------------------------------------- |
-| `click:item` | `(item: DadsMenuListBoxItem, index: number, event: MouseEvent)` | 有効な項目がクリックされたとき発火（disabled 時は発火しない） |
+| Event               | Payload                                                         | 説明                                                          |
+| ------------------- | --------------------------------------------------------------- | ------------------------------------------------------------- |
+| `click:item`        | `(item: DadsMenuListBoxItem, index: number, event: MouseEvent)` | 有効な項目がクリックされたとき発火（disabled 時は発火しない） |
+| `update:modelValue` | `(value: boolean)`                                              | トリガークリックで開閉状態が変化したとき (Opener mode)        |
+| `open`              | -                                                               | Surface が開いたとき (Opener mode)                            |
+| `close`             | -                                                               | Surface が閉じたとき (Opener mode)                            |
 
 ## アクセシビリティ
 

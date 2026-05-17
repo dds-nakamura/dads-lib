@@ -3,4 +3,6 @@ export type {
   DadsMenuListBoxProps,
   DadsMenuListBoxEmits,
   DadsMenuListBoxItem,
+  DadsMenuListBoxPlacement,
+  DadsMenuListBoxTriggerSize,
 } from './DadsMenuListBox.types'

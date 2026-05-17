@@ -235,4 +235,129 @@ describe('DadsMenuListBox', () => {
       expect(wrapper.emitted('click:item')).toBeTruthy()
     })
   })
+
+  // ----------------------------------------------------------------------
+  // Opener mode — triggerLabel turns the component into a dropdown with an
+  // opener button, hidden surface, v-model open state, and open/close events.
+  // ----------------------------------------------------------------------
+  describe('opener mode', () => {
+    it('does not render the trigger button when triggerLabel is omitted', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-menu-list-box__trigger').exists()).toBe(false)
+    })
+
+    it('renders the trigger button when triggerLabel is provided', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー' })
+      const trigger = wrapper.find('button.dads-menu-list-box__trigger')
+      expect(trigger.exists()).toBe(true)
+      expect(trigger.text()).toContain('メニュー')
+    })
+
+    it('renders the trigger icon when triggerIcon is provided', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerIcon: 'mdi-menu' })
+      const icon = wrapper.find('.dads-menu-list-box__trigger-icon')
+      expect(icon.exists()).toBe(true)
+      expect(icon.classes()).toContain('mdi-menu')
+    })
+
+    it('applies the trigger size modifier', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerSize: 'lg' })
+      expect(wrapper.find('.dads-menu-list-box__trigger').classes()).toContain(
+        'dads-menu-list-box__trigger--lg',
+      )
+    })
+
+    it('reflects open state via aria-expanded on the trigger', async () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
+      const trigger = wrapper.find('.dads-menu-list-box__trigger')
+      expect(trigger.attributes('aria-expanded')).toBe('false')
+      await wrapper.setProps({ modelValue: true })
+      expect(trigger.attributes('aria-expanded')).toBe('true')
+    })
+
+    it('aria-controls points to the surface element', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      const trigger = wrapper.find('.dads-menu-list-box__trigger')
+      const surface = wrapper.find('.dads-menu-list-box__surface')
+      expect(trigger.attributes('aria-controls')).toBe(surface.attributes('id'))
+    })
+
+    it('hides the surface via display: none when modelValue=false (v-show)', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
+      const surface = wrapper.find('.dads-menu-list-box__surface')
+      expect(surface.exists()).toBe(true)
+      // v-show keeps the element in the DOM with display:none.
+      expect((surface.element as HTMLElement).style.display).toBe('none')
+    })
+
+    it('shows the surface when modelValue=true', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      const surface = wrapper.find('.dads-menu-list-box__surface')
+      expect((surface.element as HTMLElement).style.display).not.toBe('none')
+    })
+
+    it('emits update:modelValue when the trigger is clicked (closed → open)', async () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
+      await wrapper.find('.dads-menu-list-box__trigger').trigger('click')
+      const emitted = wrapper.emitted('update:modelValue')
+      expect(emitted?.[0]?.[0]).toBe(true)
+    })
+
+    it('emits update:modelValue when the trigger is clicked (open → closed)', async () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      await wrapper.find('.dads-menu-list-box__trigger').trigger('click')
+      const emitted = wrapper.emitted('update:modelValue')
+      expect(emitted?.[0]?.[0]).toBe(false)
+    })
+
+    it('emits open event when modelValue transitions to true', async () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
+      await wrapper.setProps({ modelValue: true })
+      expect(wrapper.emitted('open')).toBeTruthy()
+    })
+
+    it('emits close event when modelValue transitions to false', async () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      await wrapper.setProps({ modelValue: false })
+      expect(wrapper.emitted('close')).toBeTruthy()
+    })
+
+    it('does not emit open/close on initial mount (only on real transitions)', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      expect(wrapper.emitted('open')).toBeFalsy()
+      expect(wrapper.emitted('close')).toBeFalsy()
+    })
+
+    it('applies the placement modifier (start by default)', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      expect(wrapper.classes()).toContain('dads-menu-list-box--placement-start')
+    })
+
+    it('applies the end placement modifier when placement="end"', () => {
+      const wrapper = createWrapper({
+        triggerLabel: 'メニュー',
+        modelValue: true,
+        placement: 'end',
+      })
+      expect(wrapper.classes()).toContain('dads-menu-list-box--placement-end')
+    })
+
+    it('does not emit open/close in standalone mode (no opener)', async () => {
+      // Without triggerLabel, the modelValue prop is irrelevant — no events
+      // should fire even when it changes.
+      const wrapper = createWrapper({ modelValue: false })
+      await wrapper.setProps({ modelValue: true })
+      expect(wrapper.emitted('open')).toBeFalsy()
+    })
+  })
+
+  describe('standalone mode (no opener)', () => {
+    it('always shows the surface even when modelValue=false', () => {
+      const wrapper = createWrapper({ modelValue: false })
+      const surface = wrapper.find('.dads-menu-list-box__surface')
+      expect(surface.exists()).toBe(true)
+      // No v-show display:none should be applied in standalone mode.
+      expect((surface.element as HTMLElement).style.display).not.toBe('none')
+    })
+  })
 })
