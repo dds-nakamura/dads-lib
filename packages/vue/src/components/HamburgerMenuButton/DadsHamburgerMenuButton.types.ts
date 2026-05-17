@@ -13,6 +13,15 @@ import type { DadsSize } from '../../types/common'
 
 export type DadsHamburgerMenuButtonSize = Extract<DadsSize, 'lg' | 'md' | 'sm'>
 
+/**
+ * 形状バリアント (公式 DADS 定義)。
+ * - `default`: アイコン横にラベルを並べる標準形 (デフォルト)
+ * - `icon-only`: 正方形・アイコンのみ。ラベルは `aria-label` で SR に伝える
+ * - `mobile-conditional`: モバイル時はアイコン下にテキストを縦並びにする
+ *   コンパクト形 (タップターゲットを確保)
+ */
+export type DadsHamburgerMenuButtonVariant = 'default' | 'icon-only' | 'mobile-conditional'
+
 export interface DadsHamburgerMenuButtonProps {
   /** メニューの開閉状態。`true` = 開いている。v-model 経由で双方向バインドする。 */
   modelValue?: boolean
@@ -29,6 +38,8 @@ export interface DadsHamburgerMenuButtonProps {
   closeLabel?: string
   /** サイズ。デフォルト: `'md'`。 */
   size?: DadsHamburgerMenuButtonSize
+  /** 形状バリアント。デフォルト `'default'`。 */
+  variant?: DadsHamburgerMenuButtonVariant
 }
 
 export interface DadsHamburgerMenuButtonEmits {

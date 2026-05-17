@@ -3,4 +3,5 @@ export type {
   DadsHamburgerMenuButtonEmits,
   DadsHamburgerMenuButtonProps,
   DadsHamburgerMenuButtonSize,
+  DadsHamburgerMenuButtonVariant,
 } from './DadsHamburgerMenuButton.types'

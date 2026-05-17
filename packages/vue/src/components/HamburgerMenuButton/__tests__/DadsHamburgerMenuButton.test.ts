@@ -225,4 +225,42 @@ describe('DadsHamburgerMenuButton', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
+
+  describe('variant', () => {
+    it('applies the default variant modifier', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-hamburger-menu-button--variant-default')
+    })
+
+    it.each(['default', 'icon-only', 'mobile-conditional'] as const)(
+      'applies the %s variant modifier',
+      (variant) => {
+        const wrapper = createWrapper({ variant })
+        expect(wrapper.classes()).toContain(`dads-hamburger-menu-button--variant-${variant}`)
+      },
+    )
+
+    it('renders the label by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-hamburger-menu-button__label').exists()).toBe(true)
+    })
+
+    it('omits the visible label and exposes aria-label when variant="icon-only"', () => {
+      const wrapper = createWrapper({ variant: 'icon-only' })
+      expect(wrapper.find('.dads-hamburger-menu-button__label').exists()).toBe(false)
+      expect(wrapper.attributes('aria-label')).toBe('メニュー')
+    })
+
+    it('aria-label tracks open/close state in icon-only mode', async () => {
+      const wrapper = createWrapper({ variant: 'icon-only', modelValue: false })
+      expect(wrapper.attributes('aria-label')).toBe('メニュー')
+      await wrapper.setProps({ modelValue: true })
+      expect(wrapper.attributes('aria-label')).toBe('閉じる')
+    })
+
+    it('does not set aria-label for non-icon-only variants (label is visible)', () => {
+      const wrapper = createWrapper({ variant: 'default' })
+      expect(wrapper.attributes('aria-label')).toBeUndefined()
+    })
+  })
 })

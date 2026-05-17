@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<DadsHamburgerMenuButtonProps>(), {
   openLabel: 'メニュー',
   closeLabel: '閉じる',
   size: 'md',
+  variant: 'default',
 })
 
 const emit = defineEmits<DadsHamburgerMenuButtonEmits>()
@@ -20,10 +21,16 @@ const isOpen = computed(() => Boolean(props.modelValue))
 const rootClasses = computed(() => [
   'dads-hamburger-menu-button',
   `dads-hamburger-menu-button--${props.size}`,
+  `dads-hamburger-menu-button--variant-${props.variant}`,
   {
     'dads-hamburger-menu-button--open': isOpen.value,
   },
 ])
+
+// icon-only variant suppresses the visible label but still exposes it to SR
+// via aria-label so the button retains an accessible name.
+const isIconOnly = computed(() => props.variant === 'icon-only')
+const ariaLabel = computed(() => (isIconOnly.value ? label.value : undefined))
 
 const label = computed(() => (isOpen.value ? props.closeLabel : props.openLabel))
 
@@ -43,6 +50,7 @@ const onClick = (event: MouseEvent) => {
     :class="rootClasses"
     :aria-expanded="isOpen"
     :aria-controls="ariaControls"
+    :aria-label="ariaLabel"
     :disabled="disabled || undefined"
     @click="onClick"
   >
@@ -71,7 +79,7 @@ const onClick = (event: MouseEvent) => {
         fill="currentcolor"
       />
     </svg>
-    <span class="dads-hamburger-menu-button__label">{{ label }}</span>
+    <span v-if="!isIconOnly" class="dads-hamburger-menu-button__label">{{ label }}</span>
   </button>
 </template>
 
@@ -141,6 +149,34 @@ const onClick = (event: MouseEvent) => {
   // -------------------- label ---------------------------------------------
   &__label {
     display: inline-block;
+  }
+
+  // -------------------- variant ------------------------------------------
+  // icon-only: square, no visible label (aria-label keeps it accessible).
+  &--variant-icon-only {
+    aspect-ratio: 1;
+    padding: var(--spacing-8, 0.5rem);
+    column-gap: 0;
+    justify-content: center;
+  }
+
+  // mobile-conditional: on narrow viewports, stack icon over label (vertical),
+  // creating a square-ish tap target with a small caption underneath.
+  @media (max-width: 47.99rem) {
+    &--variant-mobile-conditional {
+      flex-direction: column;
+      column-gap: 0;
+      row-gap: 0.125rem;
+      padding: var(--spacing-4, 0.25rem);
+      aspect-ratio: 1;
+      justify-content: center;
+      min-width: 3rem;
+    }
+
+    &--variant-mobile-conditional &__label {
+      font-size: var(--font-size-12, 0.75rem);
+      line-height: 1.2;
+    }
   }
 
   // -------------------- hover ---------------------------------------------
