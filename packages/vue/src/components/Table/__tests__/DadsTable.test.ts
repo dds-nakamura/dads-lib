@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsTable from '../DadsTable.vue'
 import type { DadsTableProps } from '../DadsTable.types'
 
@@ -264,6 +265,41 @@ describe('DadsTable', () => {
       const body = wrapper.find('.dads-table__skeleton-body')
       expect(body.attributes('aria-busy')).toBe('true')
       expect(body.attributes('aria-live')).toBe('polite')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: DadsTableProps = {}, slots = { default: TABLE_BODY }) =>
+      mount(DadsTable, { props, slots, attachTo: document.body })
+
+    it('has no violations with a basic table', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a caption', async () => {
+      const wrapper = mountInBody({ caption: '従業員一覧' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with sticky header', async () => {
+      const wrapper = mountInBody({ stickyHeader: true, caption: 'スコア' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in compact density (bordered + striped)', async () => {
+      const wrapper = mountInBody({
+        caption: '統計',
+        density: 'compact',
+        bordered: true,
+        striped: true,
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations in loading state', async () => {
+      const wrapper = mountInBody({ caption: '読み込み中', loading: true })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

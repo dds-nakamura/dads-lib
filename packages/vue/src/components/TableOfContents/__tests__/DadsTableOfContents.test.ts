@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsTableOfContents from '../DadsTableOfContents.vue'
 import type {
   DadsTableOfContentsItem,
@@ -213,6 +214,34 @@ describe('DadsTableOfContents', () => {
       expect(events).toHaveLength(1)
       const [item] = events?.[0] as [DadsTableOfContentsItem]
       expect(item.id).toBe('props')
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsTableOfContentsProps> = {}) =>
+      mount(DadsTableOfContents, {
+        props: { items: flatItems, ...props } as DadsTableOfContentsProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations with a flat TOC', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a nested TOC', async () => {
+      const wrapper = mountInBody({ items: nestedItems })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with an active item', async () => {
+      const wrapper = mountInBody({ activeId: 'usage' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with a custom aria-label', async () => {
+      const wrapper = mountInBody({ ariaLabel: '本ページの目次' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

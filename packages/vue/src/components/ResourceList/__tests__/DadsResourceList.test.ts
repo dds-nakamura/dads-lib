@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsResourceList from '../DadsResourceList.vue'
 import type { DadsResourceListItem, DadsResourceListProps } from '../DadsResourceList.types'
 
@@ -297,6 +298,44 @@ describe('DadsResourceList', () => {
       const emitted = wrapper.emitted('click:item')
       expect(emitted).toBeTruthy()
       expect(emitted?.[0]?.[1]).toBe(0)
+    })
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    const mountInBody = (props: Partial<DadsResourceListProps> = {}) =>
+      mount(DadsResourceList, {
+        props: { items: sampleItems, ...props } as DadsResourceListProps,
+        attachTo: document.body,
+      })
+
+    it('has no violations with a basic resource list', async () => {
+      const wrapper = mountInBody()
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with linked items (href)', async () => {
+      const wrapper = mountInBody({
+        items: sampleItems.map((item) => ({ ...item, href: '/details' })),
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with style="list"', async () => {
+      const wrapper = mountInBody({ style: 'list' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations with thumbnails (decorative alt)', async () => {
+      const wrapper = mountInBody({
+        items: [
+          {
+            title: 'プレゼン資料',
+            description: '令和5年度',
+            thumbnail: 'https://example.com/thumb.png',
+          },
+        ],
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
 })

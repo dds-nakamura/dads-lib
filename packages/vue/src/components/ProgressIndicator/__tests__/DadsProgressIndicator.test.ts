@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
+import { axe } from 'vitest-axe'
 import DadsProgressIndicator from '../DadsProgressIndicator.vue'
 import type { DadsProgressIndicatorProps } from '../DadsProgressIndicator.types'
 
@@ -294,5 +295,34 @@ describe('DadsProgressIndicator', () => {
         expect(wrapper.classes()).toContain(`dads-progress-indicator--color-${c}`)
       },
     )
+  })
+
+  describe('a11y (vitest-axe)', () => {
+    it('has no violations for determinate linear progress', async () => {
+      const wrapper = createWrapper({ value: 42, ariaLabel: '読み込み進捗' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations for indeterminate linear progress', async () => {
+      const wrapper = createWrapper({ ariaLabel: '処理中' })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations for determinate circular progress with label', async () => {
+      const wrapper = createWrapper({
+        variant: 'circular',
+        value: 75,
+        showLabel: true,
+        ariaLabel: 'アップロード進捗',
+      })
+      expect(await axe(wrapper.element)).toHaveNoViolations()
+    })
+
+    it('has no violations at value 0 and 100 boundaries', async () => {
+      const min = createWrapper({ value: 0, ariaLabel: '0%' })
+      expect(await axe(min.element)).toHaveNoViolations()
+      const max = createWrapper({ value: 100, ariaLabel: '100%' })
+      expect(await axe(max.element)).toHaveNoViolations()
+    })
   })
 })
