@@ -219,4 +219,195 @@ describe('DadsHeading', () => {
       expect(headings[1].classes()).toContain('dads-heading--level-1')
     })
   })
+
+  // ----------------------------------------------------------------------
+  // hgroup wrapping — DADS specifies the heading is grouped with shoulder
+  // and subtitle inside <hgroup> so SR users hear them as a single unit.
+  // We render <hgroup> only when there is something to group; otherwise
+  // <div> keeps the DOM minimal.
+  // ----------------------------------------------------------------------
+  describe('hgroup wrapping', () => {
+    it('renders <div> as the root when neither shoulder nor subtitle is present', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.element.tagName).toBe('DIV')
+    })
+
+    it('renders <hgroup> as the root when only shoulder is present', () => {
+      const wrapper = createWrapper({ shoulder: 'カテゴリ' })
+      expect(wrapper.element.tagName).toBe('HGROUP')
+    })
+
+    it('renders <hgroup> as the root when only subtitle is present', () => {
+      const wrapper = createWrapper({ subtitle: '補足' })
+      expect(wrapper.element.tagName).toBe('HGROUP')
+    })
+
+    it('renders <hgroup> as the root when both shoulder and subtitle are present', () => {
+      const wrapper = createWrapper({ shoulder: 'カテゴリ', subtitle: '補足' })
+      expect(wrapper.element.tagName).toBe('HGROUP')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // shoulder — text rendered above the heading inside <hgroup>, supports
+  // both prop (string convenience) and slot (custom markup).
+  // ----------------------------------------------------------------------
+  describe('shoulder', () => {
+    it('does not render the shoulder element when neither prop nor slot is provided', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-heading__shoulder').exists()).toBe(false)
+    })
+
+    it('renders the shoulder prop as a <p> before the heading', () => {
+      const wrapper = createWrapper({ shoulder: 'カテゴリラベル' })
+      const shoulder = wrapper.find('p.dads-heading__shoulder')
+      expect(shoulder.exists()).toBe(true)
+      expect(shoulder.text()).toBe('カテゴリラベル')
+    })
+
+    it('places the shoulder before the heading element in document order', () => {
+      const wrapper = createWrapper({ as: 'h2', shoulder: 'カテゴリ' })
+      const children = Array.from(wrapper.element.children)
+      expect(children[0].classList.contains('dads-heading__shoulder')).toBe(true)
+      expect(children[1].tagName.toLowerCase()).toBe('h2')
+    })
+
+    it('renders the shoulder slot in place of the prop value when both provided', () => {
+      const wrapper = createWrapper(
+        { shoulder: 'プロップ値' },
+        { default: 'タイトル', shoulder: '<span class="custom">スロット値</span>' },
+      )
+      const shoulder = wrapper.find('.dads-heading__shoulder')
+      expect(shoulder.find('.custom').text()).toBe('スロット値')
+      // The prop string should NOT appear when the slot is used.
+      expect(shoulder.text()).not.toBe('プロップ値')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // subtitle prop — string convenience matching the slot variant.
+  // ----------------------------------------------------------------------
+  describe('subtitle prop', () => {
+    it('renders the subtitle prop as a <p> after the heading', () => {
+      const wrapper = createWrapper({ subtitle: 'プロップ補足' })
+      const subtitle = wrapper.find('p.dads-heading__subtitle')
+      expect(subtitle.exists()).toBe(true)
+      expect(subtitle.text()).toBe('プロップ補足')
+    })
+
+    it('renders the subtitle slot in place of the prop value when both provided', () => {
+      const wrapper = createWrapper(
+        { subtitle: 'プロップ値' },
+        { default: 'タイトル', subtitle: '<span class="custom">スロット値</span>' },
+      )
+      const subtitle = wrapper.find('.dads-heading__subtitle')
+      expect(subtitle.find('.custom').text()).toBe('スロット値')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // icon prop — MDI class convenience matching the prepend-icon slot.
+  // ----------------------------------------------------------------------
+  describe('icon prop', () => {
+    it('renders the icon prop as <i class="mdi {icon}"> inside the icon wrapper', () => {
+      const wrapper = createWrapper({ icon: 'mdi-information' })
+      const icon = wrapper.find('.dads-heading__icon')
+      expect(icon.exists()).toBe(true)
+      expect(icon.find('i.mdi.mdi-information').exists()).toBe(true)
+      expect(icon.attributes('aria-hidden')).toBe('true')
+    })
+
+    it('renders the prepend-icon slot in place of the icon prop when both provided', () => {
+      const wrapper = createWrapper(
+        { icon: 'mdi-information' },
+        { default: 'タイトル', 'prepend-icon': '<span class="custom-svg">★</span>' },
+      )
+      const icon = wrapper.find('.dads-heading__icon')
+      expect(icon.find('.custom-svg').exists()).toBe(true)
+      // The MDI class wrapper should NOT appear when slot is used.
+      expect(icon.find('i.mdi').exists()).toBe(false)
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // chip slot — inline badge alongside the heading text.
+  // ----------------------------------------------------------------------
+  describe('chip slot', () => {
+    it('does not render the chip wrapper when the slot is empty', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-heading__chip').exists()).toBe(false)
+    })
+
+    it('renders the chip slot inside the title element', () => {
+      const wrapper = createWrapper(
+        {},
+        { default: 'タイトル', chip: '<span class="badge">NEW</span>' },
+      )
+      const title = wrapper.find('.dads-heading__title')
+      const chip = title.find('.dads-heading__chip')
+      expect(chip.exists()).toBe(true)
+      expect(chip.find('.badge').text()).toBe('NEW')
+    })
+
+    it('places the chip after the heading text inside the title', () => {
+      const wrapper = createWrapper(
+        {},
+        { default: 'タイトル', chip: '<span class="badge">NEW</span>' },
+      )
+      const title = wrapper.find('.dads-heading__title')
+      const text = title.find('.dads-heading__text')
+      const chip = title.find('.dads-heading__chip')
+      // Chip should come AFTER text in DOM order.
+      const titleChildren = Array.from(title.element.children)
+      expect(titleChildren.indexOf(text.element)).toBeLessThan(titleChildren.indexOf(chip.element))
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // size prop — explicit font-size token from the DADS scale (14..36 px),
+  // independent of level and as.
+  // ----------------------------------------------------------------------
+  describe('size prop', () => {
+    it.each(['14', '16', '18', '20', '24', '28', '32', '36'] as const)(
+      'applies the dads-heading--size-%s modifier when size=%s',
+      (size) => {
+        const wrapper = createWrapper({ size })
+        expect(wrapper.classes()).toContain(`dads-heading--size-${size}`)
+      },
+    )
+
+    it('does not apply a size modifier when size is unspecified', () => {
+      const wrapper = createWrapper()
+      const sizeClasses = wrapper.classes().filter((c) => c.startsWith('dads-heading--size-'))
+      expect(sizeClasses).toEqual([])
+    })
+
+    it('keeps both level and size modifiers when both are set (size wins via CSS specificity)', () => {
+      const wrapper = createWrapper({ level: 3, size: '20' })
+      expect(wrapper.classes()).toContain('dads-heading--level-3')
+      expect(wrapper.classes()).toContain('dads-heading--size-20')
+    })
+  })
+
+  // ----------------------------------------------------------------------
+  // Composition — shoulder + heading + chip + subtitle inside <hgroup>
+  // ----------------------------------------------------------------------
+  describe('composition with all parts', () => {
+    it('renders shoulder + heading (with icon + chip) + subtitle inside <hgroup>', () => {
+      const wrapper = createWrapper(
+        { as: 'h1', shoulder: 'カテゴリA', subtitle: '補足説明', icon: 'mdi-bookmark' },
+        { default: 'メインタイトル', chip: '<span class="badge">NEW</span>' },
+      )
+      expect(wrapper.element.tagName).toBe('HGROUP')
+      const children = Array.from(wrapper.element.children)
+      expect(children[0].classList.contains('dads-heading__shoulder')).toBe(true)
+      expect(children[1].tagName.toLowerCase()).toBe('h1')
+      expect(children[2].classList.contains('dads-heading__subtitle')).toBe(true)
+
+      const title = wrapper.find('.dads-heading__title')
+      expect(title.find('.dads-heading__icon i.mdi.mdi-bookmark').exists()).toBe(true)
+      expect(title.find('.dads-heading__text').text()).toBe('メインタイトル')
+      expect(title.find('.dads-heading__chip .badge').text()).toBe('NEW')
+    })
+  })
 })
