@@ -10,6 +10,8 @@ const props = withDefaults(defineProps<DadsLanguageSelectorProps>(), {
   options: () => [],
   disabled: false,
   size: 'md',
+  colorScheme: 'light-blue',
+  cornerShape: 'rounded',
   ariaLabel: '言語を選択',
   openerLabel: 'Language',
 })
@@ -35,6 +37,8 @@ const isItemCurrent = (option: DadsLanguageSelectorOption): boolean =>
 const rootClasses = computed(() => [
   'dads-language-selector',
   `dads-language-selector--${props.size}`,
+  `dads-language-selector--${props.colorScheme}`,
+  `dads-language-selector--corner-${props.cornerShape}`,
   {
     'dads-language-selector--disabled': props.disabled,
     'dads-language-selector--open': isOpen.value,
@@ -395,6 +399,55 @@ const setItemRef =
   &--sm &__opener {
     font-size: var(--font-size-14, 0.875rem);
     padding: 2px var(--spacing-8, 0.5rem);
+  }
+
+  // -------------------- color scheme -------------------------------------
+  // Tinted opener / popup variants per DADS guidance. Hover surface and
+  // selected-item color follow the chosen accent.
+  &--light-blue &__opener {
+    color: var(--color-brand-primary, #1a73e8);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-info-bg, rgba(26, 115, 232, 0.08));
+    }
+  }
+  &--light-blue &__item--current {
+    color: var(--color-brand-primary, #1a73e8);
+  }
+
+  &--light-green &__opener {
+    color: var(--color-success, #1f8a3a);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-success-bg, rgba(31, 138, 58, 0.08));
+    }
+  }
+  &--light-green &__item--current {
+    color: var(--color-success, #1f8a3a);
+  }
+
+  &--light-gray &__opener {
+    color: var(--color-text-primary, #1a1a1a);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    }
+  }
+  &--light-gray &__item--current {
+    color: var(--color-text-primary, #1a1a1a);
+  }
+
+  // -------------------- corner shape -------------------------------------
+  &--corner-rounded &__opener {
+    border-radius: var(--border-radius-4, 0.25rem);
+  }
+
+  &--corner-pill &__opener {
+    border-radius: 9999px;
+  }
+
+  &--corner-square &__opener {
+    border-radius: 0;
   }
 
   // -------------------- disabled -----------------------------------------

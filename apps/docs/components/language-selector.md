@@ -64,6 +64,38 @@ const selected = ref('ja')
   </div>
 </div>
 
+## Color Scheme
+
+DADS 公式仕様で示唆されているカラーバリエーション 3 種 (`light-blue` / `light-green` / `light-gray`)。デフォルトは `light-blue`。サイトのプライマリカラーに合わせて選択する。
+
+<div class="demo">
+  <div class="demo-row">
+    <DadsLanguageSelector v-model="selected" :options="languages" color-scheme="light-blue" />
+    <DadsLanguageSelector v-model="selected" :options="languages" color-scheme="light-green" />
+    <DadsLanguageSelector v-model="selected" :options="languages" color-scheme="light-gray" />
+  </div>
+</div>
+
+```vue
+<DadsLanguageSelector v-model="lang" :options="languages" color-scheme="light-green" />
+```
+
+## Corner Shape
+
+オープナーの角の形状。周囲のヘッダー要素のスタイルに合わせて `rounded`（デフォルト） / `pill` / `square` から選択する。
+
+<div class="demo">
+  <div class="demo-row">
+    <DadsLanguageSelector v-model="selected" :options="languages" corner-shape="rounded" />
+    <DadsLanguageSelector v-model="selected" :options="languages" corner-shape="pill" />
+    <DadsLanguageSelector v-model="selected" :options="languages" corner-shape="square" />
+  </div>
+</div>
+
+```vue
+<DadsLanguageSelector v-model="lang" :options="languages" corner-shape="pill" />
+```
+
 ## 無効化
 
 `disabled` を指定するとオープナーが押せなくなり、メニューも開かない。
@@ -102,14 +134,16 @@ const selected = ref('ja')
 
 ## Props
 
-| Prop          | 型                             | デフォルト     | 説明                                                                      |
-| ------------- | ------------------------------ | -------------- | ------------------------------------------------------------------------- |
-| `modelValue`  | `string`                       | -              | 選択中の言語コード（`v-model`）                                           |
-| `options`     | `DadsLanguageSelectorOption[]` | `[]`           | 選択可能な言語の配列。`value` / `label`（任意で `href`）                  |
-| `size`        | `'lg' \| 'md' \| 'sm'`         | `'md'`         | オープナーのサイズ                                                        |
-| `disabled`    | `boolean`                      | `false`        | 操作不可化（オープナー無効・メニュー開閉抑止）                            |
-| `ariaLabel`   | `string`                       | `'言語を選択'` | オープナーボタンのアクセシブル名                                          |
-| `openerLabel` | `string`                       | `'Language'`   | オープナーに表示するテキスト（DADS 規約では常に英語の `Language` を推奨） |
+| Prop          | 型                                              | デフォルト     | 説明                                                                      |
+| ------------- | ----------------------------------------------- | -------------- | ------------------------------------------------------------------------- |
+| `modelValue`  | `string`                                        | -              | 選択中の言語コード（`v-model`）                                           |
+| `options`     | `DadsLanguageSelectorOption[]`                  | `[]`           | 選択可能な言語の配列。`value` / `label`（任意で `href`）                  |
+| `size`        | `'lg' \| 'md' \| 'sm'`                          | `'md'`         | オープナーのサイズ                                                        |
+| `colorScheme` | `'light-blue' \| 'light-green' \| 'light-gray'` | `'light-blue'` | オープナー / 選択項目のカラーアクセント                                   |
+| `cornerShape` | `'rounded' \| 'pill' \| 'square'`               | `'rounded'`    | オープナーの角の形状                                                      |
+| `disabled`    | `boolean`                                       | `false`        | 操作不可化（オープナー無効・メニュー開閉抑止）                            |
+| `ariaLabel`   | `string`                                        | `'言語を選択'` | オープナーボタンのアクセシブル名                                          |
+| `openerLabel` | `string`                                        | `'Language'`   | オープナーに表示するテキスト（DADS 規約では常に英語の `Language` を推奨） |
 
 ### DadsLanguageSelectorOption
 

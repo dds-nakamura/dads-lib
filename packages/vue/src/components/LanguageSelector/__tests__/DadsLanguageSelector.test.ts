@@ -70,6 +70,36 @@ describe('DadsLanguageSelector', () => {
     })
   })
 
+  describe('colorScheme', () => {
+    it.each(['light-blue', 'light-green', 'light-gray'] as const)(
+      'applies dads-language-selector--%s class',
+      (colorScheme) => {
+        const wrapper = createWrapper({ colorScheme })
+        expect(wrapper.classes()).toContain(`dads-language-selector--${colorScheme}`)
+      },
+    )
+
+    it('defaults to light-blue', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-language-selector--light-blue')
+    })
+  })
+
+  describe('cornerShape', () => {
+    it.each(['rounded', 'pill', 'square'] as const)(
+      'applies dads-language-selector--corner-%s class',
+      (cornerShape) => {
+        const wrapper = createWrapper({ cornerShape })
+        expect(wrapper.classes()).toContain(`dads-language-selector--corner-${cornerShape}`)
+      },
+    )
+
+    it('defaults to rounded', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.classes()).toContain('dads-language-selector--corner-rounded')
+    })
+  })
+
   describe('open / close', () => {
     it('opens on opener click', async () => {
       const wrapper = createWrapper()
