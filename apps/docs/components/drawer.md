@@ -1,6 +1,6 @@
 # Drawer
 
-モーダルな左サイドナビゲーション。トリガーから `v-model` で開閉し、`items` 配列で項目を宣言する。`children` を持つ項目は 1 段ネストのアコーディオンとして展開される。
+モーダルなサイドナビゲーション。トリガーから `v-model` で開閉し、`items` 配列で項目を宣言する。`children` を持つ項目は 1 段ネストのアコーディオンとして展開される。`placement` プロップで **左 (デフォルト) / 右 / フルオーバーレイ** の 3 配置を切り替え可能。
 
 ## 基本
 
@@ -54,6 +54,8 @@ const callbackItems = [
 ]
 
 const customCloseOpen = ref(false)
+const rightOpen = ref(false)
+const fullOpen = ref(false)
 </script>
 
 <div class="demo">
@@ -131,14 +133,37 @@ const items = [
   />
 </div>
 
+## 配置 (placement) [NEW]
+
+公式 DADS は **左寄せ / 右寄せ / フルオーバーレイ** の 3 配置を提供する。`placement` プロップで切替可能 (デフォルト `'left'`)。
+
+<div class="demo">
+  <div class="demo-row">
+    <DadsButton @click="rightOpen = true">右側から開く</DadsButton>
+    <DadsButton @click="fullOpen = true">フルオーバーレイで開く</DadsButton>
+  </div>
+  <DadsDrawer v-model="rightOpen" :items="basicItems" placement="right" title="設定パネル" />
+  <DadsDrawer v-model="fullOpen" :items="nestedItems" placement="full" title="フルメニュー" />
+</div>
+
+```vue
+<DadsDrawer v-model="open" :items="items" placement="right" title="設定" />
+<DadsDrawer v-model="open" :items="items" placement="full" title="メニュー" />
+```
+
+- `'left'` (デフォルト): 左端から slide-in (左→右に展開)。最も一般的なモバイルメニュー用途。
+- `'right'`: 右端から slide-in (右→左に展開)。設定パネル・フィルタ・通知パネル等。
+- `'full'`: ビューポート全体を panel で覆い、フェードで表示。フルスクリーンメニュー用途。
+
 ## Props
 
-| Prop         | 型                 | デフォルト | 説明                                                           |
-| ------------ | ------------------ | ---------- | -------------------------------------------------------------- |
-| `modelValue` | `boolean`          | `false`    | 開閉状態 (`v-model` 対応)                                      |
-| `items`      | `DadsDrawerItem[]` | -          | 表示する項目配列 (必須)                                        |
-| `title`      | `string`           | -          | ヘッダの見出し。未指定時の `aria-label` フォールバックにもなる |
-| `closeLabel` | `string`           | `'閉じる'` | 閉じるボタンの `aria-label`                                    |
+| Prop         | 型                            | デフォルト | 説明                                                           |
+| ------------ | ----------------------------- | ---------- | -------------------------------------------------------------- |
+| `modelValue` | `boolean`                     | `false`    | 開閉状態 (`v-model` 対応)                                      |
+| `items`      | `DadsDrawerItem[]`            | -          | 表示する項目配列 (必須)                                        |
+| `title`      | `string`                      | -          | ヘッダの見出し。未指定時の `aria-label` フォールバックにもなる |
+| `closeLabel` | `string`                      | `'閉じる'` | 閉じるボタンの `aria-label`                                    |
+| `placement`  | `'left' \| 'right' \| 'full'` | `'left'`   | Drawer 配置パターン                                            |
 
 ### `DadsDrawerItem`
 

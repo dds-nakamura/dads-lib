@@ -10,6 +10,7 @@ import type {
 const props = withDefaults(defineProps<DadsDrawerProps>(), {
   modelValue: false,
   closeLabel: '閉じる',
+  placement: 'left',
 })
 
 const emit = defineEmits<DadsDrawerEmits>()
@@ -79,10 +80,11 @@ watch(
 
 <template>
   <Teleport to="body">
-    <Transition name="dads-drawer">
+    <Transition :name="`dads-drawer-${placement}`">
       <div
         v-if="modelValue"
         class="dads-drawer"
+        :class="`dads-drawer--${placement}`"
         role="dialog"
         aria-modal="true"
         :aria-label="title || 'ナビゲーション'"
@@ -152,6 +154,23 @@ watch(
     &:focus {
       outline: none;
     }
+  }
+
+  // -------------------- placement ----------------------------------------
+  // Default (`left`): the panel sits at the start of the flex row, matching
+  // pre-2026-05 behavior. Explicit modifier kept for symmetry with right/full.
+  &--left &__panel {
+    margin-inline-end: auto;
+  }
+
+  &--right &__panel {
+    margin-inline-start: auto;
+  }
+
+  &--full &__panel {
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
   }
 
   // -------------------- header / title / close --------------------------
@@ -281,9 +300,16 @@ watch(
   }
 }
 
-// -------------------- transition ---------------------------------------
-.dads-drawer-enter-active,
-.dads-drawer-leave-active {
+// -------------------- transitions (per placement) ----------------------
+// Each placement gets its own named transition so the slide direction
+// follows the visual position (left panels slide in from -X, right panels
+// from +X, and full overlays just fade).
+.dads-drawer-left-enter-active,
+.dads-drawer-left-leave-active,
+.dads-drawer-right-enter-active,
+.dads-drawer-right-leave-active,
+.dads-drawer-full-enter-active,
+.dads-drawer-full-leave-active {
   transition: opacity 0.2s ease;
 
   .dads-drawer__panel {
@@ -291,12 +317,26 @@ watch(
   }
 }
 
-.dads-drawer-enter-from,
-.dads-drawer-leave-to {
+.dads-drawer-left-enter-from,
+.dads-drawer-left-leave-to {
   opacity: 0;
 
   .dads-drawer__panel {
     transform: translateX(-100%);
   }
+}
+
+.dads-drawer-right-enter-from,
+.dads-drawer-right-leave-to {
+  opacity: 0;
+
+  .dads-drawer__panel {
+    transform: translateX(100%);
+  }
+}
+
+.dads-drawer-full-enter-from,
+.dads-drawer-full-leave-to {
+  opacity: 0;
 }
 </style>

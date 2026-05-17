@@ -377,4 +377,45 @@ describe('DadsDrawer', () => {
       expect(document.activeElement).toBe(last)
     })
   })
+
+  // ----------------------------------------------------------------------
+  // placement — DADS specifies left (default) / right / full overlay.
+  // The modifier class drives the SCSS-side margin + transition.
+  // ----------------------------------------------------------------------
+  describe('placement variant', () => {
+    it('applies the dads-drawer--left modifier by default', () => {
+      createWrapper()
+      expect(queryDrawer()?.classList.contains('dads-drawer--left')).toBe(true)
+    })
+
+    it('applies the dads-drawer--right modifier when placement="right"', () => {
+      createWrapper({ placement: 'right' })
+      expect(queryDrawer()?.classList.contains('dads-drawer--right')).toBe(true)
+      expect(queryDrawer()?.classList.contains('dads-drawer--left')).toBe(false)
+    })
+
+    it('applies the dads-drawer--full modifier when placement="full"', () => {
+      createWrapper({ placement: 'full' })
+      expect(queryDrawer()?.classList.contains('dads-drawer--full')).toBe(true)
+      expect(queryDrawer()?.classList.contains('dads-drawer--left')).toBe(false)
+    })
+
+    it.each(['left', 'right', 'full'] as const)(
+      'keeps role="dialog" and aria-modal across placement=%s',
+      (placement) => {
+        createWrapper({ placement })
+        const dialog = queryDrawer()
+        expect(dialog?.getAttribute('role')).toBe('dialog')
+        expect(dialog?.getAttribute('aria-modal')).toBe('true')
+      },
+    )
+
+    it('only applies one placement modifier at a time', () => {
+      createWrapper({ placement: 'right' })
+      const placementClasses = (queryDrawer() as Element).className
+        .split(/\s+/)
+        .filter((c) => /^dads-drawer--(left|right|full)$/.test(c))
+      expect(placementClasses).toEqual(['dads-drawer--right'])
+    })
+  })
 })

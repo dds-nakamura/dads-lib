@@ -4,7 +4,18 @@
  * The drawer renders a modal navigation panel — toggled by `modelValue` —
  * with optional one-level-deep accordion children. The shape mirrors the
  * DADS HTML reference, with disabled / icon support layered on top.
+ *
+ * 公式 DADS は左寄せ / 右寄せ / フルオーバーレイの 3 配置を提供する。
+ * 本コンポーネントの `placement` プロップで切替可能。
  */
+
+/**
+ * Drawer の配置パターン。
+ * - `left`: 左端から slide-in (デフォルト、最も一般的なモバイルメニュー用途)
+ * - `right`: 右端から slide-in (設定パネル・フィルタ・通知パネル等)
+ * - `full`: ビューポート全体を panel で覆う (フルスクリーンメニュー用途)
+ */
+export type DadsDrawerPlacement = 'left' | 'right' | 'full'
 
 export interface DadsDrawerItem {
   /** Visible text. Required because every item is announced to screen readers. */
@@ -29,6 +40,11 @@ export interface DadsDrawerProps {
   title?: string
   /** aria-label for the close button. Defaults to "閉じる". */
   closeLabel?: string
+  /**
+   * Drawer 配置パターン。`left` (デフォルト) / `right` / `full`。
+   * `full` はパネルがビューポート全体を覆い、overlay は背景色のみ担う。
+   */
+  placement?: DadsDrawerPlacement
 }
 
 export interface DadsDrawerEmits {
