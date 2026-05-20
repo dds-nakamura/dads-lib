@@ -26,6 +26,11 @@ export interface DadsCheckboxProps {
   /** Native `value` attribute, used when the checkbox participates in a
    *  group (e.g. DadsCheckboxGroup) to identify the selected option. */
   value?: string | number | boolean
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsCheckboxEmits {

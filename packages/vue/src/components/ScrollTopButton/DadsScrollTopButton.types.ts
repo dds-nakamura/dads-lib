@@ -35,6 +35,11 @@ export interface DadsScrollTopButtonProps {
    * marked `disabled` for assistive tech. Default: `false`.
    */
   disabled?: boolean
+  /**
+   * Slot fallback text displayed in `<slot>` when no default slot is
+   * provided. Default: `'トップへ'`. Override to localize the button label.
+   */
+  defaultLabel?: string
 }
 
 export interface DadsScrollTopButtonEmits {

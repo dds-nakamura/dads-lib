@@ -146,6 +146,20 @@ describe('DadsRadioGroup', () => {
       const wrapper = createWrapper({ legend: '質問' })
       expect(wrapper.find('.dads-radio-group__required').exists()).toBe(false)
     })
+
+    it('renders the default 必須 label when required is true', () => {
+      const wrapper = createWrapper({ legend: '質問', required: true })
+      expect(wrapper.find('.dads-radio-group__required').text()).toBe('必須')
+    })
+
+    it('renders a custom requiredLabel when provided (i18n override)', () => {
+      const wrapper = createWrapper({
+        legend: '質問',
+        required: true,
+        requiredLabel: 'Required',
+      })
+      expect(wrapper.find('.dads-radio-group__required').text()).toBe('Required')
+    })
   })
 
   describe('disabled', () => {

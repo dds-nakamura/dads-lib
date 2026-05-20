@@ -15,6 +15,8 @@ const props = withDefaults(defineProps<DadsMobileMenuProps>(), {
   type: 'accordion',
   utilityItems: undefined,
   ariaLabel: 'モバイルメニュー',
+  navAriaLabel: 'メインナビゲーション',
+  subLinksAriaLabel: '補助リンク',
   closeLabel: '閉じる',
   backLabel: '戻る',
   showCloseButton: true,
@@ -171,7 +173,7 @@ watch(
               </svg>
             </button>
           </header>
-          <nav class="dads-mobile-menu__nav" aria-label="メインナビゲーション">
+          <nav class="dads-mobile-menu__nav" :aria-label="navAriaLabel">
             <!-- accordion mode (default): delegate to DadsMenuList which
                  expands children inline. -->
             <DadsMenuList
@@ -220,7 +222,7 @@ watch(
           <div v-if="utilityItems && utilityItems.length > 0" class="dads-mobile-menu__utility">
             <DadsUtilityLink
               :items="utilityItems"
-              aria-label="補助リンク"
+              :aria-label="subLinksAriaLabel"
               @click:item="onUtilityItemClick"
             />
           </div>

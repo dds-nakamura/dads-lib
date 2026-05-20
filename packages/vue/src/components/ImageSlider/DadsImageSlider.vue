@@ -16,6 +16,10 @@ const props = withDefaults(defineProps<DadsImageSliderProps>(), {
   loop: true,
   ariaLabel: 'イメージスライダー',
   headingLevel: 2,
+  prevSlideAriaLabel: '前のスライド',
+  nextSlideAriaLabel: '次のスライド',
+  slidePositionAriaLabel: 'スライド位置',
+  formatSlideAriaLabel: (idx: number) => `スライド ${idx + 1}`,
 })
 
 const headingTag = computed(() => `h${props.headingLevel}` as const)
@@ -183,7 +187,7 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
       v-if="showArrows && total > 1"
       type="button"
       class="dads-image-slider__arrow dads-image-slider__arrow--prev"
-      aria-label="前のスライド"
+      :aria-label="prevSlideAriaLabel"
       :disabled="!canPrev || undefined"
       @click="goPrev"
     >
@@ -193,7 +197,7 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
       v-if="showArrows && total > 1"
       type="button"
       class="dads-image-slider__arrow dads-image-slider__arrow--next"
-      aria-label="次のスライド"
+      :aria-label="nextSlideAriaLabel"
       :disabled="!canNext || undefined"
       @click="goNext"
     >
@@ -204,7 +208,7 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
       v-if="showIndicators && total > 1"
       class="dads-image-slider__indicators"
       role="tablist"
-      aria-label="スライド位置"
+      :aria-label="slidePositionAriaLabel"
     >
       <button
         v-for="(_, idx) in slides"
@@ -213,7 +217,7 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
         role="tab"
         :aria-selected="idx === safeIndex"
         :aria-controls="slideId(idx)"
-        :aria-label="`スライド ${idx + 1}`"
+        :aria-label="formatSlideAriaLabel(idx)"
         :class="indicatorClasses(idx)"
         @click="onIndicatorClick(idx)"
       >

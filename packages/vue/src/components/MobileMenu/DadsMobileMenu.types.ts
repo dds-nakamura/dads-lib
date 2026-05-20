@@ -46,6 +46,16 @@ export interface DadsMobileMenuProps {
   utilityItems?: DadsUtilityLinkItem[]
   /** `aria-label`。デフォルト `'モバイルメニュー'`。 */
   ariaLabel?: string
+  /**
+   * メインメニュー `<nav>` の `aria-label`。デフォルト `'メインナビゲーション'`。
+   * i18n を行いたい場合に上書きする。
+   */
+  navAriaLabel?: string
+  /**
+   * 補助リンク領域 (`DadsUtilityLink`) に渡す `aria-label`。
+   * デフォルト `'補助リンク'`。i18n を行いたい場合に上書きする。
+   */
+  subLinksAriaLabel?: string
   /** クローズボタンの `aria-label`。デフォルト `'閉じる'`。 */
   closeLabel?: string
   /** 戻るボタンの aria-label / 表示テキスト。デフォルト `'戻る'`。`type='slide'` のみ使用。 */

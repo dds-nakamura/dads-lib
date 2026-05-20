@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<DadsRadioGroupProps>(), {
   error: false,
   disabled: false,
   legendVisuallyHidden: false,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsRadioGroupEmits>()
@@ -66,7 +67,9 @@ const onSelect = (value: DadsRadioGroupValue) => {
       :class="{ 'dads-radio-group__legend--visually-hidden': legendVisuallyHidden }"
     >
       {{ legend }}
-      <span v-if="required" class="dads-radio-group__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-radio-group__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </legend>
 
     <div class="dads-radio-group__items">

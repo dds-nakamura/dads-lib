@@ -9,6 +9,9 @@ import {
 const props = withDefaults(defineProps<DadsColorPickerProps>(), {
   swatches: () => [...DADS_DEFAULT_SWATCHES],
   disabled: false,
+  defaultAriaLabel: '色を選択',
+  hexInputAriaLabel: 'HEXカラーコード',
+  formatSwatchAriaLabel: (swatch: string) => `${swatch} を選択`,
 })
 
 const emit = defineEmits<DadsColorPickerEmits>()
@@ -62,7 +65,7 @@ const onSwatchClick = (color: string) => {
           type="color"
           :value="colorInputValue"
           :disabled="disabled"
-          :aria-label="label ?? '色を選択'"
+          :aria-label="label ?? defaultAriaLabel"
           @input="onColorInput"
         />
         <span
@@ -80,7 +83,7 @@ const onSwatchClick = (color: string) => {
         maxlength="7"
         spellcheck="false"
         autocomplete="off"
-        aria-label="HEXカラーコード"
+        :aria-label="hexInputAriaLabel"
         @input="onHexInput"
       />
     </div>
@@ -92,7 +95,7 @@ const onSwatchClick = (color: string) => {
           class="dads-color-picker__swatch"
           :style="{ backgroundColor: swatch }"
           :disabled="disabled"
-          :aria-label="`${swatch} を選択`"
+          :aria-label="formatSwatchAriaLabel(swatch)"
           :aria-pressed="normalize(swatch) === colorInputValue"
           @click="onSwatchClick(swatch)"
         />

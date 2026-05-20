@@ -45,6 +45,17 @@ export interface DadsFileUploadProps {
    * file in the preview list. Defaults to `true`.
    */
   showFileSize?: boolean
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
+  /**
+   * 各ファイルの × ボタンに付与する `aria-label` のフォーマッタ。
+   * ファイル名を受け取り、ラベル文字列を返す。i18n 用に上書き可能。
+   * Default: `` (name) => `${name} を削除` ``.
+   */
+  formatRemoveLabel?: (name: string) => string
 }
 
 export interface DadsFileUploadEmits {

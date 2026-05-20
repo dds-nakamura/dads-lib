@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<DadsCheckboxProps>(), {
   readonly: false,
   required: false,
   error: false,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsCheckboxEmits>()
@@ -130,7 +131,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       <span class="dads-checkbox__indicator" aria-hidden="true" />
       <span v-if="label" class="dads-checkbox__text">
         {{ label }}
-        <span v-if="required" class="dads-checkbox__required" aria-hidden="true">必須</span>
+        <span v-if="required" class="dads-checkbox__required" aria-hidden="true">{{
+          requiredLabel
+        }}</span>
       </span>
     </label>
 

@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<DadsTextareaProps>(), {
   readonly: false,
   required: false,
   error: false,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsTextareaEmits>()
@@ -120,7 +121,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   <div :class="rootClasses">
     <label v-if="label" :for="textareaId" class="dads-textarea__label">
       {{ label }}
-      <span v-if="required" class="dads-textarea__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-textarea__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div class="dads-textarea__control">

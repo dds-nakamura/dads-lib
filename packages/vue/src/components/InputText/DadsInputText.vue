@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<DadsInputTextProps>(), {
   required: false,
   error: false,
   align: 'vertical',
+  requiredLabel: '必須',
 })
 
 // Official DADS a11y guidance discourages both `placeholder` and `maxlength`:
@@ -101,7 +102,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   <div :class="rootClasses">
     <label v-if="label" :for="inputId" class="dads-input-text__label">
       {{ label }}
-      <span v-if="required" class="dads-input-text__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-input-text__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div class="dads-input-text__control">

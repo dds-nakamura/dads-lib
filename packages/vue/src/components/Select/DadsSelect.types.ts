@@ -53,6 +53,17 @@ export interface DadsSelectProps {
    * comma-separated text label.
    */
   chips?: boolean
+  /**
+   * Formatter for the aria-label on each chip's remove (×) button. Receives
+   * the chip's display title. Default produces `` `${title} を削除` ``.
+   * Override to localize the select.
+   */
+  formatRemoveAriaLabel?: (title: string) => string
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsSelectEmits {

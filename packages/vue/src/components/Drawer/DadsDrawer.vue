@@ -10,6 +10,8 @@ import type {
 const props = withDefaults(defineProps<DadsDrawerProps>(), {
   modelValue: false,
   closeLabel: '閉じる',
+  defaultAriaLabel: 'ナビゲーション',
+  navAriaLabel: 'ドロワーナビゲーション',
   placement: 'left',
 })
 
@@ -87,7 +89,7 @@ watch(
         :class="`dads-drawer--${placement}`"
         role="dialog"
         aria-modal="true"
-        :aria-label="title || 'ナビゲーション'"
+        :aria-label="title || defaultAriaLabel"
         @keydown.esc="close"
         @keydown.tab="onTab"
       >
@@ -104,7 +106,7 @@ watch(
               <i class="mdi mdi-close" aria-hidden="true" />
             </button>
           </header>
-          <nav class="dads-drawer__nav" aria-label="ドロワーナビゲーション">
+          <nav class="dads-drawer__nav" :aria-label="navAriaLabel">
             <ul class="dads-drawer__list">
               <DadsDrawerItem
                 v-for="(item, idx) in items"

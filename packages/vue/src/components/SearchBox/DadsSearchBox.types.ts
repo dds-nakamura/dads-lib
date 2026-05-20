@@ -68,6 +68,11 @@ export interface DadsSearchBoxProps {
   category?: string
   /** Placeholder for the category select. Default: `カテゴリ`. */
   categoryPlaceholder?: string
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsSearchBoxEmits {

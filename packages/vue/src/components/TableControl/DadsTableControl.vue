@@ -18,6 +18,18 @@ const props = withDefaults(defineProps<DadsTableControlProps>(), {
   showSearch: true,
   showPageSize: true,
   showPagination: true,
+  ariaLabel: 'テーブルコントロール',
+  searchLabel: '検索',
+  pageSizeLabel: '表示件数',
+  paginationAriaLabel: 'ページ送り',
+  prevPageAriaLabel: '前のページ',
+  currentPageAriaLabel: '現在のページ',
+  nextPageAriaLabel: '次のページ',
+  prevPageLabel: '前へ',
+  nextPageLabel: '次へ',
+  formatPageSizeOption: (n: number) => `${n} 件`,
+  formatRangeLabel: (start: number, end: number, total: number) =>
+    total === 0 ? '0 件' : `${start}-${end} / ${total} 件`,
 })
 
 const emit = defineEmits<DadsTableControlEmits>()
@@ -75,10 +87,9 @@ const rangeEnd = computed(() => {
   return Math.min(props.totalItems, props.currentPage * props.pageSize)
 })
 
-const statusText = computed(() => {
-  if (props.totalItems === 0) return '0 件'
-  return `${rangeStart.value}-${rangeEnd.value} / ${props.totalItems} 件`
-})
+const statusText = computed(() =>
+  props.formatRangeLabel(rangeStart.value, rangeEnd.value, props.totalItems),
+)
 
 const onPresetClick = (preset: DadsTableControlPreset) => {
   emit('update:search', preset.query)
@@ -93,11 +104,11 @@ const onReset = () => {
 </script>
 
 <template>
-  <div class="dads-table-control" role="group" aria-label="テーブルコントロール">
+  <div class="dads-table-control" role="group" :aria-label="ariaLabel">
     <!-- Top row: search + page-size selector. -->
     <div v-if="showSearch || showPageSize" class="dads-table-control__top">
       <div v-if="showSearch" class="dads-table-control__search">
-        <label :for="searchId" class="dads-table-control__label">検索</label>
+        <label :for="searchId" class="dads-table-control__label">{{ searchLabel }}</label>
         <div class="dads-table-control__search-control">
           <i class="mdi mdi-magnify dads-table-control__search-icon" aria-hidden="true" />
           <input
@@ -134,14 +145,16 @@ const onReset = () => {
       </div>
 
       <div v-if="showPageSize" class="dads-table-control__page-size">
-        <label :for="pageSizeId" class="dads-table-control__label">表示件数</label>
+        <label :for="pageSizeId" class="dads-table-control__label">{{ pageSizeLabel }}</label>
         <select
           :id="pageSizeId"
           class="dads-table-control__page-size-select"
           :value="pageSize"
           @change="onPageSizeChange"
         >
-          <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">{{ opt }} 件</option>
+          <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">{{
+            formatPageSizeOption(opt)
+          }}</option>
         </select>
       </div>
     </div>
@@ -151,28 +164,28 @@ const onReset = () => {
       <span :id="statusId" class="dads-table-control__status" aria-live="polite">
         {{ statusText }}
       </span>
-      <div class="dads-table-control__buttons" role="navigation" aria-label="ページ送り">
+      <div class="dads-table-control__buttons" role="navigation" :aria-label="paginationAriaLabel">
         <button
           type="button"
           class="dads-table-control__button dads-table-control__button--prev"
           :disabled="isFirstPage"
-          aria-label="前のページ"
+          :aria-label="prevPageAriaLabel"
           @click="goToPrev"
         >
           <i class="mdi mdi-chevron-left" aria-hidden="true" />
-          前へ
+          {{ prevPageLabel }}
         </button>
-        <span class="dads-table-control__page-indicator" aria-label="現在のページ">
+        <span class="dads-table-control__page-indicator" :aria-label="currentPageAriaLabel">
           {{ currentPage }} / {{ totalPages }}
         </span>
         <button
           type="button"
           class="dads-table-control__button dads-table-control__button--next"
           :disabled="isLastPage"
-          aria-label="次のページ"
+          :aria-label="nextPageAriaLabel"
           @click="goToNext"
         >
-          次へ
+          {{ nextPageLabel }}
           <i class="mdi mdi-chevron-right" aria-hidden="true" />
         </button>
       </div>

@@ -136,6 +136,37 @@ describe('DadsColorPicker', () => {
     })
   })
 
+  describe('i18n overrides', () => {
+    it('overrides the fallback aria-label via defaultAriaLabel', () => {
+      const wrapper = mount(DadsColorPicker, {
+        props: { modelValue: '#000000', defaultAriaLabel: 'Choose color' },
+      })
+      const colorInput = wrapper.find('input[type="color"]')
+      expect(colorInput.attributes('aria-label')).toBe('Choose color')
+    })
+
+    it('overrides the HEX input aria-label via hexInputAriaLabel', () => {
+      const wrapper = mount(DadsColorPicker, {
+        props: { modelValue: '#000000', hexInputAriaLabel: 'HEX color code' },
+      })
+      const hexInput = wrapper.find('input[type="text"]')
+      expect(hexInput.attributes('aria-label')).toBe('HEX color code')
+    })
+
+    it('overrides swatch aria-labels via formatSwatchAriaLabel', () => {
+      const wrapper = mount(DadsColorPicker, {
+        props: {
+          modelValue: '#000000',
+          swatches: ['#ff0000', '#00ff00'],
+          formatSwatchAriaLabel: (s) => `Select ${s}`,
+        },
+      })
+      const swatches = wrapper.findAll('.dads-color-picker__swatch')
+      expect(swatches[0]?.attributes('aria-label')).toBe('Select #ff0000')
+      expect(swatches[1]?.attributes('aria-label')).toBe('Select #00ff00')
+    })
+  })
+
   describe('a11y (vitest-axe)', () => {
     const mountInBody = (
       props: Partial<{

@@ -13,6 +13,8 @@ const props = withDefaults(defineProps<DadsFileUploadProps>(), {
   dropzoneText: 'またはここにファイルをドロップ',
   expandDropArea: false,
   showFileSize: true,
+  requiredLabel: '必須',
+  formatRemoveLabel: (name: string) => `${name} を削除`,
 })
 
 const emit = defineEmits<DadsFileUploadEmits>()
@@ -184,7 +186,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   <div :class="rootClasses">
     <label v-if="label" :for="inputId" class="dads-file-upload__label">
       {{ label }}
-      <span v-if="required" class="dads-file-upload__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-file-upload__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div
@@ -228,7 +232,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         <button
           type="button"
           class="dads-file-upload__remove"
-          :aria-label="`${file.name} を削除`"
+          :aria-label="formatRemoveLabel(file.name)"
           :disabled="isLocked"
           @click="removeFile(file)"
         >

@@ -35,6 +35,11 @@ export interface DadsCheckboxGroupProps {
   /** Native `id` of the fieldset. When omitted, an id is generated so the
    *  hint / error references stay in sync. */
   id?: string
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsCheckboxGroupEmits {

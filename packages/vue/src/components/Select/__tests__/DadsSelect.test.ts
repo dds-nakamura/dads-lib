@@ -358,6 +358,20 @@ describe('DadsSelect', () => {
       const wrapper = createWrapper({ required: true })
       expect(wrapper.find('button').attributes('aria-required')).toBe('true')
     })
+
+    it('renders the default 必須 label when required is true', () => {
+      const wrapper = createWrapper({ label: '果物', required: true })
+      expect(wrapper.find('.dads-select__required').text()).toBe('必須')
+    })
+
+    it('renders a custom requiredLabel when provided (i18n override)', () => {
+      const wrapper = createWrapper({
+        label: '果物',
+        required: true,
+        requiredLabel: 'Required',
+      })
+      expect(wrapper.find('.dads-select__required').text()).toBe('Required')
+    })
   })
 
   describe('disabled', () => {
@@ -546,6 +560,29 @@ describe('DadsSelect', () => {
       const wrapper = createWrapper({ multiple: true, modelValue: ['a', 'c'], chips: false })
       expect(wrapper.findAll('.dads-select__tag')).toHaveLength(0)
       expect(wrapper.find('.dads-select__value').text()).toBe('Apple, Cherry')
+    })
+  })
+
+  describe('i18n overrides (chip remove label)', () => {
+    it('uses the default Japanese remove aria-label on chip × buttons', () => {
+      const wrapper = createWrapper({
+        multiple: true,
+        modelValue: ['a', 'c'],
+      })
+      const removeButtons = wrapper.findAll('.dads-select__tag-remove')
+      expect(removeButtons[0]?.attributes('aria-label')).toBe('Apple を削除')
+      expect(removeButtons[1]?.attributes('aria-label')).toBe('Cherry を削除')
+    })
+
+    it('overrides the chip remove aria-label via formatRemoveAriaLabel', () => {
+      const wrapper = createWrapper({
+        multiple: true,
+        modelValue: ['a', 'c'],
+        formatRemoveAriaLabel: (title: string) => `Remove ${title}`,
+      })
+      const removeButtons = wrapper.findAll('.dads-select__tag-remove')
+      expect(removeButtons[0]?.attributes('aria-label')).toBe('Remove Apple')
+      expect(removeButtons[1]?.attributes('aria-label')).toBe('Remove Cherry')
     })
   })
 

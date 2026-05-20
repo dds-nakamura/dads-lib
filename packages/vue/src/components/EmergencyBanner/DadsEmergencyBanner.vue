@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<DadsEmergencyBannerProps>(), {
   iconName: 'mdi-alert',
   ariaLabel: '緊急情報',
   linkExternal: false,
+  newTabHintText: '（新規タブで開く）',
 })
 
 const emit = defineEmits<DadsEmergencyBannerEmits>()
@@ -79,7 +80,7 @@ const onClose = () => {
             aria-hidden="true"
           />
           <span v-if="linkExternal" class="dads-emergency-banner__sr-only">
-            （新規タブで開く）
+            {{ newTabHintText }}
           </span>
         </a>
       </div>

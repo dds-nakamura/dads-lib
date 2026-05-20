@@ -44,6 +44,11 @@ export interface DadsTextareaProps {
   /** Maximum row count when `autoResize` is on. When omitted, the height
    *  grows without an upper bound. */
   maxRows?: number
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsTextareaEmits {

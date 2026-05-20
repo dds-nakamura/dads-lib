@@ -7,6 +7,7 @@ const props = withDefaults(defineProps<DadsRadioProps>(), {
   disabled: false,
   required: false,
   error: false,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsRadioEmits>()
@@ -81,7 +82,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       <span v-if="label || required || description" class="dads-radio__text">
         <span class="dads-radio__title">
           <template v-if="label">{{ label }}</template>
-          <span v-if="required" class="dads-radio__required" aria-hidden="true">必須</span>
+          <span v-if="required" class="dads-radio__required" aria-hidden="true">{{
+            requiredLabel
+          }}</span>
         </span>
         <span v-if="description" :id="descriptionId" class="dads-radio__description">{{
           description
