@@ -75,8 +75,8 @@ npm install "git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git#vue-
   {
     "dependencies": {
       "@dads/vue": "git+https://github.com/dds-nakamura/dads-lib.git#vue-v0.1.0",
-      "@digital-go-jp/design-tokens": "^1.1.0"
-    }
+      "@digital-go-jp/design-tokens": "^1.1.0",
+    },
   }
   ```
   バージョンアップは tag 部分を書き換えて `npm install` するだけ。

@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<DadsCheckboxGroupProps>(), {
   required: false,
   error: false,
   disabled: false,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsCheckboxGroupEmits>()
@@ -75,7 +76,9 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
   >
     <legend v-if="legend" class="dads-checkbox-group__legend">
       {{ legend }}
-      <span v-if="required" class="dads-checkbox-group__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-checkbox-group__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </legend>
     <div class="dads-checkbox-group__items">
       <DadsCheckbox

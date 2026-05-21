@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<DadsHeaderContainerProps>(), {
   sticky: true,
   showMenuToggle: true,
   menuToggleLabel: 'メニューを開く',
+  navAriaLabel: 'メインナビゲーション',
   variant: 'wide-full',
 })
 
@@ -52,7 +53,7 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
           </component>
         </slot>
       </div>
-      <nav v-if="$slots.nav" class="dads-header-container__nav" aria-label="メインナビゲーション">
+      <nav v-if="$slots.nav" class="dads-header-container__nav" :aria-label="navAriaLabel">
         <slot name="nav" />
       </nav>
       <div v-if="$slots.utility" class="dads-header-container__utility">

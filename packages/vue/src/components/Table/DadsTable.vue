@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<DadsTableProps>(), {
   loading: false,
   skeletonRowCount: 3,
   skeletonColumnCount: 4,
+  loadingLabel: '読み込み中',
 })
 
 const skeletonRows = computed(() => Array.from({ length: props.skeletonRowCount }, (_, i) => i))
@@ -44,7 +45,7 @@ const rootClasses = computed(() => [
         <tr v-for="row in skeletonRows" :key="row" class="dads-table__skeleton-row">
           <td v-for="col in skeletonCols" :key="col" class="dads-table__skeleton-cell">
             <span class="dads-table__skeleton-bar" aria-hidden="true" />
-            <span class="dads-table__sr-only">読み込み中</span>
+            <span class="dads-table__sr-only">{{ loadingLabel }}</span>
           </td>
         </tr>
       </tbody>

@@ -8,6 +8,7 @@ import type {
 
 const props = withDefaults(defineProps<DadsUtilityLinkProps>(), {
   ariaLabel: 'ユーティリティリンク',
+  newTabAriaLabel: '新規タブで開きます',
 })
 
 const emit = defineEmits<DadsUtilityLinkEmits>()
@@ -66,7 +67,7 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
           viewBox="0 0 48 48"
           fill="currentcolor"
           role="img"
-          aria-label="新規タブで開きます"
+          :aria-label="newTabAriaLabel"
         >
           <path d="M22 6V9H9V39H39V26H42V42H6V6H22ZM42 6V20H39V11.2L21 29L19 27L36.8 9H28V6H42Z" />
         </svg>
@@ -97,7 +98,7 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
       viewBox="0 0 48 48"
       fill="currentcolor"
       role="img"
-      aria-label="新規タブで開きます"
+      :aria-label="newTabAriaLabel"
     >
       <path d="M22 6V9H9V39H39V26H42V42H6V6H22ZM42 6V20H39V11.2L21 29L19 27L36.8 9H28V6H42Z" />
     </svg>

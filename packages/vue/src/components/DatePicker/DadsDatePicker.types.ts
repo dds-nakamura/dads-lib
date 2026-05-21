@@ -66,6 +66,20 @@ export interface DadsDatePickerProps {
   variant?: DadsDatePickerVariant
   /** Calendar locale display. Default `'gregorian'`. */
   locale?: DadsDatePickerLocale
+  /** Label text for the required badge. Default `'必須'`. */
+  requiredLabel?: string
+  /** Visible label for the year field. Default `'年'`. */
+  yearLabel?: string
+  /** Visible label for the month field. Default `'月'`. */
+  monthLabel?: string
+  /** Visible label for the day field. Default `'日'`. */
+  dayLabel?: string
+  /** ARIA label for the calendar toggle button. Default `'カレンダーを開く'`. */
+  openCalendarAriaLabel?: string
+  /** ARIA label for the previous-month navigation button. Default `'前の月'`. */
+  prevMonthAriaLabel?: string
+  /** ARIA label for the next-month navigation button. Default `'次の月'`. */
+  nextMonthAriaLabel?: string
 }
 
 export interface DadsDatePickerEmits {

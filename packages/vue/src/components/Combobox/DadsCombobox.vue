@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<DadsComboboxProps>(), {
   readonly: false,
   required: false,
   error: false,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsComboboxEmits>()
@@ -325,7 +326,9 @@ watch(
   <div ref="rootRef" :class="rootClasses">
     <label v-if="label" :for="inputId" class="dads-combobox__label">
       {{ label }}
-      <span v-if="required" class="dads-combobox__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-combobox__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div class="dads-combobox__control" @mousedown="onControlMousedown">

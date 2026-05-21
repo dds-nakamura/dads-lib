@@ -11,6 +11,13 @@ const props = withDefaults(defineProps<DadsDatePickerProps>(), {
   error: false,
   variant: 'consolidated',
   locale: 'gregorian',
+  requiredLabel: '必須',
+  yearLabel: '年',
+  monthLabel: '月',
+  dayLabel: '日',
+  openCalendarAriaLabel: 'カレンダーを開く',
+  prevMonthAriaLabel: '前の月',
+  nextMonthAriaLabel: '次の月',
 })
 
 /**
@@ -334,7 +341,7 @@ const isNextMonthAvailable = computed(() => {
   return isWithinRange(nextYear, nextMonth, 1)
 })
 
-const monthLabel = computed(() => {
+const displayMonthLabel = computed(() => {
   const date = new Date(displayYear.value, displayMonth.value - 1, 1)
   return new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long' }).format(date)
 })
@@ -412,7 +419,9 @@ const warekiHint = computed(() => {
   <div :class="rootClasses">
     <label v-if="label" :for="yearId" class="dads-date-picker__label-text">
       {{ label }}
-      <span v-if="required" class="dads-date-picker__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-date-picker__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div class="dads-date-picker__controls" :data-size="size">
@@ -423,7 +432,7 @@ const warekiHint = computed(() => {
         :data-readonly="readonly || undefined"
       >
         <label class="dads-date-picker__year">
-          <span class="dads-date-picker__label">年</span>
+          <span class="dads-date-picker__label">{{ yearLabel }}</span>
           <input
             :id="yearId"
             ref="yearInputRef"
@@ -450,7 +459,7 @@ const warekiHint = computed(() => {
           </span>
         </label>
         <label class="dads-date-picker__month">
-          <span class="dads-date-picker__label">月</span>
+          <span class="dads-date-picker__label">{{ monthLabel }}</span>
           <input
             :id="monthId"
             ref="monthInputRef"
@@ -472,7 +481,7 @@ const warekiHint = computed(() => {
           />
         </label>
         <label class="dads-date-picker__day">
-          <span class="dads-date-picker__label">日</span>
+          <span class="dads-date-picker__label">{{ dayLabel }}</span>
           <input
             :id="dayId"
             ref="dayInputRef"
@@ -502,7 +511,7 @@ const warekiHint = computed(() => {
         :aria-expanded="isOpen"
         :aria-controls="popoverId"
         aria-haspopup="dialog"
-        aria-label="カレンダーを開く"
+        :aria-label="openCalendarAriaLabel"
         :disabled="disabled || readonly || undefined"
         data-js-calendar-button
         @click="toggleCalendar"
@@ -517,7 +526,7 @@ const warekiHint = computed(() => {
         ref="popoverRef"
         class="dads-date-picker__calendar-popover"
         role="dialog"
-        :aria-label="monthLabel"
+        :aria-label="displayMonthLabel"
         @keydown="onPopoverKeydown"
       >
         <div class="dads-date-picker__calendar-header">
@@ -525,25 +534,25 @@ const warekiHint = computed(() => {
             type="button"
             class="dads-date-picker__nav-button"
             :disabled="!isPrevMonthAvailable || undefined"
-            aria-label="前の月"
+            :aria-label="prevMonthAriaLabel"
             @click="navigateMonth(-1)"
           >
             <i class="mdi mdi-chevron-left" aria-hidden="true" />
           </button>
           <span class="dads-date-picker__current-month" aria-live="polite">
-            {{ monthLabel }}
+            {{ displayMonthLabel }}
           </span>
           <button
             type="button"
             class="dads-date-picker__nav-button"
             :disabled="!isNextMonthAvailable || undefined"
-            aria-label="次の月"
+            :aria-label="nextMonthAriaLabel"
             @click="navigateMonth(1)"
           >
             <i class="mdi mdi-chevron-right" aria-hidden="true" />
           </button>
         </div>
-        <table class="dads-date-picker__calendar-table" role="grid" :aria-label="monthLabel">
+        <table class="dads-date-picker__calendar-table" role="grid" :aria-label="displayMonthLabel">
           <thead>
             <tr>
               <th v-for="w in weekdayLabels" :key="w" scope="col" class="dads-date-picker__weekday">

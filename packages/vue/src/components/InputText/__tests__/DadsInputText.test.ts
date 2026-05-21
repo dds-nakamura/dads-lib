@@ -115,6 +115,20 @@ describe('DadsInputText', () => {
       const wrapper = createWrapper({ required: true })
       expect(wrapper.find('input').attributes('aria-required')).toBe('true')
     })
+
+    it('renders the default 必須 label when required is true', () => {
+      const wrapper = createWrapper({ label: 'Name', required: true })
+      expect(wrapper.find('.dads-input-text__required').text()).toBe('必須')
+    })
+
+    it('renders a custom requiredLabel when provided (i18n override)', () => {
+      const wrapper = createWrapper({
+        label: 'Name',
+        required: true,
+        requiredLabel: 'Required',
+      })
+      expect(wrapper.find('.dads-input-text__required').text()).toBe('Required')
+    })
   })
 
   describe('disabled', () => {

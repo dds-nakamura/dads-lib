@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<DadsScrollTopButtonProps>(), {
   ariaLabel: 'ページの先頭へ戻る',
   position: 'bottom-right',
   disabled: false,
+  defaultLabel: 'トップへ',
 })
 
 const emit = defineEmits<DadsScrollTopButtonEmits>()
@@ -94,7 +95,7 @@ onBeforeUnmount(() => {
       </svg>
     </span>
     <span class="dads-scroll-top-button__label">
-      <slot>トップへ</slot>
+      <slot>{{ defaultLabel }}</slot>
     </span>
   </button>
 </template>

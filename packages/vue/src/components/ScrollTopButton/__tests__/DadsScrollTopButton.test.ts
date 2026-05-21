@@ -190,6 +190,22 @@ describe('DadsScrollTopButton', () => {
     })
   })
 
+  describe('i18n overrides (defaultLabel)', () => {
+    it('renders the overridden defaultLabel as slot fallback', () => {
+      const wrapper = createWrapper({ defaultLabel: 'Back to top' })
+      expect(wrapper.find('.dads-scroll-top-button__label').text()).toBe('Back to top')
+    })
+
+    it('still prefers the explicit default slot over defaultLabel', () => {
+      const wrapper = mount(DadsScrollTopButton, {
+        props: { defaultLabel: 'Back to top' },
+        slots: { default: () => 'Slot wins' },
+        attachTo: document.body,
+      })
+      expect(wrapper.find('.dads-scroll-top-button__label').text()).toBe('Slot wins')
+    })
+  })
+
   describe('a11y (vitest-axe)', () => {
     it('has no violations with the default Japanese aria-label', async () => {
       const wrapper = createWrapper()

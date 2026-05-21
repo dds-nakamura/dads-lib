@@ -476,6 +476,50 @@ describe('DadsCarousel', () => {
     })
   })
 
+  // ----------------------------------------------------------------------
+  // i18n — aria-label プロップの上書き (default: Japanese, override: English)
+  // ----------------------------------------------------------------------
+  describe('i18n aria-label overrides', () => {
+    it('uses default Japanese aria-labels for prev/next arrows and indicators', () => {
+      const wrapper = createWrapper({ itemCount: 3 })
+      expect(wrapper.find('.dads-carousel__arrow--prev').attributes('aria-label')).toBe(
+        '前のスライド',
+      )
+      expect(wrapper.find('.dads-carousel__arrow--next').attributes('aria-label')).toBe(
+        '次のスライド',
+      )
+      expect(wrapper.find('.dads-carousel__indicators').attributes('aria-label')).toBe(
+        'スライド位置',
+      )
+      const inds = wrapper.findAll('.dads-carousel__indicator')
+      expect(inds[0].attributes('aria-label')).toBe('スライド 1')
+      expect(inds[2].attributes('aria-label')).toBe('スライド 3')
+    })
+
+    it('allows overriding all aria-label props with English strings', () => {
+      const wrapper = createWrapper({
+        itemCount: 3,
+        prevSlideAriaLabel: 'Previous slide',
+        nextSlideAriaLabel: 'Next slide',
+        slidePositionAriaLabel: 'Slide position',
+        formatSlideAriaLabel: (i: number) => `Slide ${i + 1}`,
+      })
+      expect(wrapper.find('.dads-carousel__arrow--prev').attributes('aria-label')).toBe(
+        'Previous slide',
+      )
+      expect(wrapper.find('.dads-carousel__arrow--next').attributes('aria-label')).toBe(
+        'Next slide',
+      )
+      expect(wrapper.find('.dads-carousel__indicators').attributes('aria-label')).toBe(
+        'Slide position',
+      )
+      const inds = wrapper.findAll('.dads-carousel__indicator')
+      expect(inds[0].attributes('aria-label')).toBe('Slide 1')
+      expect(inds[1].attributes('aria-label')).toBe('Slide 2')
+      expect(inds[2].attributes('aria-label')).toBe('Slide 3')
+    })
+  })
+
   describe('a11y (vitest-axe)', () => {
     const slideRenderer = ({ index }: { index: number }) => h('p', `Slide ${index + 1}`)
 
@@ -485,10 +529,7 @@ describe('DadsCarousel', () => {
     })
 
     it('has no violations with custom aria-label', async () => {
-      const wrapper = createWrapper(
-        { ariaLabel: '主要なお知らせ' },
-        { default: slideRenderer },
-      )
+      const wrapper = createWrapper({ ariaLabel: '主要なお知らせ' }, { default: slideRenderer })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 

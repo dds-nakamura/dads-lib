@@ -226,6 +226,92 @@ describe('DadsTableControl', () => {
     })
   })
 
+  describe('i18n label overrides', () => {
+    it('uses the default Japanese labels when no override props are given', () => {
+      const wrapper = createWrapper({ currentPage: 2, pageSize: 10, totalItems: 50 })
+      expect(wrapper.find('.dads-table-control').attributes('aria-label')).toBe(
+        'テーブルコントロール',
+      )
+      const labels = wrapper.findAll('.dads-table-control__label')
+      expect(labels[0].text()).toBe('検索')
+      expect(labels[1].text()).toBe('表示件数')
+      expect(wrapper.find('.dads-table-control__buttons').attributes('aria-label')).toBe(
+        'ページ送り',
+      )
+      expect(wrapper.find('.dads-table-control__button--prev').attributes('aria-label')).toBe(
+        '前のページ',
+      )
+      expect(wrapper.find('.dads-table-control__page-indicator').attributes('aria-label')).toBe(
+        '現在のページ',
+      )
+      expect(wrapper.find('.dads-table-control__button--next').attributes('aria-label')).toBe(
+        '次のページ',
+      )
+    })
+
+    it('renders English overrides for every label prop', () => {
+      const wrapper = createWrapper({
+        currentPage: 2,
+        pageSize: 10,
+        totalItems: 50,
+        ariaLabel: 'Table controls',
+        searchLabel: 'Search',
+        pageSizeLabel: 'Rows per page',
+        paginationAriaLabel: 'Pagination',
+        prevPageAriaLabel: 'Previous page',
+        currentPageAriaLabel: 'Current page',
+        nextPageAriaLabel: 'Next page',
+      })
+      expect(wrapper.find('.dads-table-control').attributes('aria-label')).toBe('Table controls')
+      const labels = wrapper.findAll('.dads-table-control__label')
+      expect(labels[0].text()).toBe('Search')
+      expect(labels[1].text()).toBe('Rows per page')
+      expect(wrapper.find('.dads-table-control__buttons').attributes('aria-label')).toBe(
+        'Pagination',
+      )
+      expect(wrapper.find('.dads-table-control__button--prev').attributes('aria-label')).toBe(
+        'Previous page',
+      )
+      expect(wrapper.find('.dads-table-control__page-indicator').attributes('aria-label')).toBe(
+        'Current page',
+      )
+      expect(wrapper.find('.dads-table-control__button--next').attributes('aria-label')).toBe(
+        'Next page',
+      )
+    })
+
+    it('uses default Japanese button text and range/page-size formatters', () => {
+      const wrapper = createWrapper({ currentPage: 2, pageSize: 10, totalItems: 50 })
+      expect(wrapper.find('.dads-table-control__button--prev').text()).toBe('前へ')
+      expect(wrapper.find('.dads-table-control__button--next').text()).toBe('次へ')
+      const options = wrapper.findAll('.dads-table-control__page-size-select option')
+      expect(options[0].text()).toBe('10 件')
+      expect(wrapper.find('.dads-table-control__status').text()).toBe('11-20 / 50 件')
+    })
+
+    it('honors English overrides for button labels and formatters', () => {
+      const wrapper = createWrapper({
+        currentPage: 2,
+        pageSize: 10,
+        totalItems: 50,
+        prevPageLabel: 'Prev',
+        nextPageLabel: 'Next',
+        formatPageSizeOption: (n) => `${n} items`,
+        formatRangeLabel: (s, e, t) => (t === 0 ? '0 items' : `${s}-${e} of ${t}`),
+      })
+      expect(wrapper.find('.dads-table-control__button--prev').text()).toBe('Prev')
+      expect(wrapper.find('.dads-table-control__button--next').text()).toBe('Next')
+      const options = wrapper.findAll('.dads-table-control__page-size-select option')
+      expect(options[0].text()).toBe('10 items')
+      expect(wrapper.find('.dads-table-control__status').text()).toBe('11-20 of 50')
+    })
+
+    it('returns the empty-state formatter output when totalItems is 0', () => {
+      const wrapper = createWrapper({ totalItems: 0 })
+      expect(wrapper.find('.dads-table-control__status').text()).toBe('0 件')
+    })
+  })
+
   describe('presets', () => {
     it('renders nothing when presets is empty (default)', () => {
       const wrapper = createWrapper()

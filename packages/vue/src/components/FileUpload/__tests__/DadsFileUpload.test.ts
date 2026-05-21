@@ -124,6 +124,37 @@ describe('DadsFileUpload', () => {
       const wrapper = createWrapper({ required: true })
       expect(wrapper.find('input[type="file"]').attributes('aria-required')).toBe('true')
     })
+
+    it('renders the default 必須 label when required is true', () => {
+      const wrapper = createWrapper({ label: 'CSV', required: true })
+      expect(wrapper.find('.dads-file-upload__required').text()).toBe('必須')
+    })
+
+    it('renders a custom requiredLabel when provided (i18n override)', () => {
+      const wrapper = createWrapper({
+        label: 'CSV',
+        required: true,
+        requiredLabel: 'Required',
+      })
+      expect(wrapper.find('.dads-file-upload__required').text()).toBe('Required')
+    })
+  })
+
+  describe('formatRemoveLabel (i18n)', () => {
+    it('uses the default `${name} を削除` aria-label on the remove button', () => {
+      const wrapper = createWrapper({ modelValue: makeFile('only.txt', 10) })
+      const removeBtn = wrapper.find('.dads-file-upload__remove')
+      expect(removeBtn.attributes('aria-label')).toBe('only.txt を削除')
+    })
+
+    it('applies a custom formatRemoveLabel for i18n', () => {
+      const wrapper = createWrapper({
+        modelValue: makeFile('only.txt', 10),
+        formatRemoveLabel: (name: string) => `Remove ${name}`,
+      })
+      const removeBtn = wrapper.find('.dads-file-upload__remove')
+      expect(removeBtn.attributes('aria-label')).toBe('Remove only.txt')
+    })
   })
 
   describe('disabled', () => {

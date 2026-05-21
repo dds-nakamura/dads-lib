@@ -247,11 +247,11 @@ pnpm vendor:status -- --quiet     # drift 時のみ出力 (CI 用)
 
 ### 何を比較するか
 
-| カテゴリ                       | 比較対象                                                            | drift 判定                                                |
-| ------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------------- |
-| GitHub vendor 3 件             | `VENDORED.md` の上流バージョン ↔ `<dir>/package.json` の `version`  | 一致しなければ ✗ err                                      |
-| サイト snapshot (md / html)    | `VENDORED.md` の抽出日 ↔ 実ファイル最新 mtime                       | 3 日以上の差で ⚠ warn (ローカル編集など)                  |
-| Figma snapshot (manifest × 2)  | `VENDORED.md` の `fileKey` / `exportedAt` ↔ 実 manifest.json の値   | `fileKey` 不一致で ✗ err / `exportedAt` 1 日超ズレで ⚠    |
+| カテゴリ                      | 比較対象                                                           | drift 判定                                             |
+| ----------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
+| GitHub vendor 3 件            | `VENDORED.md` の上流バージョン ↔ `<dir>/package.json` の `version` | 一致しなければ ✗ err                                   |
+| サイト snapshot (md / html)   | `VENDORED.md` の抽出日 ↔ 実ファイル最新 mtime                      | 3 日以上の差で ⚠ warn (ローカル編集など)               |
+| Figma snapshot (manifest × 2) | `VENDORED.md` の `fileKey` / `exportedAt` ↔ 実 manifest.json の値  | `fileKey` 不一致で ✗ err / `exportedAt` 1 日超ズレで ⚠ |
 
 ### Exit code
 
@@ -263,7 +263,7 @@ pnpm vendor:status -- --quiet     # drift 時のみ出力 (CI 用)
 
 `VENDORED.md` のテーブル行を正規表現で抽出して、
 
-- 1 列目から ``` `<dir>/` ``` パターンでディレクトリ名
+- 1 列目から `` `<dir>/` `` パターンでディレクトリ名
 - セルから `vX.Y.Z` / 7〜40 桁 hex (commit) / `fileKey=...` / `2026-05-16T14:54Z` を取り出して比較
 
 する。`VENDORED.md` のフォーマット変更には弱い (列順を変えると追従が必要) ので、

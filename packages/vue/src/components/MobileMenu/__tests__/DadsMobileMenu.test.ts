@@ -94,6 +94,34 @@ describe('DadsMobileMenu', () => {
       const closeBtn = document.body.querySelector('.dads-mobile-menu__close')
       expect(closeBtn?.getAttribute('aria-label')).toBe('Close menu')
     })
+
+    it('sets the nav aria-label to "メインナビゲーション" by default', () => {
+      createWrapper()
+      const nav = document.body.querySelector('.dads-mobile-menu__nav')
+      expect(nav?.getAttribute('aria-label')).toBe('メインナビゲーション')
+    })
+
+    it('overrides the nav aria-label via navAriaLabel prop (i18n)', () => {
+      createWrapper({ navAriaLabel: 'Main navigation' })
+      const nav = document.body.querySelector('.dads-mobile-menu__nav')
+      expect(nav?.getAttribute('aria-label')).toBe('Main navigation')
+    })
+
+    it('sets the utility region aria-label to "補助リンク" by default', () => {
+      createWrapper({ utilityItems })
+      const utilList = document.body.querySelector(
+        '.dads-mobile-menu__utility .dads-utility-link-list',
+      )
+      expect(utilList?.getAttribute('aria-label')).toBe('補助リンク')
+    })
+
+    it('overrides the utility region aria-label via subLinksAriaLabel prop (i18n)', () => {
+      createWrapper({ utilityItems, subLinksAriaLabel: 'Sub links' })
+      const utilList = document.body.querySelector(
+        '.dads-mobile-menu__utility .dads-utility-link-list',
+      )
+      expect(utilList?.getAttribute('aria-label')).toBe('Sub links')
+    })
   })
 
   describe('items rendering', () => {

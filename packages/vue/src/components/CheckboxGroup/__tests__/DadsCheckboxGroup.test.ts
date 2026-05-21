@@ -132,6 +132,20 @@ describe('DadsCheckboxGroup', () => {
       const wrapper = createWrapper({ legend: '果物', required: false })
       expect(wrapper.find('.dads-checkbox-group__required').exists()).toBe(false)
     })
+
+    it('renders the default 必須 label when required is true', () => {
+      const wrapper = createWrapper({ legend: '果物', required: true })
+      expect(wrapper.find('.dads-checkbox-group__required').text()).toBe('必須')
+    })
+
+    it('renders a custom requiredLabel when provided (i18n override)', () => {
+      const wrapper = createWrapper({
+        legend: '果物',
+        required: true,
+        requiredLabel: 'Required',
+      })
+      expect(wrapper.find('.dads-checkbox-group__required').text()).toBe('Required')
+    })
   })
 
   describe('disabled', () => {

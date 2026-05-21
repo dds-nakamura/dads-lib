@@ -19,6 +19,8 @@ const props = withDefaults(defineProps<DadsSelectProps>(), {
   required: false,
   error: false,
   chips: true,
+  formatRemoveAriaLabel: (title: string) => `${title} を削除`,
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsSelectEmits>()
@@ -288,7 +290,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   <div ref="rootRef" :class="rootClasses">
     <label v-if="label" :for="triggerId" class="dads-select__label">
       {{ label }}
-      <span v-if="required" class="dads-select__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-select__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div class="dads-select__control">
@@ -329,7 +333,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
                 <button
                   type="button"
                   class="dads-select__tag-remove"
-                  :aria-label="`${getItemTitle(item)} を削除`"
+                  :aria-label="formatRemoveAriaLabel(getItemTitle(item))"
                   :disabled="disabled || readonly || undefined"
                   @click.stop="removeItem(item)"
                   @keydown.stop

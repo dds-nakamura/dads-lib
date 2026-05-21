@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<DadsSearchBoxProps>(), {
   clearLabel: 'クリア',
   category: '',
   categoryPlaceholder: 'カテゴリ',
+  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsSearchBoxEmits>()
@@ -100,7 +101,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   <div :class="rootClasses">
     <label v-if="label" :for="inputId" class="dads-search-box__label">
       {{ label }}
-      <span v-if="required" class="dads-search-box__required" aria-hidden="true">必須</span>
+      <span v-if="required" class="dads-search-box__required" aria-hidden="true">{{
+        requiredLabel
+      }}</span>
     </label>
 
     <div class="dads-search-box__row">

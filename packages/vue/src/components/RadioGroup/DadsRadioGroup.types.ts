@@ -39,6 +39,11 @@ export interface DadsRadioGroupProps {
    *  generated so multiple groups on the same page do not interfere. */
   name?: string
   id?: string
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsRadioGroupEmits {

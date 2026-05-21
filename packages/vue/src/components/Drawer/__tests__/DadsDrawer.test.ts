@@ -99,6 +99,23 @@ describe('DadsDrawer', () => {
       const closeBtn = document.body.querySelector('.dads-drawer__close')
       expect(closeBtn?.getAttribute('aria-label')).toBe('Close menu')
     })
+
+    it('overrides the fallback aria-label via defaultAriaLabel prop (i18n)', () => {
+      createWrapper({ defaultAriaLabel: 'Navigation' })
+      expect(queryDrawer()?.getAttribute('aria-label')).toBe('Navigation')
+    })
+
+    it('sets the nav aria-label to "ドロワーナビゲーション" by default', () => {
+      createWrapper()
+      const nav = document.body.querySelector('.dads-drawer__nav')
+      expect(nav?.getAttribute('aria-label')).toBe('ドロワーナビゲーション')
+    })
+
+    it('overrides the nav aria-label via navAriaLabel prop (i18n)', () => {
+      createWrapper({ navAriaLabel: 'Drawer navigation' })
+      const nav = document.body.querySelector('.dads-drawer__nav')
+      expect(nav?.getAttribute('aria-label')).toBe('Drawer navigation')
+    })
   })
 
   describe('title', () => {

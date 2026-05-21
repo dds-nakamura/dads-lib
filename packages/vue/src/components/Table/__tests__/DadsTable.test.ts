@@ -266,6 +266,29 @@ describe('DadsTable', () => {
       expect(body.attributes('aria-busy')).toBe('true')
       expect(body.attributes('aria-live')).toBe('polite')
     })
+
+    it('renders the default Japanese loadingLabel inside each skeleton cell', () => {
+      const wrapper = mount(DadsTable, {
+        props: { loading: true, skeletonRowCount: 1, skeletonColumnCount: 1 },
+      })
+      const srOnly = wrapper.find('.dads-table__sr-only')
+      expect(srOnly.exists()).toBe(true)
+      expect(srOnly.text()).toBe('読み込み中')
+    })
+
+    it('honors a custom English loadingLabel prop', () => {
+      const wrapper = mount(DadsTable, {
+        props: {
+          loading: true,
+          skeletonRowCount: 1,
+          skeletonColumnCount: 1,
+          loadingLabel: 'Loading',
+        },
+      })
+      const labels = wrapper.findAll('.dads-table__sr-only')
+      expect(labels.length).toBeGreaterThan(0)
+      labels.forEach((el) => expect(el.text()).toBe('Loading'))
+    })
   })
 
   describe('a11y (vitest-axe)', () => {

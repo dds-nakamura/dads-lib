@@ -155,6 +155,48 @@ describe('DadsDatePicker', () => {
       const wrapper = createWrapper({ placeholder: 'YYYY' })
       expect(wrapper.find('input[data-js-year-input]').attributes('placeholder')).toBe('YYYY')
     })
+
+    // ----------------------------------------------------------------------
+    // i18n — label props override the default Japanese strings without
+    // changing behavior. Defaults remain Japanese so existing consumers
+    // are not affected (verified in other tests above).
+    // ----------------------------------------------------------------------
+    it('renders custom labels in English when label props are overridden', async () => {
+      const wrapper = createWrapper({
+        label: 'Date of birth',
+        required: true,
+        requiredLabel: 'Required',
+        yearLabel: 'Year',
+        monthLabel: 'Month',
+        dayLabel: 'Day',
+        openCalendarAriaLabel: 'Open calendar',
+        prevMonthAriaLabel: 'Previous month',
+        nextMonthAriaLabel: 'Next month',
+      })
+
+      // Required badge
+      expect(wrapper.find('.dads-date-picker__required').text()).toBe('Required')
+
+      // Year / month / day field labels
+      const labels = wrapper.findAll('.dads-date-picker__label').map((n) => n.text())
+      expect(labels).toEqual(['Year', 'Month', 'Day'])
+
+      // Calendar toggle ARIA label
+      expect(wrapper.find('button[data-js-calendar-button]').attributes('aria-label')).toBe(
+        'Open calendar',
+      )
+
+      // Prev / next month navigation ARIA labels (only visible after open)
+      await wrapper.find('button[data-js-calendar-button]').trigger('click')
+      const navButtons = wrapper.findAll('.dads-date-picker__nav-button')
+      expect(navButtons[0].attributes('aria-label')).toBe('Previous month')
+      expect(navButtons[1].attributes('aria-label')).toBe('Next month')
+
+      // The Japanese `必須` badge text must be gone when overridden — the
+      // wareki / display-month header still uses `Intl.DateTimeFormat` so
+      // those are intentionally not checked here.
+      expect(wrapper.find('.dads-date-picker__required').text()).not.toBe('必須')
+    })
   })
 
   // ----------------------------------------------------------------------

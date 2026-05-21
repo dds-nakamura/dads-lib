@@ -243,6 +243,27 @@ describe('DadsEmergencyBanner', () => {
     })
   })
 
+  describe('i18n overrides (newTabHintText)', () => {
+    it('uses the default Japanese new-tab hint text', () => {
+      const wrapper = createWrapper({
+        linkLabel: '詳細',
+        linkHref: 'https://example.gov.jp',
+        linkExternal: true,
+      })
+      expect(wrapper.find('.dads-emergency-banner__sr-only').text()).toBe('（新規タブで開く）')
+    })
+
+    it('overrides the sr-only new-tab hint via newTabHintText', () => {
+      const wrapper = createWrapper({
+        linkLabel: 'Details',
+        linkHref: 'https://example.gov.jp',
+        linkExternal: true,
+        newTabHintText: '(opens in new tab)',
+      })
+      expect(wrapper.find('.dads-emergency-banner__sr-only').text()).toBe('(opens in new tab)')
+    })
+  })
+
   describe('a11y (vitest-axe)', () => {
     const mountInBody = (
       props: Partial<DadsEmergencyBannerProps> = {},

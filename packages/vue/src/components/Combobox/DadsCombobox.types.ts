@@ -60,6 +60,11 @@ export interface DadsComboboxProps {
   error?: boolean
   disabled?: boolean
   readonly?: boolean
+  /**
+   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'必須'`.
+   */
+  requiredLabel?: string
 }
 
 export interface DadsComboboxEmits {

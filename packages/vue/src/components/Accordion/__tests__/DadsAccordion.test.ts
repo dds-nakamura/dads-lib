@@ -371,7 +371,11 @@ describe('DadsAccordion', () => {
     it('has no violations when a single panel is open', async () => {
       const wrapper = createWrapper(
         { modelValue: 'a' },
-        { 'panel-a': '<p>A の内容</p>', 'panel-b': '<p>B の内容</p>', 'panel-c': '<p>C の内容</p>' },
+        {
+          'panel-a': '<p>A の内容</p>',
+          'panel-b': '<p>B の内容</p>',
+          'panel-c': '<p>C の内容</p>',
+        },
       )
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
@@ -379,7 +383,11 @@ describe('DadsAccordion', () => {
     it('has no violations in multiple mode with two panels open', async () => {
       const wrapper = createWrapper(
         { type: 'multiple', modelValue: ['a', 'c'] },
-        { 'panel-a': '<p>A の内容</p>', 'panel-b': '<p>B の内容</p>', 'panel-c': '<p>C の内容</p>' },
+        {
+          'panel-a': '<p>A の内容</p>',
+          'panel-b': '<p>B の内容</p>',
+          'panel-c': '<p>C の内容</p>',
+        },
       )
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })

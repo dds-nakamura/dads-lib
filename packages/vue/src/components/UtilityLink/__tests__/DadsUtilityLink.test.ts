@@ -245,6 +245,28 @@ describe('DadsUtilityLink', () => {
     })
   })
 
+  describe('i18n overrides (newTabAriaLabel)', () => {
+    it('overrides the external tail-icon aria-label in single-link mode', () => {
+      const wrapper = createWrapper({
+        href: 'https://example.com',
+        label: 'External',
+        external: true,
+        newTabAriaLabel: 'Opens in new tab',
+      })
+      const tail = wrapper.find('svg.dads-utility-link__tail-icon')
+      expect(tail.attributes('aria-label')).toBe('Opens in new tab')
+    })
+
+    it('overrides the external tail-icon aria-label in list mode', () => {
+      const wrapper = createWrapper({
+        items: [{ label: 'External', href: 'https://example.com', external: true }],
+        newTabAriaLabel: 'Opens in new tab',
+      })
+      const tail = wrapper.find('svg.dads-utility-link__tail-icon')
+      expect(tail.attributes('aria-label')).toBe('Opens in new tab')
+    })
+  })
+
   describe('a11y (vitest-axe)', () => {
     const mountInBody = (props: Partial<DadsUtilityLinkProps>) =>
       mount(DadsUtilityLink, {

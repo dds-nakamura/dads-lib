@@ -143,6 +143,15 @@ describe('DadsHeaderContainer', () => {
       expect(nav.attributes('aria-label')).toBe('メインナビゲーション')
       expect(nav.find('.link').text()).toBe('Home')
     })
+
+    it('overrides the nav aria-label via navAriaLabel prop (i18n)', () => {
+      const wrapper = createWrapper(
+        { navAriaLabel: 'Main navigation' },
+        { nav: '<a class="link" href="/">Home</a>' },
+      )
+      const nav = wrapper.find('.dads-header-container__nav')
+      expect(nav.attributes('aria-label')).toBe('Main navigation')
+    })
   })
 
   describe('actions slot', () => {
