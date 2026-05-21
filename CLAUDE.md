@@ -215,3 +215,22 @@ dads-lib/
 - GitHub (Design Tokens): <https://github.com/digital-go-jp/design-tokens>
 - npm (Tailwind plugin): <https://www.npmjs.com/package/@digital-go-jp/tailwind-theme-plugin>
 - npm (Design Tokens): <https://www.npmjs.com/package/@digital-go-jp/design-tokens>
+
+## PR Workflow
+
+- Default PR base branch is `development`, NOT `main` (only release PRs target main)
+- Always verify base branch before creating PRs with `gh pr create`
+- After merging, run post-merge cleanup: delete feature branch, close related issues, prune worktrees
+
+## Worktree & Branch Safety
+
+- Before spawning parallel agents in worktrees, ALWAYS fetch latest and rebase from origin/development to avoid base-drift
+- Never commit directly to `development` or `main` — always work on a feature/hotfix branch
+- Verify current branch with `git branch --show-current` before any commit
+
+## Verification
+
+- Use Playwright MCP for visual verification of UI/CSS changes when available
+- If Playwright runtime is missing, fall back to build + unit tests + curl, and explicitly note the limitation
+- Run full test suite before opening PRs
+- Save visual verification screenshots to `screenshots/` (gitignored), never to the repo root
