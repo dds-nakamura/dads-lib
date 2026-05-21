@@ -209,6 +209,7 @@ const items = [
 | `disabled`             | `boolean`                             | `false`      | グループ全体を無効化 (`<fieldset disabled>` 経由)                 |
 | `name`                 | `string`                              | -            | 全 radio に共有する `name`。省略時はユニーク値が自動生成          |
 | `id`                   | `string`                              | -            | `<fieldset>` の `id`。省略時は自動生成                            |
+| `requiredLabel`        | `string`                              | `'必須'`     | 「必須」バッジに表示するテキスト。i18n 用に上書き可能             |
 
 ## Events
 

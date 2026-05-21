@@ -157,13 +157,15 @@ const items = [
 
 ## Props
 
-| Prop         | 型                            | デフォルト | 説明                                                           |
-| ------------ | ----------------------------- | ---------- | -------------------------------------------------------------- |
-| `modelValue` | `boolean`                     | `false`    | 開閉状態 (`v-model` 対応)                                      |
-| `items`      | `DadsDrawerItem[]`            | -          | 表示する項目配列 (必須)                                        |
-| `title`      | `string`                      | -          | ヘッダの見出し。未指定時の `aria-label` フォールバックにもなる |
-| `closeLabel` | `string`                      | `'閉じる'` | 閉じるボタンの `aria-label`                                    |
-| `placement`  | `'left' \| 'right' \| 'full'` | `'left'`   | Drawer 配置パターン                                            |
+| Prop               | 型                            | デフォルト                 | 説明                                                               |
+| ------------------ | ----------------------------- | -------------------------- | ------------------------------------------------------------------ |
+| `modelValue`       | `boolean`                     | `false`                    | 開閉状態 (`v-model` 対応)                                          |
+| `items`            | `DadsDrawerItem[]`            | -                          | 表示する項目配列 (必須)                                            |
+| `title`            | `string`                      | -                          | ヘッダの見出し。未指定時の `aria-label` フォールバックにもなる     |
+| `closeLabel`       | `string`                      | `'閉じる'`                 | 閉じるボタンの `aria-label`                                        |
+| `placement`        | `'left' \| 'right' \| 'full'` | `'left'`                   | Drawer 配置パターン                                                |
+| `defaultAriaLabel` | `string`                      | `'ナビゲーション'`         | `title` 未指定時のフォールバック `aria-label`。i18n 用に上書き可能 |
+| `navAriaLabel`     | `string`                      | `'ドロワーナビゲーション'` | ドロワー内 `<nav>` の `aria-label`。i18n 用に上書き可能            |
 
 ### `DadsDrawerItem`
 

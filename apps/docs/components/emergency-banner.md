@@ -137,17 +137,20 @@ const visible = ref(true)
 
 ## Props
 
-| Prop         | 型        | デフォルト    | 説明                                                        |
-| ------------ | --------- | ------------- | ----------------------------------------------------------- |
-| `modelValue` | `boolean` | `true`        | 表示状態。`v-model` のターゲット                            |
-| `title`      | `string`  | -             | 見出し（「【緊急】」で始まり全角30文字以内推奨）            |
-| `message`    | `string`  | **required**  | 本文。全角100文字程度以内が推奨                             |
-| `linkLabel`  | `string`  | -             | CTA リンクのラベル。`linkHref` とセットで指定               |
-| `linkHref`   | `string`  | -             | CTA リンクの遷移先。`linkLabel` とセットで指定              |
-| `closable`   | `boolean` | `false`       | 閉じるボタンを表示するか。DADS 仕様では本番では推奨されない |
-| `closeLabel` | `string`  | `'閉じる'`    | 閉じるボタンの `aria-label`                                 |
-| `iconName`   | `string`  | `'mdi-alert'` | 見出し横の MDI アイコン。空文字でアイコン非表示             |
-| `ariaLabel`  | `string`  | `'緊急情報'`  | バナールートの `aria-label`                                 |
+| Prop             | 型               | デフォルト             | 説明                                                                                                   |
+| ---------------- | ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| `modelValue`     | `boolean`        | `true`                 | 表示状態。`v-model` のターゲット                                                                       |
+| `title`          | `string`         | -                      | 見出し（「【緊急】」で始まり全角30文字以内推奨）                                                       |
+| `message`        | `string`         | **required**           | 本文。全角100文字程度以内が推奨                                                                        |
+| `linkLabel`      | `string`         | -                      | CTA リンクのラベル。`linkHref` とセットで指定                                                          |
+| `linkHref`       | `string`         | -                      | CTA リンクの遷移先。`linkLabel` とセットで指定                                                         |
+| `closable`       | `boolean`        | `false`                | 閉じるボタンを表示するか。DADS 仕様では本番では推奨されない                                            |
+| `closeLabel`     | `string`         | `'閉じる'`             | 閉じるボタンの `aria-label`                                                                            |
+| `iconName`       | `string`         | `'mdi-alert'`          | 見出し横の MDI アイコン。空文字でアイコン非表示                                                        |
+| `ariaLabel`      | `string`         | `'緊急情報'`           | バナールートの `aria-label`                                                                            |
+| `linkExternal`   | `boolean`        | `false`                | `true` で CTA リンクを新規タブ (`target=_blank` + 安全な `rel`) で開く。可視ラベルに外部アイコンも付与 |
+| `newTabHintText` | `string`         | `'（新規タブで開く）'` | `linkExternal=true` のとき CTA ラベル後に追加するスクリーンリーダ専用ヒント。i18n 用に上書き可能       |
+| `timestamp`      | `string \| Date` | -                      | 見出し上部に表示するタイムスタンプ (ISO 文字列はそのまま使用、`Date` は自動整形)                       |
 
 ## Events
 

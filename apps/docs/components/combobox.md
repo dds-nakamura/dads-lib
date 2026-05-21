@@ -173,25 +173,26 @@ const selected = ref(null)
 
 ## Props
 
-| Prop           | 型                                               | デフォルト | 説明                                             |
-| -------------- | ------------------------------------------------ | ---------- | ------------------------------------------------ |
-| `modelValue`   | `string \| number \| (string\|number)[] \| null` | -          | 選択値。`multiple` 時は配列                      |
-| `items`        | `DadsComboboxItem[]`                             | `[]`       | 候補一覧                                         |
-| `itemValue`    | `string`                                         | `'value'`  | 値として参照する項目のプロパティ名               |
-| `itemTitle`    | `string`                                         | `'title'`  | 表示テキストとして参照する項目のプロパティ名     |
-| `multiple`     | `boolean`                                        | `false`    | 複数選択モード（チップ表示）                     |
-| `filter`       | `(item, query) => boolean`                       | 部分一致   | 既定の絞り込みロジックを差し替える               |
-| `placeholder`  | `string`                                         | -          | 入力欄のプレースホルダー                         |
-| `id`           | `string`                                         | 自動生成   | 入力要素の `id`（ラベルや ARIA 参照に同期）      |
-| `name`         | `string`                                         | -          | フォーム送信時の `name`                          |
-| `size`         | `'lg' \| 'md' \| 'sm'`                           | `'md'`     | サイズ                                           |
-| `label`        | `string`                                         | -          | 上部ラベル                                       |
-| `hint`         | `string`                                         | -          | 補助テキスト（フッター）                         |
-| `errorMessage` | `string`                                         | -          | エラーメッセージ（指定でエラー視覚状態が有効化） |
-| `required`     | `boolean`                                        | `false`    | 必須マークを表示・`aria-required` を付与         |
-| `error`        | `boolean`                                        | `false`    | メッセージなしでエラー視覚状態のみ強制           |
-| `disabled`     | `boolean`                                        | `false`    | 操作不可化                                       |
-| `readonly`     | `boolean`                                        | `false`    | 読み取り専用                                     |
+| Prop            | 型                                               | デフォルト | 説明                                                  |
+| --------------- | ------------------------------------------------ | ---------- | ----------------------------------------------------- |
+| `modelValue`    | `string \| number \| (string\|number)[] \| null` | -          | 選択値。`multiple` 時は配列                           |
+| `items`         | `DadsComboboxItem[]`                             | `[]`       | 候補一覧                                              |
+| `itemValue`     | `string`                                         | `'value'`  | 値として参照する項目のプロパティ名                    |
+| `itemTitle`     | `string`                                         | `'title'`  | 表示テキストとして参照する項目のプロパティ名          |
+| `multiple`      | `boolean`                                        | `false`    | 複数選択モード（チップ表示）                          |
+| `filter`        | `(item, query) => boolean`                       | 部分一致   | 既定の絞り込みロジックを差し替える                    |
+| `placeholder`   | `string`                                         | -          | 入力欄のプレースホルダー                              |
+| `id`            | `string`                                         | 自動生成   | 入力要素の `id`（ラベルや ARIA 参照に同期）           |
+| `name`          | `string`                                         | -          | フォーム送信時の `name`                               |
+| `size`          | `'lg' \| 'md' \| 'sm'`                           | `'md'`     | サイズ                                                |
+| `label`         | `string`                                         | -          | 上部ラベル                                            |
+| `hint`          | `string`                                         | -          | 補助テキスト（フッター）                              |
+| `errorMessage`  | `string`                                         | -          | エラーメッセージ（指定でエラー視覚状態が有効化）      |
+| `required`      | `boolean`                                        | `false`    | 必須マークを表示・`aria-required` を付与              |
+| `error`         | `boolean`                                        | `false`    | メッセージなしでエラー視覚状態のみ強制                |
+| `disabled`      | `boolean`                                        | `false`    | 操作不可化                                            |
+| `readonly`      | `boolean`                                        | `false`    | 読み取り専用                                          |
+| `requiredLabel` | `string`                                         | `'必須'`   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能 |
 
 ## Events
 

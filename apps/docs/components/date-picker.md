@@ -104,24 +104,63 @@ const date = ref('')
   />
 </div>
 
+## i18n / 国際化対応
+
+年・月・日のフィールドラベル、必須バッジ、カレンダー操作ボタンの aria-label をすべてプロップで上書きできる。`<script>` 内の和暦変換ロジックは別途扱う (英語ロケールでも JST 環境では従来通り動く)。
+
+<div class="demo">
+  <DadsDatePicker
+    label="Date of birth"
+    required
+    required-label="Required"
+    year-label="Year"
+    month-label="Month"
+    day-label="Day"
+    open-calendar-aria-label="Open calendar"
+    prev-month-aria-label="Previous month"
+    next-month-aria-label="Next month"
+  />
+</div>
+
+```vue
+<DadsDatePicker
+  label="Date of birth"
+  required
+  required-label="Required"
+  year-label="Year"
+  month-label="Month"
+  day-label="Day"
+  open-calendar-aria-label="Open calendar"
+  prev-month-aria-label="Previous month"
+  next-month-aria-label="Next month"
+/>
+```
+
 ## Props
 
-| Prop           | 型                     | デフォルト | 説明                                                     |
-| -------------- | ---------------------- | ---------- | -------------------------------------------------------- |
-| `modelValue`   | `string`               | `''`       | `v-model` の値 (`YYYY-MM-DD`)                            |
-| `label`        | `string`               | -          | コントロール上に表示するラベル                           |
-| `hint`         | `string`               | -          | コントロール下に表示する補助テキスト                     |
-| `errorMessage` | `string`               | -          | エラーメッセージ。指定するとエラー視覚状態と aria が有効 |
-| `required`     | `boolean`              | `false`    | 必須バッジを表示し `aria-required` を付与                |
-| `disabled`     | `boolean`              | `false`    | 操作不可化                                               |
-| `readonly`     | `boolean`              | `false`    | 読み取り専用（破線ボーダー）                             |
-| `error`        | `boolean`              | `false`    | メッセージ無しでエラー視覚状態を強制                     |
-| `size`         | `'lg' \| 'md' \| 'sm'` | `'md'`     | サイズ                                                   |
-| `min`          | `string`               | -          | 選択可能な最早日 (`YYYY-MM-DD`)                          |
-| `max`          | `string`               | -          | 選択可能な最遅日 (`YYYY-MM-DD`)                          |
-| `placeholder`  | `string`               | -          | 各入力欄のプレースホルダー                               |
-| `name`         | `string`               | -          | フォーム送信用の `name` 属性                             |
-| `id`           | `string`               | -          | コントロールのベース `id`。未指定時は自動生成            |
+| Prop                    | 型                     | デフォルト           | 説明                                                     |
+| ----------------------- | ---------------------- | -------------------- | -------------------------------------------------------- |
+| `modelValue`            | `string`               | `''`                 | `v-model` の値 (`YYYY-MM-DD`)                            |
+| `label`                 | `string`               | -                    | コントロール上に表示するラベル                           |
+| `hint`                  | `string`               | -                    | コントロール下に表示する補助テキスト                     |
+| `errorMessage`          | `string`               | -                    | エラーメッセージ。指定するとエラー視覚状態と aria が有効 |
+| `required`              | `boolean`              | `false`              | 必須バッジを表示し `aria-required` を付与                |
+| `disabled`              | `boolean`              | `false`              | 操作不可化                                               |
+| `readonly`              | `boolean`              | `false`              | 読み取り専用（破線ボーダー）                             |
+| `error`                 | `boolean`              | `false`              | メッセージ無しでエラー視覚状態を強制                     |
+| `size`                  | `'lg' \| 'md' \| 'sm'` | `'md'`               | サイズ                                                   |
+| `min`                   | `string`               | -                    | 選択可能な最早日 (`YYYY-MM-DD`)                          |
+| `max`                   | `string`               | -                    | 選択可能な最遅日 (`YYYY-MM-DD`)                          |
+| `placeholder`           | `string`               | -                    | 各入力欄のプレースホルダー                               |
+| `name`                  | `string`               | -                    | フォーム送信用の `name` 属性                             |
+| `id`                    | `string`               | -                    | コントロールのベース `id`。未指定時は自動生成            |
+| `requiredLabel`         | `string`               | `'必須'`             | 「必須」バッジに表示するテキスト。i18n 用に上書き可能    |
+| `yearLabel`             | `string`               | `'年'`               | 年フィールドの可視ラベル。i18n 用に上書き可能            |
+| `monthLabel`            | `string`               | `'月'`               | 月フィールドの可視ラベル。i18n 用に上書き可能            |
+| `dayLabel`              | `string`               | `'日'`               | 日フィールドの可視ラベル。i18n 用に上書き可能            |
+| `openCalendarAriaLabel` | `string`               | `'カレンダーを開く'` | カレンダー開閉ボタンの aria-label。i18n 用に上書き可能   |
+| `prevMonthAriaLabel`    | `string`               | `'前の月'`           | 月送り前ボタンの aria-label。i18n 用に上書き可能         |
+| `nextMonthAriaLabel`    | `string`               | `'次の月'`           | 月送り次ボタンの aria-label。i18n 用に上書き可能         |
 
 ## Events
 

@@ -110,21 +110,22 @@ const onSearch = (value) => {
 
 ## Props
 
-| Prop           | 型                     | デフォルト | 説明                                                     |
-| -------------- | ---------------------- | ---------- | -------------------------------------------------------- |
-| `modelValue`   | `string`               | `''`       | `v-model` のクエリ文字列                                 |
-| `placeholder`  | `string`               | -          | プレースホルダー                                         |
-| `label`        | `string`               | -          | input 上に表示するラベル                                 |
-| `hint`         | `string`               | -          | input 下に表示する補助テキスト                           |
-| `errorMessage` | `string`               | -          | エラーメッセージ。指定するとエラー視覚状態と aria が有効 |
-| `required`     | `boolean`              | `false`    | 必須バッジを表示し `aria-required` を付与                |
-| `disabled`     | `boolean`              | `false`    | 操作不可化 (input + 送信ボタン)                          |
-| `readonly`     | `boolean`              | `false`    | input のみ読み取り専用 (破線ボーダー)                    |
-| `error`        | `boolean`              | `false`    | メッセージ無しでエラー視覚状態を強制                     |
-| `size`         | `'lg' \| 'md' \| 'sm'` | `'md'`     | サイズ                                                   |
-| `name`         | `string`               | -          | フォーム送信用の `name` 属性                             |
-| `id`           | `string`               | -          | input の `id`。未指定時は自動生成                        |
-| `buttonLabel`  | `string`               | `'検索'`   | 送信ボタンの文言 (ラベル省略時はアクセシブル名にも流用)  |
+| Prop            | 型                     | デフォルト | 説明                                                     |
+| --------------- | ---------------------- | ---------- | -------------------------------------------------------- |
+| `modelValue`    | `string`               | `''`       | `v-model` のクエリ文字列                                 |
+| `placeholder`   | `string`               | -          | プレースホルダー                                         |
+| `label`         | `string`               | -          | input 上に表示するラベル                                 |
+| `hint`          | `string`               | -          | input 下に表示する補助テキスト                           |
+| `errorMessage`  | `string`               | -          | エラーメッセージ。指定するとエラー視覚状態と aria が有効 |
+| `required`      | `boolean`              | `false`    | 必須バッジを表示し `aria-required` を付与                |
+| `disabled`      | `boolean`              | `false`    | 操作不可化 (input + 送信ボタン)                          |
+| `readonly`      | `boolean`              | `false`    | input のみ読み取り専用 (破線ボーダー)                    |
+| `error`         | `boolean`              | `false`    | メッセージ無しでエラー視覚状態を強制                     |
+| `size`          | `'lg' \| 'md' \| 'sm'` | `'md'`     | サイズ                                                   |
+| `name`          | `string`               | -          | フォーム送信用の `name` 属性                             |
+| `id`            | `string`               | -          | input の `id`。未指定時は自動生成                        |
+| `buttonLabel`   | `string`               | `'検索'`   | 送信ボタンの文言 (ラベル省略時はアクセシブル名にも流用)  |
+| `requiredLabel` | `string`               | `'必須'`   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能    |
 
 ## Events
 

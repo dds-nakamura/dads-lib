@@ -127,25 +127,27 @@ const file = (ref < File) | (null > null)
 
 ## Props
 
-| Prop           | 型                       | デフォルト                         | 説明                                                             |
-| -------------- | ------------------------ | ---------------------------------- | ---------------------------------------------------------------- |
-| `modelValue`   | `File \| File[] \| null` | -                                  | v-model 値。`multiple=true` のとき `File[]`、それ以外は `File`   |
-| `accept`       | `string`                 | -                                  | 受け入れる拡張子 / MIME (例: `.csv,image/*`)。ドロップ時も検証   |
-| `multiple`     | `boolean`                | `false`                            | 複数選択を許可                                                   |
-| `maxSize`      | `number`                 | -                                  | 1 ファイルあたりの最大バイト数。超過時は拒否                     |
-| `size`         | `'lg' \| 'md' \| 'sm'`   | `'md'`                             | サイズ                                                           |
-| `label`        | `string`                 | -                                  | ラベルテキスト                                                   |
-| `hint`         | `string`                 | -                                  | 補助テキスト                                                     |
-| `errorMessage` | `string`                 | -                                  | 呼び出し側のエラー文言（内部検証メッセージが優先）               |
-| `required`     | `boolean`                | `false`                            | 必須マークと `aria-required` を付与                              |
-| `error`        | `boolean`                | `false`                            | メッセージなしでエラー表示を強制                                 |
-| `disabled`     | `boolean`                | `false`                            | 操作不可化                                                       |
-| `readonly`     | `boolean`                | `false`                            | 読み取り専用                                                     |
-| `progress`     | `number`                 | -                                  | アップロード進捗 0–100。指定するとプログレスバー表示             |
-| `name`         | `string`                 | -                                  | ネイティブ `name` 属性                                           |
-| `id`           | `string`                 | 自動生成                           | ネイティブ `id`。省略時は label `for` と aria 参照のため自動生成 |
-| `buttonText`   | `string`                 | `'ファイルを選択'`                 | トリガーボタンのラベル                                           |
-| `dropzoneText` | `string`                 | `'またはここにファイルをドロップ'` | ドロップ領域の補助テキスト                                       |
+| Prop                | 型                         | デフォルト                         | 説明                                                                 |
+| ------------------- | -------------------------- | ---------------------------------- | -------------------------------------------------------------------- |
+| `modelValue`        | `File \| File[] \| null`   | -                                  | v-model 値。`multiple=true` のとき `File[]`、それ以外は `File`       |
+| `accept`            | `string`                   | -                                  | 受け入れる拡張子 / MIME (例: `.csv,image/*`)。ドロップ時も検証       |
+| `multiple`          | `boolean`                  | `false`                            | 複数選択を許可                                                       |
+| `maxSize`           | `number`                   | -                                  | 1 ファイルあたりの最大バイト数。超過時は拒否                         |
+| `size`              | `'lg' \| 'md' \| 'sm'`     | `'md'`                             | サイズ                                                               |
+| `label`             | `string`                   | -                                  | ラベルテキスト                                                       |
+| `hint`              | `string`                   | -                                  | 補助テキスト                                                         |
+| `errorMessage`      | `string`                   | -                                  | 呼び出し側のエラー文言（内部検証メッセージが優先）                   |
+| `required`          | `boolean`                  | `false`                            | 必須マークと `aria-required` を付与                                  |
+| `error`             | `boolean`                  | `false`                            | メッセージなしでエラー表示を強制                                     |
+| `disabled`          | `boolean`                  | `false`                            | 操作不可化                                                           |
+| `readonly`          | `boolean`                  | `false`                            | 読み取り専用                                                         |
+| `progress`          | `number`                   | -                                  | アップロード進捗 0–100。指定するとプログレスバー表示                 |
+| `name`              | `string`                   | -                                  | ネイティブ `name` 属性                                               |
+| `id`                | `string`                   | 自動生成                           | ネイティブ `id`。省略時は label `for` と aria 参照のため自動生成     |
+| `buttonText`        | `string`                   | `'ファイルを選択'`                 | トリガーボタンのラベル                                               |
+| `dropzoneText`      | `string`                   | `'またはここにファイルをドロップ'` | ドロップ領域の補助テキスト                                           |
+| `formatRemoveLabel` | `(name: string) => string` | `` (n) => `${n} を削除` ``         | 各ファイルの × ボタン aria-label のフォーマッタ。i18n 用に上書き可能 |
+| `requiredLabel`     | `string`                   | `'必須'`                           | 「必須」バッジに表示するテキスト。i18n 用に上書き可能                |
 
 ## Events
 

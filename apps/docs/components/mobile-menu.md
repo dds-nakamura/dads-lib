@@ -138,16 +138,18 @@ slide モード:
 
 ## Props
 
-| Prop              | 型                       | デフォルト           | 説明                                                                 |
-| ----------------- | ------------------------ | -------------------- | -------------------------------------------------------------------- |
-| `modelValue`      | `boolean`                | `false`              | 開閉状態 (v-model)                                                   |
-| `items`           | `DadsMobileMenuItem[]`   | -                    | 主ナビゲーション項目 (`DadsMenuListItem` と同形・必須)               |
-| `type`            | `'accordion' \| 'slide'` | `'accordion'`        | メニュー種別 (公式 DADS の 2 主要タイプ)                             |
-| `utilityItems`    | `DadsUtilityLinkItem[]`  | -                    | 補助リンク (ログイン / お問い合わせ等)。指定時のみメニュー下部に描画 |
-| `ariaLabel`       | `string`                 | `'モバイルメニュー'` | ルート要素の `aria-label`                                            |
-| `closeLabel`      | `string`                 | `'閉じる'`           | クローズボタンの `aria-label`                                        |
-| `backLabel`       | `string`                 | `'戻る'`             | 戻るボタンの `aria-label` / 表示テキスト (`type='slide'` のみ使用)   |
-| `showCloseButton` | `boolean`                | `true`               | クローズボタンの表示。`false` 時は Header 側で開閉制御する想定       |
+| Prop                | 型                       | デフォルト               | 説明                                                                        |
+| ------------------- | ------------------------ | ------------------------ | --------------------------------------------------------------------------- |
+| `modelValue`        | `boolean`                | `false`                  | 開閉状態 (v-model)                                                          |
+| `items`             | `DadsMobileMenuItem[]`   | -                        | 主ナビゲーション項目 (`DadsMenuListItem` と同形・必須)                      |
+| `type`              | `'accordion' \| 'slide'` | `'accordion'`            | メニュー種別 (公式 DADS の 2 主要タイプ)                                    |
+| `utilityItems`      | `DadsUtilityLinkItem[]`  | -                        | 補助リンク (ログイン / お問い合わせ等)。指定時のみメニュー下部に描画        |
+| `ariaLabel`         | `string`                 | `'モバイルメニュー'`     | ルート要素の `aria-label`                                                   |
+| `closeLabel`        | `string`                 | `'閉じる'`               | クローズボタンの `aria-label`                                               |
+| `backLabel`         | `string`                 | `'戻る'`                 | 戻るボタンの `aria-label` / 表示テキスト (`type='slide'` のみ使用)          |
+| `showCloseButton`   | `boolean`                | `true`                   | クローズボタンの表示。`false` 時は Header 側で開閉制御する想定              |
+| `navAriaLabel`      | `string`                 | `'メインナビゲーション'` | メインメニュー `<nav>` の `aria-label`。i18n 用に上書き可能                 |
+| `subLinksAriaLabel` | `string`                 | `'補助リンク'`           | 補助リンク領域 (`DadsUtilityLink`) に渡す `aria-label`。i18n 用に上書き可能 |
 
 ## Events
 

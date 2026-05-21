@@ -125,28 +125,29 @@ const memo = ref('')
 
 ## Props
 
-| Prop           | 型                                               | デフォルト   | 説明                                                               |
-| -------------- | ------------------------------------------------ | ------------ | ------------------------------------------------------------------ |
-| `modelValue`   | `string`                                         | -            | `v-model` の値                                                     |
-| `placeholder`  | `string`                                         | -            | プレースホルダ                                                     |
-| `name`         | `string`                                         | -            | フォーム送信時のフィールド名                                       |
-| `id`           | `string`                                         | 自動生成     | ネイティブ `id`。省略時は label `for` と aria 連携用 ID を自動生成 |
-| `autocomplete` | `string`                                         | -            | ネイティブ `autocomplete` 属性                                     |
-| `maxlength`    | `number`                                         | -            | 入力可能な最大文字数 (ブラウザ側で制御)                            |
-| `rows`         | `number`                                         | `3`          | 表示行数 (`autoResize` 無効時)                                     |
-| `size`         | `'lg' \| 'md' \| 'sm'`                           | `'md'`       | サイズ                                                             |
-| `label`        | `string`                                         | -            | ラベルテキスト                                                     |
-| `hint`         | `string`                                         | -            | 補助テキスト (エラー表示時は非表示)                                |
-| `errorMessage` | `string`                                         | -            | エラーメッセージ。設定すると暗黙的にエラー表示状態になる           |
-| `required`     | `boolean`                                        | `false`      | 必須マーク表示と `aria-required` を付与                            |
-| `error`        | `boolean`                                        | `false`      | エラー視覚状態を強制 (メッセージ無しのケース用)                    |
-| `disabled`     | `boolean`                                        | `false`      | 操作不可化                                                         |
-| `readonly`     | `boolean`                                        | `false`      | 読み取り専用                                                       |
-| `counter`      | `number`                                         | -            | 上限文字数の表示 (`current / counter`)。入力制限はかからない       |
-| `resize`       | `'none' \| 'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | CSS `resize`。`autoResize` 有効時は `'none'` に強制される          |
-| `autoResize`   | `boolean`                                        | `false`      | 内容に応じて高さを伸縮 (`minRows`〜`maxRows`)                      |
-| `minRows`      | `number`                                         | `2`          | `autoResize` 有効時の最小行数                                      |
-| `maxRows`      | `number`                                         | -            | `autoResize` 有効時の最大行数。省略時は上限なし                    |
+| Prop            | 型                                               | デフォルト   | 説明                                                               |
+| --------------- | ------------------------------------------------ | ------------ | ------------------------------------------------------------------ |
+| `modelValue`    | `string`                                         | -            | `v-model` の値                                                     |
+| `placeholder`   | `string`                                         | -            | プレースホルダ                                                     |
+| `name`          | `string`                                         | -            | フォーム送信時のフィールド名                                       |
+| `id`            | `string`                                         | 自動生成     | ネイティブ `id`。省略時は label `for` と aria 連携用 ID を自動生成 |
+| `autocomplete`  | `string`                                         | -            | ネイティブ `autocomplete` 属性                                     |
+| `maxlength`     | `number`                                         | -            | 入力可能な最大文字数 (ブラウザ側で制御)                            |
+| `rows`          | `number`                                         | `3`          | 表示行数 (`autoResize` 無効時)                                     |
+| `size`          | `'lg' \| 'md' \| 'sm'`                           | `'md'`       | サイズ                                                             |
+| `label`         | `string`                                         | -            | ラベルテキスト                                                     |
+| `hint`          | `string`                                         | -            | 補助テキスト (エラー表示時は非表示)                                |
+| `errorMessage`  | `string`                                         | -            | エラーメッセージ。設定すると暗黙的にエラー表示状態になる           |
+| `required`      | `boolean`                                        | `false`      | 必須マーク表示と `aria-required` を付与                            |
+| `error`         | `boolean`                                        | `false`      | エラー視覚状態を強制 (メッセージ無しのケース用)                    |
+| `disabled`      | `boolean`                                        | `false`      | 操作不可化                                                         |
+| `readonly`      | `boolean`                                        | `false`      | 読み取り専用                                                       |
+| `counter`       | `number`                                         | -            | 上限文字数の表示 (`current / counter`)。入力制限はかからない       |
+| `resize`        | `'none' \| 'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | CSS `resize`。`autoResize` 有効時は `'none'` に強制される          |
+| `autoResize`    | `boolean`                                        | `false`      | 内容に応じて高さを伸縮 (`minRows`〜`maxRows`)                      |
+| `minRows`       | `number`                                         | `2`          | `autoResize` 有効時の最小行数                                      |
+| `maxRows`       | `number`                                         | -            | `autoResize` 有効時の最大行数。省略時は上限なし                    |
+| `requiredLabel` | `string`                                         | `'必須'`     | 「必須」バッジに表示するテキスト。i18n 用に上書き可能              |
 
 ## Events
 

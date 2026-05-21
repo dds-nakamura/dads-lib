@@ -20,6 +20,8 @@ const idx5 = ref(0)
 const idx6 = ref(0)
 
 const palette = ['#0017c1', '#0064d2', '#1a9af2', '#3aaee0', '#7dd3fc']
+
+const i18nSlideLabel = (i) => `Slide ${i + 1}`
 </script>
 
 <div class="demo">
@@ -213,25 +215,73 @@ const current = ref(0)
 
 `autoPlay` プロップは互換性のため残っているが、**公式 DADS では自動再生機能を備えていないと明言** されているため、使用すると dev mode で console.warn が出力される。アクセシビリティ上、モーション過敏症ユーザーへの配慮として手動操作を基本とすることを強く推奨する。
 
+## i18n / 国際化対応
+
+矢印ボタンとインジケータの aria-label はすべてプロップ / フォーマッタで上書きできる。`formatSlideAriaLabel` は 0 始まりのインデックスを受け取るので、`+1` を含めて出力する。
+
+<div class="demo">
+  <DadsCarousel
+    v-model="idx1"
+    :item-count="3"
+    aria-label="Recent articles"
+    prev-slide-aria-label="Previous slide"
+    next-slide-aria-label="Next slide"
+    slide-position-aria-label="Slide position"
+    :format-slide-aria-label="i18nSlideLabel"
+  >
+    <template #default="{ index }">
+      <div :style="{
+        background: palette[index],
+        color: '#fff',
+        padding: '3rem 1rem',
+        textAlign: 'center'
+      }">
+        Slide {{ index + 1 }}
+      </div>
+    </template>
+  </DadsCarousel>
+</div>
+
+```vue
+<script setup>
+const i18nSlideLabel = (i) => `Slide ${i + 1}`
+</script>
+
+<template>
+  <DadsCarousel
+    :item-count="3"
+    aria-label="Recent articles"
+    prev-slide-aria-label="Previous slide"
+    next-slide-aria-label="Next slide"
+    slide-position-aria-label="Slide position"
+    :format-slide-aria-label="i18nSlideLabel"
+  />
+</template>
+```
+
 ## Props
 
-| Prop             | 型                            | デフォルト     | 説明                                               |
-| ---------------- | ----------------------------- | -------------- | -------------------------------------------------- |
-| `modelValue`     | `number`                      | `0`            | 現在表示中のスライドインデックス (v-model 対象)    |
-| `itemCount`      | `number`                      | (必須)         | スライド総数。スロットがこの回数だけ呼び出される   |
-| `type`           | `'key-visual' \| 'container'` | `'key-visual'` | 用途タイプ。container は heading 必須              |
-| `mode`           | `'single' \| 'multi'`         | `'single'`     | 表示モード (multi は将来拡張)                      |
-| `heading`        | `string`                      | -              | container type の見出し                            |
-| `headingLevel`   | `1 \| 2 \| 3 \| 4 \| 5 \| 6`  | `2`            | 見出しの HTML レベル                               |
-| `showAllLabel`   | `string`                      | -              | 「すべて見る」リンクのラベル (href とセットで指定) |
-| `showAllHref`    | `string`                      | -              | 「すべて見る」リンクの href                        |
-| `autoPlay`       | `boolean`                     | `false`        | **公式非推奨**: `interval` ms ごとに自動遷移       |
-| `interval`       | `number`                      | `5000`         | 自動再生の間隔 (ms)                                |
-| `pauseOnHover`   | `boolean`                     | `true`         | ホバー中に自動再生を一時停止                       |
-| `showArrows`     | `boolean`                     | `true`         | 左右の矢印ボタンを表示                             |
-| `showIndicators` | `boolean`                     | `true`         | ドットインジケータを表示                           |
-| `loop`           | `boolean`                     | `true`         | 末尾の次で先頭にラップする                         |
-| `ariaLabel`      | `string`                      | `'カルーセル'` | アクセシブル名 (`aria-label`)                      |
+| Prop                     | 型                            | デフォルト                     | 説明                                                                 |
+| ------------------------ | ----------------------------- | ------------------------------ | -------------------------------------------------------------------- |
+| `modelValue`             | `number`                      | `0`                            | 現在表示中のスライドインデックス (v-model 対象)                      |
+| `itemCount`              | `number`                      | (必須)                         | スライド総数。スロットがこの回数だけ呼び出される                     |
+| `type`                   | `'key-visual' \| 'container'` | `'key-visual'`                 | 用途タイプ。container は heading 必須                                |
+| `mode`                   | `'single' \| 'multi'`         | `'single'`                     | 表示モード (multi は将来拡張)                                        |
+| `heading`                | `string`                      | -                              | container type の見出し                                              |
+| `headingLevel`           | `1 \| 2 \| 3 \| 4 \| 5 \| 6`  | `2`                            | 見出しの HTML レベル                                                 |
+| `showAllLabel`           | `string`                      | -                              | 「すべて見る」リンクのラベル (href とセットで指定)                   |
+| `showAllHref`            | `string`                      | -                              | 「すべて見る」リンクの href                                          |
+| `autoPlay`               | `boolean`                     | `false`                        | **公式非推奨**: `interval` ms ごとに自動遷移                         |
+| `interval`               | `number`                      | `5000`                         | 自動再生の間隔 (ms)                                                  |
+| `pauseOnHover`           | `boolean`                     | `true`                         | ホバー中に自動再生を一時停止                                         |
+| `showArrows`             | `boolean`                     | `true`                         | 左右の矢印ボタンを表示                                               |
+| `showIndicators`         | `boolean`                     | `true`                         | ドットインジケータを表示                                             |
+| `loop`                   | `boolean`                     | `true`                         | 末尾の次で先頭にラップする                                           |
+| `ariaLabel`              | `string`                      | `'カルーセル'`                 | アクセシブル名 (`aria-label`)                                        |
+| `prevSlideAriaLabel`     | `string`                      | `'前のスライド'`               | 「前へ」矢印ボタンの aria-label。i18n 用に上書き可能                 |
+| `nextSlideAriaLabel`     | `string`                      | `'次のスライド'`               | 「次へ」矢印ボタンの aria-label。i18n 用に上書き可能                 |
+| `slidePositionAriaLabel` | `string`                      | `'スライド位置'`               | インジケータ群 (`role="tablist"`) の aria-label。i18n 用に上書き可能 |
+| `formatSlideAriaLabel`   | `(idx: number) => string`     | `` (i) => `スライド ${i+1}` `` | 各インジケータの aria-label フォーマッタ。i18n 用に上書き可能        |
 
 ## Events
 

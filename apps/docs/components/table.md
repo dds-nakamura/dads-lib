@@ -173,13 +173,14 @@ const rows = [
 
 ## Props
 
-| Prop           | 型                           | デフォルト      | 説明                                                           |
-| -------------- | ---------------------------- | --------------- | -------------------------------------------------------------- |
-| `stickyHeader` | `boolean`                    | `false`         | `thead th` を `position: sticky` で上端に固定する              |
-| `density`      | `'comfortable' \| 'compact'` | `'comfortable'` | セルの縦方向密度                                               |
-| `bordered`     | `boolean`                    | `false`         | テーブル外周に 1px の枠線を追加（セル罫線は常時表示）          |
-| `striped`      | `boolean`                    | `false`         | 偶数行に淡い背景色を付与                                       |
-| `caption`      | `string`                     | -               | `<caption>` のテキスト（`caption` スロット指定時は無視される） |
+| Prop           | 型                           | デフォルト      | 説明                                                                              |
+| -------------- | ---------------------------- | --------------- | --------------------------------------------------------------------------------- |
+| `stickyHeader` | `boolean`                    | `false`         | `thead th` を `position: sticky` で上端に固定する                                 |
+| `density`      | `'comfortable' \| 'compact'` | `'comfortable'` | セルの縦方向密度                                                                  |
+| `bordered`     | `boolean`                    | `false`         | テーブル外周に 1px の枠線を追加（セル罫線は常時表示）                             |
+| `striped`      | `boolean`                    | `false`         | 偶数行に淡い背景色を付与                                                          |
+| `caption`      | `string`                     | -               | `<caption>` のテキスト（`caption` スロット指定時は無視される）                    |
+| `loadingLabel` | `string`                     | `'読み込み中'`  | スケルトン表示中にスクリーンリーダーへ読み上げる隠しテキスト。i18n 用に上書き可能 |
 
 ## Events
 
