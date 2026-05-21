@@ -152,9 +152,9 @@ const onReset = () => {
           :value="pageSize"
           @change="onPageSizeChange"
         >
-          <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">{{
-            formatPageSizeOption(opt)
-          }}</option>
+          <option v-for="opt in pageSizeOptions" :key="opt" :value="opt">
+            {{ formatPageSizeOption(opt) }}
+          </option>
         </select>
       </div>
     </div>

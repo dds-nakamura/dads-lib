@@ -17,12 +17,12 @@
 公式 GitHub に存在しない以下は **静的スナップショット** として取り込んでいる。
 バージョン判定は git タグではなく、**抽出元の DADS バージョン** または **Figma `fileKey` + `exportedAt`** を真実の源とする。
 
-| サブディレクトリ       | 抽出元                                                                                 | スナップショット情報                                                                                          | 抽出日     | 詳細リファレンス                               |
-| ---------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------- |
-| `dads-document-md/`    | <https://design.digital.go.jp/dads/>                                                   | DADS **v2.13.0** / 91 ファイル / 604 KB                                                                       | 2026-05-12 | `dads-document-md/README.md`                   |
-| `dads-document-html/`  | <https://design.digital.go.jp/dads/>                                                   | DADS **v2.13.0** (md と同時取得) / 958 ファイル (HTML 148 + PNG 669 + フォント/assets) / 51 MB                | 2026-05-12 | （README 未配置。md と同一抽出に由来）         |
-| `dads-document-figma/` | Figma Community: <https://www.figma.com/community/file/1255349027535859598>            | (frame モード) `fileKey=SZ2T652pyb3nz4Mrh06ALt` / "v2.13.0 (Community)" / lastModified 2026-05-14T06:48Z      | 2026-05-14 | `dads-document-figma/manifest.json`            |
-| `dads-document-figma/` | 〃                                                                                     | (playwright モード) `fileKey=71GUnpF30YjVBRuWCPgKaC` / 42 pages / scale 2 / exportedAt 2026-05-16T14:54Z      | 2026-05-16 | `dads-document-figma/playwright-manifest.json` |
+| サブディレクトリ       | 抽出元                                                                      | スナップショット情報                                                                                     | 抽出日     | 詳細リファレンス                               |
+| ---------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------- |
+| `dads-document-md/`    | <https://design.digital.go.jp/dads/>                                        | DADS **v2.13.0** / 91 ファイル / 604 KB                                                                  | 2026-05-12 | `dads-document-md/README.md`                   |
+| `dads-document-html/`  | <https://design.digital.go.jp/dads/>                                        | DADS **v2.13.0** (md と同時取得) / 958 ファイル (HTML 148 + PNG 669 + フォント/assets) / 51 MB           | 2026-05-12 | （README 未配置。md と同一抽出に由来）         |
+| `dads-document-figma/` | Figma Community: <https://www.figma.com/community/file/1255349027535859598> | (frame モード) `fileKey=SZ2T652pyb3nz4Mrh06ALt` / "v2.13.0 (Community)" / lastModified 2026-05-14T06:48Z | 2026-05-14 | `dads-document-figma/manifest.json`            |
+| `dads-document-figma/` | 〃                                                                          | (playwright モード) `fileKey=71GUnpF30YjVBRuWCPgKaC` / 42 pages / scale 2 / exportedAt 2026-05-16T14:54Z | 2026-05-16 | `dads-document-figma/playwright-manifest.json` |
 
 `dads-document-figma/` は `.gitignore` 対象（各環境で再生成）。再取得手順は [scripts/README.md](./scripts/README.md) (`pnpm figma:pw-export`) を参照。
 

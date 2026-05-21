@@ -31,9 +31,10 @@ const QUIET = args.has('--quiet')
 // ---------- 共通ユーティリティ ----------
 
 const MARK = { ok: '✓', warn: '⚠', err: '✗' }
-const COLOR = process.stdout.isTTY && !JSON_OUT
-  ? { ok: '\x1b[32m', warn: '\x1b[33m', err: '\x1b[31m', dim: '\x1b[2m', reset: '\x1b[0m' }
-  : { ok: '', warn: '', err: '', dim: '', reset: '' }
+const COLOR =
+  process.stdout.isTTY && !JSON_OUT
+    ? { ok: '\x1b[32m', warn: '\x1b[33m', err: '\x1b[31m', dim: '\x1b[2m', reset: '\x1b[0m' }
+    : { ok: '', warn: '', err: '', dim: '', reset: '' }
 
 function fmtSize(bytes) {
   if (bytes < 1024) return `${bytes} B`
@@ -187,7 +188,9 @@ async function checkGithubVendor(row) {
       notes.push(`version drift: VENDORED.md=${recordedVersion} / package.json=${actualVersion}`)
     }
   } else if (actualVersion === '0.0.0') {
-    notes.push(`package.json version=0.0.0 → commit hash ${recordedCommit?.slice(0, 7) ?? '?'} で判定`)
+    notes.push(
+      `package.json version=0.0.0 → commit hash ${recordedCommit?.slice(0, 7) ?? '?'} で判定`,
+    )
   }
   push({
     dir,
@@ -228,7 +231,9 @@ async function checkSiteSnapshot(row) {
     const diff = daysBetween(recordedDate, newestDate)
     if (diff !== null && diff > 3) {
       status = 'warn'
-      notes.push(`mtime drift: 記録 ${recordedDate} に対しファイル mtime 最新 ${newestDate} (差 ${diff.toFixed(0)} 日)`)
+      notes.push(
+        `mtime drift: 記録 ${recordedDate} に対しファイル mtime 最新 ${newestDate} (差 ${diff.toFixed(0)} 日)`,
+      )
     }
   }
   push({
@@ -338,7 +343,9 @@ function renderHuman() {
       if (r.actual.exportedAt) parts.push(`exportedAt ${r.actual.exportedAt.slice(0, 10)}`)
       if (r.actual.pages !== undefined) parts.push(`${r.actual.pages} pages`)
       if (r.actual.filesMatchingExt !== undefined)
-        parts.push(`${r.actual.filesMatchingExt} files (total ${r.actual.filesTotal}, ${fmtSize(r.actual.bytes)})`)
+        parts.push(
+          `${r.actual.filesMatchingExt} files (total ${r.actual.filesTotal}, ${fmtSize(r.actual.bytes)})`,
+        )
       if (r.actual.newestMtime) parts.push(`newest mtime ${r.actual.newestMtime}`)
       if (parts.length) out.push(`    ${COLOR.dim}actual:  ${COLOR.reset} ${parts.join('  ')}`)
     }

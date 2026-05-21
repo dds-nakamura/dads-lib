@@ -165,7 +165,10 @@ describe('DadsDivider', () => {
   })
 
   describe('a11y (vitest-axe)', () => {
-    const mountInBody = (props: Partial<DadsDividerProps> = {}, slots: Record<string, string> = {}) =>
+    const mountInBody = (
+      props: Partial<DadsDividerProps> = {},
+      slots: Record<string, string> = {},
+    ) =>
       mount(DadsDivider, {
         props: props as DadsDividerProps,
         slots,

@@ -529,10 +529,7 @@ describe('DadsCarousel', () => {
     })
 
     it('has no violations with custom aria-label', async () => {
-      const wrapper = createWrapper(
-        { ariaLabel: '主要なお知らせ' },
-        { default: slideRenderer },
-      )
+      const wrapper = createWrapper({ ariaLabel: '主要なお知らせ' }, { default: slideRenderer })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 

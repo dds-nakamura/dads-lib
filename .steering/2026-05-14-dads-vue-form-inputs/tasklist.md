@@ -13,6 +13,7 @@
 > 残された未チェック項目は **再着手不要** — 履歴として保持。
 >
 > 最新の対応状況は以下を参照:
+>
 > - [`2026-05-17-dads-vue-naming-and-gap`](../2026-05-17-dads-vue-naming-and-gap/) — 命名整合 + High/Medium/Low 全件ギャップ解消
 > - [`2026-05-17-dads-vue-figma-compliance`](../2026-05-17-dads-vue-figma-compliance/) — Figma スナップショット準拠化
 

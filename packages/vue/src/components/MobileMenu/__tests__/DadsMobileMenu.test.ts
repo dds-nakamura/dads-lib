@@ -109,13 +109,17 @@ describe('DadsMobileMenu', () => {
 
     it('sets the utility region aria-label to "補助リンク" by default', () => {
       createWrapper({ utilityItems })
-      const utilList = document.body.querySelector('.dads-mobile-menu__utility .dads-utility-link-list')
+      const utilList = document.body.querySelector(
+        '.dads-mobile-menu__utility .dads-utility-link-list',
+      )
       expect(utilList?.getAttribute('aria-label')).toBe('補助リンク')
     })
 
     it('overrides the utility region aria-label via subLinksAriaLabel prop (i18n)', () => {
       createWrapper({ utilityItems, subLinksAriaLabel: 'Sub links' })
-      const utilList = document.body.querySelector('.dads-mobile-menu__utility .dads-utility-link-list')
+      const utilList = document.body.querySelector(
+        '.dads-mobile-menu__utility .dads-utility-link-list',
+      )
       expect(utilList?.getAttribute('aria-label')).toBe('Sub links')
     })
   })
