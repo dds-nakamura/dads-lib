@@ -24,6 +24,8 @@ const customSwatches = [
   '#ea4335',
   '#9e9e9e',
 ]
+
+const i18nSwatchLabel = (s) => `Select ${s}`
 </script>
 
 <div class="demo">
@@ -135,14 +137,47 @@ watch(color, (next) => {
 </template>
 ```
 
+## i18n / 国際化対応
+
+ネイティブカラー入力 / HEX 入力 / 各スウォッチの aria-label をすべてプロップ / フォーマッタで上書きできる。`formatSwatchAriaLabel` は HEX 文字列を受け取り、ロケールに合わせた発話文字列を返す。
+
+<div class="demo">
+  <DadsColorPicker
+    v-model="basicColor"
+    label="Background color"
+    default-aria-label="Pick a color"
+    hex-input-aria-label="HEX color code"
+    :format-swatch-aria-label="i18nSwatchLabel"
+  />
+</div>
+
+```vue
+<script setup>
+const i18nSwatchLabel = (s) => `Select ${s}`
+</script>
+
+<template>
+  <DadsColorPicker
+    v-model="color"
+    label="Background color"
+    default-aria-label="Pick a color"
+    hex-input-aria-label="HEX color code"
+    :format-swatch-aria-label="i18nSwatchLabel"
+  />
+</template>
+```
+
 ## Props
 
-| Prop         | 型         | デフォルト              | 説明                                                      |
-| ------------ | ---------- | ----------------------- | --------------------------------------------------------- |
-| `modelValue` | `string`   | -                       | 現在の色 (`#RRGGBB` 形式)。`v-model` で双方向バインドする |
-| `swatches`   | `string[]` | `DADS_DEFAULT_SWATCHES` | スウォッチグリッドに並べる色の配列                        |
-| `disabled`   | `boolean`  | `false`                 | 操作不可化                                                |
-| `label`      | `string`   | `'色を選択'`            | ネイティブカラー入力に適用するアクセシブル名              |
+| Prop                    | 型                           | デフォルト                 | 説明                                                                                              |
+| ----------------------- | ---------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------- |
+| `modelValue`            | `string`                     | -                          | 現在の色 (`#RRGGBB` 形式)。`v-model` で双方向バインドする                                         |
+| `swatches`              | `string[]`                   | `DADS_DEFAULT_SWATCHES`    | スウォッチグリッドに並べる色の配列                                                                |
+| `disabled`              | `boolean`                    | `false`                    | 操作不可化                                                                                        |
+| `label`                 | `string`                     | `'色を選択'`               | ネイティブカラー入力に適用するアクセシブル名                                                      |
+| `defaultAriaLabel`      | `string`                     | `'色を選択'`               | `label` 未指定時にネイティブカラー入力へ付与する aria-label のフォールバック。i18n 用に上書き可能 |
+| `hexInputAriaLabel`     | `string`                     | `'HEXカラーコード'`        | HEX 入力欄の aria-label。i18n 用に上書き可能                                                      |
+| `formatSwatchAriaLabel` | `(swatch: string) => string` | `` (s) => `${s} を選択` `` | 各スウォッチボタンの aria-label フォーマッタ。i18n 用に上書き可能                                 |
 
 ## Events
 

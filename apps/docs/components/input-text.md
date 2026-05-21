@@ -126,29 +126,47 @@ const name = ref('')
   />
 </div>
 
+## i18n / 国際化対応
+
+「必須」バッジのテキストは `requiredLabel` プロップで上書きできる。多言語サイトでロケールに応じて切り替えるユースケースを想定している。`required` を併せて指定したときのみバッジが表示される。
+
+<div class="demo">
+  <DadsInputText label="Phone number" required required-label="Required" placeholder="090-0000-0000" />
+</div>
+
+```vue
+<DadsInputText
+  label="Phone number"
+  required
+  required-label="Required"
+  placeholder="090-0000-0000"
+/>
+```
+
 ## Props
 
-| Prop           | 型                                                                          | デフォルト | 説明                                                     |
-| -------------- | --------------------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
-| `modelValue`   | `string \| number`                                                          | -          | `v-model` の値                                           |
-| `type`         | `'text' \| 'email' \| 'password' \| 'tel' \| 'url' \| 'number' \| 'search'` | `'text'`   | ネイティブ input type                                    |
-| `placeholder`  | `string`                                                                    | -          | プレースホルダー                                         |
-| `name`         | `string`                                                                    | -          | フォーム送信用の `name` 属性                             |
-| `id`           | `string`                                                                    | -          | input の `id`。未指定時は自動生成                        |
-| `autocomplete` | `string`                                                                    | -          | ネイティブ `autocomplete` 属性                           |
-| `maxlength`    | `number`                                                                    | -          | 入力可能な最大文字数                                     |
-| `inputmode`    | `'text' \| 'numeric' \| 'decimal' \| 'tel' \| 'search' \| 'email' \| 'url'` | -          | モバイル向けキーボードヒント                             |
-| `size`         | `'lg' \| 'md' \| 'sm'`                                                      | `'md'`     | サイズ                                                   |
-| `label`        | `string`                                                                    | -          | input 上に表示するラベル                                 |
-| `hint`         | `string`                                                                    | -          | input 下に表示する補助テキスト                           |
-| `errorMessage` | `string`                                                                    | -          | エラーメッセージ。指定するとエラー視覚状態と aria が有効 |
-| `required`     | `boolean`                                                                   | `false`    | 必須バッジを表示し `aria-required` を付与                |
-| `error`        | `boolean`                                                                   | `false`    | メッセージ無しでエラー視覚状態を強制                     |
-| `disabled`     | `boolean`                                                                   | `false`    | 操作不可化                                               |
-| `readonly`     | `boolean`                                                                   | `false`    | 読み取り専用（破線ボーダー）                             |
-| `prependIcon`  | `string`                                                                    | -          | 前置アイコンの MDI クラス名                              |
-| `appendIcon`   | `string`                                                                    | -          | 後置アイコンの MDI クラス名                              |
-| `counter`      | `number`                                                                    | -          | `現在文字数 / counter` を表示（制限はしない）            |
+| Prop            | 型                                                                          | デフォルト | 説明                                                     |
+| --------------- | --------------------------------------------------------------------------- | ---------- | -------------------------------------------------------- |
+| `modelValue`    | `string \| number`                                                          | -          | `v-model` の値                                           |
+| `type`          | `'text' \| 'email' \| 'password' \| 'tel' \| 'url' \| 'number' \| 'search'` | `'text'`   | ネイティブ input type                                    |
+| `placeholder`   | `string`                                                                    | -          | プレースホルダー                                         |
+| `name`          | `string`                                                                    | -          | フォーム送信用の `name` 属性                             |
+| `id`            | `string`                                                                    | -          | input の `id`。未指定時は自動生成                        |
+| `autocomplete`  | `string`                                                                    | -          | ネイティブ `autocomplete` 属性                           |
+| `maxlength`     | `number`                                                                    | -          | 入力可能な最大文字数                                     |
+| `inputmode`     | `'text' \| 'numeric' \| 'decimal' \| 'tel' \| 'search' \| 'email' \| 'url'` | -          | モバイル向けキーボードヒント                             |
+| `size`          | `'lg' \| 'md' \| 'sm'`                                                      | `'md'`     | サイズ                                                   |
+| `label`         | `string`                                                                    | -          | input 上に表示するラベル                                 |
+| `hint`          | `string`                                                                    | -          | input 下に表示する補助テキスト                           |
+| `errorMessage`  | `string`                                                                    | -          | エラーメッセージ。指定するとエラー視覚状態と aria が有効 |
+| `required`      | `boolean`                                                                   | `false`    | 必須バッジを表示し `aria-required` を付与                |
+| `error`         | `boolean`                                                                   | `false`    | メッセージ無しでエラー視覚状態を強制                     |
+| `disabled`      | `boolean`                                                                   | `false`    | 操作不可化                                               |
+| `readonly`      | `boolean`                                                                   | `false`    | 読み取り専用（破線ボーダー）                             |
+| `prependIcon`   | `string`                                                                    | -          | 前置アイコンの MDI クラス名                              |
+| `appendIcon`    | `string`                                                                    | -          | 後置アイコンの MDI クラス名                              |
+| `counter`       | `number`                                                                    | -          | `現在文字数 / counter` を表示（制限はしない）            |
+| `requiredLabel` | `string`                                                                    | `'必須'`   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能    |
 
 ## Events
 

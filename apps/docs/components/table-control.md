@@ -46,6 +46,10 @@ const onSearchUpdate = (v) => {
   searchQuery.value = v
   currentPage.value = 1
 }
+
+const i18nPageSize = (n) => `${n} items`
+const i18nRange = (start, end, total) =>
+  total === 0 ? 'No items' : `${start}-${end} of ${total} items`
 </script>
 
 <div class="demo">
@@ -198,19 +202,60 @@ const onSearchUpdate = (v) => {
 
 並び替えは `DadsTable` 側の `<th>` に独自ハンドラを付けて親 state を変更すれば良い。`DadsTableControl` は並び替えに関与しない。
 
+## i18n / 国際化対応
+
+「前へ」「次へ」ボタンラベル、表示件数 `<option>` ラベル、範囲ステータス文言をすべてプロップ / フォーマッタで上書きできる。動的補間部分は関数プロップとして渡すことで、複数形・順序付け・桁区切りの違いに対応できる。
+
+<div class="demo">
+  <DadsTableControl
+    :total-items="42"
+    search-placeholder="Search"
+    search-label="Search"
+    page-size-label="Items per page"
+    prev-page-label="Prev"
+    next-page-label="Next"
+    :format-page-size-option="i18nPageSize"
+    :format-range-label="i18nRange"
+  />
+</div>
+
+```vue
+<script setup>
+const i18nPageSize = (n) => `${n} items`
+const i18nRange = (start, end, total) =>
+  total === 0 ? 'No items' : `${start}-${end} of ${total} items`
+</script>
+
+<template>
+  <DadsTableControl
+    :total-items="42"
+    search-placeholder="Search"
+    page-size-label="Items per page"
+    prev-page-label="Prev"
+    next-page-label="Next"
+    :format-page-size-option="i18nPageSize"
+    :format-range-label="i18nRange"
+  />
+</template>
+```
+
 ## Props
 
-| Prop                | 型         | デフォルト          | 説明                                               |
-| ------------------- | ---------- | ------------------- | -------------------------------------------------- |
-| `searchQuery`       | `string`   | `''`                | 検索文字列（`v-model:search`）                     |
-| `currentPage`       | `number`   | `1`                 | 1 始まりの現在ページ番号（`v-model:page`）         |
-| `pageSize`          | `number`   | `10`                | 1 ページあたりの件数（`v-model:pageSize`）         |
-| `totalItems`        | `number`   | -（必須）           | 全行数（フィルタ後）。`totalPages` 算出に使用      |
-| `pageSizeOptions`   | `number[]` | `[10, 25, 50, 100]` | 表示件数セレクタの候補                             |
-| `searchPlaceholder` | `string`   | `'検索'`            | 検索入力の placeholder                             |
-| `showSearch`        | `boolean`  | `true`              | 検索ボックスを表示するか                           |
-| `showPageSize`      | `boolean`  | `true`              | 表示件数セレクタを表示するか                       |
-| `showPagination`    | `boolean`  | `true`              | ページ送り（前へ / ページ番号 / 次へ）を表示するか |
+| Prop                   | 型                                                      | デフォルト                                              | 説明                                                                    |
+| ---------------------- | ------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `searchQuery`          | `string`                                                | `''`                                                    | 検索文字列（`v-model:search`）                                          |
+| `currentPage`          | `number`                                                | `1`                                                     | 1 始まりの現在ページ番号（`v-model:page`）                              |
+| `pageSize`             | `number`                                                | `10`                                                    | 1 ページあたりの件数（`v-model:pageSize`）                              |
+| `totalItems`           | `number`                                                | -（必須）                                               | 全行数（フィルタ後）。`totalPages` 算出に使用                           |
+| `pageSizeOptions`      | `number[]`                                              | `[10, 25, 50, 100]`                                     | 表示件数セレクタの候補                                                  |
+| `searchPlaceholder`    | `string`                                                | `'検索'`                                                | 検索入力の placeholder                                                  |
+| `showSearch`           | `boolean`                                               | `true`                                                  | 検索ボックスを表示するか                                                |
+| `showPageSize`         | `boolean`                                               | `true`                                                  | 表示件数セレクタを表示するか                                            |
+| `showPagination`       | `boolean`                                               | `true`                                                  | ページ送り（前へ / ページ番号 / 次へ）を表示するか                      |
+| `prevPageLabel`        | `string`                                                | `'前へ'`                                                | 「前へ」ボタンの可視ラベル。i18n 用に上書き可能                         |
+| `nextPageLabel`        | `string`                                                | `'次へ'`                                                | 「次へ」ボタンの可視ラベル。i18n 用に上書き可能                         |
+| `formatPageSizeOption` | `(n: number) => string`                                 | `` (n) => `${n} 件` ``                                  | 表示件数 `<option>` ラベルのフォーマッタ。i18n 用に上書き可能           |
+| `formatRangeLabel`     | `(start: number, end: number, total: number) => string` | `` (s,e,t) => t===0 ? '0 件' : `${s}-${e} / ${t} 件` `` | ページネーション上部の範囲ステータスのフォーマッタ。i18n 用に上書き可能 |
 
 ## Events
 

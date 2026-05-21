@@ -184,24 +184,26 @@ const selected = ref(null)
 
 ## Props
 
-| Prop           | 型                                             | デフォルト | 説明                                                               |
-| -------------- | ---------------------------------------------- | ---------- | ------------------------------------------------------------------ |
-| `modelValue`   | `string \| number \| boolean \| Array \| null` | -          | `v-model` の値。`multiple` の場合は配列                            |
-| `items`        | `DadsSelectItem[]`                             | `[]`       | 選択肢の配列                                                       |
-| `itemValue`    | `string`                                       | `'value'`  | 各 item の値として参照するキー名                                   |
-| `itemTitle`    | `string`                                       | `'title'`  | 各 item の表示テキストとして参照するキー名                         |
-| `multiple`     | `boolean`                                      | `false`    | 複数選択モード                                                     |
-| `placeholder`  | `string`                                       | -          | 未選択時の表示                                                     |
-| `id`           | `string`                                       | -          | trigger の id (省略時は自動生成し label `for` / aria 参照を同期)   |
-| `name`         | `string`                                       | -          | フォーム送信時の name                                              |
-| `size`         | `'lg' \| 'md' \| 'sm'`                         | `'md'`     | サイズ                                                             |
-| `label`        | `string`                                       | -          | 上部に表示するラベル                                               |
-| `hint`         | `string`                                       | -          | 下部に表示する補助テキスト                                         |
-| `errorMessage` | `string`                                       | -          | エラーメッセージ。設定するとエラー表示状態になり aria で関連付ける |
-| `required`     | `boolean`                                      | `false`    | 必須マーク表示と `aria-required="true"`                            |
-| `error`        | `boolean`                                      | `false`    | エラー視覚状態を強制する (メッセージなしで赤枠だけにしたいとき)    |
-| `disabled`     | `boolean`                                      | `false`    | 操作不可化                                                         |
-| `readonly`     | `boolean`                                      | `false`    | 読み取り専用 (開閉・選択を抑止)                                    |
+| Prop                    | 型                                             | デフォルト                 | 説明                                                               |
+| ----------------------- | ---------------------------------------------- | -------------------------- | ------------------------------------------------------------------ |
+| `modelValue`            | `string \| number \| boolean \| Array \| null` | -                          | `v-model` の値。`multiple` の場合は配列                            |
+| `items`                 | `DadsSelectItem[]`                             | `[]`                       | 選択肢の配列                                                       |
+| `itemValue`             | `string`                                       | `'value'`                  | 各 item の値として参照するキー名                                   |
+| `itemTitle`             | `string`                                       | `'title'`                  | 各 item の表示テキストとして参照するキー名                         |
+| `multiple`              | `boolean`                                      | `false`                    | 複数選択モード                                                     |
+| `placeholder`           | `string`                                       | -                          | 未選択時の表示                                                     |
+| `id`                    | `string`                                       | -                          | trigger の id (省略時は自動生成し label `for` / aria 参照を同期)   |
+| `name`                  | `string`                                       | -                          | フォーム送信時の name                                              |
+| `size`                  | `'lg' \| 'md' \| 'sm'`                         | `'md'`                     | サイズ                                                             |
+| `label`                 | `string`                                       | -                          | 上部に表示するラベル                                               |
+| `hint`                  | `string`                                       | -                          | 下部に表示する補助テキスト                                         |
+| `errorMessage`          | `string`                                       | -                          | エラーメッセージ。設定するとエラー表示状態になり aria で関連付ける |
+| `required`              | `boolean`                                      | `false`                    | 必須マーク表示と `aria-required="true"`                            |
+| `error`                 | `boolean`                                      | `false`                    | エラー視覚状態を強制する (メッセージなしで赤枠だけにしたいとき)    |
+| `disabled`              | `boolean`                                      | `false`                    | 操作不可化                                                         |
+| `readonly`              | `boolean`                                      | `false`                    | 読み取り専用 (開閉・選択を抑止)                                    |
+| `formatRemoveAriaLabel` | `(title: string) => string`                    | `` (t) => `${t} を削除` `` | `multiple` のチップ × ボタン aria-label のフォーマッタ             |
+| `requiredLabel`         | `string`                                       | `'必須'`                   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能              |
 
 ## Events
 

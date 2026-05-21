@@ -121,20 +121,21 @@ const fruit = ref('apple')
 
 ## Props
 
-| Prop           | 型                                    | デフォルト | 説明                                                         |
-| -------------- | ------------------------------------- | ---------- | ------------------------------------------------------------ |
-| `modelValue`   | `string \| number \| boolean \| null` | -          | 現在選択中の値。`value` と一致すると checked になる          |
-| `value`        | `string \| number \| boolean`         | -          | このラジオを表す値 (必須)。選択時に emit される              |
-| `size`         | `'lg' \| 'md' \| 'sm'`                | `'md'`     | サイズ                                                       |
-| `label`        | `string`                              | -          | ラベルテキスト                                               |
-| `description`  | `string`                              | -          | ラベル直下の説明文 (`aria-describedby` で紐付け)             |
-| `hint`         | `string`                              | -          | 補足テキスト (`aria-describedby` で紐付け)                   |
-| `errorMessage` | `string`                              | -          | エラーメッセージ。指定時は `role="alert"` で読み上げ         |
-| `required`     | `boolean`                             | `false`    | 必須マーカーを表示し `aria-required` を付与                  |
-| `error`        | `boolean`                             | `false`    | エラー視覚状態を強制 (メッセージなしで枠だけ赤くしたい場合)  |
-| `disabled`     | `boolean`                             | `false`    | 操作不可化                                                   |
-| `name`         | `string`                              | -          | グループ識別子。同じ `name` で単一選択がブラウザに強制される |
-| `id`           | `string`                              | -          | input の `id`。省略時は自動生成され label/aria と同期する    |
+| Prop            | 型                                    | デフォルト | 説明                                                         |
+| --------------- | ------------------------------------- | ---------- | ------------------------------------------------------------ |
+| `modelValue`    | `string \| number \| boolean \| null` | -          | 現在選択中の値。`value` と一致すると checked になる          |
+| `value`         | `string \| number \| boolean`         | -          | このラジオを表す値 (必須)。選択時に emit される              |
+| `size`          | `'lg' \| 'md' \| 'sm'`                | `'md'`     | サイズ                                                       |
+| `label`         | `string`                              | -          | ラベルテキスト                                               |
+| `description`   | `string`                              | -          | ラベル直下の説明文 (`aria-describedby` で紐付け)             |
+| `hint`          | `string`                              | -          | 補足テキスト (`aria-describedby` で紐付け)                   |
+| `errorMessage`  | `string`                              | -          | エラーメッセージ。指定時は `role="alert"` で読み上げ         |
+| `required`      | `boolean`                             | `false`    | 必須マーカーを表示し `aria-required` を付与                  |
+| `error`         | `boolean`                             | `false`    | エラー視覚状態を強制 (メッセージなしで枠だけ赤くしたい場合)  |
+| `disabled`      | `boolean`                             | `false`    | 操作不可化                                                   |
+| `name`          | `string`                              | -          | グループ識別子。同じ `name` で単一選択がブラウザに強制される |
+| `id`            | `string`                              | -          | input の `id`。省略時は自動生成され label/aria と同期する    |
+| `requiredLabel` | `string`                              | `'必須'`   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能        |
 
 ## Events
 

@@ -159,20 +159,21 @@ const items = [
 
 ## Props
 
-| Prop           | 型                                | デフォルト   | 説明                                                            |
-| -------------- | --------------------------------- | ------------ | --------------------------------------------------------------- |
-| `modelValue`   | `(string \| number \| boolean)[]` | -            | 選択中の値の配列。`v-model` として双方向バインドする            |
-| `items`        | `DadsCheckboxGroupItem[]`         | -（必須）    | 選択肢の配列。`{ value, label, disabled?, hint? }`              |
-| `legend`       | `string`                          | -            | `<legend>` に表示するグループラベル                             |
-| `direction`    | `'vertical' \| 'horizontal'`      | `'vertical'` | レイアウト方向                                                  |
-| `size`         | `'sm' \| 'md' \| 'lg'`            | `'md'`       | 各チェックボックスのサイズ                                      |
-| `hint`         | `string`                          | -            | フッターに表示する補助テキスト                                  |
-| `errorMessage` | `string`                          | -            | エラーメッセージ。指定するとエラー視覚を有効化                  |
-| `required`     | `boolean`                         | `false`      | 凡例横に「必須」バッジを表示                                    |
-| `error`        | `boolean`                         | `false`      | エラー視覚を強制（メッセージなしでも適用）                      |
-| `disabled`     | `boolean`                         | `false`      | `<fieldset>` 全体を無効化（`items[].disabled` も併用可能）      |
-| `name`         | `string`                          | -            | 各 input の `name` 属性。非 AJAX のフォーム送信用               |
-| `id`           | `string`                          | -            | `<fieldset>` の id。未指定時は自動採番（hint/error 参照に使用） |
+| Prop            | 型                                | デフォルト   | 説明                                                            |
+| --------------- | --------------------------------- | ------------ | --------------------------------------------------------------- |
+| `modelValue`    | `(string \| number \| boolean)[]` | -            | 選択中の値の配列。`v-model` として双方向バインドする            |
+| `items`         | `DadsCheckboxGroupItem[]`         | -（必須）    | 選択肢の配列。`{ value, label, disabled?, hint? }`              |
+| `legend`        | `string`                          | -            | `<legend>` に表示するグループラベル                             |
+| `direction`     | `'vertical' \| 'horizontal'`      | `'vertical'` | レイアウト方向                                                  |
+| `size`          | `'sm' \| 'md' \| 'lg'`            | `'md'`       | 各チェックボックスのサイズ                                      |
+| `hint`          | `string`                          | -            | フッターに表示する補助テキスト                                  |
+| `errorMessage`  | `string`                          | -            | エラーメッセージ。指定するとエラー視覚を有効化                  |
+| `required`      | `boolean`                         | `false`      | 凡例横に「必須」バッジを表示                                    |
+| `error`         | `boolean`                         | `false`      | エラー視覚を強制（メッセージなしでも適用）                      |
+| `disabled`      | `boolean`                         | `false`      | `<fieldset>` 全体を無効化（`items[].disabled` も併用可能）      |
+| `name`          | `string`                          | -            | 各 input の `name` 属性。非 AJAX のフォーム送信用               |
+| `id`            | `string`                          | -            | `<fieldset>` の id。未指定時は自動採番（hint/error 参照に使用） |
+| `requiredLabel` | `string`                          | `'必須'`     | 「必須」バッジに表示するテキスト。i18n 用に上書き可能           |
 
 ## Events
 

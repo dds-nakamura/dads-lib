@@ -120,17 +120,21 @@ const idx = ref(0)
 
 ## Props
 
-| Prop             | 型                       | デフォルト             | 説明                                             |
-| ---------------- | ------------------------ | ---------------------- | ------------------------------------------------ |
-| `modelValue`     | `number`                 | `0`                    | 現在表示中のスライドインデックス (v-model 対象)  |
-| `slides`         | `DadsImageSliderSlide[]` | -                      | 表示するスライド配列 (必須)                      |
-| `autoPlay`       | `boolean`                | `false`                | `true` のとき自動再生                            |
-| `interval`       | `number`                 | `5000`                 | 自動再生の間隔 (ms)                              |
-| `pauseOnHover`   | `boolean`                | `true`                 | ホバー時に自動再生を一時停止                     |
-| `showArrows`     | `boolean`                | `true`                 | 前へ/次への矢印ボタンを表示                      |
-| `showIndicators` | `boolean`                | `true`                 | スライド位置を示すドットインジケータを表示       |
-| `loop`           | `boolean`                | `true`                 | 末尾から先頭へ (および先頭から末尾へ) ラップする |
-| `ariaLabel`      | `string`                 | `'イメージスライダー'` | スライダ全体のアクセシブル名 (`aria-label`)      |
+| Prop                     | 型                        | デフォルト                     | 説明                                                                 |
+| ------------------------ | ------------------------- | ------------------------------ | -------------------------------------------------------------------- |
+| `modelValue`             | `number`                  | `0`                            | 現在表示中のスライドインデックス (v-model 対象)                      |
+| `slides`                 | `DadsImageSliderSlide[]`  | -                              | 表示するスライド配列 (必須)                                          |
+| `autoPlay`               | `boolean`                 | `false`                        | `true` のとき自動再生                                                |
+| `interval`               | `number`                  | `5000`                         | 自動再生の間隔 (ms)                                                  |
+| `pauseOnHover`           | `boolean`                 | `true`                         | ホバー時に自動再生を一時停止                                         |
+| `showArrows`             | `boolean`                 | `true`                         | 前へ/次への矢印ボタンを表示                                          |
+| `showIndicators`         | `boolean`                 | `true`                         | スライド位置を示すドットインジケータを表示                           |
+| `loop`                   | `boolean`                 | `true`                         | 末尾から先頭へ (および先頭から末尾へ) ラップする                     |
+| `ariaLabel`              | `string`                  | `'イメージスライダー'`         | スライダ全体のアクセシブル名 (`aria-label`)                          |
+| `prevSlideAriaLabel`     | `string`                  | `'前のスライド'`               | 「前へ」矢印ボタンの aria-label。i18n 用に上書き可能                 |
+| `nextSlideAriaLabel`     | `string`                  | `'次のスライド'`               | 「次へ」矢印ボタンの aria-label。i18n 用に上書き可能                 |
+| `slidePositionAriaLabel` | `string`                  | `'スライド位置'`               | インジケータ群 (`role="tablist"`) の aria-label。i18n 用に上書き可能 |
+| `formatSlideAriaLabel`   | `(idx: number) => string` | `` (i) => `スライド ${i+1}` `` | 各インジケータの aria-label フォーマッタ。i18n 用に上書き可能        |
 
 ### `DadsImageSliderSlide`
 

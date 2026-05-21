@@ -81,12 +81,13 @@ import { DadsScrollTopButton } from '@dads/vue'
 
 ## Props
 
-| Prop         | 型                                | デフォルト             | 説明                                      |
-| ------------ | --------------------------------- | ---------------------- | ----------------------------------------- |
-| `showOffset` | `number`                          | `200`                  | ボタン表示のしきい値 (px)                 |
-| `ariaLabel`  | `string`                          | `'ページの先頭へ戻る'` | アクセシブル名                            |
-| `position`   | `'bottom-right' \| 'bottom-left'` | `'bottom-right'`       | 画面上の配置                              |
-| `disabled`   | `boolean`                         | `false`                | 操作不可化 (クリック時のスクロールを抑止) |
+| Prop           | 型                                | デフォルト             | 説明                                                                  |
+| -------------- | --------------------------------- | ---------------------- | --------------------------------------------------------------------- |
+| `showOffset`   | `number`                          | `200`                  | ボタン表示のしきい値 (px)                                             |
+| `ariaLabel`    | `string`                          | `'ページの先頭へ戻る'` | アクセシブル名                                                        |
+| `position`     | `'bottom-right' \| 'bottom-left'` | `'bottom-right'`       | 画面上の配置                                                          |
+| `disabled`     | `boolean`                         | `false`                | 操作不可化 (クリック時のスクロールを抑止)                             |
+| `defaultLabel` | `string`                          | `'トップへ'`           | デフォルトスロット未指定時に表示される可視ラベル。i18n 用に上書き可能 |
 
 ## Events
 
