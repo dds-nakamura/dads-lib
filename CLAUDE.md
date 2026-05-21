@@ -228,6 +228,20 @@ dads-lib/
 - Never commit directly to `development` or `main` — always work on a feature/hotfix branch
 - Verify current branch with `git branch --show-current` before any commit
 
+## Protected Branches (削除禁止)
+
+以下のブランチは **絶対に削除してはならない**。マージ済み判定や branch cleanup の対象から常に除外すること。
+
+| ブランチ      | 種類             | 役割                                                                    |
+| ------------- | ---------------- | ----------------------------------------------------------------------- |
+| `main`        | 長期ブランチ     | リリース本流                                                            |
+| `development` | 長期ブランチ     | 開発統合ブランチ（PR のデフォルト base）                                |
+| `vue-pkg`     | orphan ブランチ  | `@dads/vue` の npm 配布スナップショット（`vue-v<semver>` tag を打つ場所） |
+
+- `vue-pkg` は `main` と履歴が独立した orphan ブランチで、`./scripts/release-vue.sh` が `packages/vue/` の dist を含む配布物をコミットする先。`git branch -r --merged` には現れないが、これは設計通り（履歴が独立しているため）であって未マージ状態ではない。
+- マージ済みリモートブランチを削除する作業の際は、上記 3 つを **必ず allowlist として除外** してから `git push origin --delete` を実行する。
+- 上記以外でも `release/*`, `hotfix/*`, tag 付き orphan ブランチなど運用上重要なブランチを見つけたら、削除前に必ずユーザーに確認する。
+
 ## Verification
 
 - Use Playwright MCP for visual verification of UI/CSS changes when available
