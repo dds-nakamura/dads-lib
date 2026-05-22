@@ -13,6 +13,7 @@ declare const __VLS_base: import("vue").DefineComponent<DadsTableProps, {}, {}, 
     striped: boolean;
     skeletonRowCount: number;
     skeletonColumnCount: number;
+    loadingLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
 declare const _default: typeof __VLS_export;

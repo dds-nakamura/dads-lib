@@ -23,6 +23,10 @@ declare const __VLS_base: import("vue").DefineComponent<DadsCarouselProps, {}, {
     showIndicators: boolean;
     loop: boolean;
     headingLevel: import("./DadsCarousel.types").DadsCarouselHeadingLevel;
+    prevSlideAriaLabel: string;
+    nextSlideAriaLabel: string;
+    slidePositionAriaLabel: string;
+    formatSlideAriaLabel: (idx: number) => string;
     visibleCount: number;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;

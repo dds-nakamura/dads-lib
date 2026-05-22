@@ -5,6 +5,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsUtilityLinkProps, 
     "onClick:item"?: ((item: DadsUtilityLinkItem, index: number, event: MouseEvent) => any) | undefined;
 }>, {
     ariaLabel: string;
+    newTabAriaLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

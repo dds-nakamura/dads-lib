@@ -52,6 +52,11 @@ export interface DadsUtilityLinkProps {
      * 例: `'ユーティリティリンク'` / `'フッターリンク'`。
      */
     ariaLabel?: string;
+    /**
+     * 外部リンクのテイルアイコン (新規タブで開く SVG) に付与する `aria-label`。
+     * デフォルト: `'新規タブで開きます'`。i18n 対応のため上書き可能。
+     */
+    newTabAriaLabel?: string;
 }
 export interface DadsUtilityLinkEmits {
     /**

@@ -50,5 +50,10 @@ export interface DadsTableProps {
      * visual transition when loading completes.
      */
     skeletonColumnCount?: number;
+    /**
+     * Screen-reader-only text announced while the loading skeleton is shown.
+     * Default `'読み込み中'`.
+     */
+    loadingLabel?: string;
 }
 //# sourceMappingURL=DadsTable.types.d.ts.map

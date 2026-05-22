@@ -17,11 +17,13 @@ declare const __VLS_export: import("vue").DefineComponent<DadsFileUploadProps, {
     disabled: boolean;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     multiple: boolean;
     buttonText: string;
     dropzoneText: string;
     expandDropArea: boolean;
     showFileSize: boolean;
+    formatRemoveLabel: (name: string) => string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

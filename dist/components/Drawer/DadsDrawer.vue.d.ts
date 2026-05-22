@@ -8,6 +8,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsDrawerProps, {}, {
 }>, {
     modelValue: boolean;
     closeLabel: string;
+    navAriaLabel: string;
+    defaultAriaLabel: string;
     placement: import("./DadsDrawer.types").DadsDrawerPlacement;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;

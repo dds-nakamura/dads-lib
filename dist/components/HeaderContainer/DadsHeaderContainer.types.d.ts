@@ -27,6 +27,11 @@ export interface DadsHeaderContainerProps {
     /** aria-label for the hamburger button. Defaults to 'メニューを開く'. */
     menuToggleLabel?: string;
     /**
+     * `aria-label` for the main `<nav>` element. Defaults to 'メインナビゲーション'.
+     * i18n を行いたい場合に上書きする。
+     */
+    navAriaLabel?: string;
+    /**
      * Header variant per official DADS spec. Defaults to `'wide-full'`.
      * Controls inner max-width and minimum height of the header bar.
      */

@@ -55,6 +55,35 @@ export interface DadsTableControlProps {
     showPageSize?: boolean;
     /** Show the pagination (prev / page indicator / next). Default: `true`. */
     showPagination?: boolean;
+    /** ARIA label for the root group. Default `'テーブルコントロール'`. */
+    ariaLabel?: string;
+    /** Visible label for the search input. Default `'検索'`. */
+    searchLabel?: string;
+    /** Visible label for the page-size selector. Default `'表示件数'`. */
+    pageSizeLabel?: string;
+    /** ARIA label for the pagination navigation. Default `'ページ送り'`. */
+    paginationAriaLabel?: string;
+    /** ARIA label for the previous-page button. Default `'前のページ'`. */
+    prevPageAriaLabel?: string;
+    /** ARIA label for the current-page indicator. Default `'現在のページ'`. */
+    currentPageAriaLabel?: string;
+    /** ARIA label for the next-page button. Default `'次のページ'`. */
+    nextPageAriaLabel?: string;
+    /** Visible label for the previous-page button. Default `'前へ'`. */
+    prevPageLabel?: string;
+    /** Visible label for the next-page button. Default `'次へ'`. */
+    nextPageLabel?: string;
+    /**
+     * Formatter for each page-size `<option>` label. Default `` (n) => `${n} 件` ``.
+     * Override to i18n: e.g. `` (n) => `${n} items` ``.
+     */
+    formatPageSizeOption?: (n: number) => string;
+    /**
+     * Formatter for the range status text (visible above pagination).
+     * Default produces `'0 件'` when totalItems is 0, or
+     * `` `${start}-${end} / ${total} 件` `` otherwise.
+     */
+    formatRangeLabel?: (start: number, end: number, total: number) => string;
 }
 export interface DadsTableControlEmits {
     /** Search query changed. */

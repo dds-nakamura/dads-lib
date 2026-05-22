@@ -10,6 +10,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsRadioGroupProps, {
     size: import("../Radio/DadsRadio.types.js").DadsRadioSize;
     disabled: boolean;
     required: boolean;
+    requiredLabel: string;
     direction: import("./DadsRadioGroup.types").DadsRadioGroupDirection;
     legendVisuallyHidden: boolean;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;

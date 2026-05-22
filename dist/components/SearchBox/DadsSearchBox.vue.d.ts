@@ -20,6 +20,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsSearchBoxProps, {}
     modelValue: string;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     buttonLabel: string;
     clearable: boolean;
     clearLabel: string;

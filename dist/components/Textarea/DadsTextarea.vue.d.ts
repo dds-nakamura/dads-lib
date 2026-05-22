@@ -15,6 +15,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsTextareaProps, {},
     disabled: boolean;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     rows: number;
     resize: import("./DadsTextarea.types").DadsTextareaResize;
     autoResize: boolean;

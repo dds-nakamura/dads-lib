@@ -16,6 +16,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsCheckboxProps, {},
     modelValue: boolean;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     indeterminate: boolean;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;

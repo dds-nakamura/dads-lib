@@ -84,6 +84,27 @@ export interface DadsCarouselProps {
     loop?: boolean;
     /** カルーセル全体のアクセシブル名 (`aria-label`)。 */
     ariaLabel?: string;
+    /**
+     * 「前のスライド」ボタンの `aria-label`。デフォルトは `'前のスライド'`。
+     * i18n 対応で英語等に差し替え可能。
+     */
+    prevSlideAriaLabel?: string;
+    /**
+     * 「次のスライド」ボタンの `aria-label`。デフォルトは `'次のスライド'`。
+     * i18n 対応で英語等に差し替え可能。
+     */
+    nextSlideAriaLabel?: string;
+    /**
+     * インジケータ群 (tablist) の `aria-label`。デフォルトは `'スライド位置'`。
+     * i18n 対応で英語等に差し替え可能。
+     */
+    slidePositionAriaLabel?: string;
+    /**
+     * 各インジケータの `aria-label` を生成するフォーマッタ。
+     * デフォルトは `(i) => \`スライド ${i + 1}\``。i18n 対応で英語等に差し替え可能。
+     * @param idx 0 始まりのスライドインデックス
+     */
+    formatSlideAriaLabel?: (idx: number) => string;
 }
 export interface DadsCarouselEmits {
     /** v-model 用。新しいインデックス。 */

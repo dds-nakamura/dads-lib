@@ -45,6 +45,27 @@ export interface DadsImageSliderProps {
     showAllLabel?: string;
     /** 「すべてのスライド」リンクの href。 */
     showAllHref?: string;
+    /**
+     * 「前のスライド」ボタンの `aria-label`。デフォルトは `'前のスライド'`。
+     * i18n 対応で英語等に差し替え可能。
+     */
+    prevSlideAriaLabel?: string;
+    /**
+     * 「次のスライド」ボタンの `aria-label`。デフォルトは `'次のスライド'`。
+     * i18n 対応で英語等に差し替え可能。
+     */
+    nextSlideAriaLabel?: string;
+    /**
+     * インジケータ群 (tablist) の `aria-label`。デフォルトは `'スライド位置'`。
+     * i18n 対応で英語等に差し替え可能。
+     */
+    slidePositionAriaLabel?: string;
+    /**
+     * 各インジケータの `aria-label` を生成するフォーマッタ。
+     * デフォルトは `(i) => \`スライド ${i + 1}\``。i18n 対応で英語等に差し替え可能。
+     * @param idx 0 始まりのスライドインデックス
+     */
+    formatSlideAriaLabel?: (idx: number) => string;
 }
 export interface DadsImageSliderEmits {
     /** v-model 用。新しいインデックス。 */

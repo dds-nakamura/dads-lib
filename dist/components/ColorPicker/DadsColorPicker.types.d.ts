@@ -15,6 +15,22 @@ export interface DadsColorPickerProps {
     disabled?: boolean;
     /** Accessible label applied to the native color input. */
     label?: string;
+    /**
+     * Fallback aria-label for the native color input when `label` is not
+     * provided. Default: `'色を選択'`. Override to localize the picker.
+     */
+    defaultAriaLabel?: string;
+    /**
+     * aria-label for the HEX text input. Default: `'HEXカラーコード'`.
+     * Override to localize the picker.
+     */
+    hexInputAriaLabel?: string;
+    /**
+     * Formatter that returns the aria-label for each swatch button. Receives
+     * the swatch hex string (e.g. `'#FF5500'`). Default produces
+     * `` `${swatch} を選択` ``. Override to localize the picker.
+     */
+    formatSwatchAriaLabel?: (swatch: string) => string;
 }
 export interface DadsColorPickerEmits {
     (e: 'update:modelValue', value: string): void;

@@ -38,6 +38,16 @@ export interface DadsDrawerProps {
     /** aria-label for the close button. Defaults to "閉じる". */
     closeLabel?: string;
     /**
+     * `title` 未指定時のフォールバック `aria-label`。デフォルト `'ナビゲーション'`。
+     * i18n を行いたい場合に上書きする。
+     */
+    defaultAriaLabel?: string;
+    /**
+     * ドロワー内 `<nav>` の `aria-label`。デフォルト `'ドロワーナビゲーション'`。
+     * i18n を行いたい場合に上書きする。
+     */
+    navAriaLabel?: string;
+    /**
      * Drawer 配置パターン。`left` (デフォルト) / `right` / `full`。
      * `full` はパネルがビューポート全体を覆い、overlay は背景色のみ担う。
      */

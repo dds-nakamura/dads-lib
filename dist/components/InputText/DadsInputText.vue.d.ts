@@ -17,6 +17,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsInputTextProps, {}
     required: boolean;
     readonly: boolean;
     align: import("./DadsInputText.types").DadsInputTextAlign;
+    requiredLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

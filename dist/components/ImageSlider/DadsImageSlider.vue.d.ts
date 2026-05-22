@@ -15,6 +15,10 @@ declare const __VLS_export: import("vue").DefineComponent<DadsImageSliderProps, 
     showIndicators: boolean;
     loop: boolean;
     headingLevel: 1 | 2 | 3 | 4 | 5 | 6;
+    prevSlideAriaLabel: string;
+    nextSlideAriaLabel: string;
+    slidePositionAriaLabel: string;
+    formatSlideAriaLabel: (idx: number) => string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

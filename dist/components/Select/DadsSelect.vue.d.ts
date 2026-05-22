@@ -19,11 +19,13 @@ declare const __VLS_export: import("vue").DefineComponent<DadsSelectProps, {}, {
     disabled: boolean;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     items: DadsSelectItem[];
     itemValue: string;
     itemTitle: string;
     multiple: boolean;
     chips: boolean;
+    formatRemoveAriaLabel: (title: string) => string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

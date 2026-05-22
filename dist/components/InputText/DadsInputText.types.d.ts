@@ -65,6 +65,11 @@ export interface DadsInputTextProps {
      * behaviour). See {@link DadsInputTextAlign} for the full list.
      */
     align?: DadsInputTextAlign;
+    /**
+     * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+     * Default: `'必須'`.
+     */
+    requiredLabel?: string;
 }
 export interface DadsInputTextEmits {
     (e: 'update:modelValue', value: string | number): void;

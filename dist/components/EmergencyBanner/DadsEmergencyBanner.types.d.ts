@@ -41,6 +41,12 @@ export interface DadsEmergencyBannerProps {
      * 「新規タブで開く」external icon. Default `false`.
      */
     linkExternal?: boolean;
+    /**
+     * Screen-reader-only hint announced after the CTA label when
+     * `linkExternal=true`. Default: `'（新規タブで開く）'`. Override to
+     * localize the banner.
+     */
+    newTabHintText?: string;
 }
 export interface DadsEmergencyBannerEmits {
     (e: 'update:modelValue', value: boolean): void;

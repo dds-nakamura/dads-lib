@@ -14,7 +14,9 @@ declare const __VLS_export: import("vue").DefineComponent<DadsMobileMenuProps, {
     ariaLabel: string;
     modelValue: boolean;
     closeLabel: string;
+    navAriaLabel: string;
     utilityItems: DadsUtilityLinkItem[];
+    subLinksAriaLabel: string;
     backLabel: string;
     showCloseButton: boolean;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;

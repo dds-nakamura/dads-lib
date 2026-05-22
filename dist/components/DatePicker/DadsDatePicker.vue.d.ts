@@ -17,7 +17,14 @@ declare const __VLS_export: import("vue").DefineComponent<DadsDatePickerProps, {
     modelValue: string;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     locale: import("./DadsDatePicker.types").DadsDatePickerLocale;
+    yearLabel: string;
+    monthLabel: string;
+    dayLabel: string;
+    openCalendarAriaLabel: string;
+    prevMonthAriaLabel: string;
+    nextMonthAriaLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

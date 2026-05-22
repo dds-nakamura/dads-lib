@@ -15,6 +15,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsComboboxProps, {},
     disabled: boolean;
     required: boolean;
     readonly: boolean;
+    requiredLabel: string;
     items: DadsComboboxItem[];
     itemValue: string;
     itemTitle: string;

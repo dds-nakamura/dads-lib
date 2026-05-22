@@ -30,6 +30,11 @@ export interface DadsRadioProps {
     /** Native `id`. When omitted, an id is generated so the label `for` and
      *  ARIA `aria-describedby` references stay in sync. */
     id?: string;
+    /**
+     * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
+     * Default: `'必須'`.
+     */
+    requiredLabel?: string;
 }
 export interface DadsRadioEmits {
     (e: 'update:modelValue', value: DadsRadioValue): void;
