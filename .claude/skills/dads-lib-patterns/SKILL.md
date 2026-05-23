@@ -237,32 +237,33 @@ npm install "git+https://github.com/dds-nakamura/dads-lib.git#vue-v<semver>"
 
 ---
 
-## 8. Spec-driven Development (`.steering/`)
+## 8. Spec-driven Development (`.steering/` + `docs/`)
 
-新規大型タスクは **spec フォルダ**を切ってから着手する。
+新規大型タスクは **spec フォルダ**を切ってから着手する。`.steering/` は **`.gitignore` 対象の一時作業エリア**、永続化が必要な仕様・設計・意思決定は `docs/` に集約する。
 
 ### Folder Structure
 
 ```
-.steering/<YYYY-MM-DD>-<kebab-task-name>/
+.steering/<ID>-<kebab-task-name>/    # ID = GitHub Issue 番号 or Backlog 課題キー数値部
 ├── requirements.md    # 要件定義 (WHAT / WHY / 制約)
 ├── design.md          # 設計 (HOW / アーキテクチャ / 代替案)
 └── tasklist.md        # Phase 別タスクリスト ([ ] / [x])
 ```
+
+例: GitHub Issue #42 → `.steering/42-dads-vue-figma-compliance/`
+例: Backlog 課題キー `DDS-123` → `.steering/123-dads-vue-figma-compliance/`
 
 ### Phase 設計
 
 - 各 Phase に **Exit Criteria（完了条件）** を明記
 - Phase 内のタスクは `[ ]` / `[x]` チェックボックス
 - 並列度（直列 / 並列可）を Phase ヘッダに記す
-- 完了した spec は **Historical reference banner** を冒頭に追記して残す（削除しない）
 
-### 既存 specs
+### 永続化フロー
 
-- `2026-05-12-dads-vue-library-init` — monorepo 初期化
-- `2026-05-14-dads-vue-{form-inputs,navigation-menus,display-misc,docs-rollout}` — 機能拡充の wave
-- `2026-05-17-dads-vue-{figma-compliance,naming-and-gap}` — 仕様整合
-- `2026-05-17-multi-remote-release` — Backlog Git 連携
+- タスク完了時点で永続化対象の内容（仕様・設計・意思決定の根拠）を `docs/` 配下の該当トピックに集約する。
+- 集約後は `.steering/<ID>-<kebab-task-name>/` を削除可能。`.steering/` 自体は版管理対象外なので残しても他環境に影響しない。
+- `docs/` の構成は [`docs/README.md`](../../../docs/README.md) を索引として `architecture/` / `components/` / `quality/` / `guides/` に分類。
 
 ---
 
@@ -319,7 +320,7 @@ packages:
 
 ### Spec 文書
 
-完了した spec は `.steering/` に残し、**冒頭に Historical reference banner** を追加して撤退ではなく履歴化する。
+`.steering/<ID>-<kebab-task-name>/` (gitignore) で作業し、永続化が必要な仕様・設計・意思決定の根拠は `docs/` 配下のトピック別ドキュメントに集約する。`.steering/` 配下は完了後に削除可能。詳細は §8 を参照。
 
 ---
 

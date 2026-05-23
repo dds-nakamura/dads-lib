@@ -141,7 +141,8 @@ dads-lib/
 │
 ├── .changeset/                             Changesets 設定
 ├── .github/workflows/ci.yml                CI (typecheck/lint/test/build)
-├── .steering/2026-05-12-dads-vue-library-init/  本プロジェクトの仕様 (requirements/design/tasklist)
+├── docs/                                   ★ 永続ドキュメント (architecture/components/quality/guides)
+├── .steering/                              一時作業エリア (gitignore / 課題毎フォルダ {ID}-{kebab-name})
 ├── CLAUDE.md                               Claude Code 用プロジェクト指示
 ├── VENDORED.md                             vendor 取り込みバージョン管理
 └── eslint.config.js                        ESLint 9 flat config (ルート集約)
