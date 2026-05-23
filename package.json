@@ -1,6 +1,6 @@
 {
   "name": "@dads/vue",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "type": "module",
   "description": "DADS (デジタル庁デザインシステム) Vue 3 コンポーネントライブラリ",
@@ -45,13 +45,13 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^4.0.0",
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^20.9.0",
     "sass": "^1.99.0",
     "typescript": "^5.7.2",
-    "vite": "^7.3.0",
-    "vitest": "^3.2.4",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0",
     "vitest-axe": "^0.1.0",
     "vue": "^3.5.0",
     "vue-tsc": "^3.0.0"
