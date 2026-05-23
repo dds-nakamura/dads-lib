@@ -19,6 +19,10 @@ Thumbs.db
 # MCP / agent artifacts
 .playwright-mcp/
 
+# Steering workspace (ephemeral specs per Issue / Backlog 課題キー)
+# 永続化が必要なドキュメントは docs/ に集約する運用 (CLAUDE.md 参照)。
+.steering/
+
 # Runtime artifacts from dads-document-html local server
 /dads-document-html/.server.pid
 
