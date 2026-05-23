@@ -54,7 +54,7 @@
 | `@dads/tailwind-plugin` | `packages/tailwind-plugin/` | `@digital-go-jp/tailwind-theme-plugin` の薄ラッパ (v3) |
 | `@dads/docs`            | `apps/docs/`                | VitePress カタログ (26 コンポーネントの demo + API)    |
 
-詳細仕様は `.steering/2026-05-12-dads-vue-library-init/{requirements,design,tasklist}.md` を参照。
+詳細仕様は [`docs/`](./docs/) 配下に集約済み（[`docs/README.md`](./docs/README.md) が索引）。
 
 ### 新規アプリで `@dads/vue` を使うときの最短手順
 
@@ -103,7 +103,8 @@ dads-lib/
 │
 ├── .changeset/                            Changesets (linked: @dads/*, ignore: @dads/docs)
 ├── .github/workflows/ci.yml               CI (typecheck/lint/test/build × 3)
-├── .steering/                             仕様ドキュメント (requirements/design/tasklist)
+├── .steering/                             一時作業エリア (gitignore / 課題毎フォルダ)
+├── docs/                                  ★ 永続ドキュメント (architecture/components/quality/guides)
 │
 ├── dads-document-md/                      ★ 仕様参照の第一候補（90 ファイル / 596KB）
 │   └── dads/
@@ -215,6 +216,16 @@ dads-lib/
 - GitHub (Design Tokens): <https://github.com/digital-go-jp/design-tokens>
 - npm (Tailwind plugin): <https://www.npmjs.com/package/@digital-go-jp/tailwind-theme-plugin>
 - npm (Design Tokens): <https://www.npmjs.com/package/@digital-go-jp/design-tokens>
+
+## Spec / Steering Workflow
+
+- 課題ごとの仕様作業エリアは `.steering/` 配下に作成する。**`.steering/` は `.gitignore` 対象（永続化しない）**。
+- フォルダ名は `.steering/{ID}-{kebab-case タスク名}/` の形式とする。`{ID}` は **GitHub Issue 番号** または **Backlog 課題キーの数値部分** を使う（旧 `yyyymmdd` プレフィックス運用は廃止）。
+  - 例: GitHub Issue #42 → `.steering/42-dads-vue-figma-compliance/`
+  - 例: Backlog 課題キー `DDS-123` → `.steering/123-dads-vue-figma-compliance/`
+- 各フォルダの基本構成: `requirements.md` / `design.md` / `tasklist.md`（必要に応じ `phase-specs.yaml` / `gap-report-*.md` 等を追加）。
+- **永続化すべき仕様・設計・意思決定は [`docs/`](./docs/) に集約する**。`.steering/` は作業完了後に削除可能なエフェメラル領域。`docs/` の構成は [`docs/README.md`](./docs/README.md) を参照。
+- `/phase-plan` などの skill が自動生成するパス（`.steering/{YYYYMMDD}-{タスク名}/...`）を使う場合も、上書きでフォルダ名を `{ID}-{タスク名}` に揃えること。
 
 ## PR Workflow
 

@@ -2,7 +2,7 @@
 
 このリポジトリは以下の上流リポジトリのソースを **vendor (取り込み)** している。各サブディレクトリはこちらの git 管理下に置かれ、上流の `.git/` は `.gitignore` で除外している。
 
-詳細な戦略: `.steering/2026-05-12-dads-vue-library-init/design.md` §9 / requirements.md D-6
+詳細な戦略: [`docs/architecture/monorepo-and-vue-library.md`](./docs/architecture/monorepo-and-vue-library.md)（Vendor 方式 / 主要意思決定 D-6）
 
 ## 取り込みバージョン (Pinned)
 
