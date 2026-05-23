@@ -7,6 +7,14 @@ import type { DadsScrollTopButtonProps } from '../DadsScrollTopButton.types'
 
 enableAutoUnmount(afterEach)
 
+// Vitest 4 では spy の自動 restore が以前より厳格化されたため、明示的に
+// 各テスト終了時に全 spy を復元する。これがないと vi.spyOn(window, 'scrollTo')
+// などのチェイン状の bind が累積し、後続テストで意図せず呼び出しカウントが
+// 紛れ込む。
+afterEach(() => {
+  vi.restoreAllMocks()
+})
+
 // happy-dom does not implement a real layout engine, so `window.scrollY` is a
 // settable own-property. We define it explicitly with a backing variable so
 // individual tests can mutate it freely and the component reads the same
