@@ -18,7 +18,6 @@ Thumbs.db
 
 # MCP / agent artifacts
 .playwright-mcp/
-.claude/
 
 # Runtime artifacts from dads-document-html local server
 /dads-document-html/.server.pid
