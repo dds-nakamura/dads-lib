@@ -10,7 +10,7 @@ export default defineConfig({
       formats: ['es'],
       fileName: 'index',
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: ['vue'],
       output: {
         globals: { vue: 'Vue' },
@@ -20,7 +20,9 @@ export default defineConfig({
     cssCodeSplit: false,
     emptyOutDir: true,
   },
-  // Vite 7 は SCSS の modern API がデフォルト。sass-embedded ではなく
+  // Vite 8 では Rolldown (Rust) が Rollup+esbuild を置換。
+  // CSS minify はデフォルトの Lightning CSS を採用 (Vite 8 推奨)。
+  // SCSS の modern API はデフォルト。sass-embedded ではなく
   // sass (dart-sass) を採用するのは、sass-embedded の async dispatcher が
   // vitest 並列実行で落ちる既知の問題があるため。
 })
