@@ -4,18 +4,18 @@
 
 ## 命名規約
 
-`@dads/vue` のコンポーネント・型・API は公式 slug (`dads-document-md/dads/components/<slug>/index.md`) との一致を最優先する。命名揺れ解消にあたっては Option B (旧名を `@deprecated` alias として併存) を採用し、private package ながら暫定的に互換維持する。
+`@dads/vue` のコンポーネント・型・API は公式 slug (`dads-document-md/dads/components/<slug>/index.md`) との一致を最優先する。命名揺れ解消にあたっては Option B (旧名を `@deprecated` alias として一時併存し、次の major リリースで削除) を採用した。
 
 ### コンポーネント名
 
 - すべてのコンポーネントは `Dads` プレフィックス + PascalCase の公式 slug を用いる
   例: `dads-document-md/dads/components/input-text/` → `DadsInputText`
-- 旧名は `@deprecated` JSDoc 付きで `packages/vue/src/index.ts` から re-export する (次の major で削除予定)
+- 旧名 alias は major リリース時に削除する方針で、`packages/vue/src/index.ts` には公式名のみが残る
 - ディレクトリ rename は `git mv` で履歴を保持する
 
-公式 slug と一致させた最終命名:
+公式 slug と一致させた最終命名 (旧名 alias は major リリースで削除済み):
 
-| 公式 slug          | 新名 (公式準拠)                | 旧名 (deprecated alias)       |
+| 公式 slug          | 新名 (公式準拠)                | 旧名 (削除済み)               |
 | ------------------ | ------------------------------ | ----------------------------- |
 | `dialog`           | `DadsDialog`                   | `DadsModal`                   |
 | `header-container` | `DadsHeaderContainer`          | `DadsHeader`                  |
@@ -68,7 +68,7 @@
 | ------ | ---- | ---- |
 | High   | 9    | carousel, dialog, drawer, header-container, heading, menu-list-box, mobile-menu, notification-banner, breadcrumb (条件付) |
 | Medium | 17   | accordion, card, chip-label, chip-tag, date-picker, divider, emergency-banner, file-upload, hamburger-menu-button, image-slider, input-text (a11y warn), list, menu-list, progress-indicator, resource-list, search-box, select, table |
-| Low    | 13   | blockquote, bottom-navigation (deprecated), button (xs 確認), checkbox, description-list, disclosure, language-selector, radio, scroll-top-button (deprecated), textarea, utility-link, mega-menu (仕様乏), heading (略) |
+| Low    | 11   | blockquote, button (xs 確認), checkbox, description-list, disclosure, language-selector, radio, textarea, utility-link, mega-menu (仕様乏), heading (略) |
 
 ### 未実装コンポーネント
 
@@ -166,9 +166,9 @@
 
 ### 命名揺れ
 
-公式 slug と実装名の不一致 (Option B で deprecated alias 併存):
+公式 slug と実装名の不一致 (Option B で deprecated alias 併存 → 次の major リリースで削除済み):
 
-| 公式 slug          | 旧名 (deprecated)              | 新名 (公式準拠)             |
+| 公式 slug          | 旧名 (削除済み)                | 新名 (公式準拠)             |
 | ------------------ | ------------------------------ | --------------------------- |
 | `dialog`           | `DadsModal` / `DadsModalProps` | `DadsDialog` / `DadsDialogProps` |
 | `header-container` | `DadsHeader`                   | `DadsHeaderContainer`       |
@@ -176,7 +176,7 @@
 | `chip-label`       | `DadsChip` (兼用)              | `DadsChipLabel` (分離)      |
 | `chip-tag`         | `DadsChip` (兼用)              | `DadsChipTag` (分離)        |
 
-CSS class も同様: `.dads-modal__*` → `.dads-dialog__*` 等。旧 class は alias として残す。
+CSS class も同様: `.dads-modal__*` → `.dads-dialog__*` 等。旧 class alias も major リリースと同時に削除済み。
 
 ### 該当なし (Low / 公式仕様充足)
 
@@ -187,7 +187,7 @@ CSS class も同様: `.dads-modal__*` → `.dads-dialog__*` 等。旧 class は 
 - radio (`description` / `legendVisuallyHidden` を追加すれば完了レベル)
 - language-selector (`colorScheme` / `cornerShape` を追加すれば完了レベル)
 
-公式が非推奨扱いのため拡張せず docs に warning を強調:
+公式が非推奨扱いのため `@dads/vue` から除外済み (Issue #14, major リリース):
 
 - bottom-navigation (代替: HamburgerMenuButton + MobileMenu / HeaderContainer + GlobalMenu / Tab)
 - scroll-top-button (代替: TableOfContents / PageNavigation / skip-link / Header sticky)
@@ -214,10 +214,14 @@ CSS class も同様: `.dads-modal__*` → `.dads-dialog__*` 等。旧 class は 
 | Medium 重要度実装     | 17 件  | Done (Phase 4) |
 | Low 重要度評価        | 13 件  | Done (Phase 5) |
 
-将来の major リリース時の対応事項:
+major リリース完了済み対応 (Issue #14):
 
-- 旧名 deprecated alias の削除 (`DadsModal` / `DadsHeader` / `DadsTextField` / `DadsChip`)
-- 旧 CSS class alias (`.dads-modal__*` 等) の削除
+- 旧名 deprecated alias の削除 (`DadsModal` / `DadsHeader` / `DadsTextField` / `DadsChip`) — 完了
+- 旧 CSS class alias (`.dads-modal__*` 等) の削除 — 完了
+- 公式 DADS が非推奨指定の `DadsScrollTopButton` / `DadsBottomNavigation` を `@dads/vue` から除外 — 完了
+
+残課題:
+
 - mega-menu の公式仕様確定後の再評価
 - carousel の `autoPlay` 削除検討 (公式非推奨)
 

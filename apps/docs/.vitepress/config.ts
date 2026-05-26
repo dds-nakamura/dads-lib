@@ -1,9 +1,8 @@
 import { defineConfig } from 'vitepress'
 
-// 52 コンポーネント (DADS 公式 46 + 独自 6) を 4 カテゴリにグルーピング。
+// DADS 公式コンポーネントを 4 カテゴリにグルーピング。
 // 公式分類 (入力 / ナビゲーション / 表示 / フィードバック) に沿って配置。
-// TableOfContents は Navigation 内、TableControl は Display 内、Chip alias は
-// Display 末尾 (deprecated 明示)。
+// TableOfContents は Navigation 内、TableControl は Display 内。
 const components = {
   Form: [
     { text: 'Button', link: '/components/button' },
@@ -31,12 +30,10 @@ const components = {
     { text: 'MenuListBox', link: '/components/menu-list-box' },
     { text: 'HamburgerMenuButton', link: '/components/hamburger-menu-button' },
     { text: 'UtilityLink', link: '/components/utility-link' },
-    { text: 'ScrollTopButton', link: '/components/scroll-top-button' },
     { text: 'GlobalMenu', link: '/components/global-menu' },
     { text: 'MegaMenu', link: '/components/mega-menu' },
     { text: 'PageNavigation', link: '/components/page-navigation' },
     { text: 'TableOfContents', link: '/components/table-of-contents' },
-    { text: 'BottomNavigation', link: '/components/bottom-navigation' },
     { text: 'MobileMenu', link: '/components/mobile-menu' },
   ],
   Feedback: [
@@ -54,7 +51,6 @@ const components = {
     { text: 'Accordion', link: '/components/accordion' },
     { text: 'ChipLabel', link: '/components/chip-label' },
     { text: 'ChipTag', link: '/components/chip-tag' },
-    { text: 'Chip (deprecated)', link: '/components/chip' },
     { text: 'Disclosure', link: '/components/disclosure' },
     { text: 'DescriptionList', link: '/components/description-list' },
     { text: 'Image', link: '/components/image' },

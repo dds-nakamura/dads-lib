@@ -1,8 +1,7 @@
 import type { DadsSize } from '../../types/common'
 
 /**
- * 公式 slug は `input-text`。旧名 `DadsTextField` は deprecated alias と
- * して併存する。
+ * 公式 slug は `input-text`。
  */
 export type DadsInputTextSize = Exclude<DadsSize, 'xs'>
 

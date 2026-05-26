@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
-import DadsChip from '../Chip/DadsChip.vue'
+import DadsChipTag from '../ChipTag/DadsChipTag.vue'
 import type {
   DadsComboboxEmits,
   DadsComboboxFilter,
@@ -281,7 +281,7 @@ const onControlMousedown = (event: MouseEvent) => {
   const target = event.target as HTMLElement | null
   if (target && target === inputRef.value) return
   // Don't steal a click destined for the close button inside a chip.
-  if (target?.closest('.dads-chip__close')) return
+  if (target?.closest('.dads-chip-tag__close')) return
   event.preventDefault()
   inputRef.value?.focus()
 }
@@ -334,14 +334,14 @@ watch(
     <div class="dads-combobox__control" @mousedown="onControlMousedown">
       <ul v-if="multiple && selectedValues.length > 0" class="dads-combobox__chip-list">
         <li v-for="value in selectedValues" :key="String(value)" class="dads-combobox__chip-item">
-          <DadsChip
+          <DadsChipTag
             size="sm"
             :closable="!disabled && !readonly"
             :disabled="disabled"
             @close="removeChip(value)"
           >
             {{ titleForValue(value) }}
-          </DadsChip>
+          </DadsChipTag>
         </li>
       </ul>
       <input

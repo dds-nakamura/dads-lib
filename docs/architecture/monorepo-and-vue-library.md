@@ -142,7 +142,7 @@ apps/docs (@dads/docs)
 
 `src/index.ts` は以下を named export で提供する。
 
-- コンポーネント: `DadsButton`, `DadsTextField`, ... （26 種類）
+- コンポーネント: `DadsButton`, `DadsInputText`, ... （49 種類）
 - 型: `DadsButtonProps`, `DadsButtonEmits`, ... （各コンポーネント対応）
 - プリミティブ型: `DadsSize`, `DadsSemanticColor`
 
@@ -156,7 +156,7 @@ import '@dads/vue/styles'   // 全コンポーネントの CSS
 
 ```vue
 <script setup lang="ts">
-import { DadsButton, DadsTextField } from '@dads/vue'
+import { DadsButton, DadsInputText } from '@dads/vue'
 </script>
 ```
 
