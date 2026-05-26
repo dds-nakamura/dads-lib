@@ -224,12 +224,12 @@ describe('DadsCombobox', () => {
   })
 
   describe('multiple mode', () => {
-    it('renders DadsChip for each selected value', () => {
+    it('renders DadsChipTag for each selected value', () => {
       const wrapper = createWrapper({
         multiple: true,
         modelValue: ['a', 'c'],
       })
-      const chips = wrapper.findAll('.dads-chip')
+      const chips = wrapper.findAll('.dads-chip-tag')
       expect(chips).toHaveLength(2)
       expect(chips[0].text()).toContain('Apple')
       expect(chips[1].text()).toContain('Cherry')
@@ -278,7 +278,7 @@ describe('DadsCombobox', () => {
         multiple: true,
         modelValue: ['a', 'b'],
       })
-      const close = wrapper.find('.dads-chip__close')
+      const close = wrapper.find('.dads-chip-tag__close')
       await close.trigger('click')
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toEqual(['b'])
     })

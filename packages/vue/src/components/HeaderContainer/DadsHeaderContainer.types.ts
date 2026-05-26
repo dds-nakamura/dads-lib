@@ -4,8 +4,7 @@
  * Layout components do not take a `size` prop — sizing is determined by the
  * inner content and the surrounding application chrome.
  *
- * 公式 slug は `header-container`。旧名 `DadsHeader` は deprecated alias と
- * して併存する。
+ * 公式 slug は `header-container`。
  */
 
 /**

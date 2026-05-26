@@ -49,7 +49,7 @@
 
 | パッケージ              | パス                        | 用途                                                   |
 | ----------------------- | --------------------------- | ------------------------------------------------------ |
-| `@dads/vue`             | `packages/vue/`             | ★ 50 個の Vue 3 コンポーネント実装 (本体)              |
+| `@dads/vue`             | `packages/vue/`             | ★ 49 個の Vue 3 コンポーネント実装 (本体)              |
 | `@dads/tokens`          | `packages/tokens/`          | `@digital-go-jp/design-tokens` の薄ラッパ              |
 | `@dads/tailwind-plugin` | `packages/tailwind-plugin/` | `@digital-go-jp/tailwind-theme-plugin` の薄ラッパ (v3) |
 | `@dads/docs`            | `apps/docs/`                | VitePress カタログ (26 コンポーネントの demo + API)    |
@@ -66,7 +66,7 @@ import '@dads/vue/styles' // 全コンポーネントの CSS
 
 ```vue
 <script setup lang="ts">
-import { DadsButton, DadsTextField } from '@dads/vue'
+import { DadsButton, DadsInputText } from '@dads/vue'
 </script>
 ```
 
@@ -170,7 +170,7 @@ dads-lib/
 `dads-document-md/dads/components/` 配下にすべての仕様が Markdown で揃っています。主要カテゴリ:
 
 - **入力系**: button, checkbox, radio, input-text, textarea, select, combobox, date-picker, file-upload, search-box
-- **ナビゲーション系**: breadcrumb, page-navigation, step-navigation, tab, global-menu, mega-menu, mobile-menu, drawer, hamburger-menu-button, header-container, bottom-navigation, scroll-top-button
+- **ナビゲーション系**: breadcrumb, page-navigation, step-navigation, tab, global-menu, mega-menu, mobile-menu, drawer, hamburger-menu-button, header-container
 - **表示系**: card, list, table, table-control, description-list, resource-list, heading, blockquote, divider, image, image-slider, carousel
 - **フィードバック系**: dialog, notification-banner, emergency-banner, progress-indicator
 - **その他**: accordion, disclosure, chip-label, chip-tag, language-selector, menu-list, menu-list-box, utility-link

@@ -1,6 +1,6 @@
 # InputText
 
-1 行のテキスト入力欄。ラベル・ヒント・エラー・カウンター・前後アイコンを内蔵し、`v-model` で文字列または数値を双方向バインドする。公式 slug は `input-text`。旧名 `DadsTextField` は deprecated として併存する。
+1 行のテキスト入力欄。ラベル・ヒント・エラー・カウンター・前後アイコンを内蔵し、`v-model` で文字列または数値を双方向バインドする。公式 slug は `input-text`。
 
 ## 基本
 
@@ -187,11 +187,11 @@ const name = ref('')
 
 ## マイグレーション (DadsTextField → DadsInputText)
 
-旧名 `DadsTextField` は引き続き re-export されているが、`@deprecated` 警告が出る。次のメジャーバージョンで削除予定。CSS クラスも `dads-text-field*` から `dads-input-text*` に変更されている。
+旧名 `DadsTextField` は major リリース (Issue #14) で削除済み。新規コード・既存コードともに `DadsInputText` を使用すること。CSS クラスも `dads-text-field*` から `dads-input-text*` に変更されている。
 
 ```ts
-// 旧 (deprecated)
-import { DadsTextField } from '@dads/vue'
+// 旧 (削除済み)
+// import { DadsTextField } from '@dads/vue'
 // 新
 import { DadsInputText } from '@dads/vue'
 ```

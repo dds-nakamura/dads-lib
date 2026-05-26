@@ -1,6 +1,6 @@
 # Dialog
 
-オーバーレイ上に表示されるダイアログ。フォーカストラップと ESC キーでの閉じる動作を提供し、`v-model` で開閉を制御する。公式 slug は `dialog`。旧名 `DadsModal` は deprecated として併存する。
+オーバーレイ上に表示されるダイアログ。フォーカストラップと ESC キーでの閉じる動作を提供し、`v-model` で開閉を制御する。公式 slug は `dialog`。
 
 ## 基本
 
@@ -197,11 +197,11 @@ const summarySectionRef = ref(null)
 
 ## マイグレーション (DadsModal → DadsDialog)
 
-旧名 `DadsModal` は引き続き re-export されているが、`@deprecated` 警告が出る。次のメジャーバージョンで削除予定。新規コードは `DadsDialog` を使用すること。
+旧名 `DadsModal` は major リリース (Issue #14) で削除済み。新規コード・既存コードともに `DadsDialog` を使用すること。
 
 ```ts
-// 旧 (deprecated)
-import { DadsModal } from '@dads/vue'
+// 旧 (削除済み)
+// import { DadsModal } from '@dads/vue'
 // 新
 import { DadsDialog } from '@dads/vue'
 ```
