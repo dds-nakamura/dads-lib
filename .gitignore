@@ -23,6 +23,11 @@ Thumbs.db
 # 永続化が必要なドキュメントは docs/ に集約する運用 (CLAUDE.md 参照)。
 .steering/
 
+# Claude Code worktrees — /github-issue や手動 `git worktree add` で作る作業用
+# linked worktree の置き場所。git は linked worktree を status から除外するが、
+# 外部ツール (IDE / lint / find 等) が拾うのを防ぐためここで明示的に無視する。
+.claude/worktrees/
+
 # Runtime artifacts from dads-document-html local server
 /dads-document-html/.server.pid
 
