@@ -129,8 +129,10 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
     align-items: center;
     gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
-    line-height: var(--line-height-150, 1.5);
+    // Official form-control-label legend typography: bold / 1.7 / 0.02em.
+    font-weight: bold;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
     padding: 0; // user-agent legends ship with horizontal padding
   }
 
@@ -177,9 +179,10 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
 
   // -------------------- disabled -----------------------------------------
   // The native `<fieldset disabled>` already disables descendant form
-  // controls; we only adjust the legend so it visually matches the children.
+  // controls; we only adjust the legend so it visually matches the children's
+  // official disabled text colour (gray-420) rather than a blanket opacity dim.
   &--disabled &__legend {
-    opacity: 0.5;
+    color: var(--color-neutral-solid-gray-420, #949494);
   }
 
   // -------------------- forced colors ------------------------------------

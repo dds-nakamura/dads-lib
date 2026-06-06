@@ -168,6 +168,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  letter-spacing: 0.02em;
 
   // -------------------- label & required marker --------------------------
   &__label {
@@ -196,8 +197,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: relative;
     display: flex;
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
@@ -210,7 +211,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     @include base.dads-reset-input;
     flex: 1;
     width: 100%;
-    line-height: var(--line-height-150, 1.5);
+    line-height: var(--line-height-170, 1.7);
 
     // The wrapper provides the focus ring via :focus-within. Suppress the
     // textarea's own :focus-visible outline so the global `:focus-visible` rule
@@ -253,7 +254,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
   &--md &__input {
     font-size: var(--font-size-16, 1rem);
-    padding: calc(12 / 16 * 1rem);
+    padding: calc(16 / 16 * 1rem);
   }
 
   &--sm &__input {
@@ -276,10 +277,15 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- disabled -----------------------------------------
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
 
     .dads-textarea__control {
-      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-textarea__input {
+      color: var(--color-neutral-solid-gray-420, #949494);
+      resize: none;
     }
   }
 
@@ -288,10 +294,24 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     border-color: var(--color-semantic-error-1, #ec0000);
   }
 
+  // error + hover: deepen the border to match the official red-1000 treatment.
+  &--error:not(.dads-textarea--readonly):not(.dads-textarea--disabled)
+    .dads-textarea__control:hover {
+    border-color: var(--color-primitive-red-1000, #a90000);
+  }
+
   // -------------------- forced colors ------------------------------------
   @include base.dads-forced-colors {
     &__control {
       border: 1px solid CanvasText;
+    }
+
+    &--disabled .dads-textarea__control {
+      border-color: GrayText;
+    }
+
+    &--disabled .dads-textarea__input {
+      color: GrayText;
     }
   }
 }

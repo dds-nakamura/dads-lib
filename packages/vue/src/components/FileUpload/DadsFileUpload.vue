@@ -274,7 +274,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   flex-direction: column;
   gap: calc(8 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  // Official root typography: 16px / line-height 1.7 / letter-spacing .02em
+  // / overflow-wrap anywhere so long file names wrap inside the control.
+  font-size: var(--font-size-16, 1rem);
+  font-weight: normal;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+  color: var(--color-neutral-solid-gray-800, #333333);
 
   // -------------------- label & required marker --------------------------
   &__label {
@@ -305,9 +312,10 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex-wrap: wrap;
     align-items: center;
     gap: calc(12 / 16 * 1rem);
-    border: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
+    // Official drop area: 1px SOLID gray-536 border, 8px radius, gray-50 fill.
+    border: 1px solid var(--color-neutral-solid-gray-536, #767676);
+    border-radius: var(--border-radius-8, 0.5rem);
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     transition:
       border-color 0.15s ease,
       background-color 0.15s ease,
@@ -315,9 +323,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
     @include ring.dads-focus-ring-within;
 
+    // Official dragover: 4px green outline (inset) + green-50 background.
     &--dragover {
-      border-color: var(--color-primitive-blue-900, #0017c1);
-      background-color: var(--color-info-bg, #e8eaf6);
+      outline: 4px solid var(--color-semantic-success-1, #2cac6e);
+      outline-offset: -4px;
+      background-color: var(--color-primitive-green-50, #e6f5ec);
     }
   }
 
@@ -333,11 +343,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    // Mirrors the official outline button (data-type="outline"): blue-900
+    // border/text, 8px radius, bold label, blue-200 hover fill.
     border: 1px solid var(--color-primitive-blue-900, #0017c1);
-    border-radius: var(--border-radius-4, 0.25rem);
+    border-radius: var(--border-radius-8, 0.5rem);
     color: var(--color-primitive-blue-900, #0017c1);
     background-color: transparent;
-    font-weight: 500;
+    font-weight: bold;
     line-height: var(--line-height-150, 1.5);
     transition:
       background-color 0.15s ease,
@@ -345,13 +357,17 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       border-color 0.15s ease;
 
     &:hover {
-      background-color: var(--color-info-bg, #e8eaf6);
+      background-color: var(--color-primitive-blue-200, #c5d7fb);
     }
 
+    // Official disabled outline button: gray-300 border, gray-50 fill,
+    // gray-420 text (not a flat 0.5 opacity dim).
     &:disabled,
     &[aria-disabled='true'] {
       cursor: not-allowed;
-      opacity: 0.5;
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      color: var(--color-neutral-solid-gray-420, #949494);
       pointer-events: none;
     }
   }
@@ -379,7 +395,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     gap: calc(8 / 16 * 1rem);
     padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
     border-radius: var(--border-radius-4, 0.25rem);
     font-size: var(--font-size-14, 0.875rem);
   }
@@ -389,10 +405,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    // Official file name is bold.
+    font-weight: bold;
   }
 
   &__file-size {
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+    // Official file meta uses gray-600.
+    color: var(--color-neutral-solid-gray-600, #666666);
     font-variant-numeric: tabular-nums;
   }
 
@@ -507,10 +526,12 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     inset: 0;
     z-index: 999;
     margin: 0;
-    background-color: rgba(0, 23, 193, 0.06);
-    border-width: 4px;
-    border-style: dashed;
-    border-color: var(--color-primitive-blue-900, #0017c1);
+    // Official viewport drop overlay uses the success-green treatment, not
+    // brand blue: green-50 wash + 4px green outline.
+    background-color: var(--color-primitive-green-50, #e6f5ec);
+    border: 1px solid var(--color-semantic-success-1, #2cac6e);
+    outline: 4px solid var(--color-semantic-success-1, #2cac6e);
+    outline-offset: -4px;
     display: flex;
     align-items: center;
     justify-content: center;

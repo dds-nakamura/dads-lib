@@ -223,7 +223,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   flex-direction: column;
   gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  color: var(--color-neutral-solid-gray-900, #1a1a1a);
+  letter-spacing: 0.02em;
 
   // -------------------- label & required marker --------------------------
   &__label {
@@ -269,8 +270,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: flex;
     align-items: stretch;
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
@@ -287,7 +288,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     margin: auto 0;
     width: 1.5rem;
     height: 1.5rem;
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+    color: var(--color-neutral-solid-gray-600, #666);
     pointer-events: none;
   }
 
@@ -296,8 +297,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex: 1;
     width: 100%;
     box-sizing: border-box;
-    padding-left: calc(calc(16 / 16 * 1rem) + 2rem); // icon room
+    padding-top: calc(12 / 16 * 1rem);
+    padding-bottom: calc(12 / 16 * 1rem);
+    padding-left: calc(48 / 16 * 1rem); // icon room
     padding-right: calc(16 / 16 * 1rem);
+
+    &::placeholder {
+      color: var(--color-neutral-solid-gray-600, #666);
+    }
 
     // Hide the WebKit / Chromium "x" so it doesn't collide with the icon.
     &::-webkit-search-cancel-button {
@@ -348,7 +355,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-search-box--readonly):not(.dads-search-box--disabled):not(.dads-search-box--error)
     .dads-search-box__input:hover {
-    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
+    border-color: var(--color-neutral-black, #000);
   }
 
   // -------------------- readonly -----------------------------------------
@@ -358,12 +365,20 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- disabled -----------------------------------------
+  // Official DADS form-control disabled palette: border gray-300, bg gray-50,
+  // text gray-420 (no flat opacity dimming).
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+    color: var(--color-neutral-solid-gray-420, #949494);
 
     .dads-search-box__input {
-      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-search-box__icon,
+    .dads-search-box__field {
+      color: var(--color-neutral-solid-gray-420, #949494);
     }
   }
 
@@ -382,13 +397,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 50%;
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+    color: var(--color-neutral-solid-gray-600, #666);
     font-size: 1rem;
     margin-inline-end: calc(4 / 16 * 1rem);
     flex-shrink: 0;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.06);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
   }
 
@@ -397,9 +412,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex-shrink: 0;
     padding: 0 calc(8 / 16 * 1rem);
     min-height: 2.5rem;
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
-    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     font: inherit;
   }
 
@@ -407,9 +422,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     list-style: none;
     margin: 0;
     padding: 0;
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     border-top: 0;
-    border-radius: 0 0 var(--border-radius-4, 0.25rem) var(--border-radius-4, 0.25rem);
+    border-radius: 0 0 var(--border-radius-8, 0.5rem) var(--border-radius-8, 0.5rem);
     background-color: var(--color-neutral-white, #fff);
     max-height: 16rem;
     overflow-y: auto;

@@ -148,7 +148,7 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
   display: flex;
   flex-direction: column;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333333);
 
   // Vertical orientation: tablist on the side, panels next to it.
   &--vertical {
@@ -161,14 +161,14 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     display: flex;
     flex-wrap: wrap;
     gap: calc(4 / 16 * 1rem);
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
   }
 
   &--vertical &__list {
     flex-direction: column;
     flex-wrap: nowrap;
     border-bottom: none;
-    border-right: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    border-right: 1px solid var(--color-neutral-solid-gray-420, #949494);
     min-width: 12rem;
   }
 
@@ -207,8 +207,8 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     }
 
     &:hover {
-      background-color: var(--color-neutral-solid-gray-50, #f0f0f0);
-      color: var(--color-neutral-solid-gray-800, #1a1a1a);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      color: var(--color-neutral-solid-gray-800, #333333);
     }
 
     // -------------------- active --------------------------------------
@@ -223,7 +223,7 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     // -------------------- disabled ------------------------------------
     &:disabled,
     &--disabled {
-      color: var(--color-neutral-solid-gray-420, #999);
+      color: var(--color-neutral-solid-gray-420, #949494);
       cursor: not-allowed;
       pointer-events: none;
       opacity: 0.5;

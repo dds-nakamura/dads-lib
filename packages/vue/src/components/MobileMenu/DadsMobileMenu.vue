@@ -249,7 +249,9 @@ watch(
   &__overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    // Matches DadsDrawer / DadsDialog scrim: the official opacity-gray-100
+    // overlay token, with a direct fallback for token-less consumers.
+    background-color: var(--color-neutral-opacity-gray-100, rgba(0, 0, 0, 0.1));
   }
 
   // -------------------- panel --------------------------------------------
@@ -260,7 +262,8 @@ watch(
     width: 100%;
     max-height: 100vh;
     background-color: var(--color-neutral-white, #fff);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    // Tokenized elevation, aligned with DadsDrawer's panel (--elevation-2).
+    box-shadow: var(--elevation-2, 0 2px 12px 2px rgba(0, 0, 0, 0.1), 0 1px 6px 0 rgba(0, 0, 0, 0.3));
     overflow-y: auto;
 
     &:focus {

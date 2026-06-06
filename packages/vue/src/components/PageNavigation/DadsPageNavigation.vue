@@ -139,7 +139,8 @@ const goTo = (target: number) => {
   display: block;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
   color: var(--color-neutral-solid-gray-900, #1a1a1c);
 
   &__list {

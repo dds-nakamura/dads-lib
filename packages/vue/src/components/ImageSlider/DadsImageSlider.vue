@@ -258,12 +258,13 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
     font-size: var(--font-size-20, 1.25rem);
     font-weight: 700;
     line-height: var(--line-height-130, 1.3);
+    letter-spacing: 0.02em;
   }
 
   &__show-all {
     color: var(--color-primitive-blue-900, #0017c1);
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: calc(3 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     white-space: nowrap;
 
@@ -369,7 +370,7 @@ const slideAriaLabel = (slide: DadsImageSliderSlide, idx: number) =>
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background-color: var(--color-border-strong, rgba(0, 0, 0, 0.24));
+    background-color: var(--color-neutral-solid-gray-500, #767676);
     transition: background-color 0.15s ease;
   }
 

@@ -294,14 +294,14 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
   border-radius: var(--border-radius-8, 0.5rem);
   overflow: hidden;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333);
 
   // -------------------- type variants -----------------------------------
   // key-visual (default): full-bleed flagship area. No outer chrome — slide
   // content owns its own visual composition.
   // container: bounded panel with a header section above the viewport.
   &--type-container {
-    border: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
   }
 
   // -------------------- header (heading + show-all) ---------------------
@@ -312,7 +312,7 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     justify-content: space-between;
     gap: calc(8 / 16 * 1rem);
     padding: calc(16 / 16 * 1rem);
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
 
     .dads-carousel--type-key-visual & {
       // For key-visual type the header is optional and sits without divider.
@@ -324,18 +324,20 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
   &__heading {
     margin: 0;
     font-size: var(--font-size-20, 1.25rem);
-    font-weight: 700;
-    line-height: var(--line-height-130, 1.3);
+    font-weight: bold;
+    line-height: var(--line-height-150, 1.5);
+    letter-spacing: 0.02em;
   }
 
   &__show-all {
-    color: var(--color-primitive-blue-900, #0017c1);
+    color: var(--color-primitive-blue-1000, #00118f);
     text-decoration: underline;
     text-underline-offset: 2px;
     font-size: var(--font-size-14, 0.875rem);
     white-space: nowrap;
 
     &:hover {
+      color: var(--color-primitive-blue-900, #0017c1);
       text-decoration: underline;
     }
   }
@@ -395,14 +397,14 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     justify-content: center;
     font-size: var(--font-size-24, 1.5rem);
     line-height: 1;
-    color: var(--color-neutral-solid-gray-800, #1a1a1a);
-    background-color: var(--color-neutral-white, rgba(255, 255, 255, 0.85));
-    border: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    color: var(--color-neutral-solid-gray-800, #333);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
     border-radius: 50%;
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.04));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
 
     &:disabled {
@@ -445,7 +447,7 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background-color: var(--color-border-strong, rgba(0, 0, 0, 0.24));
+    background-color: var(--color-neutral-solid-gray-420, #949494);
     transition: background-color 0.15s ease;
   }
 

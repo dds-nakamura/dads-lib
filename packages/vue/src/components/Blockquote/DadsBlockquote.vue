@@ -71,7 +71,7 @@ const hasCiteUrl = computed(() => Boolean(props.citeUrl))
   padding-bottom: calc(8 / 16 * 1rem);
   padding-left: calc(24 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333333);
 
   // Collapse the leading / trailing margin of the first / last child so the
   // quote sits flush against its own padding, matching the reference CSS.
@@ -98,15 +98,15 @@ const hasCiteUrl = computed(() => Boolean(props.citeUrl))
   font-style: italic;
   font-size: var(--font-size-14, 0.875rem);
   line-height: var(--line-height-150, 1.5);
-  color: var(--color-neutral-solid-gray-700, #595959);
+  color: var(--color-neutral-solid-gray-700, #4d4d4d);
 }
 
 .dads-blockquote__cite-link {
-  color: var(--color-primitive-blue-1000, #0017c1);
+  color: var(--color-primitive-blue-1000, #00118f);
   text-decoration: underline;
 
   &:hover {
-    color: var(--color-primitive-blue-900, #002dc1);
+    color: var(--color-primitive-blue-900, #0017c1);
   }
 }
 </style>

@@ -220,7 +220,6 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
 
 .dads-menu-list-root {
   display: block;
@@ -255,7 +254,7 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
   }
 
   &__section-title {
-    font-size: var(--font-size-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     color: var(--color-neutral-solid-gray-700, #4d4d4d);
     text-transform: none;
@@ -301,11 +300,11 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
     margin-left: calc(1rem * var(--menu-list-indentation, 0));
 
     &[data-size='regular'] {
-      border-radius: 0.5rem;
+      border-radius: var(--border-radius-8, 0.5rem);
     }
 
     &[data-size='small'] {
-      border-radius: 0.25rem;
+      border-radius: var(--border-radius-4, 0.25rem);
     }
   }
 
@@ -320,6 +319,13 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
     font-weight: bold;
   }
 
+  // Highlight a parent item when one of its descendants is the current page,
+  // matching the official `:has(+ * [data-current])` selector.
+  &__item:has(+ * [data-current]) {
+    background-color: var(--color-primitive-blue-50, #ebf0ff);
+    color: var(--color-primitive-blue-1000, #001a59);
+  }
+
   @media (hover: hover) {
     &__item:hover {
       background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
@@ -327,14 +333,44 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
       text-underline-offset: 0.1875rem;
     }
 
-    &__item[data-current]:hover {
+    &__item[data-current]:hover,
+    &__item:has(+ * [data-current]):hover {
       background-color: var(--color-primitive-blue-50, #ebf0ff);
       color: var(--color-primitive-blue-900, #002fa1);
     }
   }
 
-  &__item {
-    @include ring.dads-focus-ring;
+  // Focus-visible follows the official menu-list spec: a common yellow-300
+  // fill plus a variant-specific outline (standard = outset 4px, box = inset).
+  // Current / parent-current items keep their blue background under focus.
+  &__item:focus-visible {
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  &__item[data-type='standard']:focus-visible {
+    outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+    outline-offset: calc(2 / 16 * 1rem);
+    box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  &__item[data-type='box']:focus-visible {
+    outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+    outline-offset: calc(-4 / 16 * 1rem);
+    box-shadow: inset 0 0 0 calc(6 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  &__item[data-current]:focus-visible {
+    background-color: var(--color-primitive-blue-100, #d6e1ff);
+  }
+
+  &__item:has(+ * [data-current]):focus-visible {
+    background-color: var(--color-primitive-blue-50, #ebf0ff);
+  }
+
+  &__item:focus:not(:focus-visible) {
+    outline: none;
   }
 
   &__item:disabled,

@@ -157,6 +157,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
 
   // -------------------- alignment ---------------------------------------
   // vertical (default) stays as flex-direction: column.
@@ -199,7 +201,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     align-items: center;
     gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
+    font-weight: 700;
     line-height: var(--line-height-150, 1.5);
   }
 
@@ -221,8 +223,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: flex;
     align-items: stretch;
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
@@ -281,7 +283,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- size ---------------------------------------------
   &--lg &__input {
     min-height: calc(3.5rem - 2px);
-    font-size: var(--font-size-18, 1.125rem);
+    font-size: var(--font-size-16, 1rem);
     padding: 0 calc(16 / 16 * 1rem);
   }
   &--lg &__icon {
@@ -291,7 +293,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &--md &__input {
     min-height: calc(3rem - 2px);
     font-size: var(--font-size-16, 1rem);
-    padding: 0 calc(12 / 16 * 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
   &--md &__icon {
     padding: 0 calc(12 / 16 * 1rem);
@@ -299,8 +301,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
   &--sm &__input {
     min-height: calc(2.5rem - 2px);
-    font-size: var(--font-size-14, 0.875rem);
-    padding: 0 calc(12 / 16 * 1rem);
+    font-size: var(--font-size-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
   &--sm &__icon {
     padding: 0 calc(8 / 16 * 1rem);
@@ -318,22 +320,29 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-input-text--readonly):not(.dads-input-text--disabled):not(.dads-input-text--error)
     .dads-input-text__control:hover {
-    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
+    border-color: var(--color-neutral-black, #000);
   }
 
   // -------------------- readonly -----------------------------------------
+  // Official input-text uses border-style:dashed only (no background change).
   &--readonly &__control {
     border-style: dashed;
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   // -------------------- disabled -----------------------------------------
+  // Official disabled uses dedicated tokens (border gray-300 / bg gray-50 /
+  // text gray-420) instead of opacity, which would degrade text contrast.
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+    color: var(--color-neutral-solid-gray-420, #949494);
 
     .dads-input-text__control {
-      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
+      border-color: var(--color-neutral-solid-gray-300, #d9d9d9);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-input-text__input {
+      color: var(--color-neutral-solid-gray-420, #949494);
     }
   }
 
@@ -342,10 +351,24 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     border-color: var(--color-semantic-error-1, #ec0000);
   }
 
+  // Invalid + hover deepens the border, matching official red-1000.
+  &--error:not(.dads-input-text--readonly):not(.dads-input-text--disabled)
+    .dads-input-text__control:hover {
+    border-color: var(--color-primitive-red-1000, #a30000);
+  }
+
   // -------------------- forced colors ------------------------------------
   @include base.dads-forced-colors {
     &__control {
       border: 1px solid CanvasText;
+    }
+
+    &--disabled &__control {
+      border-color: GrayText;
+    }
+
+    &--disabled &__input {
+      color: GrayText;
     }
   }
 }

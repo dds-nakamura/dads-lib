@@ -160,35 +160,49 @@ const triggerClasses = computed(() => [
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
 
 .dads-menu-list-box {
   position: relative;
   display: inline-block;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, var(--color-neutral-solid-gray-800, #1a1a1a));
+  color: var(--color-neutral-solid-gray-900, #1a1a1a);
   font-size: var(--font-size-16, 1rem);
-  line-height: 1.3;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
 
   // -------------------- trigger button ----------------------------------
   &__trigger {
     @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
 
     display: inline-flex;
     align-items: center;
     gap: calc(8 / 16 * 1rem);
     padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
-    border-radius: var(--border-radius-4, 0.25rem);
+    border-radius: var(--border-radius-8, 0.5rem);
     background-color: var(--color-neutral-white, #fff);
     color: inherit;
     font: inherit;
     cursor: pointer;
     transition: background-color 0.15s ease;
 
+    // Official opener focus: 4px outline + 2px offset + yellow-300 fill +
+    // 2px yellow shadow (keeps the 8px radius, unlike the generic fill mixin).
+    &:focus-visible {
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
+      background-color: var(--color-primitive-yellow-300, #ffd43d);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+
     &:hover {
       background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
+      text-decoration: underline;
+      text-underline-offset: calc(3 / 16 * 1rem);
     }
 
     // Indicate open state on the caret.
@@ -197,13 +211,15 @@ const triggerClasses = computed(() => [
     }
 
     &--sm {
-      min-height: 2rem;
-      padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
+      min-height: calc(36 / 16 * 1rem);
+      padding: calc(4 / 16 * 1rem) calc(4 / 16 * 1rem);
+      column-gap: calc(4 / 16 * 1rem);
       font-size: var(--font-size-14, 0.875rem);
     }
 
     &--md {
-      min-height: 2.5rem;
+      min-height: calc(44 / 16 * 1rem);
+      padding: calc(4 / 16 * 1rem) calc(16 / 16 * 1rem);
       font-size: var(--font-size-16, 1rem);
     }
 
@@ -236,7 +252,9 @@ const triggerClasses = computed(() => [
     width: max-content;
     max-width: 100%;
     box-sizing: border-box;
-    border-radius: var(--border-radius-8, 0.5rem);
+    // Official popup rounds only the leading side (8px 0 0 8px), hugging the
+    // screen edge on the trailing side.
+    border-radius: var(--border-radius-8, 0.5rem) 0 0 var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
     background-color: var(--color-neutral-white, #fff);
     padding: calc(16 / 16 * 1rem) 0;
@@ -256,6 +274,9 @@ const triggerClasses = computed(() => [
 
   &--placement-end &__surface {
     inset-inline-end: 0;
+    // Mirror the leading-side rounding so the rounded edge faces inward when
+    // the popup is anchored to the trailing edge.
+    border-radius: 0 var(--border-radius-8, 0.5rem) var(--border-radius-8, 0.5rem) 0;
   }
 
   // -------------------- list --------------------------------------------
@@ -352,7 +373,7 @@ const triggerClasses = computed(() => [
     font-size: var(--font-size-14, 0.875rem);
     line-height: 1.4;
     font-weight: normal;
-    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   // -------------------- forced colors -----------------------------------

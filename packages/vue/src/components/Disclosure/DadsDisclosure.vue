@@ -142,7 +142,7 @@ const rootClasses = computed(() => [
       display: none;
     }
 
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
 
     @media (hover: hover) {
       &:hover {
@@ -214,7 +214,7 @@ const rootClasses = computed(() => [
   // -------------------- forced colors -----------------------------------
   @include base.dads-forced-colors {
     .dads-disclosure__icon {
-      color: CanvasText;
+      color: inherit;
     }
   }
 }

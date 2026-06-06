@@ -73,7 +73,7 @@ const rootClasses = computed(() => {
     color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-    font-weight: 500;
+    font-weight: bold;
   }
 
   // Reset the native h1..h6 margin so the gap to the subtitle is controlled

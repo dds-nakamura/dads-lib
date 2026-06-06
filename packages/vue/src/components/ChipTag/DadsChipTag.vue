@@ -102,22 +102,22 @@ const onClose = (event: MouseEvent) => {
 $dads-chip-tag-colors: (
   primary: (
     --color-primitive-blue-900,
-    --color-info-bg,
+    --color-primitive-blue-50,
   ),
   success: (
     --color-semantic-success-1,
-    --color-success-bg,
+    --color-primitive-green-50,
   ),
   error: (
     --color-semantic-error-1,
-    --color-error-bg,
+    --color-primitive-red-50,
   ),
   warning: (
     --color-semantic-warning-orange-1,
-    --color-warning-bg,
+    --color-primitive-orange-50,
   ),
   secondary: (
-    --color-brand-secondary,
+    --color-primitive-orange-800,
     --color-neutral-solid-gray-50,
   ),
 );
@@ -155,7 +155,7 @@ $dads-chip-tag-colors: (
   &--sm {
     min-height: 1.5rem; // 24px
     padding: 0 calc(8 / 16 * 1rem);
-    font-size: var(--font-size-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
   }
 
   // -------------------- slots ---------------------------------------------
@@ -191,11 +191,11 @@ $dads-chip-tag-colors: (
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.08);
+      background-color: var(--color-neutral-opacity-gray-100, rgba(0, 0, 0, 0.1));
     }
 
     &:active {
-      background-color: rgba(0, 0, 0, 0.12);
+      background-color: var(--color-neutral-opacity-gray-200, rgba(0, 0, 0, 0.2));
     }
 
     &:disabled {

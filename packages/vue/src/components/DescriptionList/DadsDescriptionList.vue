@@ -43,7 +43,7 @@ const rootClasses = computed(() => [
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
   font-size: var(--font-size-16, 1rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
   // Long words (URLs, IDs) should not punch out of the layout.
   overflow-wrap: anywhere;
 
@@ -127,7 +127,7 @@ const rootClasses = computed(() => [
   &--bordered {
     .dads-description-list__item {
       padding-bottom: calc(12 / 16 * 1rem);
-      border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+      border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
     }
 
     .dads-description-list__item:last-child {

@@ -136,7 +136,10 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
 // replaced by design tokens where available.
 // ----------------------------------------------------------------------------
 .dads-utility-link {
-  @include ring.dads-focus-ring;
+  // Official utility-link focus-visible fills the background with yellow-300 and
+  // rounds the corner by 4px (utility-link.css:13-19) — same treatment the shared
+  // `dads-focus-ring-fill` mixin provides for links / text buttons / menu items.
+  @include ring.dads-focus-ring-fill;
 
   display: inline-flex;
   align-items: baseline;
@@ -149,7 +152,8 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
   letter-spacing: 0;
   text-decoration: none;
   text-wrap: pretty;
-  border-radius: var(--border-radius-4, 0.25rem);
+  // border-radius is applied only on focus-visible (via the fill mixin),
+  // matching the official CSS which rounds the corner only while focused.
 
   &__lead-icon {
     flex-shrink: 0;

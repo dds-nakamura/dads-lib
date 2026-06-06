@@ -453,7 +453,7 @@ watch(
     align-items: center;
     gap: calc(4 / 16 * 1rem);
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     border-radius: var(--border-radius-4, 0.25rem);
     transition:
       border-color 0.15s ease,
@@ -501,9 +501,9 @@ watch(
     padding: calc(4 / 16 * 1rem) 0;
     list-style: none;
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     border-radius: var(--border-radius-4, 0.25rem);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--elevation-2, 0 2px 12px 2px rgba(0, 0, 0, 0.1), 0 1px 6px 0 rgba(0, 0, 0, 0.3));
     max-height: 16rem;
     overflow-y: auto;
   }

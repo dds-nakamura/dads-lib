@@ -11,7 +11,7 @@
 // =============================================================================
 
 // Common visual rule (outline + offset + shadow), matching official values.
-@mixin _dads-focus-ring-style {
+@mixin dads-focus-ring-style {
   outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
   outline-offset: calc(2 / 16 * 1rem);
   box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
@@ -20,7 +20,7 @@
 // For elements that own the focus themselves (buttons, links, native inputs).
 @mixin dads-focus-ring {
   &:focus-visible {
-    @include _dads-focus-ring-style;
+    @include dads-focus-ring-style;
   }
 
   &:focus:not(:focus-visible) {
@@ -32,7 +32,7 @@
 // matching the official text-button / link / menu-item focus treatment.
 @mixin dads-focus-ring-fill {
   &:focus-visible {
-    @include _dads-focus-ring-style;
+    @include dads-focus-ring-style;
     background-color: var(--color-primitive-yellow-300, #ffd43d);
     border-radius: calc(4 / 16 * 1rem);
   }
@@ -46,6 +46,6 @@
 // (e.g. an input wrapped by a control box with prepend / append icons).
 @mixin dads-focus-ring-within {
   &:focus-within {
-    @include _dads-focus-ring-style;
+    @include dads-focus-ring-style;
   }
 }

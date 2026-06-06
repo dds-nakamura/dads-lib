@@ -76,7 +76,7 @@ $dads-header-container-breakpoint: 768px;
 
 .dads-header-container {
   background-color: var(--color-neutral-white, #fff);
-  border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+  border-bottom: 1px solid var(--color-neutral-solid-gray-420, rgba(0, 0, 0, 0.1));
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
 

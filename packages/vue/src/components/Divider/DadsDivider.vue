@@ -98,11 +98,11 @@ const rootClasses = computed(() => [
   // For dashed lines: switch to border-top (border-style supports dashed
   // while background-color cannot).
   &--default &__line {
-    background-color: var(--color-border-default, rgba(0, 0, 0, 0.1));
+    background-color: var(--color-neutral-solid-gray-420, #949494);
   }
 
   &--strong &__line {
-    background-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+    background-color: var(--color-neutral-solid-gray-536, #767676);
   }
 
   // -------------------- width variants -----------------------------------
@@ -145,21 +145,21 @@ const rootClasses = computed(() => [
   }
 
   &--style-dashed.dads-divider--horizontal &__line {
-    border-top: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border-top: 1px dashed var(--color-neutral-solid-gray-420, #949494);
     height: 0;
   }
 
   &--style-dashed.dads-divider--vertical &__line {
-    border-left: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border-left: 1px dashed var(--color-neutral-solid-gray-420, #949494);
     width: 0;
   }
 
   &--style-dashed.dads-divider--strong.dads-divider--horizontal &__line {
-    border-top-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+    border-top-color: var(--color-neutral-solid-gray-536, #767676);
   }
 
   &--style-dashed.dads-divider--strong.dads-divider--vertical &__line {
-    border-left-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+    border-left-color: var(--color-neutral-solid-gray-536, #767676);
   }
 
   // -------------------- forced colors ------------------------------------

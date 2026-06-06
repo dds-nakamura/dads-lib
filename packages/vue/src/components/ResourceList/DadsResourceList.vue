@@ -253,6 +253,12 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     }
   }
 
+  // Active state (resource-list.css:164-168): orange-800 title, thin underline.
+  a.dads-resource-list__body:active .dads-resource-list__title {
+    color: var(--color-primitive-orange-800, #c74700);
+    text-decoration-thickness: calc(1 / 16 * 1rem);
+  }
+
   &__support > * {
     margin: 0;
     color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
@@ -278,7 +284,8 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     border-radius: calc(999 / 16 * 1rem);
     background-color: var(--color-neutral-white, #fff);
     color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
-    font-size: var(--font-size-12, 0.75rem);
+    // DADS has no 12px size token (smallest is 14px); use the canonical minimum.
+    font-size: var(--font-size-14, 0.875rem);
     line-height: 1.2;
   }
 
@@ -301,13 +308,20 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     cursor: pointer;
   }
 
+  // Selected mirrors official `:has(:checked:enabled)` — blue-50 fill with a
+  // gray-500 frame/divider (resource-list.css:24-27).
   &--selected {
-    background-color: var(--color-info-bg, #e8eaf6);
-    border-color: var(--color-primitive-blue-900, #0017c1);
+    background: var(--color-primitive-blue-50, #e8f1fe);
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
   }
 
+  // Disabled mirrors official `:has(:disabled)` token switch instead of a flat
+  // opacity dim: gray-50 fill, gray-420 text, gray-300 border
+  // (resource-list.css:29-39).
   &--disabled {
-    opacity: 0.6;
+    background: var(--color-neutral-solid-gray-50, #f2f2f2);
+    color: var(--color-neutral-solid-gray-420, #949494);
+    --_border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
     pointer-events: none;
   }
 
@@ -333,7 +347,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     flex-shrink: 0;
 
     &:hover {
-      background-color: var(--color-info-bg, rgba(0, 23, 193, 0.06));
+      background-color: var(--color-primitive-blue-50, #e8f1fe);
     }
   }
 

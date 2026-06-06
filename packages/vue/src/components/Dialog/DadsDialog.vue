@@ -196,7 +196,7 @@ watch(
     max-height: calc(100vh - 2rem);
     background-color: var(--color-neutral-white, #fff);
     border-radius: var(--border-radius-8, 0.5rem);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--elevation-4, 0 6px 20px 4px rgba(0, 0, 0, 0.1), 0 2px 6px 0 rgba(0, 0, 0, 0.3));
     overflow: hidden;
 
     &:focus {

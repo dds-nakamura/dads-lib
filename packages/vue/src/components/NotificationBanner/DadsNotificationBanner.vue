@@ -122,46 +122,36 @@ const onClose = () => {
 </template>
 
 <style scoped lang="scss">
-@use 'sass:list';
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
-// Color table: (foreground, background). Foreground is used for the icon /
-// title accent; the body text uses --color-neutral-solid-gray-800 so it stays legible
-// regardless of the tinted background.
+// Accent color per type. The official notification banner uses a white
+// background for every type and conveys the type purely through the border /
+// icon / title accent color (`--_base-color`). The body text stays
+// --color-neutral-solid-gray-800 so it is always legible.
+// All tokens below are real DADS tokens (no `--color-*-bg` / `--color-info`
+// pseudo-tokens, which do not exist in the design system).
 $dads-notification-banner-colors: (
-  success: (
-    --color-semantic-success-1,
-    --color-success-bg,
-  ),
-  error: (
-    --color-semantic-error-1,
-    --color-error-bg,
-  ),
-  warning: (
-    --color-semantic-warning-orange-1,
-    --color-warning-bg,
-  ),
-  info: (
-    --color-info,
-    --color-info-bg,
-  ),
-  neutral: (
-    --color-neutral-solid-gray-700,
-    --color-neutral-solid-gray-50,
-  ),
+  success: --color-semantic-success-2,
+  error: --color-semantic-error-1,
+  warning: --color-semantic-warning-yellow-2,
+  info: --color-primitive-blue-900,
+  neutral: --color-neutral-solid-gray-536,
 );
 
 .dads-notification-banner {
   display: flex;
   align-items: flex-start;
-  gap: calc(12 / 16 * 1rem);
+  gap: calc(16 / 16 * 1rem);
   padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
-  border-radius: var(--border-radius-4, 0.25rem);
-  border: 1px solid transparent;
+  border-radius: var(--border-radius-12, 0.75rem);
+  border: solid transparent;
+  border-width: calc(3 / 16 * 1rem); // official: standard border = 3px
+  background-color: var(--color-neutral-white, #fff);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
 
   &__icon {
     display: inline-flex;
@@ -196,7 +186,7 @@ $dads-notification-banner-colors: (
 
   &__timestamp {
     margin: calc(4 / 16 * 1rem) 0 0;
-    font-size: var(--font-size-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
     color: var(--color-neutral-solid-gray-700, #4d4d4d);
     line-height: 1.4;
   }
@@ -208,7 +198,7 @@ $dads-notification-banner-colors: (
 
   &__close {
     @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
 
     flex-shrink: 0;
     display: inline-flex;
@@ -216,34 +206,30 @@ $dads-notification-banner-colors: (
     justify-content: center;
     width: 2rem;
     height: 2rem;
-    border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-neutral-solid-gray-700, #555);
+    border-radius: var(--border-radius-8, 0.5rem); // official close = 8px
+    color: var(--color-neutral-solid-gray-900, #1a1a1c);
     font-size: 1.25rem;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.06);
+      background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
     }
   }
 
   // -------------------- color variants -----------------------------------
-  @each $name, $tokens in $dads-notification-banner-colors {
-    $fg: list.nth($tokens, 1);
-    $bg: list.nth($tokens, 2);
-
-    // standard style: tinted background with colored border.
+  @each $name, $fg in $dads-notification-banner-colors {
+    // standard style: white background (from base) with a colored border.
     &--style-standard.dads-notification-banner--#{$name} {
-      background-color: var(#{$bg});
       border-color: var(#{$fg});
     }
 
-    // color-chip style: white background with a vertical color bar on the
-    // inline-start edge. Border-left provides the accent without needing
-    // an extra DOM element.
+    // color-chip style: white background with a 2px border and a vertical
+    // color bar on the inline-start edge rendered as an inset box-shadow,
+    // matching the official 8px (SP) accent. Border stays 2px (official).
     &--style-color-chip.dads-notification-banner--#{$name} {
-      background-color: var(--color-neutral-white, #fff);
-      border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-      border-inline-start: 4px solid var(#{$fg});
-      padding-inline-start: calc(calc(16 / 16 * 1rem) - 3px);
+      border-color: var(--color-neutral-solid-gray-420, #d6d6d6);
+      border-width: calc(2 / 16 * 1rem);
+      box-shadow: inset calc(8 / 16 * 1rem) 0 0 0 var(#{$fg});
+      padding-inline-start: calc(24 / 16 * 1rem);
     }
 
     &--#{$name} .dads-notification-banner__icon,

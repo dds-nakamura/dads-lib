@@ -131,7 +131,7 @@ const onSwatchClick = (color: string) => {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: var(--border-radius-4, 0.25rem);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.2));
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     overflow: hidden;
     cursor: pointer;
     @include ring.dads-focus-ring-within;
@@ -169,7 +169,7 @@ const onSwatchClick = (color: string) => {
     flex: 1;
     min-height: 2.5rem;
     padding: 0 calc(12 / 16 * 1rem);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.2));
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     border-radius: var(--border-radius-4, 0.25rem);
     background-color: var(--color-neutral-white, #fff);
     font-family: var(--font-family-mono, 'SFMono-Regular', monospace);
@@ -194,7 +194,7 @@ const onSwatchClick = (color: string) => {
     width: 100%;
     aspect-ratio: 1 / 1;
     border-radius: var(--border-radius-4, 0.25rem);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.2));
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     transition: transform 0.1s ease;
 
     &:hover:not(:disabled) {

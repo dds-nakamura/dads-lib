@@ -133,12 +133,16 @@ watch(
   display: flex;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  line-height: 1.7; // --line-height-170
+  letter-spacing: 0.02em;
 
   // -------------------- overlay ------------------------------------------
   &__overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    // Official drawer dims the page via `::backdrop` with the
+    // opacity-gray-100 token; our overlay div mirrors that value.
+    background-color: var(--color-neutral-opacity-gray-100, rgba(0, 0, 0, 0.1));
   }
 
   // -------------------- panel --------------------------------------------
@@ -146,11 +150,11 @@ watch(
     position: relative;
     display: flex;
     flex-direction: column;
-    width: min(20rem, 80vw);
+    width: min(calc(288 / 16 * 1rem), 80vw); // official drawer width: 288px
     max-width: 100%;
     height: 100%;
     background-color: var(--color-neutral-white, #fff);
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--elevation-2);
     overflow-y: auto;
 
     &:focus {
@@ -181,8 +185,8 @@ watch(
     align-items: center;
     justify-content: space-between;
     gap: calc(8 / 16 * 1rem);
-    padding: calc(16 / 16 * 1rem);
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
+    padding: calc(20 / 16 * 1rem) calc(16 / 16 * 1rem); // official: 20px 16px
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
   }
 
   &__title {
@@ -255,7 +259,7 @@ watch(
     color: var(--color-neutral-solid-gray-800, #1a1a1a);
     text-decoration: none;
     font-size: var(--font-size-16, 1rem);
-    line-height: var(--line-height-150, 1.5);
+    line-height: 1.7; // official drawer body line-height (--line-height-170)
 
     &:hover {
       background-color: var(--color-neutral-solid-gray-50, #f5f5f5);

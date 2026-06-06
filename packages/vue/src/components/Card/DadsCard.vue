@@ -71,23 +71,24 @@ const onKeydown = (event: KeyboardEvent) => {
   display: flex;
   flex-direction: column;
   background-color: var(--color-neutral-white, #fff);
-  border-radius: var(--border-radius-8, 0.5rem);
+  border-radius: var(--border-radius-16, 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
-  // Transparent border reserves layout space so outlined / non-outlined
-  // variants share the same outer dimensions.
-  border: 1px solid transparent;
+  color: var(--color-neutral-solid-gray-800, #333);
+  // Every card carries a visible border per the DADS spec
+  // (「コンテナに必ず視認できるボーダー」). Variants only change the color.
+  border: 1px solid var(--color-neutral-solid-gray-420, #949494);
 
   // -------------------- variants ----------------------------------------
   &--outlined {
-    border-color: var(--color-border-strong, rgba(0, 0, 0, 0.24));
+    border-color: var(--color-neutral-solid-gray-420, #949494);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
   }
 
   &--filled {
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    border-color: var(--color-neutral-solid-gray-420, #949494);
   }
 
   // The elevated variant relies entirely on the &--elevation-{n} modifier
@@ -130,26 +131,11 @@ const onKeydown = (event: KeyboardEvent) => {
     transition:
       background-color 0.15s ease,
       border-color 0.15s ease,
-      box-shadow 0.15s ease,
-      transform 0.15s ease;
+      box-shadow 0.15s ease;
 
     &:hover {
-      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.04));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
-
-    &:active {
-      transform: translateY(1px);
-    }
-  }
-
-  // Selectable outlined cards: blue solid ring on hover, no elevation.
-  // The inset box-shadow keeps the outer box dimensions stable so that
-  // adjacent cards do not shift when the pointer enters / leaves.
-  // Note: Dart Sass requires `&` to start a compound selector, so the
-  // second class is written out explicitly instead of `&--clickable&--outlined`.
-  &--clickable.dads-card--outlined:hover {
-    border-color: var(--color-primitive-blue-900, #1976d2);
-    box-shadow: inset 0 0 0 2px var(--color-primitive-blue-900, #1976d2);
   }
 
   // -------------------- slots / sections --------------------------------
@@ -158,8 +144,8 @@ const onKeydown = (event: KeyboardEvent) => {
   // top corners so they follow the card's border-radius.
   &__image {
     overflow: hidden;
-    border-top-left-radius: var(--border-radius-8, 0.5rem);
-    border-top-right-radius: var(--border-radius-8, 0.5rem);
+    border-top-left-radius: var(--border-radius-16, 1rem);
+    border-top-right-radius: var(--border-radius-16, 1rem);
 
     > :first-child {
       display: block;
@@ -169,27 +155,35 @@ const onKeydown = (event: KeyboardEvent) => {
   }
 
   &__header {
-    padding: calc(16 / 16 * 1rem);
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
-    font-weight: 700;
+    padding: calc(16 / 16 * 1rem) calc(24 / 16 * 1rem);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
+    font-weight: bold;
+    font-size: calc(20 / 16 * 1rem);
+    line-height: var(--line-height-150, 1.5);
+    letter-spacing: 0.02em;
   }
 
   // Sub area (between body and footer). Typically holds a link list or a
   // secondary action group per DADS spec.
   &__sub {
-    padding: 0 calc(16 / 16 * 1rem) calc(12 / 16 * 1rem);
-    border-top: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
+    padding: 0 calc(24 / 16 * 1rem) calc(12 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #949494);
     padding-top: calc(12 / 16 * 1rem);
   }
 
   &__body {
-    padding: calc(16 / 16 * 1rem);
+    padding: calc(16 / 16 * 1rem) calc(24 / 16 * 1rem);
     flex: 1 1 auto;
+    color: var(--color-neutral-solid-gray-800, #333);
+    font-size: calc(16 / 16 * 1rem);
+    line-height: var(--line-height-170, 1.7);
+    letter-spacing: 0.02em;
   }
 
   &__footer {
-    padding: calc(16 / 16 * 1rem);
-    border-top: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
+    padding: calc(16 / 16 * 1rem) calc(24 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #949494);
     display: flex;
     align-items: center;
     justify-content: flex-end;

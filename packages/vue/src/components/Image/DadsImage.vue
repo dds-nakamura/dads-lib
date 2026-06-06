@@ -130,7 +130,8 @@ const rootClasses = computed(() => [
     margin-top: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     color: var(--color-neutral-solid-gray-700, #555);
-    line-height: 1.5;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
   }
 
   // -------------------- object-fit modifiers ----------------------------

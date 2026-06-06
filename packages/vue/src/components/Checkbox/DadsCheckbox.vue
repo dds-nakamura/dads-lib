@@ -152,6 +152,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
+@use '../../styles/focus-ring' as focus-ring;
 
 .dads-checkbox {
   display: flex;
@@ -165,7 +166,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     align-items: center;
     gap: calc(8 / 16 * 1rem);
     cursor: pointer;
-    line-height: var(--line-height-150, 1.5);
+    line-height: 1.3;
+    letter-spacing: 0;
   }
 
   // The native checkbox is visually hidden (not display:none) so it stays
@@ -186,9 +188,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // Project the keyboard focus indication onto the visible indicator since
   // the real input is hidden.
   &__input:focus-visible + &__indicator {
-    outline: 2px solid var(--color-neutral-black, #000);
-    outline-offset: 0;
-    box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+    @include focus-ring.dads-focus-ring-style;
   }
 
   // -------------------- indicator (visible box) --------------------------
@@ -199,8 +199,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     align-items: center;
     justify-content: center;
     background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
-    border-radius: var(--border-radius-4, 0.25rem);
+    border: 1px solid var(--color-neutral-solid-gray-600, #767676);
+    border-radius: 12.5%;
     transition:
       background-color 0.15s ease,
       border-color 0.15s ease,
@@ -274,28 +274,33 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- size ---------------------------------------------
+  // Box sizes / border widths / label font sizes follow the official spec
+  // (checkbox.css: 24/32/44px box, 2/2/3px border, 16/16/17px label).
   &--lg &__indicator {
-    width: 1.5rem; // 24px
-    height: 1.5rem;
+    width: calc(44 / 16 * 1rem); // 44px
+    height: calc(44 / 16 * 1rem);
+    border-width: calc(3 / 16 * 1rem);
   }
   &--lg &__label {
-    font-size: var(--font-size-18, 1.125rem);
+    font-size: calc(17 / 16 * 1rem);
   }
 
   &--md &__indicator {
-    width: 1.25rem; // 20px
-    height: 1.25rem;
+    width: calc(32 / 16 * 1rem); // 32px
+    height: calc(32 / 16 * 1rem);
+    border-width: calc(2 / 16 * 1rem);
   }
   &--md &__label {
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm &__indicator {
-    width: 1rem; // 16px
-    height: 1rem;
+    width: calc(24 / 16 * 1rem); // 24px
+    height: calc(24 / 16 * 1rem);
+    border-width: calc(2 / 16 * 1rem);
   }
   &--sm &__label {
-    font-size: var(--font-size-14, 0.875rem);
+    font-size: var(--font-size-16, 1rem);
   }
 
   // -------------------- hover (interactive) ------------------------------
@@ -315,9 +320,23 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- disabled -----------------------------------------
+  // Official disabled config (checkbox.css:132-138): base gray-50,
+  // accent/border gray-300, label text gray-420 — not a blanket opacity dim.
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+  }
+  &--disabled &__label {
+    cursor: default;
+    color: var(--color-neutral-solid-gray-420, #949494);
+  }
+  &--disabled &__indicator {
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+  }
+  &--disabled.dads-checkbox--checked &__indicator,
+  &--disabled.dads-checkbox--indeterminate &__indicator {
+    background-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+    border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
   }
 
   // -------------------- error --------------------------------------------

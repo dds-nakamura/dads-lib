@@ -89,7 +89,7 @@ const onClick = (event: MouseEvent) => {
 
 .dads-hamburger-menu-button {
   @include base.dads-reset-button;
-  @include ring.dads-focus-ring;
+  @include ring.dads-focus-ring-fill;
 
   display: inline-flex;
   align-items: center;
@@ -174,7 +174,7 @@ const onClick = (event: MouseEvent) => {
     }
 
     &--variant-mobile-conditional &__label {
-      font-size: var(--font-size-12, 0.75rem);
+      font-size: var(--font-size-14, 0.875rem);
       line-height: 1.2;
     }
   }

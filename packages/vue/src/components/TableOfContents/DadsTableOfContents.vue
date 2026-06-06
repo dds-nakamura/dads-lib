@@ -87,7 +87,7 @@ const handleClick = (item: DadsTableOfContentsItem, event: MouseEvent) => {
     &--nested {
       margin-top: calc(4 / 16 * 1rem);
       padding-left: calc(16 / 16 * 1rem);
-      border-left: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
+      border-left: 1px solid var(--color-neutral-solid-gray-420, #949494);
     }
   }
 

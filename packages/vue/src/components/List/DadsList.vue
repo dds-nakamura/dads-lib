@@ -76,7 +76,7 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
   margin-bottom: 0;
   padding-left: calc(32 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333);
   font-size: var(--font-size-16, 1rem);
   line-height: var(--line-height-150, 1.5);
   // The DADS reference resets list-style-type to `revert` so the browser's
@@ -118,10 +118,19 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
   }
 
   // Nested lists hug the parent's spacing instead of inheriting the default
-  // browser margin, matching the official CSS.
-  .dads-list {
+  // browser margin, matching the official CSS (margin-top: --_spacing,
+  // margin-bottom: calc(-1 * --_spacing)). The spacing prop drives the value.
+  &--spacing-4 .dads-list {
     margin-top: calc(4 / 16 * 1rem);
-    margin-bottom: 0;
+    margin-bottom: calc(-4 / 16 * 1rem);
+  }
+  &--spacing-8 .dads-list {
+    margin-top: calc(8 / 16 * 1rem);
+    margin-bottom: calc(-8 / 16 * 1rem);
+  }
+  &--spacing-12 .dads-list {
+    margin-top: calc(12 / 16 * 1rem);
+    margin-bottom: calc(-12 / 16 * 1rem);
   }
 
   // ----- forced colors ----------------------------------------------------

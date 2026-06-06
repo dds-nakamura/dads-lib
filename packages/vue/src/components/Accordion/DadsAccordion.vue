@@ -145,15 +145,15 @@ const itemClasses = (item: DadsAccordionItem) => [
   display: flex;
   flex-direction: column;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
-  border-top: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+  color: var(--color-neutral-solid-gray-800, #333333);
 
   // -------------------- item ---------------------------------------------
+  // Official `accordion.css` draws only a bottom border per item (no top rule).
   &__item {
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
 
     &--disabled {
-      color: var(--color-neutral-solid-gray-420, #999);
+      color: var(--color-neutral-solid-gray-420, #949494);
     }
   }
 
@@ -169,7 +169,7 @@ const itemClasses = (item: DadsAccordionItem) => [
   // -------------------- header button ------------------------------------
   &__header {
     @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
 
     display: flex;
     align-items: center;
@@ -179,18 +179,19 @@ const itemClasses = (item: DadsAccordionItem) => [
     min-height: 3rem; // 48px keeps the touch target generous.
     padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
-    line-height: var(--line-height-150, 1.5);
+    font-weight: normal;
+    line-height: var(--line-height-170, 1.7);
+    letter-spacing: 0.02em;
     color: inherit;
     background-color: transparent;
     transition: background-color 0.15s ease;
 
     &:hover:not(:disabled) {
-      background-color: var(--color-neutral-solid-gray-50, #f0f0f0);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
 
     &:disabled {
-      color: var(--color-neutral-solid-gray-420, #999);
+      color: var(--color-neutral-solid-gray-420, #949494);
       cursor: not-allowed;
       opacity: 0.6;
     }
@@ -209,7 +210,7 @@ const itemClasses = (item: DadsAccordionItem) => [
     align-items: center;
     justify-content: center;
     font-size: var(--font-size-20, 1.25rem);
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+    color: var(--color-primitive-blue-1000, #00118f);
   }
 
   // -------------------- size variants ------------------------------------
@@ -253,13 +254,21 @@ const itemClasses = (item: DadsAccordionItem) => [
     text-align: end;
 
     a {
-      color: var(--color-primitive-blue-900, #0017c1);
+      color: var(--color-primitive-blue-1000, #00118f);
       text-decoration: underline;
-      text-underline-offset: 2px;
+      text-decoration-thickness: calc(1 / 16 * 1rem);
+      text-underline-offset: calc(3 / 16 * 1rem);
       font-size: var(--font-size-14, 0.875rem);
 
       &:hover {
+        color: var(--color-primitive-blue-900, #0017c1);
         text-decoration: underline;
+        text-decoration-thickness: calc(3 / 16 * 1rem);
+      }
+
+      &:active {
+        color: var(--color-primitive-orange-800, #c74700);
+        text-decoration-thickness: calc(1 / 16 * 1rem);
       }
     }
   }
@@ -268,14 +277,12 @@ const itemClasses = (item: DadsAccordionItem) => [
   &__panel {
     padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem) calc(16 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
-    line-height: var(--line-height-150, 1.5);
-    color: var(--color-neutral-solid-gray-800, #1a1a1a);
+    line-height: var(--line-height-170, 1.7);
+    color: var(--color-neutral-solid-gray-800, #333333);
   }
 
   // -------------------- forced colors ------------------------------------
   @include base.dads-forced-colors {
-    border-top: 1px solid CanvasText;
-
     .dads-accordion__item {
       border-bottom: 1px solid CanvasText;
     }

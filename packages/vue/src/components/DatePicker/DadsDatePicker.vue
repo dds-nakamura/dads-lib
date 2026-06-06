@@ -610,6 +610,8 @@ const warekiHint = computed(() => {
   gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
 
   // -------------------- external label & required marker -----------------
   &__label-text {
@@ -645,10 +647,10 @@ const warekiHint = computed(() => {
 
     display: inline-flex;
     box-sizing: border-box;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-600, #595959);
     background-color: var(--_bg);
-    padding: 2px 0 2px 2px;
+    padding: calc(2 / 16 * 1rem) 0 calc(2 / 16 * 1rem) calc(2 / 16 * 1rem);
   }
 
   // -------------------- variant: separated -------------------------------
@@ -666,7 +668,7 @@ const warekiHint = computed(() => {
   &--variant-separated &__month,
   &--variant-separated &__day {
     border: 1px solid var(--color-neutral-solid-gray-600, #595959);
-    border-radius: 0.25rem;
+    border-radius: var(--border-radius-4, 0.25rem);
     padding: 0 0.25rem;
   }
 
@@ -674,7 +676,7 @@ const warekiHint = computed(() => {
   &__wareki {
     display: inline-block;
     margin-inline-start: 0.25rem;
-    font-size: var(--font-size-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
     color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
@@ -702,6 +704,10 @@ const warekiHint = computed(() => {
     border-color: var(--color-semantic-error-1, #ec0000);
   }
 
+  &__inputs[data-error]:focus-within {
+    border-color: var(--color-primitive-red-1000, #d20000);
+  }
+
   &__inputs[data-disabled] {
     --_bg: var(--color-neutral-solid-gray-50, #f0f0f0);
     border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
@@ -710,6 +716,7 @@ const warekiHint = computed(() => {
 
   &__inputs[data-readonly] {
     border-style: dashed;
+    border-color: var(--color-neutral-solid-gray-600, #595959);
   }
 
   &__year,
@@ -725,7 +732,7 @@ const warekiHint = computed(() => {
     margin-left: -4px;
   }
   &__day {
-    padding-right: 1rem;
+    padding-right: calc(16 / 16 * 1rem);
   }
 
   &__label {
@@ -743,19 +750,21 @@ const warekiHint = computed(() => {
     margin-right: -4px;
     box-sizing: border-box;
     width: 4rem;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid transparent;
     background-color: transparent;
-    padding-right: 0.75rem;
+    padding-right: calc(12 / 16 * 1rem);
     color: inherit;
     text-align: right;
     font: inherit;
+    letter-spacing: inherit;
 
     &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000) !important;
-      outline-offset: 2px;
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
-      border-radius: 0.5rem;
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
+      border: 1px solid var(--color-neutral-solid-gray-600, #595959);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+      border-radius: var(--border-radius-8, 0.5rem);
     }
   }
 
@@ -769,18 +778,27 @@ const warekiHint = computed(() => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    column-gap: 0.25rem;
-    border-radius: 6px;
+    column-gap: calc(4 / 16 * 1rem);
+    border-radius: var(--border-radius-6, 0.375rem);
     border: 1px solid currentColor;
     background-color: var(--color-neutral-white, #fff);
-    padding: 0 0.75rem;
+    padding: 0 calc(12 / 16 * 1rem);
     color: var(--color-primitive-blue-900, #0017c1);
     cursor: pointer;
 
+    @media (hover: hover) {
+      &:enabled:hover {
+        border-width: calc(3 / 16 * 1rem);
+        padding-left: calc(10 / 16 * 1rem);
+        padding-right: calc(10 / 16 * 1rem);
+      }
+    }
+
     &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000);
-      outline-offset: 2px;
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
+      border-radius: var(--border-radius-4, 0.25rem);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
     }
 
     &:disabled {
@@ -817,10 +835,10 @@ const warekiHint = computed(() => {
     top: calc(100% + 4px);
     left: 0;
     z-index: 10;
-    border-radius: 8px;
+    border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #808080);
     background-color: var(--color-neutral-white, #fff);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--elevation-1, 0 2px 8px 1px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.3));
     padding: 0.5rem;
   }
 
@@ -834,6 +852,7 @@ const warekiHint = computed(() => {
 
   &__nav-button {
     @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
     width: 2.5rem;
     height: 2.5rem;
     display: inline-flex;
@@ -850,11 +869,6 @@ const warekiHint = computed(() => {
     &:disabled {
       cursor: not-allowed;
       color: var(--color-neutral-solid-gray-300, #b3b3b3);
-    }
-    &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000);
-      outline-offset: 2px;
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
     }
   }
 
@@ -903,10 +917,10 @@ const warekiHint = computed(() => {
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000);
-      outline-offset: 2px;
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
       background-color: var(--color-primitive-yellow-300, #ffd43d);
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
     }
 
     &[data-selected] {
@@ -952,7 +966,6 @@ const warekiHint = computed(() => {
   // -------------------- disabled -----------------------------------------
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
   }
 
   // -------------------- forced colors ------------------------------------
@@ -963,6 +976,11 @@ const warekiHint = computed(() => {
     &__inputs:focus-within {
       border-color: Highlight;
     }
+    @media (hover: hover) {
+      &__inputs:hover {
+        border-color: Highlight;
+      }
+    }
     &__inputs[data-disabled] {
       --_bg: ButtonFace;
       border-color: GrayText;
@@ -970,6 +988,10 @@ const warekiHint = computed(() => {
     }
     &__inputs[data-readonly] {
       border-color: currentcolor;
+    }
+    &__calendar-button:disabled {
+      border-color: GrayText;
+      color: GrayText;
     }
     &__calendar-popover {
       border: 1px solid CanvasText;

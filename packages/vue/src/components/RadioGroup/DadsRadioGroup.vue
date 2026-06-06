@@ -103,8 +103,6 @@ const onSelect = (value: DadsRadioGroupValue) => {
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/base' as base;
-
 .dads-radio-group {
   // Reset native fieldset chrome so we can compose with our own tokens.
   appearance: none;
@@ -194,15 +192,8 @@ const onSelect = (value: DadsRadioGroupValue) => {
 
   // -------------------- disabled ----------------------------------------
   // The native `fieldset[disabled]` attribute already disables descendant
-  // form controls, so visually we only dim the group.
-  &--disabled {
-    opacity: 0.5;
-  }
-
-  // -------------------- forced colors -----------------------------------
-  @include base.dads-forced-colors {
-    border: 1px solid CanvasText;
-    padding: calc(8 / 16 * 1rem);
-  }
+  // form controls; each child Radio renders its own disabled token palette
+  // (gray-50 / gray-300), matching official `fieldset[disabled]` behavior.
+  // No flat opacity dim — that diverges from the official spec.
 }
 </style>

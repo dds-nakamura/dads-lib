@@ -72,20 +72,22 @@ const rootClasses = computed(() => [
   width: 100%;
   border-collapse: collapse;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333333);
   font-size: var(--font-size-16, 1rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
 
   th,
   td {
-    padding: calc(12 / 16 * 1rem);
+    // Official table.css: --_padding 20/16 (comfortable), 12/16 (dense).
+    padding: calc(20 / 16 * 1rem) calc(16 / 16 * 1rem);
     text-align: left;
-    border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
     vertical-align: top;
   }
 
   thead th {
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-100, #e6e6e6);
     font-weight: 700;
   }
 
@@ -95,17 +97,21 @@ const rootClasses = computed(() => [
     caption-side: top;
     padding: calc(8 / 16 * 1rem) 0;
     text-align: left;
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
-    font-size: var(--font-size-14, 0.875rem);
+    // Official table.css: caption is bold and 17px in the body text color.
+    color: var(--color-neutral-solid-gray-800, #333333);
+    font-size: var(--font-size-17, 1.0625rem);
+    font-weight: 700;
   }
 
   // ----- density -----------------------------------------------------------
   // `comfortable` matches the base padding above; nothing to override.
   &--compact {
+    // Official dense: 12/16 padding + line-height 1.3.
+    line-height: var(--line-height-130, 1.3);
+
     th,
     td {
-      padding: calc(8 / 16 * 1rem);
-      font-size: var(--font-size-14, 0.875rem);
+      padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
     }
   }
 
@@ -119,14 +125,15 @@ const rootClasses = computed(() => [
 
   // ----- bordered ---------------------------------------------------------
   &--bordered {
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
   }
 
   // ----- striped ----------------------------------------------------------
   // Even-row tint draws from the hover token to stay visually subordinate
   // to true hover/selection states the consumer may layer on top.
+  // Official stripe even row tint: solid-gray-50 (#f2f2f2).
   &--striped tbody tr:nth-child(even) {
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.04));
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
   }
 
   // ----- loading skeleton -------------------------------------------------
@@ -139,7 +146,7 @@ const rootClasses = computed(() => [
     width: 100%;
     height: 0.875rem;
     border-radius: var(--border-radius-4, 0.25rem);
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.08));
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     animation: dads-table-skeleton-pulse 1.4s ease-in-out infinite;
   }
 
