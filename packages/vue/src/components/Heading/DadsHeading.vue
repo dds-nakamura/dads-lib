@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsHeadingLevel, DadsHeadingProps } from './DadsHeading.types'
 
 const props = withDefaults(defineProps<DadsHeadingProps>(), {
@@ -42,7 +43,7 @@ const rootClasses = computed(() => {
     <component :is="as" class="dads-heading__title">
       <span v-if="$slots['prepend-icon'] || icon" class="dads-heading__icon" aria-hidden="true">
         <slot name="prepend-icon">
-          <i v-if="icon" :class="['mdi', icon]" />
+          <DadsIcon v-if="icon" :name="icon" :size="24" />
         </slot>
       </span>
       <span class="dads-heading__text">

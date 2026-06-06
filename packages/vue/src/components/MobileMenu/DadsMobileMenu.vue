@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import DadsMenuList from '../MenuList/DadsMenuList.vue'
 import DadsUtilityLink from '../UtilityLink/DadsUtilityLink.vue'
 import type { DadsMenuListItem } from '../MenuList/DadsMenuList.types'
@@ -146,7 +147,7 @@ watch(
               :aria-label="backLabel"
               @click="goBack"
             >
-              <i class="mdi mdi-chevron-left dads-mobile-menu__back-icon" aria-hidden="true" />
+              <DadsIcon name="chevron_left" class="dads-mobile-menu__back-icon" :size="20" />
               <span>{{ backLabel }}</span>
             </button>
             <h2 v-if="isSlide && currentPanel.label" class="dads-mobile-menu__panel-title">
@@ -210,10 +211,11 @@ watch(
                   @click="onSlideItemClick(item, $event)"
                 >
                   <span class="dads-mobile-menu__slide-item-label">{{ item.label }}</span>
-                  <i
+                  <DadsIcon
                     v-if="item.children && item.children.length > 0"
-                    class="mdi mdi-chevron-right dads-mobile-menu__slide-item-chevron"
-                    aria-hidden="true"
+                    name="chevron_right"
+                    class="dads-mobile-menu__slide-item-chevron"
+                    :size="24"
                   />
                 </button>
               </li>

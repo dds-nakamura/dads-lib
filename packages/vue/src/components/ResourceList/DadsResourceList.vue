@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsResourceListEmits,
   DadsResourceListItem,
@@ -69,10 +70,11 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
             :src="entry.item.thumbnail"
             alt=""
           />
-          <i
+          <DadsIcon
             v-else-if="entry.item.iconName"
-            :class="['mdi', entry.item.iconName, 'dads-resource-list__icon']"
-            aria-hidden="true"
+            :name="entry.item.iconName"
+            class="dads-resource-list__icon"
+            :size="32"
           />
           <div class="dads-resource-list__contents">
             <h3 class="dads-resource-list__title">{{ entry.item.title }}</h3>
@@ -103,10 +105,10 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
           class="dads-resource-list__action"
           @click="onActionClick(entry.item, entry.index, $event)"
         >
-          <i
+          <DadsIcon
             v-if="entry.item.action.iconName"
-            :class="['mdi', entry.item.action.iconName]"
-            aria-hidden="true"
+            :name="entry.item.action.iconName"
+            :size="20"
           />
           <span v-else>{{ entry.item.action.label }}</span>
         </component>
@@ -199,14 +201,11 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   }
 
   &__icon {
+    // Icon is now an inline SVG (DadsIcon) sized via the :size prop (32px).
+    // Keep the optical 4px breathing room the old 40px box provided so the
+    // gap to the contents column matches the official spec.
     flex-shrink: 0;
-    width: calc(40 / 16 * 1rem);
-    height: calc(40 / 16 * 1rem);
-    font-size: calc(32 / 16 * 1rem);
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    margin: calc(4 / 16 * 1rem);
     color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
   }
 

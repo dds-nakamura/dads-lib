@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsAccordion from '../DadsAccordion.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsAccordionItem, DadsAccordionProps } from '../DadsAccordion.types'
 
 enableAutoUnmount(afterEach)
@@ -61,12 +62,17 @@ describe('DadsAccordion', () => {
       })
     })
 
-    it('uses chevron-down by default and chevron-up when open', async () => {
+    it('uses keyboard_arrow_down by default and keyboard_arrow_up when open', () => {
       const wrapper = createWrapper({ modelValue: 'a' })
-      const icons = wrapper.findAll('.dads-accordion__icon i')
-      expect(icons[0].classes()).toContain('mdi-chevron-up')
-      expect(icons[1].classes()).toContain('mdi-chevron-down')
-      expect(icons[2].classes()).toContain('mdi-chevron-down')
+      const icons = wrapper.findAllComponents(DadsIcon)
+      expect(icons[0].props('name')).toBe('keyboard_arrow_up')
+      expect(icons[1].props('name')).toBe('keyboard_arrow_down')
+      expect(icons[2].props('name')).toBe('keyboard_arrow_down')
+    })
+
+    it('renders the chevron as an inline svg.dads-icon', () => {
+      const wrapper = createWrapper({ modelValue: 'a' })
+      expect(wrapper.findAll('.dads-accordion__icon svg.dads-icon')).toHaveLength(3)
     })
   })
 

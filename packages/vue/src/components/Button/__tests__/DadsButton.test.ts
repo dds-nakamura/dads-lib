@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsButton from '../DadsButton.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsButtonProps } from '../DadsButton.types'
 
 const createWrapper = (props: DadsButtonProps = {}, slots = { default: 'クリック' }) =>
@@ -100,28 +101,37 @@ describe('DadsButton', () => {
     })
 
     it('hides the prepend icon while loading', () => {
-      const wrapper = createWrapper({ loading: true, prependIcon: 'mdi-download' })
+      const wrapper = createWrapper({ loading: true, prependIcon: 'download' })
       expect(wrapper.find('.dads-button__icon--prepend').exists()).toBe(false)
     })
   })
 
   describe('icons', () => {
-    it('renders the prepend icon', () => {
-      const wrapper = createWrapper({ prependIcon: 'mdi-download' })
+    it('renders the prepend icon as a DadsIcon svg', () => {
+      const wrapper = createWrapper({ prependIcon: 'download' })
       const icon = wrapper.find('.dads-button__icon--prepend')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-download')
+      expect(icon.element.tagName.toLowerCase()).toBe('svg')
+      expect(icon.classes()).toContain('dads-icon')
+      const iconComp = wrapper
+        .findAllComponents(DadsIcon)
+        .find((c) => c.props('name') === 'download')
+      expect(iconComp).toBeTruthy()
     })
 
-    it('renders the append icon', () => {
-      const wrapper = createWrapper({ appendIcon: 'mdi-arrow-right' })
+    it('renders the append icon as a DadsIcon svg', () => {
+      const wrapper = createWrapper({ appendIcon: 'arrow_forward' })
       const icon = wrapper.find('.dads-button__icon--append')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-arrow-right')
+      expect(icon.element.tagName.toLowerCase()).toBe('svg')
+      const iconComp = wrapper
+        .findAllComponents(DadsIcon)
+        .find((c) => c.props('name') === 'arrow_forward')
+      expect(iconComp).toBeTruthy()
     })
 
     it('marks icons as decorative for assistive tech', () => {
-      const wrapper = createWrapper({ prependIcon: 'mdi-download' })
+      const wrapper = createWrapper({ prependIcon: 'download' })
       const icon = wrapper.find('.dads-button__icon--prepend')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
@@ -203,7 +213,7 @@ describe('DadsButton', () => {
 
     it('has no violations when icon-only with aria-label', async () => {
       const wrapper = mountInBody(
-        { ariaLabel: '保存', prependIcon: 'mdi-content-save' },
+        { ariaLabel: '保存', prependIcon: 'save' },
         { default: '' },
       )
       expect(await axe(wrapper.element)).toHaveNoViolations()

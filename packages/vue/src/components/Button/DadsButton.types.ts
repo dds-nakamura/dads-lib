@@ -16,9 +16,9 @@ export interface DadsButtonProps {
   disabled?: boolean
   /** Show spinner and suppress clicks while async work is pending. */
   loading?: boolean
-  /** Material Design Icon class name to render before the label. e.g. `mdi-download`. */
+  /** Material Symbols name to render before the label. e.g. `download`. */
   prependIcon?: string
-  /** Material Design Icon class name to render after the label. e.g. `mdi-arrow-right`. */
+  /** Material Symbols name to render after the label. e.g. `arrow_forward`. */
   appendIcon?: string
   /** Stretch to the full container width. */
   block?: boolean

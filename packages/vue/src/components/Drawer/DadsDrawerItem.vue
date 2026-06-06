@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsDrawerItem } from './DadsDrawer.types'
 
 interface Props {
@@ -46,13 +47,18 @@ const onChildClick = (child: DadsDrawerItem, event: MouseEvent) => {
   <li :class="itemClasses">
     <details v-if="hasChildren" class="dads-drawer__item-details">
       <summary class="dads-drawer__item-button">
-        <i
+        <DadsIcon
           v-if="item.icon"
-          :class="['mdi', item.icon, 'dads-drawer__item-icon']"
-          aria-hidden="true"
+          :name="item.icon"
+          class="dads-drawer__item-icon"
+          :size="20"
         />
         <span class="dads-drawer__item-label">{{ item.label }}</span>
-        <i class="mdi mdi-chevron-down dads-drawer__item-chevron" aria-hidden="true" />
+        <DadsIcon
+          name="keyboard_arrow_down"
+          class="dads-drawer__item-chevron"
+          :size="20"
+        />
       </summary>
       <ul class="dads-drawer__item-children">
         <DadsDrawerItem
@@ -71,10 +77,11 @@ const onChildClick = (child: DadsDrawerItem, event: MouseEvent) => {
       :tabindex="item.disabled ? -1 : undefined"
       @click="onClick"
     >
-      <i
+      <DadsIcon
         v-if="item.icon"
-        :class="['mdi', item.icon, 'dads-drawer__item-icon']"
-        aria-hidden="true"
+        :name="item.icon"
+        class="dads-drawer__item-icon"
+        :size="20"
       />
       <span class="dads-drawer__item-label">{{ item.label }}</span>
     </a>
@@ -85,10 +92,11 @@ const onChildClick = (child: DadsDrawerItem, event: MouseEvent) => {
       :disabled="item.disabled"
       @click="onClick"
     >
-      <i
+      <DadsIcon
         v-if="item.icon"
-        :class="['mdi', item.icon, 'dads-drawer__item-icon']"
-        aria-hidden="true"
+        :name="item.icon"
+        class="dads-drawer__item-icon"
+        :size="20"
       />
       <span class="dads-drawer__item-label">{{ item.label }}</span>
     </button>

@@ -94,10 +94,9 @@ describe('DadsMenuListBox', () => {
 
   describe('icon', () => {
     it('renders an icon element when item.iconName is set', () => {
-      const wrapper = createWrapper({ items: [{ label: 'ホーム', iconName: 'mdi-home' }] })
-      const icon = wrapper.find('.dads-menu-list-box__item-icon')
+      const wrapper = createWrapper({ items: [{ label: 'ホーム', iconName: 'home' }] })
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list-box__item-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-home')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
 
@@ -255,10 +254,9 @@ describe('DadsMenuListBox', () => {
     })
 
     it('renders the trigger icon when triggerIcon is provided', () => {
-      const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerIcon: 'mdi-menu' })
-      const icon = wrapper.find('.dads-menu-list-box__trigger-icon')
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerIcon: 'menu' })
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list-box__trigger-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-menu')
     })
 
     it('applies the trigger size modifier', () => {
@@ -388,8 +386,8 @@ describe('DadsMenuListBox', () => {
       const wrapper = mountInLandmark({
         ariaLabel: 'カテゴリ一覧',
         items: [
-          { label: 'ホーム', iconName: 'mdi-home', description: 'トップページに戻ります' },
-          { label: 'ニュース', iconName: 'mdi-newspaper', description: '最新のお知らせ' },
+          { label: 'ホーム', iconName: 'home', description: 'トップページに戻ります' },
+          { label: 'ニュース', iconName: 'newspaper', description: '最新のお知らせ' },
         ],
       })
       expect(await axe(wrapper.element)).toHaveNoViolations()

@@ -201,21 +201,19 @@ describe('DadsInputText', () => {
 
   describe('icons', () => {
     it('renders the prepend icon', () => {
-      const wrapper = createWrapper({ prependIcon: 'mdi-tag' })
-      const icon = wrapper.find('.dads-input-text__icon--prepend')
+      const wrapper = createWrapper({ prependIcon: 'label' })
+      const icon = wrapper.find('svg.dads-icon.dads-input-text__icon--prepend')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-tag')
     })
 
     it('renders the append icon', () => {
-      const wrapper = createWrapper({ appendIcon: 'mdi-magnify' })
-      const icon = wrapper.find('.dads-input-text__icon--append')
+      const wrapper = createWrapper({ appendIcon: 'search' })
+      const icon = wrapper.find('svg.dads-icon.dads-input-text__icon--append')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-magnify')
     })
 
     it('marks decorative icons as aria-hidden', () => {
-      const wrapper = createWrapper({ prependIcon: 'mdi-tag' })
+      const wrapper = createWrapper({ prependIcon: 'label' })
       expect(wrapper.find('.dads-input-text__icon--prepend').attributes('aria-hidden')).toBe('true')
     })
   })

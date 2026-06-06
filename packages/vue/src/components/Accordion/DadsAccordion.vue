@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsAccordionEmits,
   DadsAccordionItem,
@@ -91,6 +92,22 @@ const onKeydown = (event: KeyboardEvent, currentIdx: number) => {
 const headerId = (id: string) => `${baseId.value}-header-${id}`
 const panelId = (id: string) => `${baseId.value}-panel-${id}`
 
+// Icon edge length per size token, mirroring the `&__icon` font-size scale
+// in the stylesheet (l 24 / m 20 / s 18 / xs 16).
+const iconSize = computed(() => {
+  switch (props.size) {
+    case 'l':
+      return 24
+    case 's':
+      return 18
+    case 'xs':
+      return 16
+    case 'm':
+    default:
+      return 20
+  }
+})
+
 const itemClasses = (item: DadsAccordionItem) => [
   'dads-accordion__item',
   {
@@ -117,7 +134,10 @@ const itemClasses = (item: DadsAccordionItem) => [
         >
           <span class="dads-accordion__title">{{ item.title }}</span>
           <span class="dads-accordion__icon" aria-hidden="true">
-            <i class="mdi" :class="isOpen(item.id) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
+            <DadsIcon
+              :name="isOpen(item.id) ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+              :size="iconSize"
+            />
           </span>
         </button>
       </h3>

@@ -104,12 +104,12 @@ const name = ref('')
 
 ## アイコン
 
-`prependIcon` / `appendIcon` に Material Design Icons のクラス名を渡す。
-利用側で `@mdi/font` の CSS を読み込むことが前提（カタログ側では未ロードのためここでは表示されない）。
+`prependIcon` / `appendIcon` に Material Symbols 名を渡す。
+アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 ```vue
-<DadsInputText prepend-icon="mdi-magnify" label="検索" placeholder="キーワード" />
-<DadsInputText append-icon="mdi-email" label="メール" type="email" />
+<DadsInputText prepend-icon="search" label="検索" placeholder="キーワード" />
+<DadsInputText append-icon="description" label="メール" type="email" />
 ```
 
 ## カウンター
@@ -163,8 +163,8 @@ const name = ref('')
 | `error`         | `boolean`                                                                   | `false`    | メッセージ無しでエラー視覚状態を強制                     |
 | `disabled`      | `boolean`                                                                   | `false`    | 操作不可化                                               |
 | `readonly`      | `boolean`                                                                   | `false`    | 読み取り専用（破線ボーダー）                             |
-| `prependIcon`   | `string`                                                                    | -          | 前置アイコンの MDI クラス名                              |
-| `appendIcon`    | `string`                                                                    | -          | 後置アイコンの MDI クラス名                              |
+| `prependIcon`   | `string`                                                                    | -          | 前置アイコンの Material Symbols 名                       |
+| `appendIcon`    | `string`                                                                    | -          | 後置アイコンの Material Symbols 名                       |
 | `counter`       | `number`                                                                    | -          | `現在文字数 / counter` を表示（制限はしない）            |
 | `requiredLabel` | `string`                                                                    | `'必須'`   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能    |
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsMenuListEmits, DadsMenuListItem, DadsMenuListProps } from './DadsMenuList.types'
 
 const props = withDefaults(defineProps<DadsMenuListProps>(), {
@@ -70,25 +71,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
           :aria-current="item.active ? 'page' : undefined"
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-menu-list__front-icon"
+            :size="20"
           />
           <span class="dads-menu-list__label">
             {{ item.label }}
-            <i
+            <DadsIcon
               v-if="item.tailIcon"
-              :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-              :role="item.tailIconLabel ? 'img' : undefined"
-              :aria-label="item.tailIconLabel || undefined"
-              :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+              :name="item.tailIcon"
+              class="dads-menu-list__tail-icon"
+              :size="16"
+              :label="item.tailIconLabel || undefined"
             />
           </span>
-          <i
+          <DadsIcon
             v-if="item.endIcon"
-            :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-            aria-hidden="true"
+            :name="item.endIcon"
+            class="dads-menu-list__end-icon"
+            :size="16"
           />
         </a>
         <button
@@ -102,25 +105,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
           "
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-menu-list__front-icon"
+            :size="20"
           />
           <span class="dads-menu-list__label">
             {{ item.label }}
-            <i
+            <DadsIcon
               v-if="item.tailIcon"
-              :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-              :role="item.tailIconLabel ? 'img' : undefined"
-              :aria-label="item.tailIconLabel || undefined"
-              :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+              :name="item.tailIcon"
+              class="dads-menu-list__tail-icon"
+              :size="16"
+              :label="item.tailIconLabel || undefined"
             />
           </span>
-          <i
+          <DadsIcon
             v-if="item.endIcon"
-            :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-            aria-hidden="true"
+            :name="item.endIcon"
+            class="dads-menu-list__end-icon"
+            :size="16"
           />
         </button>
         <DadsMenuList
@@ -153,25 +158,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
         :aria-current="item.active ? 'page' : undefined"
         @click="handleClick(item, $event)"
       >
-        <i
+        <DadsIcon
           v-if="item.frontIcon"
-          :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-          aria-hidden="true"
+          :name="item.frontIcon"
+          class="dads-menu-list__front-icon"
+          :size="20"
         />
         <span class="dads-menu-list__label">
           {{ item.label }}
-          <i
+          <DadsIcon
             v-if="item.tailIcon"
-            :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-            :role="item.tailIconLabel ? 'img' : undefined"
-            :aria-label="item.tailIconLabel || undefined"
-            :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+            :name="item.tailIcon"
+            class="dads-menu-list__tail-icon"
+            :size="16"
+            :label="item.tailIconLabel || undefined"
           />
         </span>
-        <i
+        <DadsIcon
           v-if="item.endIcon"
-          :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-          aria-hidden="true"
+          :name="item.endIcon"
+          class="dads-menu-list__end-icon"
+          :size="16"
         />
       </a>
       <button
@@ -185,25 +192,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
         "
         @click="handleClick(item, $event)"
       >
-        <i
+        <DadsIcon
           v-if="item.frontIcon"
-          :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-          aria-hidden="true"
+          :name="item.frontIcon"
+          class="dads-menu-list__front-icon"
+          :size="20"
         />
         <span class="dads-menu-list__label">
           {{ item.label }}
-          <i
+          <DadsIcon
             v-if="item.tailIcon"
-            :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-            :role="item.tailIconLabel ? 'img' : undefined"
-            :aria-label="item.tailIconLabel || undefined"
-            :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+            :name="item.tailIcon"
+            class="dads-menu-list__tail-icon"
+            :size="16"
+            :label="item.tailIconLabel || undefined"
           />
         </span>
-        <i
+        <DadsIcon
           v-if="item.endIcon"
-          :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-          aria-hidden="true"
+          :name="item.endIcon"
+          class="dads-menu-list__end-icon"
+          :size="16"
         />
       </button>
       <DadsMenuList

@@ -380,26 +380,25 @@ describe('DadsTab', () => {
   })
 
   describe('icon support', () => {
-    it('renders an <i> with mdi class when item.icon is set', () => {
+    it('renders a DadsIcon svg when item.icon is set', () => {
       const wrapper = createWrapper({
         items: [
-          { value: 'a', label: 'A', icon: 'mdi-home' },
+          { value: 'a', label: 'A', icon: 'home' },
           { value: 'b', label: 'B' },
         ],
         modelValue: 'a',
       })
       const tabs = wrapper.findAll('[role="tab"]')
-      const firstIcon = tabs[0].find('i.mdi')
+      const firstIcon = tabs[0].find('svg.dads-icon.dads-tab__icon')
       expect(firstIcon.exists()).toBe(true)
-      expect(firstIcon.classes()).toContain('mdi-home')
       expect(firstIcon.attributes('aria-hidden')).toBe('true')
       // Second tab without icon
-      expect(tabs[1].find('i.mdi').exists()).toBe(false)
+      expect(tabs[1].find('svg.dads-icon').exists()).toBe(false)
     })
 
     it('keeps the label visible alongside the icon', () => {
       const wrapper = createWrapper({
-        items: [{ value: 'a', label: 'Home', icon: 'mdi-home' }],
+        items: [{ value: 'a', label: 'Home', icon: 'home' }],
         modelValue: 'a',
       })
       const tab = wrapper.find('[role="tab"]')
@@ -428,8 +427,8 @@ describe('DadsTab', () => {
       const wrapper = createWrapper(
         {
           items: [
-            { value: 'home', label: 'ホーム', icon: 'mdi-home' },
-            { value: 'settings', label: '設定', icon: 'mdi-cog' },
+            { value: 'home', label: 'ホーム', icon: 'home' },
+            { value: 'settings', label: '設定', icon: 'settings' },
           ],
           modelValue: 'home',
         },

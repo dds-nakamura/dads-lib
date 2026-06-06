@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsPageNavigationEmits,
   DadsPageNavigationPageEntry,
@@ -74,7 +75,7 @@ const goTo = (target: number) => {
           :aria-label="firstLabel"
           @click="goTo(1)"
         >
-          <i class="mdi mdi-chevron-double-left" aria-hidden="true" />
+          <DadsIcon name="keyboard_double_arrow_left" :size="20" />
         </button>
       </li>
       <li v-if="showPrevNext" class="dads-page-navigation__item">
@@ -84,7 +85,7 @@ const goTo = (target: number) => {
           :disabled="isPrevDisabled || undefined"
           @click="goTo(modelValue - 1)"
         >
-          <i class="mdi mdi-chevron-left" aria-hidden="true" />
+          <DadsIcon name="chevron_left" :size="20" />
           <span class="dads-page-navigation__label">{{ prevLabel }}</span>
         </button>
       </li>
@@ -113,7 +114,7 @@ const goTo = (target: number) => {
           @click="goTo(modelValue + 1)"
         >
           <span class="dads-page-navigation__label">{{ nextLabel }}</span>
-          <i class="mdi mdi-chevron-right" aria-hidden="true" />
+          <DadsIcon name="chevron_right" :size="20" />
         </button>
       </li>
       <li v-if="showFirstLast" class="dads-page-navigation__item">
@@ -124,7 +125,7 @@ const goTo = (target: number) => {
           :aria-label="lastLabel"
           @click="goTo(totalPages)"
         >
-          <i class="mdi mdi-chevron-double-right" aria-hidden="true" />
+          <DadsIcon name="keyboard_double_arrow_right" :size="20" />
         </button>
       </li>
     </ul>

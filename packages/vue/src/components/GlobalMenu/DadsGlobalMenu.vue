@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsGlobalMenuEmits,
   DadsGlobalMenuItem,
@@ -41,10 +42,11 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
           :tabindex="item.disabled ? -1 : undefined"
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-global-menu__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-global-menu__front-icon"
+            :size="24"
           />
           <span class="dads-global-menu__label">{{ item.label }}</span>
         </a>
@@ -58,16 +60,18 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
           :aria-expanded="hasChildren(item) ? Boolean(item.expanded) : undefined"
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-global-menu__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-global-menu__front-icon"
+            :size="24"
           />
           <span class="dads-global-menu__label">{{ item.label }}</span>
-          <i
+          <DadsIcon
             v-if="hasChildren(item)"
-            :class="['mdi', 'mdi-chevron-down', 'dads-global-menu__chevron']"
-            aria-hidden="true"
+            name="keyboard_arrow_down"
+            class="dads-global-menu__chevron"
+            :size="16"
           />
         </button>
       </li>

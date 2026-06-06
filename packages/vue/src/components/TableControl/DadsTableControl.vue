@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsTableControlEmits,
   DadsTableControlPreset,
@@ -110,7 +111,7 @@ const onReset = () => {
       <div v-if="showSearch" class="dads-table-control__search">
         <label :for="searchId" class="dads-table-control__label">{{ searchLabel }}</label>
         <div class="dads-table-control__search-control">
-          <i class="mdi mdi-magnify dads-table-control__search-icon" aria-hidden="true" />
+          <DadsIcon name="search" class="dads-table-control__search-icon" :size="20" />
           <input
             :id="searchId"
             class="dads-table-control__search-input"
@@ -126,7 +127,7 @@ const onReset = () => {
             :aria-label="resetLabel"
             @click="onReset"
           >
-            <i class="mdi mdi-close-circle" aria-hidden="true" />
+            <DadsIcon name="cancel" :size="20" />
           </button>
         </div>
         <div v-if="presets.length > 0" class="dads-table-control__presets" role="list">
@@ -172,7 +173,7 @@ const onReset = () => {
           :aria-label="prevPageAriaLabel"
           @click="goToPrev"
         >
-          <i class="mdi mdi-chevron-left" aria-hidden="true" />
+          <DadsIcon name="chevron_left" :size="20" />
           {{ prevPageLabel }}
         </button>
         <span class="dads-table-control__page-indicator" :aria-label="currentPageAriaLabel">
@@ -186,7 +187,7 @@ const onReset = () => {
           @click="goToNext"
         >
           {{ nextPageLabel }}
-          <i class="mdi mdi-chevron-right" aria-hidden="true" />
+          <DadsIcon name="chevron_right" :size="20" />
         </button>
       </div>
     </div>

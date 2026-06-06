@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsUtilityLink from '../DadsUtilityLink.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsUtilityLinkItem, DadsUtilityLinkProps } from '../DadsUtilityLink.types'
 
 enableAutoUnmount(afterEach)
@@ -88,22 +89,25 @@ describe('DadsUtilityLink', () => {
   })
 
   describe('lead icon (iconName)', () => {
-    it('renders an mdi-prefixed icon element when iconName is provided', () => {
+    it('renders a DadsIcon lead icon (svg) when iconName is provided', () => {
       const wrapper = createWrapper({
         href: '/help',
         label: 'ヘルプ',
-        iconName: 'mdi-help-circle-outline',
+        iconName: 'help',
       })
-      const icon = wrapper.find('i.dads-utility-link__lead-icon')
+      const icon = wrapper.find('svg.dads-utility-link__lead-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi')
-      expect(icon.classes()).toContain('mdi-help-circle-outline')
+      expect(icon.classes()).toContain('dads-icon')
+      // Decorative lead icon -> aria-hidden (DadsIcon hides when no label).
       expect(icon.attributes('aria-hidden')).toBe('true')
+      // The Material Symbols name is forwarded to DadsIcon as `name`.
+      const dadsIcon = wrapper.findComponent(DadsIcon)
+      expect(dadsIcon.props('name')).toBe('help')
     })
 
     it('does not render a lead icon when iconName is omitted', () => {
       const wrapper = createWrapper({ href: '/contact', label: 'お問合わせ' })
-      expect(wrapper.find('i.dads-utility-link__lead-icon').exists()).toBe(false)
+      expect(wrapper.find('svg.dads-utility-link__lead-icon').exists()).toBe(false)
     })
   })
 
@@ -165,16 +169,14 @@ describe('DadsUtilityLink', () => {
     it('renders per-item lead icons only when iconName is provided', () => {
       const wrapper = createWrapper({
         items: [
-          { label: 'ヘルプ', href: '/help', iconName: 'mdi-help-circle-outline' },
+          { label: 'ヘルプ', href: '/help', iconName: 'help' },
           { label: 'お問合わせ', href: '/contact' },
         ],
       })
       const links = wrapper.findAll('a.dads-utility-link')
-      expect(links[0]?.find('i.dads-utility-link__lead-icon').exists()).toBe(true)
-      expect(links[0]?.find('i.dads-utility-link__lead-icon').classes()).toContain(
-        'mdi-help-circle-outline',
-      )
-      expect(links[1]?.find('i.dads-utility-link__lead-icon').exists()).toBe(false)
+      expect(links[0]?.find('svg.dads-utility-link__lead-icon').exists()).toBe(true)
+      expect(links[0]?.findComponent(DadsIcon).props('name')).toBe('help')
+      expect(links[1]?.find('svg.dads-utility-link__lead-icon').exists()).toBe(false)
     })
   })
 
@@ -283,7 +285,7 @@ describe('DadsUtilityLink', () => {
       const wrapper = mountInBody({
         href: 'https://example.com',
         label: '外部リソース',
-        iconName: 'mdi-help-circle-outline',
+        iconName: 'help',
         external: true,
       })
       expect(await axe(wrapper.element)).toHaveNoViolations()

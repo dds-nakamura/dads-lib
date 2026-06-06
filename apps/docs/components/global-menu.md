@@ -53,9 +53,9 @@ const nestedItems = [
 ]
 
 const iconItems = [
-  { label: 'ホーム', href: '/', frontIcon: 'mdi-home' },
-  { label: 'お知らせ', href: '/news', frontIcon: 'mdi-bell-outline' },
-  { label: '設定', href: '/settings', frontIcon: 'mdi-cog' },
+  { label: 'ホーム', href: '/', frontIcon: 'home' },
+  { label: 'お知らせ', href: '/news', frontIcon: 'notifications' },
+  { label: '設定', href: '/settings', frontIcon: 'settings' },
 ]
 
 const lastClicked = ref('')
@@ -135,8 +135,7 @@ const items = [
 
 ## アイコン付き
 
-`frontIcon` に Material Design Icons のクラス名を渡すと、ラベル左にアイコンが表示される。  
-※ カタログ側では `@mdi/font` を読み込んでいないため見た目は表示されない。利用側で CSS を読み込む前提。
+`frontIcon` に Material Symbols 名を渡すと、ラベル左にアイコンが表示される。アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 <div class="demo">
   <DadsGlobalMenu :items="iconItems" />
@@ -148,9 +147,9 @@ const items = [
 
 ```ts
 const iconItems = [
-  { label: 'ホーム', href: '/', frontIcon: 'mdi-home' },
-  { label: 'お知らせ', href: '/news', frontIcon: 'mdi-bell-outline' },
-  { label: '設定', href: '/settings', frontIcon: 'mdi-cog' },
+  { label: 'ホーム', href: '/', frontIcon: 'home' },
+  { label: 'お知らせ', href: '/news', frontIcon: 'notifications' },
+  { label: '設定', href: '/settings', frontIcon: 'settings' },
 ]
 ```
 
@@ -190,7 +189,7 @@ const iconItems = [
 | `href`      | `string`               | 指定時は `<a href>` でレンダリング、未指定 (または `children` あり) は `<button>` |
 | `active`    | `boolean`              | 現在地ハイライト。`aria-current="page"` を付与                                    |
 | `disabled`  | `boolean`              | 操作不可化。リンクは `aria-disabled` + tabindex=-1、ボタンは `disabled` 属性      |
-| `frontIcon` | `string`               | 項目先頭のアイコン (MDI クラス名)                                                 |
+| `frontIcon` | `string`               | 項目先頭のアイコン (Material Symbols 名)                                          |
 | `children`  | `DadsGlobalMenuItem[]` | 子メニュー。`<button aria-haspopup="menu">` として描画され、シェブロンが付く      |
 | `expanded`  | `boolean`              | 子メニューが展開中であることを示す。`aria-expanded="true"` 付与                   |
 

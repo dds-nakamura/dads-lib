@@ -7,6 +7,7 @@
  *   import { DadsButton, DadsInputText } from '@dads/vue'
  */
 
+export * from './components/Icon'
 export * from './components/Button'
 export * from './components/InputText'
 export * from './components/Textarea'

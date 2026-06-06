@@ -9,9 +9,9 @@ import type { DadsDrawerItem as DadsDrawerItemType, DadsDrawerProps } from '../D
 enableAutoUnmount(afterEach)
 
 const flatItems: DadsDrawerItemType[] = [
-  { label: 'ホーム', href: '/', icon: 'mdi-home' },
+  { label: 'ホーム', href: '/', icon: 'home' },
   { label: 'タスク', href: '/tasks' },
-  { label: '設定', icon: 'mdi-cog' },
+  { label: '設定', icon: 'settings' },
 ]
 
 const nestedItems: DadsDrawerItemType[] = [
@@ -152,10 +152,12 @@ describe('DadsDrawer', () => {
       expect(labels.some((l) => l?.includes('設定'))).toBe(true)
     })
 
-    it('renders mdi icon class when item.icon is set', () => {
+    it('renders a DadsIcon svg when item.icon is set', () => {
       createWrapper()
-      const homeIcon = document.body.querySelector('.mdi-home')
-      expect(homeIcon).not.toBeNull()
+      const icon = document.body.querySelector('.dads-drawer__item-icon')
+      expect(icon).not.toBeNull()
+      expect(icon?.tagName.toLowerCase()).toBe('svg')
+      expect(icon?.classList.contains('dads-icon')).toBe(true)
     })
   })
 

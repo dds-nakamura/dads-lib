@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsResourceList from '../DadsResourceList.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsResourceListItem, DadsResourceListProps } from '../DadsResourceList.types'
 
 enableAutoUnmount(afterEach)
@@ -166,19 +167,23 @@ describe('DadsResourceList', () => {
   })
 
   describe('iconName', () => {
-    it('renders an icon element with the mdi class when iconName is set and thumbnail is absent', () => {
+    it('renders an inline-SVG DadsIcon when iconName is set and thumbnail is absent', () => {
       const wrapper = createWrapper({
-        items: [{ title: 'T', iconName: 'mdi-file-document' }],
+        items: [{ title: 'T', iconName: 'description' }],
       })
-      const icon = wrapper.find('.dads-resource-list__icon')
+      const icon = wrapper.find('svg.dads-resource-list__icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-file-document')
+      // Class is preserved on the SVG root for positioning/color.
+      expect(icon.classes()).toContain('dads-icon')
+      // Decorative: no label -> aria-hidden.
       expect(icon.attributes('aria-hidden')).toBe('true')
+      const comp = wrapper.findComponent(DadsIcon)
+      expect(comp.props('name')).toBe('description')
     })
 
     it('prefers thumbnail over iconName when both are provided', () => {
       const wrapper = createWrapper({
-        items: [{ title: 'T', thumbnail: '/x.png', iconName: 'mdi-file' }],
+        items: [{ title: 'T', thumbnail: '/x.png', iconName: 'draft' }],
       })
       expect(wrapper.find('img.dads-resource-list__thumbnail').exists()).toBe(true)
       expect(wrapper.find('.dads-resource-list__icon').exists()).toBe(false)
@@ -261,14 +266,15 @@ describe('DadsResourceList', () => {
         items: [
           {
             title: 'A',
-            action: { label: 'ダウンロード', iconName: 'mdi-download' },
+            action: { label: 'ダウンロード', iconName: 'download' },
           },
         ],
       })
       const action = wrapper.find('button.dads-resource-list__action')
       expect(action.exists()).toBe(true)
       expect(action.attributes('aria-label')).toBe('ダウンロード')
-      expect(action.find('i.mdi.mdi-download').exists()).toBe(true)
+      expect(action.find('svg.dads-icon').exists()).toBe(true)
+      expect(wrapper.findComponent(DadsIcon).props('name')).toBe('download')
     })
 
     it('renders action as <a> when href is provided', () => {

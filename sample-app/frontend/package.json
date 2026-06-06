@@ -15,7 +15,6 @@
     "@dads/tokens": "workspace:*",
     "@dads/vue": "workspace:*",
     "@fontsource/noto-sans-jp": "^5.2.9",
-    "@mdi/font": "^7.4.47",
     "vue": "^3.5.35",
     "vue-i18n": "^11.4.5",
     "vue-router": "^5.1.0"

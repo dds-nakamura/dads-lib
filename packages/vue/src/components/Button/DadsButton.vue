@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsButtonEmits, DadsButtonProps } from './DadsButton.types'
 
 const props = withDefaults(defineProps<DadsButtonProps>(), {
@@ -64,18 +65,20 @@ const handleClick = (event: MouseEvent) => {
 <template>
   <component :is="rootTag" :class="rootClasses" v-bind="buttonAttrs" @click="handleClick">
     <span v-if="loading" class="dads-button__spinner" aria-hidden="true" />
-    <i
+    <DadsIcon
       v-if="prependIcon && !loading"
-      :class="['mdi', prependIcon, 'dads-button__icon', 'dads-button__icon--prepend']"
-      aria-hidden="true"
+      :name="prependIcon"
+      :size="20"
+      class="dads-button__icon dads-button__icon--prepend"
     />
     <span class="dads-button__label">
       <slot />
     </span>
-    <i
+    <DadsIcon
       v-if="appendIcon && !loading"
-      :class="['mdi', appendIcon, 'dads-button__icon', 'dads-button__icon--append']"
-      aria-hidden="true"
+      :name="appendIcon"
+      :size="20"
+      class="dads-button__icon dads-button__icon--append"
     />
   </component>
 </template>

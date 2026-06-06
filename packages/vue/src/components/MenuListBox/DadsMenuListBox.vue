@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsMenuListBoxEmits,
   DadsMenuListBoxItem,
@@ -83,13 +84,14 @@ const triggerClasses = computed(() => [
       :aria-controls="surfaceId"
       @click="toggle"
     >
-      <i
+      <DadsIcon
         v-if="triggerIcon"
-        :class="['mdi', triggerIcon, 'dads-menu-list-box__trigger-icon']"
-        aria-hidden="true"
+        :name="triggerIcon"
+        class="dads-menu-list-box__trigger-icon"
+        :size="20"
       />
       <span class="dads-menu-list-box__trigger-label">{{ triggerLabel }}</span>
-      <i class="mdi mdi-chevron-down dads-menu-list-box__trigger-caret" aria-hidden="true" />
+      <DadsIcon name="keyboard_arrow_down" class="dads-menu-list-box__trigger-caret" :size="20" />
     </button>
     <div v-show="isOpen" :id="surfaceId" class="dads-menu-list-box__surface">
       <ul class="dads-menu-list-box__list" role="menu" :aria-label="ariaLabel">
@@ -113,10 +115,11 @@ const triggerClasses = computed(() => [
             :data-current="entry.item.active ? '' : undefined"
             @click="onItemClick(entry.item, entry.index, $event)"
           >
-            <i
+            <DadsIcon
               v-if="entry.item.iconName"
-              :class="['mdi', entry.item.iconName, 'dads-menu-list-box__item-icon']"
-              aria-hidden="true"
+              :name="entry.item.iconName"
+              class="dads-menu-list-box__item-icon"
+              :size="20"
             />
             <span class="dads-menu-list-box__item-body">
               <span class="dads-menu-list-box__item-label">{{ entry.item.label }}</span>
@@ -140,10 +143,11 @@ const triggerClasses = computed(() => [
             :data-current="entry.item.active ? '' : undefined"
             @click="onItemClick(entry.item, entry.index, $event)"
           >
-            <i
+            <DadsIcon
               v-if="entry.item.iconName"
-              :class="['mdi', entry.item.iconName, 'dads-menu-list-box__item-icon']"
-              aria-hidden="true"
+              :name="entry.item.iconName"
+              class="dads-menu-list-box__item-icon"
+              :size="20"
             />
             <span class="dads-menu-list-box__item-body">
               <span class="dads-menu-list-box__item-label">{{ entry.item.label }}</span>

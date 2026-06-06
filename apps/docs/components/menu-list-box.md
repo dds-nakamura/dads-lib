@@ -32,9 +32,9 @@ const describedItems = [
 ]
 
 const iconItems = [
-  { label: 'ダッシュボード', iconName: 'mdi-view-dashboard' },
-  { label: '受信トレイ', iconName: 'mdi-inbox' },
-  { label: '設定', iconName: 'mdi-cog' },
+  { label: 'ダッシュボード', iconName: 'dashboard' },
+  { label: '受信トレイ', iconName: 'notifications' },
+  { label: '設定', iconName: 'settings' },
 ]
 
 const stateItems = [
@@ -89,7 +89,7 @@ const items = [{ label: 'メニュー項目1' }, { label: 'メニュー項目2' 
 
 ## アイコン付き (icon)
 
-`iconName` に Material Design Icons のクラス名（例: `mdi-home`）を渡すと、ラベルの前にアイコンが表示される。利用側で `@mdi/font` の CSS を読み込むことが前提（カタログ側では未ロードのためここでは表示されない）。
+`iconName` に Material Symbols 名（例: `home`）を渡すと、ラベルの前にアイコンが表示される。アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 <div class="demo">
   <DadsMenuListBox :items="iconItems" aria-label="メインナビゲーション" />
@@ -98,9 +98,9 @@ const items = [{ label: 'メニュー項目1' }, { label: 'メニュー項目2' 
 ```vue
 <DadsMenuListBox
   :items="[
-    { label: 'ダッシュボード', iconName: 'mdi-view-dashboard' },
-    { label: '受信トレイ', iconName: 'mdi-inbox' },
-    { label: '設定', iconName: 'mdi-cog' },
+    { label: 'ダッシュボード', iconName: 'dashboard' },
+    { label: '受信トレイ', iconName: 'notifications' },
+    { label: '設定', iconName: 'settings' },
   ]"
   aria-label="メインナビゲーション"
 />
@@ -166,7 +166,7 @@ const items = [{ label: 'メニュー項目1' }, { label: 'メニュー項目2' 
     :items="iconItems"
     aria-label="ドロップダウン"
     trigger-label="メニュー"
-    trigger-icon="mdi-menu"
+    trigger-icon="menu"
   />
   <span class="demo-label" style="margin-top:2rem">placement="end" (右端揃え)</span>
   <DadsMenuListBox
@@ -189,7 +189,7 @@ const open = ref(false)
     v-model="open"
     :items="items"
     trigger-label="メニュー"
-    trigger-icon="mdi-menu"
+    trigger-icon="menu"
     aria-label="メニュー一覧"
   />
 </template>
@@ -213,7 +213,7 @@ const open = ref(false)
 | `ariaLabel`    | `string`                | -          | `<ul role="menu">` に適用されるアクセシブルラベル             |
 | `modelValue`   | `boolean`               | `false`    | 開閉状態 (Opener mode のみ。v-model)。standalone では常時表示 |
 | `triggerLabel` | `string`                | -          | 指定時、トリガーボタンが描画され Opener mode になる           |
-| `triggerIcon`  | `string`                | -          | トリガーボタンの MDI クラス名 (`'mdi-menu'` 等)               |
+| `triggerIcon`  | `string`                | -          | トリガーボタンの Material Symbols 名 (`'menu'` 等)            |
 | `triggerSize`  | `'sm' \| 'md' \| 'lg'`  | `'md'`     | トリガーボタンのサイズ                                        |
 | `placement`    | `'start' \| 'end'`      | `'start'`  | Surface の整列位置 (Opener mode のみ有効)                     |
 
@@ -224,7 +224,7 @@ const open = ref(false)
 | `label`       | `string`  | 必須。表示テキスト                                                       |
 | `href`        | `string`  | 指定時は `<a>` としてレンダリング。`disabled` 時は無視され `<button>` 化 |
 | `description` | `string`  | ラベル下に表示される補足説明                                             |
-| `iconName`    | `string`  | Material Design Icons のクラス名 (例: `"mdi-home"`)                      |
+| `iconName`    | `string`  | Material Symbols 名 (例: `"home"`)                                       |
 | `active`      | `boolean` | 現在地として強調表示し `aria-current="page"` を付与                      |
 | `disabled`    | `boolean` | 操作不可化（クリックと遷移を抑止し `aria-disabled="true"` を付与）       |
 

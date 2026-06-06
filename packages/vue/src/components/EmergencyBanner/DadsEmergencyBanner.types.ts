@@ -26,7 +26,7 @@ export interface DadsEmergencyBannerProps {
   closable?: boolean
   /** aria-label for the close button. Default `'閉じる'`. */
   closeLabel?: string
-  /** MDI icon class (e.g. `mdi-alert`). Default `'mdi-alert'`. */
+  /** Material Symbols name (e.g. `warning`). Default `'warning'`. */
   iconName?: string
   /** aria-label for the banner root. Default `'緊急情報'`. */
   ariaLabel?: string

@@ -28,7 +28,7 @@ export interface DadsDrawerItem {
   disabled?: boolean
   /** Nested items render as a `<details>` accordion under the parent. */
   children?: DadsDrawerItem[]
-  /** mdi-* class name (e.g. "mdi-home"). */
+  /** Material Symbols name (e.g. "home"). */
   icon?: string
 }
 

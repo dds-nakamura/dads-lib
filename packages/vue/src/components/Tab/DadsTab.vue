@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsTabEmits, DadsTabItem, DadsTabProps, DadsTabValue } from './DadsTab.types'
 
 const props = withDefaults(defineProps<DadsTabProps>(), {
@@ -117,7 +118,7 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
         :class="tabClasses(item)"
         @click="onSelect(item)"
       >
-        <i v-if="item.icon" :class="['mdi', item.icon, 'dads-tab__icon']" aria-hidden="true" />
+        <DadsIcon v-if="item.icon" :name="item.icon" class="dads-tab__icon" :size="20" />
         <span class="dads-tab__label">{{ item.label }}</span>
       </button>
     </div>
