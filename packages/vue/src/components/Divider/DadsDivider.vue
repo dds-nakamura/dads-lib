@@ -55,7 +55,7 @@ const rootClasses = computed(() => [
 .dads-divider {
   display: flex;
   align-items: center;
-  gap: var(--spacing-8, 0.5rem);
+  gap: calc(8 / 16 * 1rem);
 
   &__line {
     flex: 1 1 auto;
@@ -69,7 +69,7 @@ const rootClasses = computed(() => [
     font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-secondary, #555);
+    color: var(--color-neutral-solid-gray-700, #555);
   }
 
   // -------------------- orientation --------------------------------------
@@ -107,7 +107,7 @@ const rootClasses = computed(() => [
 
   // -------------------- width variants -----------------------------------
   &--inset {
-    padding-inline: var(--spacing-16, 1rem);
+    padding-inline: calc(16 / 16 * 1rem);
   }
 
   // -------------------- thickness -----------------------------------------

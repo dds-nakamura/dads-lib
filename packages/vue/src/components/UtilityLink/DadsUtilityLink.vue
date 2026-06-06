@@ -121,7 +121,7 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--spacing-16, 1rem);
+  gap: calc(16 / 16 * 1rem);
 
   &__item {
     display: inline-flex;
@@ -140,7 +140,7 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
 
   display: inline-flex;
   align-items: baseline;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   width: fit-content;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-weight: normal;

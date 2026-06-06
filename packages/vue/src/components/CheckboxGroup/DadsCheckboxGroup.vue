@@ -115,19 +115,19 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
   // Reset the user-agent fieldset chrome so the group renders flush.
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8, 0.5rem);
+  gap: calc(8 / 16 * 1rem);
   margin: 0;
   padding: 0;
   border: 0;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   min-inline-size: 0; // fieldset defaults to min-inline-size: min-content
 
   // -------------------- legend & required marker -------------------------
   &__legend {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
@@ -135,8 +135,8 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -151,13 +151,13 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
 
   &--vertical &__items {
     flex-direction: column;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
   }
 
   &--horizontal &__items {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
   }
 
   // -------------------- footer (hint / error) ----------------------------
@@ -167,11 +167,11 @@ const onItemToggle = (value: DadsCheckboxGroupValue, checked: boolean) => {
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 

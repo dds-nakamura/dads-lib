@@ -259,7 +259,7 @@ watch(
     flex-direction: column;
     width: 100%;
     max-height: 100vh;
-    background-color: var(--color-background-base, #fff);
+    background-color: var(--color-neutral-white, #fff);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
 
@@ -273,8 +273,8 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
     border-bottom: 1px solid var(--color-neutral-solid-gray-100, #e5e5e5);
   }
 
@@ -284,9 +284,9 @@ watch(
 
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     min-height: 2.5rem;
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
     color: var(--color-neutral-solid-gray-800, #1a1a1c);
     font-size: var(--font-size-14, 0.875rem);
@@ -336,7 +336,7 @@ watch(
   // -------------------- nav (main menu) ----------------------------------
   &__nav {
     flex: 1 1 auto;
-    padding: var(--spacing-8, 0.5rem) 0;
+    padding: calc(8 / 16 * 1rem) 0;
   }
 
   // -------------------- slide-mode list ----------------------------------
@@ -359,10 +359,10 @@ watch(
 
     display: flex;
     align-items: center;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
     width: 100%;
     min-height: 3rem; // 48px touch target
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
     color: inherit;
     text-decoration: none;
     text-align: start;
@@ -385,7 +385,7 @@ watch(
 
   // -------------------- utility links ------------------------------------
   &__utility {
-    padding: var(--spacing-16, 1rem);
+    padding: calc(16 / 16 * 1rem);
     border-top: 1px solid var(--color-neutral-solid-gray-100, #e5e5e5);
   }
 

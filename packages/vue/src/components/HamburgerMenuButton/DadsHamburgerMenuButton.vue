@@ -93,7 +93,7 @@ const onClick = (event: MouseEvent) => {
 
   display: inline-flex;
   align-items: center;
-  column-gap: var(--spacing-4, 0.25rem);
+  column-gap: calc(4 / 16 * 1rem);
   width: fit-content;
   border: 0;
   border-radius: var(--border-radius-6, 0.375rem);
@@ -110,20 +110,20 @@ const onClick = (event: MouseEvent) => {
 
   // -------------------- size ----------------------------------------------
   &--lg {
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem)
-      calc(var(--spacing-8, 0.5rem) + 0.125rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem)
+      calc(calc(8 / 16 * 1rem) + 0.125rem);
     font-size: var(--font-size-18, 1.125rem);
   }
 
   &--md {
-    padding: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem)
-      calc(var(--spacing-4, 0.25rem) + 0.125rem);
+    padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem)
+      calc(calc(4 / 16 * 1rem) + 0.125rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm {
-    column-gap: var(--spacing-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    column-gap: calc(4 / 16 * 1rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
   }
 
@@ -155,7 +155,7 @@ const onClick = (event: MouseEvent) => {
   // icon-only: square, no visible label (aria-label keeps it accessible).
   &--variant-icon-only {
     aspect-ratio: 1;
-    padding: var(--spacing-8, 0.5rem);
+    padding: calc(8 / 16 * 1rem);
     column-gap: 0;
     justify-content: center;
   }
@@ -167,7 +167,7 @@ const onClick = (event: MouseEvent) => {
       flex-direction: column;
       column-gap: 0;
       row-gap: 0.125rem;
-      padding: var(--spacing-4, 0.25rem);
+      padding: calc(4 / 16 * 1rem);
       aspect-ratio: 1;
       justify-content: center;
       min-width: 3rem;

@@ -70,10 +70,10 @@ const onKeydown = (event: KeyboardEvent) => {
 .dads-card {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-surface, #fff);
+  background-color: var(--color-neutral-white, #fff);
   border-radius: var(--border-radius-8, 0.5rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   // Transparent border reserves layout space so outlined / non-outlined
   // variants share the same outer dimensions.
   border: 1px solid transparent;
@@ -87,7 +87,7 @@ const onKeydown = (event: KeyboardEvent) => {
   }
 
   &--filled {
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   // The elevated variant relies entirely on the &--elevation-{n} modifier
@@ -134,7 +134,7 @@ const onKeydown = (event: KeyboardEvent) => {
       transform 0.15s ease;
 
     &:hover {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.04));
     }
 
     &:active {
@@ -148,8 +148,8 @@ const onKeydown = (event: KeyboardEvent) => {
   // Note: Dart Sass requires `&` to start a compound selector, so the
   // second class is written out explicitly instead of `&--clickable&--outlined`.
   &--clickable.dads-card--outlined:hover {
-    border-color: var(--color-brand-primary, #1976d2);
-    box-shadow: inset 0 0 0 2px var(--color-brand-primary, #1976d2);
+    border-color: var(--color-primitive-blue-900, #1976d2);
+    box-shadow: inset 0 0 0 2px var(--color-primitive-blue-900, #1976d2);
   }
 
   // -------------------- slots / sections --------------------------------
@@ -169,31 +169,31 @@ const onKeydown = (event: KeyboardEvent) => {
   }
 
   &__header {
-    padding: var(--spacing-16, 1rem);
-    border-bottom: 1px solid var(--color-border-divider, #e5e5e5);
+    padding: calc(16 / 16 * 1rem);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
     font-weight: 700;
   }
 
   // Sub area (between body and footer). Typically holds a link list or a
   // secondary action group per DADS spec.
   &__sub {
-    padding: 0 var(--spacing-16, 1rem) var(--spacing-12, 0.75rem);
-    border-top: 1px solid var(--color-border-divider, #e5e5e5);
-    padding-top: var(--spacing-12, 0.75rem);
+    padding: 0 calc(16 / 16 * 1rem) calc(12 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
+    padding-top: calc(12 / 16 * 1rem);
   }
 
   &__body {
-    padding: var(--spacing-16, 1rem);
+    padding: calc(16 / 16 * 1rem);
     flex: 1 1 auto;
   }
 
   &__footer {
-    padding: var(--spacing-16, 1rem);
-    border-top: 1px solid var(--color-border-divider, #e5e5e5);
+    padding: calc(16 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     // Wrap multiple slot children (e.g. an action group + a banner) onto
     // separate rows when the available width can no longer fit them.
     flex-wrap: wrap;

@@ -111,15 +111,15 @@ const onSwatchClick = (color: string) => {
 .dads-color-picker {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-12, 0.75rem);
+  gap: calc(12 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- main row (preview + hex input) -------------------
   &__main {
     display: flex;
     align-items: center;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
   }
 
   // The native color input opens the OS color picker but is visually noisy
@@ -168,10 +168,10 @@ const onSwatchClick = (color: string) => {
 
     flex: 1;
     min-height: 2.5rem;
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.2));
     border-radius: var(--border-radius-4, 0.25rem);
-    background-color: var(--color-bg-surface, #fff);
+    background-color: var(--color-neutral-white, #fff);
     font-family: var(--font-family-mono, 'SFMono-Regular', monospace);
     font-size: var(--font-size-16, 1rem);
     text-transform: uppercase;
@@ -181,7 +181,7 @@ const onSwatchClick = (color: string) => {
   &__swatches {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -205,8 +205,8 @@ const onSwatchClick = (color: string) => {
       // Inner ring distinguishes the selected swatch on top of the hex
       // background, which can be any color including pure white.
       box-shadow:
-        inset 0 0 0 2px var(--color-bg-surface, #fff),
-        inset 0 0 0 4px var(--color-text-primary, #1a1a1a);
+        inset 0 0 0 2px var(--color-neutral-white, #fff),
+        inset 0 0 0 4px var(--color-neutral-solid-gray-800, #1a1a1a);
     }
   }
 

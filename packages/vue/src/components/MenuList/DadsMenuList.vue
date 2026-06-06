@@ -242,22 +242,22 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
   // -------------------- divider / section --------------------------------
   // Plain horizontal rule between menu groups.
   &__divider {
-    margin: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+    margin: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
     border: 0;
-    border-top: 1px solid var(--color-border-divider, #d6d6d6);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
   }
 
   // Section header (divider + bold category title).
   &__section {
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem) var(--spacing-4, 0.25rem);
-    border-top: 1px solid var(--color-border-divider, #d6d6d6);
-    margin-top: var(--spacing-4, 0.25rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem) calc(4 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    margin-top: calc(4 / 16 * 1rem);
   }
 
   &__section-title {
     font-size: var(--font-size-12, 0.75rem);
     font-weight: 700;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     text-transform: none;
     line-height: 1.4;
     letter-spacing: 0.04em;

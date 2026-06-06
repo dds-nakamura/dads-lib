@@ -154,9 +154,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 .dads-input-text {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- alignment ---------------------------------------
   // vertical (default) stays as flex-direction: column.
@@ -167,7 +167,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: start;
-    gap: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
+    gap: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem);
   }
 
   &--align-horizontal-left &__label,
@@ -197,15 +197,15 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__label {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -220,7 +220,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: relative;
     display: flex;
     align-items: stretch;
-    background-color: var(--color-bg-surface, #fff);
+    background-color: var(--color-neutral-white, #fff);
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
     border-radius: var(--border-radius-4, 0.25rem);
     transition:
@@ -250,7 +250,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: 1.25em;
   }
 
@@ -258,22 +258,22 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__footer {
     display: flex;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
   &__counter {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     margin-left: auto;
     font-variant-numeric: tabular-nums;
   }
@@ -282,28 +282,28 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &--lg &__input {
     min-height: calc(3.5rem - 2px);
     font-size: var(--font-size-18, 1.125rem);
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
   &--lg &__icon {
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   &--md &__input {
     min-height: calc(3rem - 2px);
     font-size: var(--font-size-16, 1rem);
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
   &--md &__icon {
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   &--sm &__input {
     min-height: calc(2.5rem - 2px);
     font-size: var(--font-size-14, 0.875rem);
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
   &--sm &__icon {
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
   }
 
   // When an icon is rendered, drop the input's leading/trailing padding so
@@ -318,13 +318,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-input-text--readonly):not(.dads-input-text--disabled):not(.dads-input-text--error)
     .dads-input-text__control:hover {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- readonly -----------------------------------------
   &--readonly &__control {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   // -------------------- disabled -----------------------------------------
@@ -333,13 +333,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     opacity: 0.5;
 
     .dads-input-text__control {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
   }
 
   // -------------------- error --------------------------------------------
   &--error &__control {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ------------------------------------

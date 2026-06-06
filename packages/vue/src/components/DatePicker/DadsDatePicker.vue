@@ -607,23 +607,23 @@ const warekiHint = computed(() => {
 .dads-date-picker {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- external label & required marker -----------------
   &__label-text {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -636,7 +636,7 @@ const warekiHint = computed(() => {
     position: relative;
     display: flex;
     align-items: end;
-    column-gap: var(--spacing-16, 1rem);
+    column-gap: calc(16 / 16 * 1rem);
   }
 
   // -------------------- year/month/day box -------------------------------
@@ -659,7 +659,7 @@ const warekiHint = computed(() => {
     border: 0;
     background-color: transparent;
     padding: 0;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   &--variant-separated &__year,
@@ -675,7 +675,7 @@ const warekiHint = computed(() => {
     display: inline-block;
     margin-inline-start: 0.25rem;
     font-size: var(--font-size-12, 0.75rem);
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__controls[data-size='sm'] &__inputs {
@@ -699,7 +699,7 @@ const warekiHint = computed(() => {
   }
 
   &__inputs[data-error] {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
   }
 
   &__inputs[data-disabled] {
@@ -934,17 +934,17 @@ const warekiHint = computed(() => {
   &__footer {
     display: flex;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error-text {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
     margin: 0;
   }

@@ -114,15 +114,15 @@ const onSelect = (value: DadsRadioGroupValue) => {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8, 0.5rem);
+  gap: calc(8 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- legend & required marker -------------------------
   &__legend {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     padding: 0;
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
@@ -145,8 +145,8 @@ const onSelect = (value: DadsRadioGroupValue) => {
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -157,7 +157,7 @@ const onSelect = (value: DadsRadioGroupValue) => {
   // -------------------- items wrapper ------------------------------------
   &__items {
     display: flex;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
   }
 
   &--vertical &__items {
@@ -167,7 +167,7 @@ const onSelect = (value: DadsRadioGroupValue) => {
   &--horizontal &__items {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
   }
 
   // -------------------- footer (hint / error) ---------------------------
@@ -179,17 +179,17 @@ const onSelect = (value: DadsRadioGroupValue) => {
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
   // -------------------- error -------------------------------------------
   &--error &__legend {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- disabled ----------------------------------------
@@ -202,7 +202,7 @@ const onSelect = (value: DadsRadioGroupValue) => {
   // -------------------- forced colors -----------------------------------
   @include base.dads-forced-colors {
     border: 1px solid CanvasText;
-    padding: var(--spacing-8, 0.5rem);
+    padding: calc(8 / 16 * 1rem);
   }
 }
 </style>

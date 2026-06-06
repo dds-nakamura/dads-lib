@@ -74,7 +74,7 @@ const handleClick = (item: DadsTableOfContentsItem, event: MouseEvent) => {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
   line-height: var(--line-height-150, 1.5);
-  color: var(--color-text-body, #333);
+  color: var(--color-neutral-solid-gray-800, #333);
 
   &__list {
     list-style: none;
@@ -82,11 +82,11 @@ const handleClick = (item: DadsTableOfContentsItem, event: MouseEvent) => {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
 
     &--nested {
-      margin-top: var(--spacing-4, 0.25rem);
-      padding-left: var(--spacing-16, 1rem);
+      margin-top: calc(4 / 16 * 1rem);
+      padding-left: calc(16 / 16 * 1rem);
       border-left: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
     }
   }
@@ -108,25 +108,25 @@ const handleClick = (item: DadsTableOfContentsItem, event: MouseEvent) => {
     @include ring.dads-focus-ring;
 
     display: block;
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-900, #0017c1);
     text-decoration: underline;
     text-underline-offset: 2px;
     border-radius: var(--border-radius-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
 
     &:hover {
-      color: var(--color-brand-primary-hover, #001a9c);
+      color: var(--color-primitive-blue-1000, #001a9c);
       text-decoration: underline;
     }
 
     &:active {
-      color: var(--color-brand-primary-active, #001480);
+      color: var(--color-primitive-blue-1200, #001480);
     }
 
     &--active {
-      color: var(--color-text-body, #333);
+      color: var(--color-neutral-solid-gray-800, #333);
       font-weight: 700;
-      background-color: var(--color-bg-selected, rgba(0, 23, 193, 0.08));
+      background-color: var(--color-primitive-blue-100, rgba(0, 23, 193, 0.08));
     }
   }
 

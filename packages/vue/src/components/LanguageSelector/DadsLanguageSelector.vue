@@ -290,7 +290,7 @@ const setItemRef =
   width: fit-content;
   position: relative;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__box {
     position: relative;
@@ -302,14 +302,14 @@ const setItemRef =
     @include ring.dads-focus-ring;
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    gap: calc(4 / 16 * 1rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
     line-height: var(--line-height-150, 1.5);
     color: inherit;
 
     &:hover:not(:disabled) {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
 
     &:disabled {
@@ -342,7 +342,7 @@ const setItemRef =
     left: 0;
     z-index: 10;
     min-width: 12rem;
-    background-color: var(--color-bg-surface, #fff);
+    background-color: var(--color-neutral-white, #fff);
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
     // 公式 (menu-list-box) のポップアップに合わせて 8px の角丸にする。
     border-radius: var(--border-radius-8, 0.5rem);
@@ -351,7 +351,7 @@ const setItemRef =
 
   &__menu {
     margin: 0;
-    padding: var(--spacing-4, 0.25rem) 0;
+    padding: calc(4 / 16 * 1rem) 0;
     list-style: none;
   }
 
@@ -359,8 +359,8 @@ const setItemRef =
   &__item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
     text-decoration: none;
     color: inherit;
     cursor: pointer;
@@ -368,7 +368,7 @@ const setItemRef =
     @include ring.dads-focus-ring;
 
     &:hover {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
   }
 
@@ -390,7 +390,7 @@ const setItemRef =
   // -------------------- size ---------------------------------------------
   &--lg &__opener {
     font-size: var(--font-size-18, 1.125rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
   }
 
   &--md &__opener {
@@ -399,14 +399,14 @@ const setItemRef =
 
   &--sm &__opener {
     font-size: var(--font-size-14, 0.875rem);
-    padding: 2px var(--spacing-8, 0.5rem);
+    padding: 2px calc(8 / 16 * 1rem);
   }
 
   // -------------------- color scheme -------------------------------------
   // Tinted opener / popup variants per DADS guidance. Hover surface and
   // selected-item color follow the chosen accent.
   &--light-blue &__opener {
-    color: var(--color-brand-primary, #1a73e8);
+    color: var(--color-primitive-blue-900, #1a73e8);
 
     &:hover:not(:disabled) {
       background-color: var(--color-info-bg, rgba(26, 115, 232, 0.08));
@@ -420,7 +420,7 @@ const setItemRef =
   }
 
   &--light-green &__opener {
-    color: var(--color-success, #1f8a3a);
+    color: var(--color-semantic-success-1, #1f8a3a);
 
     &:hover:not(:disabled) {
       background-color: var(--color-success-bg, rgba(31, 138, 58, 0.08));
@@ -428,19 +428,19 @@ const setItemRef =
   }
   &--light-green &__item--current {
     background-color: var(--color-success-bg, rgba(31, 138, 58, 0.1));
-    color: var(--color-success, #1f8a3a);
+    color: var(--color-semantic-success-1, #1f8a3a);
   }
 
   &--light-gray &__opener {
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
     &:hover:not(:disabled) {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
   }
   &--light-gray &__item--current {
     background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- corner shape -------------------------------------

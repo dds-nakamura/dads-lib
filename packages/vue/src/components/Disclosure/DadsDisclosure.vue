@@ -121,14 +121,14 @@ const rootClasses = computed(() => [
 
 .dads-disclosure {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- summary (toggle button) -------------------------
   &__summary {
     display: flex;
     align-items: start;
     justify-content: start;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     width: fit-content;
     cursor: pointer;
     list-style-type: none;
@@ -185,15 +185,15 @@ const rootClasses = computed(() => [
   // -------------------- content panel -----------------------------------
   &__content {
     padding-left: 2rem; // 32/16rem — keeps body aligned past the icon.
-    margin: var(--spacing-16, 1rem) 0;
+    margin: calc(16 / 16 * 1rem) 0;
     font-size: var(--font-size-16, 1rem);
     line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- disabled ----------------------------------------
   &--disabled {
-    color: var(--color-text-disabled, #999);
+    color: var(--color-neutral-solid-gray-420, #999);
 
     .dads-disclosure__summary {
       cursor: not-allowed;
@@ -207,7 +207,7 @@ const rootClasses = computed(() => [
     }
 
     .dads-disclosure__icon {
-      color: var(--color-text-disabled, #999);
+      color: var(--color-neutral-solid-gray-420, #999);
     }
   }
 

@@ -169,9 +169,9 @@ watch(
 
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     min-height: 2.75rem;
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
     color: inherit;
     font-weight: 700;
@@ -203,30 +203,30 @@ watch(
     left: 0;
     z-index: 20;
     min-width: 16rem;
-    background-color: var(--color-bg-surface, #fff);
+    background-color: var(--color-neutral-white, #fff);
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
     border-radius: var(--border-radius-8, 0.5rem);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
-    padding: var(--spacing-16, 1rem);
+    padding: calc(16 / 16 * 1rem);
   }
 
   // -------------------- columns layout -----------------------------------
   &__columns {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: var(--spacing-24, 1.5rem);
+    gap: calc(24 / 16 * 1rem);
   }
 
   &__column {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     min-width: 12rem;
   }
 
   &__heading {
     margin: 0;
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
     color: var(--color-neutral-solid-gray-700, #41464d);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;

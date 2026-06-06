@@ -103,9 +103,9 @@ const displayLabel = computed(() => {
 .dads-progress-indicator {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-8, 0.5rem);
+  gap: calc(8 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- linear bar ---------------------------------------
   &__bar {
@@ -113,14 +113,14 @@ const displayLabel = computed(() => {
     flex: 1 1 auto;
     width: 100%;
     height: 0.5rem; // md default; size modifiers override below.
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     border-radius: var(--border-radius-4, 0.25rem);
     overflow: hidden;
   }
 
   &__bar-fill {
     height: 100%;
-    background-color: var(--color-brand-primary, #0017c1);
+    background-color: var(--color-primitive-blue-900, #0017c1);
     border-radius: inherit;
     transition: width 0.2s ease;
   }
@@ -134,11 +134,11 @@ const displayLabel = computed(() => {
   }
 
   &__circle-track {
-    stroke: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    stroke: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   &__circle-fill {
-    stroke: var(--color-brand-primary, #0017c1);
+    stroke: var(--color-primitive-blue-900, #0017c1);
     stroke-linecap: round;
     transition: stroke-dashoffset 0.2s ease;
   }
@@ -147,7 +147,7 @@ const displayLabel = computed(() => {
   &__label {
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-variant-numeric: tabular-nums;
   }
 
@@ -206,11 +206,11 @@ const displayLabel = computed(() => {
   // Each semantic color overrides both the linear fill background and the
   // circular fill stroke. Track / background remains the same tinted gray
   // across all colors for visual consistency.
-  &--color-primary &__bar-fill {
-    background-color: var(--color-brand-primary, #0017c1);
+  &--color-primitive-blue-900 &__bar-fill {
+    background-color: var(--color-primitive-blue-900, #0017c1);
   }
-  &--color-primary &__circle-fill {
-    stroke: var(--color-brand-primary, #0017c1);
+  &--color-primitive-blue-900 &__circle-fill {
+    stroke: var(--color-primitive-blue-900, #0017c1);
   }
   &--color-secondary &__bar-fill {
     background-color: var(--color-brand-secondary, #595959);
@@ -218,23 +218,23 @@ const displayLabel = computed(() => {
   &--color-secondary &__circle-fill {
     stroke: var(--color-brand-secondary, #595959);
   }
-  &--color-success &__bar-fill {
-    background-color: var(--color-success, #00876f);
+  &--color-semantic-success-1 &__bar-fill {
+    background-color: var(--color-semantic-success-1, #00876f);
   }
-  &--color-success &__circle-fill {
-    stroke: var(--color-success, #00876f);
+  &--color-semantic-success-1 &__circle-fill {
+    stroke: var(--color-semantic-success-1, #00876f);
   }
-  &--color-error &__bar-fill {
-    background-color: var(--color-error, #ec0000);
+  &--color-semantic-error-1 &__bar-fill {
+    background-color: var(--color-semantic-error-1, #ec0000);
   }
-  &--color-error &__circle-fill {
-    stroke: var(--color-error, #ec0000);
+  &--color-semantic-error-1 &__circle-fill {
+    stroke: var(--color-semantic-error-1, #ec0000);
   }
-  &--color-warning &__bar-fill {
-    background-color: var(--color-warning, #c47600);
+  &--color-semantic-warning-orange-1 &__bar-fill {
+    background-color: var(--color-semantic-warning-orange-1, #c47600);
   }
-  &--color-warning &__circle-fill {
-    stroke: var(--color-warning, #c47600);
+  &--color-semantic-warning-orange-1 &__circle-fill {
+    stroke: var(--color-semantic-warning-orange-1, #c47600);
   }
 
   // -------------------- forced-colors ------------------------------------

@@ -166,7 +166,7 @@ const triggerClasses = computed(() => [
   position: relative;
   display: inline-block;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, var(--color-neutral-solid-gray-800, #1a1a1a));
+  color: var(--color-neutral-solid-gray-800, var(--color-neutral-solid-gray-800, #1a1a1a));
   font-size: var(--font-size-16, 1rem);
   line-height: 1.3;
 
@@ -177,8 +177,8 @@ const triggerClasses = computed(() => [
 
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
     border-radius: var(--border-radius-4, 0.25rem);
     background-color: var(--color-neutral-white, #fff);
@@ -198,7 +198,7 @@ const triggerClasses = computed(() => [
 
     &--sm {
       min-height: 2rem;
-      padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+      padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
       font-size: var(--font-size-14, 0.875rem);
     }
 
@@ -209,7 +209,7 @@ const triggerClasses = computed(() => [
 
     &--lg {
       min-height: 3rem;
-      padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+      padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
       font-size: var(--font-size-18, 1.125rem);
     }
   }
@@ -239,14 +239,14 @@ const triggerClasses = computed(() => [
     border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
     background-color: var(--color-neutral-white, #fff);
-    padding: var(--spacing-16, 1rem) 0;
+    padding: calc(16 / 16 * 1rem) 0;
     box-shadow: var(--elevation-1, 0 1px 2px rgba(0, 0, 0, 0.08));
   }
 
   &--with-opener &__surface {
     position: absolute;
     top: 100%;
-    margin-top: var(--spacing-4, 0.25rem);
+    margin-top: calc(4 / 16 * 1rem);
     z-index: 10;
   }
 
@@ -277,11 +277,11 @@ const triggerClasses = computed(() => [
 
     display: flex;
     align-items: flex-start;
-    column-gap: var(--spacing-8, 0.5rem);
+    column-gap: calc(8 / 16 * 1rem);
     box-sizing: border-box;
     width: 100%;
     min-height: calc(44 / 16 * 1rem);
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
     border: 0;
     background-color: transparent;
     color: inherit;
@@ -352,7 +352,7 @@ const triggerClasses = computed(() => [
     font-size: var(--font-size-14, 0.875rem);
     line-height: 1.4;
     font-weight: normal;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
   }
 
   // -------------------- forced colors -----------------------------------

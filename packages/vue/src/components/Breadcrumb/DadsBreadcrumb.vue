@@ -66,7 +66,7 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
   line-height: var(--line-height-150, 1.5);
-  color: var(--color-text-body, #333);
+  color: var(--color-neutral-solid-gray-800, #333);
 
   &__list {
     list-style: none;
@@ -87,33 +87,33 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
   &__link {
     @include ring.dads-focus-ring;
 
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-900, #0017c1);
     text-decoration: underline;
     text-underline-offset: 2px;
     border-radius: var(--border-radius-4, 0.25rem);
 
     &:hover {
-      color: var(--color-brand-primary-hover, #001a9c);
+      color: var(--color-primitive-blue-1000, #001a9c);
       text-decoration: underline;
     }
 
     &:active {
-      color: var(--color-brand-primary-active, #001480);
+      color: var(--color-primitive-blue-1200, #001480);
     }
   }
 
   &__current {
-    color: var(--color-text-body, #333);
+    color: var(--color-neutral-solid-gray-800, #333);
     font-weight: 500;
 
     &--disabled {
-      color: var(--color-text-disabled, #999);
+      color: var(--color-neutral-solid-gray-420, #999);
       cursor: not-allowed;
     }
   }
 
   &__separator {
-    margin: 0 var(--spacing-8, 0.5rem);
+    margin: 0 calc(8 / 16 * 1rem);
     color: var(--color-neutral-solid-gray-500, #69707d);
     user-select: none;
   }

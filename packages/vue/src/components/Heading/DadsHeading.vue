@@ -64,13 +64,13 @@ const rootClasses = computed(() => {
 .dads-heading {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__shoulder {
     margin: 0;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
     font-weight: 500;
@@ -81,7 +81,7 @@ const rootClasses = computed(() => {
   &__title {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     margin: 0;
   }
 
@@ -100,7 +100,7 @@ const rootClasses = computed(() => {
   &__chip {
     display: inline-flex;
     align-items: center;
-    margin-inline-start: var(--spacing-8, 0.5rem);
+    margin-inline-start: calc(8 / 16 * 1rem);
     // Chip text should not inherit the heading's bold weight or large
     // font-size — let DadsChipLabel manage its own typography.
     font-weight: normal;
@@ -110,7 +110,7 @@ const rootClasses = computed(() => {
 
   &__subtitle {
     margin: 0;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }

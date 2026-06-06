@@ -132,7 +132,7 @@ watch(
   z-index: 1000;
   display: flex;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- overlay ------------------------------------------
   &__overlay {
@@ -149,7 +149,7 @@ watch(
     width: min(20rem, 80vw);
     max-width: 100%;
     height: 100%;
-    background-color: var(--color-bg-primary, #fff);
+    background-color: var(--color-neutral-white, #fff);
     box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
 
@@ -180,9 +180,9 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-16, 1rem);
-    border-bottom: 1px solid var(--color-border-divider, #e5e5e5);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(16 / 16 * 1rem);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
   }
 
   &__title {
@@ -202,18 +202,18 @@ watch(
     width: 2.5rem;
     height: 2.5rem;
     border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
     font-size: 1.5rem;
 
     &:hover {
-      background-color: var(--color-bg-subtle, #f5f5f5);
+      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
     }
   }
 
   // -------------------- nav / list ---------------------------------------
   &__nav {
     flex: 1 1 auto;
-    padding: var(--spacing-8, 0.5rem) 0;
+    padding: calc(8 / 16 * 1rem) 0;
   }
 
   &__list,
@@ -249,16 +249,16 @@ watch(
 
     display: flex;
     align-items: center;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
     width: 100%;
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
-    color: var(--color-text-primary, #1a1a1a);
+    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
     text-decoration: none;
     font-size: var(--font-size-16, 1rem);
     line-height: var(--line-height-150, 1.5);
 
     &:hover {
-      background-color: var(--color-bg-subtle, #f5f5f5);
+      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
     }
 
     &:disabled,
@@ -287,7 +287,7 @@ watch(
 
   // Nested children inherit the indent so the hierarchy is visible.
   &__item-children &__item-button {
-    padding-inline-start: var(--spacing-32, 2rem);
+    padding-inline-start: calc(32 / 16 * 1rem);
   }
 
   // -------------------- forced colors -----------------------------------

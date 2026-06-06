@@ -127,19 +127,19 @@ const onClose = () => {
 @use '../../styles/focus-ring' as ring;
 
 // Color table: (foreground, background). Foreground is used for the icon /
-// title accent; the body text uses --color-text-primary so it stays legible
+// title accent; the body text uses --color-neutral-solid-gray-800 so it stays legible
 // regardless of the tinted background.
 $dads-notification-banner-colors: (
   success: (
-    --color-success,
+    --color-semantic-success-1,
     --color-success-bg,
   ),
   error: (
-    --color-error,
+    --color-semantic-error-1,
     --color-error-bg,
   ),
   warning: (
-    --color-warning,
+    --color-semantic-warning-orange-1,
     --color-warning-bg,
   ),
   info: (
@@ -147,20 +147,20 @@ $dads-notification-banner-colors: (
     --color-info-bg,
   ),
   neutral: (
-    --color-text-secondary,
-    --color-bg-subtle,
+    --color-neutral-solid-gray-700,
+    --color-neutral-solid-gray-50,
   ),
 );
 
 .dads-notification-banner {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-12, 0.75rem);
-  padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+  gap: calc(12 / 16 * 1rem);
+  padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
   border-radius: var(--border-radius-4, 0.25rem);
   border: 1px solid transparent;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   line-height: var(--line-height-150, 1.5);
 
   &__icon {
@@ -186,7 +186,7 @@ $dads-notification-banner-colors: (
   // When both title and message render, give the message a small offset so
   // the two lines don't collapse together.
   &__title + &__message {
-    margin-top: var(--spacing-4, 0.25rem);
+    margin-top: calc(4 / 16 * 1rem);
   }
 
   &__message {
@@ -195,9 +195,9 @@ $dads-notification-banner-colors: (
   }
 
   &__timestamp {
-    margin: var(--spacing-4, 0.25rem) 0 0;
+    margin: calc(4 / 16 * 1rem) 0 0;
     font-size: var(--font-size-12, 0.75rem);
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     line-height: 1.4;
   }
 
@@ -217,7 +217,7 @@ $dads-notification-banner-colors: (
     width: 2rem;
     height: 2rem;
     border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-text-secondary, #555);
+    color: var(--color-neutral-solid-gray-700, #555);
     font-size: 1.25rem;
 
     &:hover {
@@ -240,10 +240,10 @@ $dads-notification-banner-colors: (
     // inline-start edge. Border-left provides the accent without needing
     // an extra DOM element.
     &--style-color-chip.dads-notification-banner--#{$name} {
-      background-color: var(--color-bg-surface, #fff);
+      background-color: var(--color-neutral-white, #fff);
       border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
       border-inline-start: 4px solid var(#{$fg});
-      padding-inline-start: calc(var(--spacing-16, 1rem) - 3px);
+      padding-inline-start: calc(calc(16 / 16 * 1rem) - 3px);
     }
 
     &--#{$name} .dads-notification-banner__icon,

@@ -74,9 +74,9 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
 .dads-list {
   margin-top: 0;
   margin-bottom: 0;
-  padding-left: var(--spacing-32, 2rem);
+  padding-left: calc(32 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   font-size: var(--font-size-16, 1rem);
   line-height: var(--line-height-150, 1.5);
   // The DADS reference resets list-style-type to `revert` so the browser's
@@ -88,16 +88,16 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
   // Per-item vertical rhythm. The DADS reference exposes 4 / 8 / 12px
   // spacing presets via `data-spacing`; the spacing prop selects one.
   &--spacing-4 > li {
-    padding-top: var(--spacing-4, 0.25rem);
-    padding-bottom: var(--spacing-4, 0.25rem);
+    padding-top: calc(4 / 16 * 1rem);
+    padding-bottom: calc(4 / 16 * 1rem);
   }
   &--spacing-8 > li {
-    padding-top: var(--spacing-8, 0.5rem);
-    padding-bottom: var(--spacing-8, 0.5rem);
+    padding-top: calc(8 / 16 * 1rem);
+    padding-bottom: calc(8 / 16 * 1rem);
   }
   &--spacing-12 > li {
-    padding-top: var(--spacing-12, 0.75rem);
-    padding-bottom: var(--spacing-12, 0.75rem);
+    padding-top: calc(12 / 16 * 1rem);
+    padding-bottom: calc(12 / 16 * 1rem);
   }
 
   // Nested level marker control: when `nestingMarker=false`, force the same
@@ -113,14 +113,14 @@ const hasItems = computed(() => Array.isArray(props.items) && props.items.length
   // here (the platform default) but flatten the marker styling so visual
   // alignment with the `<ul data-marker="number">` reference is consistent.
   &[data-marker='number'] {
-    padding-left: var(--spacing-32, 2rem);
+    padding-left: calc(32 / 16 * 1rem);
     list-style-type: decimal;
   }
 
   // Nested lists hug the parent's spacing instead of inheriting the default
   // browser margin, matching the official CSS.
   .dads-list {
-    margin-top: var(--spacing-4, 0.25rem);
+    margin-top: calc(4 / 16 * 1rem);
     margin-bottom: 0;
   }
 

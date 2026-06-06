@@ -87,25 +87,25 @@ const handleClick = (event: MouseEvent) => {
 
 $dads-button-colors: (
   primary: (
-    --color-brand-primary,
-    --color-brand-primary-hover,
-    --color-brand-primary-active,
+    --color-primitive-blue-900,
+    --color-primitive-blue-1000,
+    --color-primitive-blue-1200,
     --color-info-bg,
   ),
   success: (
-    --color-success,
+    --color-semantic-success-1,
     --color-semantic-success-2,
     --color-semantic-success-2,
     --color-success-bg,
   ),
   error: (
-    --color-error,
+    --color-semantic-error-1,
     --color-semantic-error-2,
     --color-semantic-error-2,
     --color-error-bg,
   ),
   warning: (
-    --color-warning,
+    --color-semantic-warning-orange-1,
     --color-semantic-warning-orange-2,
     --color-semantic-warning-orange-2,
     --color-warning-bg,
@@ -114,7 +114,7 @@ $dads-button-colors: (
     --color-brand-secondary,
     --color-neutral-solid-gray-800,
     --color-neutral-solid-gray-900,
-    --color-bg-subtle,
+    --color-neutral-solid-gray-50,
   ),
 );
 
@@ -125,7 +125,7 @@ $dads-button-colors: (
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-8, 0.5rem);
+  gap: calc(8 / 16 * 1rem);
   border-radius: var(--border-radius-4, 0.25rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-weight: 500;
@@ -140,25 +140,25 @@ $dads-button-colors: (
   // -------------------- size ----------------------------------------------
   &--lg {
     min-height: 3.5rem; // 56px
-    padding: 0 var(--spacing-24, 1.5rem);
+    padding: 0 calc(24 / 16 * 1rem);
     font-size: var(--font-size-18, 1.125rem);
   }
 
   &--md {
     min-height: 2.5rem; // 40px
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm {
     min-height: 2rem; // 32px
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
   }
 
   &--xs {
     min-height: 1.75rem; // 28px
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
   }
 
@@ -206,7 +206,7 @@ $dads-button-colors: (
 
     &--#{$name}.dads-button--solid-fill {
       background-color: var(#{$base});
-      color: var(--color-text-on-primary, #fff);
+      color: var(--color-neutral-white, #fff);
 
       &:hover {
         background-color: var(#{$hover});
@@ -236,8 +236,8 @@ $dads-button-colors: (
     &--#{$name}.dads-button--text {
       background-color: transparent;
       color: var(#{$base});
-      padding-left: var(--spacing-4, 0.25rem);
-      padding-right: var(--spacing-4, 0.25rem);
+      padding-left: calc(4 / 16 * 1rem);
+      padding-right: calc(4 / 16 * 1rem);
 
       &:hover {
         text-decoration: underline;

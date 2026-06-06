@@ -156,14 +156,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 .dads-checkbox {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__label {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     cursor: pointer;
     line-height: var(--line-height-150, 1.5);
   }
@@ -198,7 +198,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-bg-surface, #fff);
+    background-color: var(--color-neutral-white, #fff);
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
     border-radius: var(--border-radius-4, 0.25rem);
     transition:
@@ -212,8 +212,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: absolute;
     width: 30%;
     height: 60%;
-    border-right: 2px solid var(--color-text-on-primary, #fff);
-    border-bottom: 2px solid var(--color-text-on-primary, #fff);
+    border-right: 2px solid var(--color-neutral-white, #fff);
+    border-bottom: 2px solid var(--color-neutral-white, #fff);
     transform: rotate(45deg) translate(-10%, -10%);
     opacity: 0;
   }
@@ -223,14 +223,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: absolute;
     width: 60%;
     height: 2px;
-    background-color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-neutral-white, #fff);
     opacity: 0;
   }
 
   &--checked &__indicator,
   &--indeterminate &__indicator {
-    background-color: var(--color-brand-primary, #0017c1);
-    border-color: var(--color-brand-primary, #0017c1);
+    background-color: var(--color-primitive-blue-900, #0017c1);
+    border-color: var(--color-primitive-blue-900, #0017c1);
   }
 
   &--checked &__indicator::before {
@@ -245,12 +245,12 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__text {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -265,11 +265,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
@@ -302,7 +302,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &:not(.dads-checkbox--readonly):not(.dads-checkbox--disabled):not(.dads-checkbox--error)
     .dads-checkbox__label:hover
     .dads-checkbox__indicator {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- readonly -----------------------------------------
@@ -311,7 +311,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
   &--readonly &__indicator {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   // -------------------- disabled -----------------------------------------
@@ -322,7 +322,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
   // -------------------- error --------------------------------------------
   &--error &__indicator {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ------------------------------------

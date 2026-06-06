@@ -126,7 +126,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   margin: 0;
   padding: 0;
   display: grid;
-  row-gap: var(--spacing-16, 1rem);
+  row-gap: calc(16 / 16 * 1rem);
 
   // `list` mode squashes the rows together — the per-row bottom border draws
   // the divider, so the gap collapses to zero.
@@ -143,13 +143,13 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   display: flex;
   align-items: center;
   background: var(--color-neutral-white, #fff);
-  color: var(--color-text-primary, var(--color-neutral-solid-gray-800, #1a1a1a));
+  color: var(--color-neutral-solid-gray-800, var(--color-neutral-solid-gray-800, #1a1a1a));
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   overflow-wrap: anywhere;
 
   --_border-color: var(--color-neutral-solid-gray-420, #69707d);
-  --_padding-block: var(--spacing-16, 1rem);
-  --_padding-inline: var(--spacing-16, 1rem);
+  --_padding-block: calc(16 / 16 * 1rem);
+  --_padding-inline: calc(16 / 16 * 1rem);
 
   &[data-style='list'] {
     border: 1px solid transparent;
@@ -168,7 +168,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     display: flex;
     flex-grow: 1;
     align-items: center;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
     outline-offset: calc(-1 / 16 * 1rem);
     border-radius: inherit;
     padding: var(--_padding-block) var(--_padding-inline);
@@ -207,7 +207,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
   }
 
   // ---------- contents column --------------------------------------------
@@ -217,7 +217,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     flex-grow: 1;
     flex-shrink: 1;
     flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     font-weight: normal;
     font-size: var(--font-size-16, 1rem);
     line-height: 1.3;
@@ -230,7 +230,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
 
   &__title {
     margin: 0;
-    color: var(--color-text-primary, var(--color-neutral-solid-gray-900, #0f0f0f));
+    color: var(--color-neutral-solid-gray-800, var(--color-neutral-solid-gray-900, #0f0f0f));
     font-weight: bold;
     font-size: var(--font-size-20, 1.25rem);
     line-height: 1.5;
@@ -255,7 +255,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
 
   &__support > * {
     margin: 0;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
     font-size: var(--font-size-14, 0.875rem);
     line-height: 1.4;
   }
@@ -263,21 +263,21 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   // ---------- tags --------------------------------------------------------
   &__tags {
     list-style: none;
-    margin: var(--spacing-4, 0.25rem) 0 0;
+    margin: calc(4 / 16 * 1rem) 0 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
   }
 
   &__tag {
     display: inline-flex;
     align-items: center;
-    padding: calc(2 / 16 * 1rem) var(--spacing-8, 0.5rem);
+    padding: calc(2 / 16 * 1rem) calc(8 / 16 * 1rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
     border-radius: calc(999 / 16 * 1rem);
     background-color: var(--color-neutral-white, #fff);
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
     font-size: var(--font-size-12, 0.75rem);
     line-height: 1.2;
   }
@@ -289,7 +289,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     font-size: var(--font-size-16, 1rem);
     line-height: 1.3;
     letter-spacing: 0;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
   }
 
   &__sub > * {
@@ -303,7 +303,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
 
   &--selected {
     background-color: var(--color-info-bg, #e8eaf6);
-    border-color: var(--color-brand-primary, #0017c1);
+    border-color: var(--color-primitive-blue-900, #0017c1);
   }
 
   &--disabled {
@@ -320,10 +320,10 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     justify-content: center;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    padding: 0 var(--spacing-12, 0.75rem);
-    margin-inline: var(--spacing-8, 0.5rem);
+    padding: 0 calc(12 / 16 * 1rem);
+    margin-inline: calc(8 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-900, #0017c1);
     background-color: transparent;
     font: inherit;
     font-size: 1.25rem;

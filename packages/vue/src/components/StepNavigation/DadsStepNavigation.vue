@@ -69,14 +69,14 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
 .dads-step-navigation {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   // -------------------- orientation --------------------------------------
@@ -115,10 +115,10 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
     @include base.dads-reset-button;
     @include ring.dads-focus-ring;
     display: inline-flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     align-items: center;
     border-radius: var(--border-radius-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem);
+    padding: calc(4 / 16 * 1rem);
   }
 
   &--horizontal &__button {
@@ -127,9 +127,9 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   &__static {
     display: inline-flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     align-items: center;
-    padding: var(--spacing-4, 0.25rem);
+    padding: calc(4 / 16 * 1rem);
   }
 
   &--horizontal &__static {
@@ -146,8 +146,8 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
     height: 2rem;
     border-radius: 50%;
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
-    background-color: var(--color-bg-surface, #fff);
-    color: var(--color-text-primary, #1a1a1a);
+    background-color: var(--color-neutral-white, #fff);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 500;
     line-height: 1;
@@ -161,7 +161,7 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
   &__title {
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
     word-break: break-word;
   }
 
@@ -172,7 +172,7 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   &--horizontal &__connector {
     position: absolute;
-    top: calc(var(--spacing-4, 0.25rem) + 1rem);
+    top: calc(calc(4 / 16 * 1rem) + 1rem);
     left: 50%;
     width: 100%;
     height: 0;
@@ -181,9 +181,9 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
   }
 
   &--vertical &__connector {
-    margin-left: calc(1rem + var(--spacing-4, 0.25rem));
+    margin-left: calc(1rem + calc(4 / 16 * 1rem));
     width: 0;
-    height: var(--spacing-16, 1rem);
+    height: calc(16 / 16 * 1rem);
     border-left: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
   }
 
@@ -196,20 +196,20 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   // -------------------- status: pending ---------------------------------
   &__item--pending &__indicator {
-    background-color: var(--color-bg-surface, #fff);
+    background-color: var(--color-neutral-white, #fff);
     border-color: var(--color-border-default, rgba(0, 0, 0, 0.42));
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   // -------------------- status: current ---------------------------------
   &__item--current &__indicator {
-    background-color: var(--color-brand-primary, #0017c1);
-    border-color: var(--color-brand-primary, #0017c1);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-primitive-blue-900, #0017c1);
+    border-color: var(--color-primitive-blue-900, #0017c1);
+    color: var(--color-neutral-white, #fff);
     font-weight: 700;
     box-shadow:
-      0 0 0 2px var(--color-bg-surface, #fff),
-      0 0 0 3px var(--color-brand-primary, #0017c1);
+      0 0 0 2px var(--color-neutral-white, #fff),
+      0 0 0 3px var(--color-primitive-blue-900, #0017c1);
   }
 
   &__item--current &__title {
@@ -218,20 +218,20 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   // -------------------- status: done ------------------------------------
   &__item--done &__indicator {
-    background-color: var(--color-brand-primary, #0017c1);
-    border-color: var(--color-brand-primary, #0017c1);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-primitive-blue-900, #0017c1);
+    border-color: var(--color-primitive-blue-900, #0017c1);
+    color: var(--color-neutral-white, #fff);
   }
 
   // -------------------- status: error -----------------------------------
   &__item--error &__indicator {
-    background-color: var(--color-error, #ec0000);
-    border-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
   }
 
   &__item--error &__title {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ------------------------------------
