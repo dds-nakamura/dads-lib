@@ -133,11 +133,9 @@ const itemClasses = (item: DadsAccordionItem) => [
           @keydown="onKeydown($event, idx)"
         >
           <span class="dads-accordion__title">{{ item.title }}</span>
+          <!-- 公式準拠: 円形ボーダー内に単一 chevron。開いている時は CSS で 180° 回転。 -->
           <span class="dads-accordion__icon" aria-hidden="true">
-            <DadsIcon
-              :name="isOpen(item.id) ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-              :size="iconSize"
-            />
+            <DadsIcon name="keyboard_arrow_down" :size="iconSize" />
           </span>
         </button>
       </h3>
@@ -224,13 +222,25 @@ const itemClasses = (item: DadsAccordionItem) => [
   }
 
   // -------------------- icon ---------------------------------------------
+  // Official: circular bordered container holding a single chevron that rotates
+  // 180° when the item is open.
   &__icon {
     flex: 0 0 auto;
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--font-size-20, 1.25rem);
+    width: calc(28 / 16 * 1rem);
+    height: calc(28 / 16 * 1rem);
+    border-radius: 50%;
+    border: 1px solid currentcolor;
+    background-color: var(--color-neutral-white, #fff);
     color: var(--color-primitive-blue-1000, #00118f);
+    transition: transform 0.15s ease;
+  }
+
+  &__item--open &__icon {
+    transform: rotate(180deg);
   }
 
   // -------------------- size variants ------------------------------------
@@ -241,7 +251,8 @@ const itemClasses = (item: DadsAccordionItem) => [
     font-size: var(--font-size-18, 1.125rem);
   }
   &--size-l &__icon {
-    font-size: var(--font-size-24, 1.5rem);
+    width: calc(32 / 16 * 1rem);
+    height: calc(32 / 16 * 1rem);
   }
   &--size-m &__header {
     min-height: 3rem;
@@ -249,7 +260,8 @@ const itemClasses = (item: DadsAccordionItem) => [
     font-size: var(--font-size-16, 1rem);
   }
   &--size-m &__icon {
-    font-size: var(--font-size-20, 1.25rem);
+    width: calc(28 / 16 * 1rem);
+    height: calc(28 / 16 * 1rem);
   }
   &--size-s &__header {
     min-height: 2.5rem;
@@ -257,7 +269,8 @@ const itemClasses = (item: DadsAccordionItem) => [
     font-size: var(--font-size-14, 0.875rem);
   }
   &--size-s &__icon {
-    font-size: var(--font-size-18, 1.125rem);
+    width: calc(26 / 16 * 1rem);
+    height: calc(26 / 16 * 1rem);
   }
   &--size-xs &__header {
     min-height: 2rem;
@@ -265,7 +278,8 @@ const itemClasses = (item: DadsAccordionItem) => [
     font-size: var(--font-size-14, 0.875rem);
   }
   &--size-xs &__icon {
-    font-size: var(--font-size-16, 1rem);
+    width: calc(24 / 16 * 1rem);
+    height: calc(24 / 16 * 1rem);
   }
 
   // -------------------- return link -------------------------------------

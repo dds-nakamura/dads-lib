@@ -62,12 +62,16 @@ describe('DadsAccordion', () => {
       })
     })
 
-    it('uses keyboard_arrow_down by default and keyboard_arrow_up when open', () => {
+    it('always uses a single keyboard_arrow_down chevron (rotation handled by CSS on open)', () => {
       const wrapper = createWrapper({ modelValue: 'a' })
       const icons = wrapper.findAllComponents(DadsIcon)
-      expect(icons[0].props('name')).toBe('keyboard_arrow_up')
-      expect(icons[1].props('name')).toBe('keyboard_arrow_down')
-      expect(icons[2].props('name')).toBe('keyboard_arrow_down')
+      for (const icon of icons) {
+        expect(icon.props('name')).toBe('keyboard_arrow_down')
+      }
+      // The open item carries the --open modifier; CSS rotates its icon 180°.
+      const openItem = wrapper.find('.dads-accordion__item--open')
+      expect(openItem.exists()).toBe(true)
+      expect(openItem.find('.dads-accordion__icon svg.dads-icon').exists()).toBe(true)
     })
 
     it('renders the chevron as an inline svg.dads-icon', () => {
