@@ -290,7 +290,7 @@ const setItemRef =
   width: fit-content;
   position: relative;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__box {
     position: relative;
@@ -299,17 +299,22 @@ const setItemRef =
   // -------------------- opener button ------------------------------------
   &__opener {
     @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: var(--line-height-150, 1.5);
+    gap: calc(4 / 16 * 1rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
+    // 公式 (menu-list-box opener) に合わせて 8px の角丸にする。
+    border-radius: var(--border-radius-8, 0.5rem);
+    // 公式 opener は line-height 1.2 / letter-spacing 0.02em。
+    line-height: 1.2;
+    letter-spacing: 0.02em;
     color: inherit;
 
     &:hover:not(:disabled) {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      text-decoration: underline;
+      text-underline-offset: calc(3 / 16 * 1rem);
     }
 
     &:disabled {
@@ -338,20 +343,21 @@ const setItemRef =
   // -------------------- popup container ----------------------------------
   &__popup {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + calc(4 / 16 * 1rem));
     left: 0;
     z-index: 10;
     min-width: 12rem;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    // 公式 (menu-list-box) のポップアップに合わせて 8px の角丸にする。
-    border-radius: var(--border-radius-8, 0.5rem);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
+    // 公式 (menu-list-box) のポップアップは左側のみ 8px の角丸。
+    border-radius: var(--border-radius-8, 0.5rem) 0 0 var(--border-radius-8, 0.5rem);
+    box-shadow: var(--elevation-1, 0 2px 8px 1px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.3));
   }
 
   &__menu {
     margin: 0;
-    padding: var(--spacing-4, 0.25rem) 0;
+    // 公式 (menu-list-box popup) の縦パディングは 16px。
+    padding: calc(16 / 16 * 1rem) 0;
     list-style: none;
   }
 
@@ -359,16 +365,33 @@ const setItemRef =
   &__item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    gap: calc(8 / 16 * 1rem);
+    // 公式 menu-list item[data-size="regular"]: min-height 44px, pad 10/16px。
+    min-height: calc(44 / 16 * 1rem);
+    padding: calc(10 / 16 * 1rem) calc(16 / 16 * 1rem);
     text-decoration: none;
-    color: inherit;
+    color: var(--color-neutral-solid-gray-800, #333);
     cursor: pointer;
 
-    @include ring.dads-focus-ring;
-
     &:hover {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      text-decoration: underline;
+      text-underline-offset: calc(3 / 16 * 1rem);
+    }
+
+    // 公式 menu-list item[data-type="box"] の focus: 4px outline (内側) +
+    // inset 6px の黄リング。popup 内項目は box 型に倣う。
+    &:focus-visible {
+      position: relative;
+      z-index: 1;
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(-4 / 16 * 1rem);
+      background-color: var(--color-primitive-yellow-300, #ffd43d);
+      box-shadow: inset 0 0 0 calc(6 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
     }
   }
 
@@ -390,62 +413,70 @@ const setItemRef =
   // -------------------- size ---------------------------------------------
   &--lg &__opener {
     font-size: var(--font-size-18, 1.125rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
   }
 
   &--md &__opener {
+    // 公式 menu-list-box opener[data-size="md"]: min-height 44px。
+    min-height: calc(44 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm &__opener {
+    // 公式 menu-list-box opener[data-size="sm"]: min-height 36px, pad 4px。
+    min-height: calc(36 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
-    padding: 2px var(--spacing-8, 0.5rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
   }
 
   // -------------------- color scheme -------------------------------------
   // Tinted opener / popup variants per DADS guidance. Hover surface and
   // selected-item color follow the chosen accent.
   &--light-blue &__opener {
-    color: var(--color-brand-primary, #1a73e8);
+    color: var(--color-primitive-blue-900, #0017c1);
 
     &:hover:not(:disabled) {
-      background-color: var(--color-info-bg, rgba(26, 115, 232, 0.08));
+      background-color: var(--color-primitive-blue-50, #f0f5ff);
     }
   }
   // 選択中項目は公式 (menu-list の data-current) に倣い、薄いアクセント色で
-  // 背景を塗る。light-blue は公式既定の blue-100 / blue-1000 に合わせる。
+  // 背景を塗る。light-blue は公式既定の blue-100 / blue-1000 + bold に合わせる。
   &--light-blue &__item--current {
-    background-color: var(--color-primitive-blue-100, #e8f1ff);
-    color: var(--color-primitive-blue-1000, #001a9c);
+    background-color: var(--color-primitive-blue-100, #d9e6ff);
+    color: var(--color-primitive-blue-1000, #00118f);
+    font-weight: bold;
   }
 
   &--light-green &__opener {
-    color: var(--color-success, #1f8a3a);
+    color: var(--color-semantic-success-1, #1f8a3a);
 
     &:hover:not(:disabled) {
-      background-color: var(--color-success-bg, rgba(31, 138, 58, 0.08));
+      background-color: var(--color-primitive-green-50, #f0fbf2);
     }
   }
   &--light-green &__item--current {
-    background-color: var(--color-success-bg, rgba(31, 138, 58, 0.1));
-    color: var(--color-success, #1f8a3a);
+    background-color: var(--color-primitive-green-50, #f0fbf2);
+    color: var(--color-semantic-success-1, #1f8a3a);
+    font-weight: bold;
   }
 
   &--light-gray &__opener {
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #333);
 
     &:hover:not(:disabled) {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
   }
   &--light-gray &__item--current {
     background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #333);
+    font-weight: bold;
   }
 
   // -------------------- corner shape -------------------------------------
   &--corner-rounded &__opener {
-    border-radius: var(--border-radius-4, 0.25rem);
+    // 公式 menu-list-box opener は 8px の角丸。
+    border-radius: var(--border-radius-8, 0.5rem);
   }
 
   &--corner-pill &__opener {

@@ -39,11 +39,11 @@ const rootClasses = computed(() => [
 @use '../../styles/base' as base;
 
 .dads-description-list {
-  margin: var(--spacing-16, 1rem) 0;
+  margin: calc(16 / 16 * 1rem) 0;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   font-size: var(--font-size-16, 1rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
   // Long words (URLs, IDs) should not punch out of the layout.
   overflow-wrap: anywhere;
 
@@ -60,7 +60,7 @@ const rootClasses = computed(() => [
 
   // ----- marker: bullet ---------------------------------------------------
   &[data-marker='bullet'] dt {
-    margin-left: var(--spacing-32, 2rem);
+    margin-left: calc(32 / 16 * 1rem);
     display: list-item;
     list-style-type: disc;
   }
@@ -71,7 +71,7 @@ const rootClasses = computed(() => [
   // intrinsic width.
   &[data-marker='custom'] dt > span:first-child {
     display: inline-block;
-    min-width: var(--spacing-32, 2rem);
+    min-width: calc(32 / 16 * 1rem);
   }
 
   // ----- layout: vertical -------------------------------------------------
@@ -79,14 +79,14 @@ const rootClasses = computed(() => [
   // matching the DADS reference (32px).
   &--vertical {
     display: grid;
-    gap: var(--spacing-8, 0.5rem) 0;
+    gap: calc(8 / 16 * 1rem) 0;
 
     .dads-description-list__item {
       display: block;
     }
 
     dd {
-      margin-left: var(--spacing-32, 2rem);
+      margin-left: calc(32 / 16 * 1rem);
     }
   }
 
@@ -96,12 +96,12 @@ const rootClasses = computed(() => [
   // phones.
   &--horizontal {
     display: grid;
-    gap: var(--spacing-12, 0.75rem) 0;
+    gap: calc(12 / 16 * 1rem) 0;
 
     .dads-description-list__item {
       display: grid;
       grid-template-columns: minmax(8rem, 1fr) 3fr;
-      gap: var(--spacing-16, 1rem);
+      gap: calc(16 / 16 * 1rem);
       align-items: baseline;
     }
 
@@ -112,11 +112,11 @@ const rootClasses = computed(() => [
     @media (max-width: 599px) {
       .dads-description-list__item {
         grid-template-columns: 1fr;
-        gap: var(--spacing-4, 0.25rem);
+        gap: calc(4 / 16 * 1rem);
       }
 
       dd {
-        margin-left: var(--spacing-16, 1rem);
+        margin-left: calc(16 / 16 * 1rem);
       }
     }
   }
@@ -126,8 +126,8 @@ const rootClasses = computed(() => [
   // a hanging line at the bottom of the list.
   &--bordered {
     .dads-description-list__item {
-      padding-bottom: var(--spacing-12, 0.75rem);
-      border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+      padding-bottom: calc(12 / 16 * 1rem);
+      border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
     }
 
     .dads-description-list__item:last-child {

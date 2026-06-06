@@ -36,58 +36,67 @@ const rootClasses = computed(() => [
 
 // Color tuple = (base, bg-subtle). Mirrors DadsChipTag so visual rhythm stays
 // consistent across chip variants.
+// S-1b token correction: the previous `--color-*-bg` / `--color-brand-secondary`
+// tokens do not exist in design-tokens (always fell back to inert literals).
+// Mapped to the official primitive `*-50` subtle backgrounds and accents
+// (chip-label.css uses primitive `*-50` for `--_bg`). Keeps the 5-semantic
+// public `color` API unchanged; the full 12-hue redesign is deferred to A3.
 $dads-chip-label-colors: (
   primary: (
-    --color-brand-primary,
-    --color-info-bg,
+    --color-primitive-blue-900,
+    --color-primitive-blue-50,
   ),
   success: (
-    --color-success,
-    --color-success-bg,
+    --color-semantic-success-1,
+    --color-primitive-green-50,
   ),
   error: (
-    --color-error,
-    --color-error-bg,
+    --color-semantic-error-1,
+    --color-primitive-red-50,
   ),
   warning: (
-    --color-warning,
-    --color-warning-bg,
+    --color-semantic-warning-orange-1,
+    --color-primitive-orange-50,
   ),
   secondary: (
-    --color-brand-secondary,
-    --color-bg-subtle,
+    --color-primitive-orange-800,
+    --color-neutral-solid-gray-50,
   ),
 );
 
 .dads-chip-label {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-4, 0.25rem);
-  border-radius: var(--border-radius-pill, 999px);
+  gap: calc(4 / 16 * 1rem);
+  // Official chip-label is an 8px-radius rectangle, not a pill.
+  border-radius: calc(8 / 16 * 1rem);
   border: 1px solid transparent;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  font-weight: 500;
-  line-height: var(--line-height-150, 1.5);
+  // Official typography: normal weight, line-height 1, letter-spacing 0.02em.
+  font-weight: normal;
+  line-height: 1;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   vertical-align: middle;
 
   // -------------------- size ----------------------------------------------
   &--lg {
     min-height: 2rem; // 32px
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--md {
     min-height: 1.75rem; // 28px
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
   }
 
   &--sm {
     min-height: 1.5rem; // 24px
-    padding: 0 var(--spacing-8, 0.5rem);
-    font-size: var(--font-size-12, 0.75rem);
+    padding: 0 calc(8 / 16 * 1rem);
+    // --font-size-12 does not exist in design-tokens; DADS minimum is 14px.
+    font-size: var(--font-size-14, 0.875rem);
   }
 
   // -------------------- slots ---------------------------------------------

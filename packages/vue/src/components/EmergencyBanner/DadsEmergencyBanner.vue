@@ -120,6 +120,7 @@ const onClose = () => {
   color: var(--color-neutral-solid-gray-800, #333);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: 1rem;
+  font-weight: normal;
   line-height: 1.7;
   letter-spacing: 0.02em;
 
@@ -236,6 +237,8 @@ const onClose = () => {
       &:hover {
         background-color: var(--color-semantic-error-2, #a30d24);
         text-decoration: underline;
+        text-decoration-thickness: 0.0625rem;
+        text-underline-offset: 0.1875rem;
       }
     }
 
@@ -273,7 +276,7 @@ const onClose = () => {
     font-size: 1.25rem;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.06);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
   }
 

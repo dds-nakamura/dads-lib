@@ -64,9 +64,10 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
 
 .dads-breadcrumb {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  font-size: var(--font-size-14, 0.875rem);
-  line-height: var(--line-height-150, 1.5);
-  color: var(--color-text-body, #333);
+  font-size: var(--font-size-16, 1rem);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
+  color: var(--color-neutral-solid-gray-800, #333333);
 
   &__list {
     list-style: none;
@@ -75,7 +76,7 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0;
+    column-gap: calc(4 / 16 * 1rem);
   }
 
   &__item {
@@ -85,36 +86,37 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
   }
 
   &__link {
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
 
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-1000, #00118f);
     text-decoration: underline;
-    text-underline-offset: 2px;
-    border-radius: var(--border-radius-4, 0.25rem);
+    text-decoration-thickness: calc(1 / 16 * 1rem);
+    text-underline-offset: calc(3 / 16 * 1rem);
 
     &:hover {
-      color: var(--color-brand-primary-hover, #001a9c);
+      color: var(--color-primitive-blue-900, #0017c1);
       text-decoration: underline;
+      text-decoration-thickness: calc(3 / 16 * 1rem);
     }
 
     &:active {
-      color: var(--color-brand-primary-active, #001480);
+      color: var(--color-primitive-orange-800, #c74700);
+      text-decoration-thickness: calc(1 / 16 * 1rem);
     }
   }
 
   &__current {
-    color: var(--color-text-body, #333);
-    font-weight: 500;
+    color: var(--color-neutral-solid-gray-800, #333333);
 
     &--disabled {
-      color: var(--color-text-disabled, #999);
+      color: var(--color-neutral-solid-gray-420, #949494);
       cursor: not-allowed;
     }
   }
 
   &__separator {
-    margin: 0 var(--spacing-8, 0.5rem);
-    color: var(--color-neutral-solid-gray-500, #69707d);
+    margin: 0 calc(4 / 16 * 1rem);
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
     user-select: none;
   }
 

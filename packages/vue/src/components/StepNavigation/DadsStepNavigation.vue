@@ -69,14 +69,16 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
 .dads-step-navigation {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
 
   &__list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   // -------------------- orientation --------------------------------------
@@ -115,10 +117,10 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
     @include base.dads-reset-button;
     @include ring.dads-focus-ring;
     display: inline-flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     align-items: center;
     border-radius: var(--border-radius-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem);
+    padding: calc(4 / 16 * 1rem);
   }
 
   &--horizontal &__button {
@@ -127,9 +129,9 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   &__static {
     display: inline-flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     align-items: center;
-    padding: var(--spacing-4, 0.25rem);
+    padding: calc(4 / 16 * 1rem);
   }
 
   &--horizontal &__static {
@@ -145,12 +147,12 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
     width: 2rem; // 32px
     height: 2rem;
     border-radius: 50%;
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
-    background-color: var(--color-bg-surface, #fff);
-    color: var(--color-text-primary, #1a1a1a);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 500;
-    line-height: 1;
+    border: 2px solid var(--color-neutral-solid-gray-600, #666);
+    background-color: var(--color-neutral-white, #fff);
+    color: var(--color-neutral-solid-gray-800, #333);
+    font-size: var(--font-size-16, 1rem);
+    font-weight: 700;
+    line-height: 1.5;
     transition:
       background-color 0.15s ease,
       border-color 0.15s ease,
@@ -159,9 +161,11 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   // -------------------- title --------------------------------------------
   &__title {
-    font-size: var(--font-size-14, 0.875rem);
-    line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-primary, #1a1a1a);
+    font-size: var(--font-size-16, 1rem);
+    font-weight: 700;
+    line-height: var(--line-height-170, 1.7);
+    letter-spacing: 0.02em;
+    color: var(--color-neutral-solid-gray-800, #333);
     word-break: break-word;
   }
 
@@ -172,19 +176,19 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   &--horizontal &__connector {
     position: absolute;
-    top: calc(var(--spacing-4, 0.25rem) + 1rem);
+    top: calc(calc(4 / 16 * 1rem) + 1rem);
     left: 50%;
     width: 100%;
     height: 0;
-    border-top: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
+    border-top: 1px solid var(--color-neutral-solid-gray-600, #666);
     z-index: 0;
   }
 
   &--vertical &__connector {
-    margin-left: calc(1rem + var(--spacing-4, 0.25rem));
+    margin-left: calc(1rem + calc(4 / 16 * 1rem));
     width: 0;
-    height: var(--spacing-16, 1rem);
-    border-left: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
+    height: calc(16 / 16 * 1rem);
+    border-left: 1px solid var(--color-neutral-solid-gray-600, #666);
   }
 
   // The button / indicator should sit above the connector line.
@@ -196,42 +200,44 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
 
   // -------------------- status: pending ---------------------------------
   &__item--pending &__indicator {
-    background-color: var(--color-bg-surface, #fff);
-    border-color: var(--color-border-default, rgba(0, 0, 0, 0.42));
-    color: var(--color-text-secondary, #4d4d4d);
+    background-color: var(--color-neutral-white, #fff);
+    border-color: var(--color-neutral-solid-gray-600, #666);
+    color: var(--color-neutral-solid-gray-800, #333);
   }
 
   // -------------------- status: current ---------------------------------
+  // Official: aria-current draws a ring on the number (outline gray-800 +
+  // offset + white shadow) over the reached (gray-800) fill.
   &__item--current &__indicator {
-    background-color: var(--color-brand-primary, #0017c1);
-    border-color: var(--color-brand-primary, #0017c1);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-neutral-solid-gray-800, #333);
+    border-color: var(--color-neutral-solid-gray-800, #333);
+    color: var(--color-neutral-white, #fff);
     font-weight: 700;
-    box-shadow:
-      0 0 0 2px var(--color-bg-surface, #fff),
-      0 0 0 3px var(--color-brand-primary, #0017c1);
+    outline: calc(2 / 16 * 1rem) solid var(--color-neutral-solid-gray-800, #333);
+    outline-offset: calc(2 / 16 * 1rem);
+    box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-neutral-white, #fff);
   }
 
   &__item--current &__title {
     font-weight: 700;
   }
 
-  // -------------------- status: done ------------------------------------
+  // -------------------- status: done (reached) --------------------------
   &__item--done &__indicator {
-    background-color: var(--color-brand-primary, #0017c1);
-    border-color: var(--color-brand-primary, #0017c1);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-neutral-solid-gray-800, #333);
+    border-color: var(--color-neutral-solid-gray-800, #333);
+    color: var(--color-neutral-white, #fff);
   }
 
   // -------------------- status: error -----------------------------------
   &__item--error &__indicator {
-    background-color: var(--color-error, #ec0000);
-    border-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
   }
 
   &__item--error &__title {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ------------------------------------
@@ -241,11 +247,16 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
     }
 
     &__item--current &__indicator,
-    &__item--done &__indicator,
+    &__item--done &__indicator {
+      background-color: CanvasText;
+      border-color: CanvasText;
+      color: Canvas;
+      forced-color-adjust: none;
+    }
+
     &__item--error &__indicator {
-      background-color: Highlight;
-      border-color: Highlight;
-      color: HighlightText;
+      border-color: CanvasText;
+      color: CanvasText;
     }
 
     &__connector {

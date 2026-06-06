@@ -148,27 +148,27 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
   display: flex;
   flex-direction: column;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333333);
 
   // Vertical orientation: tablist on the side, panels next to it.
   &--vertical {
     flex-direction: row;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
   }
 
   // -------------------- tablist ------------------------------------------
   &__list {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-4, 0.25rem);
-    border-bottom: 1px solid var(--color-border-divider, #d6d6d6);
+    gap: calc(4 / 16 * 1rem);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
   }
 
   &--vertical &__list {
     flex-direction: column;
     flex-wrap: nowrap;
     border-bottom: none;
-    border-right: 1px solid var(--color-border-divider, #d6d6d6);
+    border-right: 1px solid var(--color-neutral-solid-gray-420, #949494);
     min-width: 12rem;
   }
 
@@ -181,13 +181,13 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     min-height: 2.75rem; // 44px
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     background-color: transparent;
     border-radius: var(--border-radius-4, 0.25rem) var(--border-radius-4, 0.25rem) 0 0;
     transition:
@@ -198,8 +198,8 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     &::after {
       content: '';
       position: absolute;
-      left: var(--spacing-8, 0.5rem);
-      right: var(--spacing-8, 0.5rem);
+      left: calc(8 / 16 * 1rem);
+      right: calc(8 / 16 * 1rem);
       bottom: -1px;
       height: 2px;
       background-color: transparent;
@@ -207,23 +207,23 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     }
 
     &:hover {
-      background-color: var(--color-bg-subtle, #f0f0f0);
-      color: var(--color-text-primary, #1a1a1a);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      color: var(--color-neutral-solid-gray-800, #333333);
     }
 
     // -------------------- active --------------------------------------
     &--active {
-      color: var(--color-brand-primary, #0017c1);
+      color: var(--color-primitive-blue-900, #0017c1);
 
       &::after {
-        background-color: var(--color-brand-primary, #0017c1);
+        background-color: var(--color-primitive-blue-900, #0017c1);
       }
     }
 
     // -------------------- disabled ------------------------------------
     &:disabled,
     &--disabled {
-      color: var(--color-text-disabled, #999);
+      color: var(--color-neutral-solid-gray-420, #949494);
       cursor: not-allowed;
       pointer-events: none;
       opacity: 0.5;
@@ -237,9 +237,9 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
     border-radius: var(--border-radius-4, 0.25rem) 0 0 var(--border-radius-4, 0.25rem);
 
     &::after {
-      top: var(--spacing-4, 0.25rem);
+      top: calc(4 / 16 * 1rem);
       right: -1px;
-      bottom: var(--spacing-4, 0.25rem);
+      bottom: calc(4 / 16 * 1rem);
       left: auto;
       width: 2px;
       height: auto;
@@ -267,11 +267,11 @@ const panelId = (value: DadsTabValue) => `${baseId.value}-panel-${value}`
   &__panel {
     @include ring.dads-focus-ring;
 
-    padding: var(--spacing-16, 1rem) 0;
+    padding: calc(16 / 16 * 1rem) 0;
   }
 
   &--vertical &__panel {
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
 
   // -------------------- forced colors ------------------------------------

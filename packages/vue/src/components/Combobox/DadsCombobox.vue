@@ -418,24 +418,24 @@ watch(
 .dads-combobox {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   position: relative;
 
   // -------------------- label & required marker --------------------------
   &__label {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -451,9 +451,9 @@ watch(
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    gap: calc(4 / 16 * 1rem);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     border-radius: var(--border-radius-4, 0.25rem);
     transition:
       border-color 0.15s ease,
@@ -498,23 +498,23 @@ watch(
     right: 0;
     z-index: 10;
     margin: 0;
-    padding: var(--spacing-4, 0.25rem) 0;
+    padding: calc(4 / 16 * 1rem) 0;
     list-style: none;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
     border-radius: var(--border-radius-4, 0.25rem);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--elevation-2, 0 2px 12px 2px rgba(0, 0, 0, 0.1), 0 1px 6px 0 rgba(0, 0, 0, 0.3));
     max-height: 16rem;
     overflow-y: auto;
   }
 
   &__suggestion {
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
     cursor: pointer;
     line-height: var(--line-height-150, 1.5);
 
     &--active {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
 
     &--disabled {
@@ -526,49 +526,49 @@ watch(
   // -------------------- footer (hint / error) ----------------------------
   &__footer {
     display: flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
   // -------------------- size ---------------------------------------------
   &--lg &__control {
     min-height: calc(3.5rem - 2px);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-16, 1rem);
+    padding: calc(4 / 16 * 1rem) calc(16 / 16 * 1rem);
     font-size: var(--font-size-18, 1.125rem);
   }
 
   &--md &__control {
     min-height: calc(3rem - 2px);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
+    padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm &__control {
     min-height: calc(2.5rem - 2px);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
+    padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
   }
 
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-combobox--readonly):not(.dads-combobox--disabled):not(.dads-combobox--error)
     .dads-combobox__control:hover {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- readonly -----------------------------------------
   &--readonly &__control {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     cursor: not-allowed;
   }
 
@@ -578,13 +578,13 @@ watch(
     opacity: 0.5;
 
     .dads-combobox__control {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
   }
 
   // -------------------- error --------------------------------------------
   &--error &__control {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ------------------------------------

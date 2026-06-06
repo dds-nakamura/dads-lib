@@ -152,20 +152,22 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
+@use '../../styles/focus-ring' as focus-ring;
 
 .dads-checkbox {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__label {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     cursor: pointer;
-    line-height: var(--line-height-150, 1.5);
+    line-height: 1.3;
+    letter-spacing: 0;
   }
 
   // The native checkbox is visually hidden (not display:none) so it stays
@@ -186,9 +188,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // Project the keyboard focus indication onto the visible indicator since
   // the real input is hidden.
   &__input:focus-visible + &__indicator {
-    outline: 2px solid var(--color-neutral-black, #000);
-    outline-offset: 0;
-    box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+    @include focus-ring.dads-focus-ring-style;
   }
 
   // -------------------- indicator (visible box) --------------------------
@@ -198,9 +198,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.42));
-    border-radius: var(--border-radius-4, 0.25rem);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #767676);
+    border-radius: 12.5%;
     transition:
       background-color 0.15s ease,
       border-color 0.15s ease,
@@ -212,8 +212,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: absolute;
     width: 30%;
     height: 60%;
-    border-right: 2px solid var(--color-text-on-primary, #fff);
-    border-bottom: 2px solid var(--color-text-on-primary, #fff);
+    border-right: 2px solid var(--color-neutral-white, #fff);
+    border-bottom: 2px solid var(--color-neutral-white, #fff);
     transform: rotate(45deg) translate(-10%, -10%);
     opacity: 0;
   }
@@ -223,14 +223,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: absolute;
     width: 60%;
     height: 2px;
-    background-color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-neutral-white, #fff);
     opacity: 0;
   }
 
   &--checked &__indicator,
   &--indeterminate &__indicator {
-    background-color: var(--color-brand-primary, #0017c1);
-    border-color: var(--color-brand-primary, #0017c1);
+    background-color: var(--color-primitive-blue-900, #0017c1);
+    border-color: var(--color-primitive-blue-900, #0017c1);
   }
 
   &--checked &__indicator::before {
@@ -245,12 +245,12 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__text {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -265,44 +265,49 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
   // -------------------- size ---------------------------------------------
+  // Box sizes / border widths / label font sizes follow the official spec
+  // (checkbox.css: 24/32/44px box, 2/2/3px border, 16/16/17px label).
   &--lg &__indicator {
-    width: 1.5rem; // 24px
-    height: 1.5rem;
+    width: calc(44 / 16 * 1rem); // 44px
+    height: calc(44 / 16 * 1rem);
+    border-width: calc(3 / 16 * 1rem);
   }
   &--lg &__label {
-    font-size: var(--font-size-18, 1.125rem);
+    font-size: calc(17 / 16 * 1rem);
   }
 
   &--md &__indicator {
-    width: 1.25rem; // 20px
-    height: 1.25rem;
+    width: calc(32 / 16 * 1rem); // 32px
+    height: calc(32 / 16 * 1rem);
+    border-width: calc(2 / 16 * 1rem);
   }
   &--md &__label {
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm &__indicator {
-    width: 1rem; // 16px
-    height: 1rem;
+    width: calc(24 / 16 * 1rem); // 24px
+    height: calc(24 / 16 * 1rem);
+    border-width: calc(2 / 16 * 1rem);
   }
   &--sm &__label {
-    font-size: var(--font-size-14, 0.875rem);
+    font-size: var(--font-size-16, 1rem);
   }
 
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-checkbox--readonly):not(.dads-checkbox--disabled):not(.dads-checkbox--error)
     .dads-checkbox__label:hover
     .dads-checkbox__indicator {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- readonly -----------------------------------------
@@ -311,18 +316,32 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
   &--readonly &__indicator {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   // -------------------- disabled -----------------------------------------
+  // Official disabled config (checkbox.css:132-138): base gray-50,
+  // accent/border gray-300, label text gray-420 — not a blanket opacity dim.
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+  }
+  &--disabled &__label {
+    cursor: default;
+    color: var(--color-neutral-solid-gray-420, #949494);
+  }
+  &--disabled &__indicator {
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+  }
+  &--disabled.dads-checkbox--checked &__indicator,
+  &--disabled.dads-checkbox--indeterminate &__indicator {
+    background-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+    border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
   }
 
   // -------------------- error --------------------------------------------
   &--error &__indicator {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ------------------------------------

@@ -101,32 +101,32 @@ const onClose = (event: MouseEvent) => {
 // background so tags read as quiet labels rather than buttons.
 $dads-chip-tag-colors: (
   primary: (
-    --color-brand-primary,
-    --color-info-bg,
+    --color-primitive-blue-900,
+    --color-primitive-blue-50,
   ),
   success: (
-    --color-success,
-    --color-success-bg,
+    --color-semantic-success-1,
+    --color-primitive-green-50,
   ),
   error: (
-    --color-error,
-    --color-error-bg,
+    --color-semantic-error-1,
+    --color-primitive-red-50,
   ),
   warning: (
-    --color-warning,
-    --color-warning-bg,
+    --color-semantic-warning-orange-1,
+    --color-primitive-orange-50,
   ),
   secondary: (
-    --color-brand-secondary,
-    --color-bg-subtle,
+    --color-primitive-orange-800,
+    --color-neutral-solid-gray-50,
   ),
 );
 
 .dads-chip-tag {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-4, 0.25rem);
-  border-radius: var(--border-radius-pill, 999px);
+  gap: calc(4 / 16 * 1rem);
+  border-radius: var(--border-radius-full, 999px);
   border: 1px solid transparent;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-weight: 500;
@@ -142,20 +142,20 @@ $dads-chip-tag-colors: (
   // -------------------- size ----------------------------------------------
   &--lg {
     min-height: 2rem; // 32px
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--md {
     min-height: 1.75rem; // 28px
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
   }
 
   &--sm {
     min-height: 1.5rem; // 24px
-    padding: 0 var(--spacing-8, 0.5rem);
-    font-size: var(--font-size-12, 0.75rem);
+    padding: 0 calc(8 / 16 * 1rem);
+    font-size: var(--font-size-14, 0.875rem);
   }
 
   // -------------------- slots ---------------------------------------------
@@ -182,8 +182,8 @@ $dads-chip-tag-colors: (
     justify-content: center;
     width: 1.25em;
     height: 1.25em;
-    margin-left: var(--spacing-4, 0.25rem);
-    margin-right: calc(var(--spacing-4, 0.25rem) * -1);
+    margin-left: calc(4 / 16 * 1rem);
+    margin-right: calc(calc(4 / 16 * 1rem) * -1);
     border-radius: 50%;
     color: inherit;
     font-size: 1em;
@@ -191,11 +191,11 @@ $dads-chip-tag-colors: (
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.08);
+      background-color: var(--color-neutral-opacity-gray-100, rgba(0, 0, 0, 0.1));
     }
 
     &:active {
-      background-color: rgba(0, 0, 0, 0.12);
+      background-color: var(--color-neutral-opacity-gray-200, rgba(0, 0, 0, 0.2));
     }
 
     &:disabled {
@@ -242,12 +242,12 @@ $dads-chip-tag-colors: (
     &--#{$name}.dads-chip-tag--clickable {
       &:hover {
         background-color: var(#{$base});
-        color: var(--color-text-on-primary, #fff);
+        color: var(--color-neutral-white, #fff);
       }
 
       &:active {
         background-color: var(#{$base});
-        color: var(--color-text-on-primary, #fff);
+        color: var(--color-neutral-white, #fff);
       }
     }
   }

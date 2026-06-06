@@ -290,18 +290,18 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
   position: relative;
   display: block;
   width: 100%;
-  background-color: var(--color-bg-surface, #fff);
+  background-color: var(--color-neutral-white, #fff);
   border-radius: var(--border-radius-8, 0.5rem);
   overflow: hidden;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333);
 
   // -------------------- type variants -----------------------------------
   // key-visual (default): full-bleed flagship area. No outer chrome — slide
   // content owns its own visual composition.
   // container: bounded panel with a header section above the viewport.
   &--type-container {
-    border: 1px solid var(--color-border-divider, #d6d6d6);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
   }
 
   // -------------------- header (heading + show-all) ---------------------
@@ -310,9 +310,9 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-16, 1rem);
-    border-bottom: 1px solid var(--color-border-divider, #d6d6d6);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(16 / 16 * 1rem);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
 
     .dads-carousel--type-key-visual & {
       // For key-visual type the header is optional and sits without divider.
@@ -324,18 +324,20 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
   &__heading {
     margin: 0;
     font-size: var(--font-size-20, 1.25rem);
-    font-weight: 700;
-    line-height: var(--line-height-130, 1.3);
+    font-weight: bold;
+    line-height: var(--line-height-150, 1.5);
+    letter-spacing: 0.02em;
   }
 
   &__show-all {
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-1000, #00118f);
     text-decoration: underline;
     text-underline-offset: 2px;
     font-size: var(--font-size-14, 0.875rem);
     white-space: nowrap;
 
     &:hover {
+      color: var(--color-primitive-blue-900, #0017c1);
       text-decoration: underline;
     }
   }
@@ -395,14 +397,14 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     justify-content: center;
     font-size: var(--font-size-24, 1.5rem);
     line-height: 1;
-    color: var(--color-text-primary, #1a1a1a);
-    background-color: var(--color-bg-surface, rgba(255, 255, 255, 0.85));
-    border: 1px solid var(--color-border-divider, #d6d6d6);
+    color: var(--color-neutral-solid-gray-800, #333);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
     border-radius: 50%;
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
 
     &:disabled {
@@ -412,11 +414,11 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     }
 
     &--prev {
-      left: var(--spacing-8, 0.5rem);
+      left: calc(8 / 16 * 1rem);
     }
 
     &--next {
-      right: var(--spacing-8, 0.5rem);
+      right: calc(8 / 16 * 1rem);
     }
   }
 
@@ -424,8 +426,8 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
   &__indicators {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(8 / 16 * 1rem);
   }
 
   &__indicator {
@@ -445,12 +447,12 @@ const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background-color: var(--color-border-strong, rgba(0, 0, 0, 0.24));
+    background-color: var(--color-neutral-solid-gray-420, #949494);
     transition: background-color 0.15s ease;
   }
 
   &__indicator--active &__indicator-dot {
-    background-color: var(--color-brand-primary, #0017c1);
+    background-color: var(--color-primitive-blue-900, #0017c1);
   }
 
   // -------------------- forced colors ------------------------------------

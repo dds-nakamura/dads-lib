@@ -139,14 +139,15 @@ const goTo = (target: number) => {
   display: block;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
   color: var(--color-neutral-solid-gray-900, #1a1a1c);
 
   &__list {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -163,13 +164,13 @@ const goTo = (target: number) => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     box-sizing: border-box;
     min-width: 2rem;
     min-height: 2rem;
     border: 1px solid transparent;
     border-radius: var(--border-radius-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     background-color: transparent;
     color: var(--color-primitive-blue-900, #002fa1);
     font: inherit;
@@ -208,7 +209,7 @@ const goTo = (target: number) => {
     justify-content: center;
     min-width: 2rem;
     min-height: 2rem;
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     color: var(--color-neutral-solid-gray-420, #d6d6d6);
     user-select: none;
   }

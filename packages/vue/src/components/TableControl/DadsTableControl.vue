@@ -200,9 +200,9 @@ const onReset = () => {
 .dads-table-control {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-12, 0.75rem);
+  gap: calc(12 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333333);
   font-size: var(--font-size-14, 0.875rem);
   line-height: var(--line-height-150, 1.5);
 
@@ -211,35 +211,35 @@ const onReset = () => {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
   }
 
   &__search {
     flex: 1 1 240px;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
   }
 
   &__label {
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 500;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__search-control {
     display: flex;
     align-items: center;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666666);
     border-radius: var(--border-radius-4, 0.25rem);
 
     @include ring.dads-focus-ring-within;
   }
 
   &__search-icon {
-    padding: 0 var(--spacing-8, 0.5rem) 0 var(--spacing-12, 0.75rem);
-    color: var(--color-text-secondary, #4d4d4d);
+    padding: 0 calc(8 / 16 * 1rem) 0 calc(12 / 16 * 1rem);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: 1.25em;
   }
 
@@ -248,7 +248,7 @@ const onReset = () => {
     flex: 1;
     width: 100%;
     min-height: calc(2.5rem - 2px);
-    padding: 0 var(--spacing-12, 0.75rem) 0 var(--spacing-4, 0.25rem);
+    padding: 0 calc(12 / 16 * 1rem) 0 calc(4 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
 
     &:focus-visible {
@@ -266,16 +266,16 @@ const onReset = () => {
     justify-content: center;
     width: 1.75rem;
     height: 1.75rem;
-    margin-right: var(--spacing-4, 0.25rem);
+    margin-right: calc(4 / 16 * 1rem);
     border-radius: 50%;
     background-color: transparent;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: 1.1rem;
     cursor: pointer;
 
     &:hover {
-      color: var(--color-text-primary, #1a1a1a);
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+      color: var(--color-neutral-solid-gray-800, #333333);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
   }
 
@@ -283,8 +283,8 @@ const onReset = () => {
   &__presets {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-4, 0.25rem);
-    margin-top: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
+    margin-top: calc(4 / 16 * 1rem);
   }
 
   &__preset {
@@ -294,12 +294,12 @@ const onReset = () => {
     display: inline-flex;
     align-items: center;
     min-height: 1.75rem;
-    padding: 0 var(--spacing-8, 0.5rem);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
-    border-radius: var(--border-radius-pill, 999px);
-    background-color: var(--color-bg-surface, #fff);
-    color: var(--color-text-primary, #1a1a1a);
-    font-size: var(--font-size-12, 0.75rem);
+    padding: 0 calc(8 / 16 * 1rem);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666666);
+    border-radius: var(--border-radius-full, 9999px);
+    background-color: var(--color-neutral-white, #fff);
+    color: var(--color-neutral-solid-gray-800, #333333);
+    font-size: var(--font-size-14, 0.875rem);
     cursor: pointer;
     transition:
       background-color 0.15s ease,
@@ -307,32 +307,32 @@ const onReset = () => {
       color 0.15s ease;
 
     &:hover {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
 
     &[aria-pressed='true'] {
-      background-color: var(--color-info-bg, rgba(0, 23, 193, 0.08));
-      border-color: var(--color-brand-primary, #0017c1);
-      color: var(--color-brand-primary, #0017c1);
+      background-color: var(--color-primitive-blue-50, #e8f1fe);
+      border-color: var(--color-primitive-blue-900, #0017c1);
+      color: var(--color-primitive-blue-900, #0017c1);
     }
   }
 
   &__page-size {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
   }
 
   &__page-size-select {
     appearance: none;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666666);
     border-radius: var(--border-radius-4, 0.25rem);
     color: inherit;
     font: inherit;
     font-size: var(--font-size-14, 0.875rem);
     min-height: calc(2.5rem - 2px);
-    padding: 0 var(--spacing-24, 1.5rem) 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(24 / 16 * 1rem) 0 calc(12 / 16 * 1rem);
 
     @include ring.dads-focus-ring;
   }
@@ -343,18 +343,18 @@ const onReset = () => {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
   }
 
   &__status {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-variant-numeric: tabular-nums;
   }
 
   &__buttons {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   &__button {
@@ -363,20 +363,20 @@ const onReset = () => {
 
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     min-height: 2rem;
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
-    background-color: var(--color-bg-surface, #fff);
-    color: var(--color-text-primary, #1a1a1a);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666666);
+    background-color: var(--color-neutral-white, #fff);
+    color: var(--color-neutral-solid-gray-800, #333333);
     font-size: var(--font-size-14, 0.875rem);
     transition:
       background-color 0.15s ease,
       border-color 0.15s ease;
 
     &:hover:not(:disabled) {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
 
     &:disabled {
@@ -389,7 +389,7 @@ const onReset = () => {
   &__page-indicator {
     min-width: 4rem;
     text-align: center;
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #333333);
     font-variant-numeric: tabular-nums;
   }
 
@@ -397,7 +397,9 @@ const onReset = () => {
   @include base.dads-forced-colors {
     .dads-table-control__search-control,
     .dads-table-control__page-size-select,
-    .dads-table-control__button {
+    .dads-table-control__button,
+    .dads-table-control__preset,
+    .dads-table-control__reset {
       border: 1px solid CanvasText;
     }
   }

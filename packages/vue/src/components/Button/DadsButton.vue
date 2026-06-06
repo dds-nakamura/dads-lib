@@ -87,25 +87,25 @@ const handleClick = (event: MouseEvent) => {
 
 $dads-button-colors: (
   primary: (
-    --color-brand-primary,
-    --color-brand-primary-hover,
-    --color-brand-primary-active,
-    --color-info-bg,
+    --color-primitive-blue-900,
+    --color-primitive-blue-1000,
+    --color-primitive-blue-1200,
+    --color-primitive-blue-50,
   ),
   success: (
-    --color-success,
+    --color-semantic-success-1,
     --color-semantic-success-2,
     --color-semantic-success-2,
     --color-success-bg,
   ),
   error: (
-    --color-error,
+    --color-semantic-error-1,
     --color-semantic-error-2,
     --color-semantic-error-2,
     --color-error-bg,
   ),
   warning: (
-    --color-warning,
+    --color-semantic-warning-orange-1,
     --color-semantic-warning-orange-2,
     --color-semantic-warning-orange-2,
     --color-warning-bg,
@@ -114,7 +114,7 @@ $dads-button-colors: (
     --color-brand-secondary,
     --color-neutral-solid-gray-800,
     --color-neutral-solid-gray-900,
-    --color-bg-subtle,
+    --color-neutral-solid-gray-50,
   ),
 );
 
@@ -125,12 +125,13 @@ $dads-button-colors: (
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-8, 0.5rem);
-  border-radius: var(--border-radius-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  font-weight: 500;
-  line-height: var(--line-height-150, 1.5);
+  font-weight: bold;
+  line-height: var(--line-height-100, 1);
+  letter-spacing: 0.02em;
   text-decoration: none;
+  text-underline-offset: calc(3 / 16 * 1rem);
   transition:
     background-color 0.15s ease,
     color 0.15s ease,
@@ -138,28 +139,57 @@ $dads-button-colors: (
     box-shadow 0.15s ease;
 
   // -------------------- size ----------------------------------------------
+  // Sizes follow the official example (button.css): per-size min-width /
+  // min-height / border-radius / padding. sm & xs use an ::after pseudo to
+  // guarantee a 44px tap target (MD accessibility requirement).
   &--lg {
-    min-height: 3.5rem; // 56px
-    padding: 0 var(--spacing-24, 1.5rem);
-    font-size: var(--font-size-18, 1.125rem);
+    min-width: calc(136 / 16 * 1rem);
+    min-height: calc(56 / 16 * 1rem);
+    border-radius: var(--border-radius-8, 0.5rem);
+    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
+    font-size: var(--font-size-16, 1rem);
   }
 
   &--md {
-    min-height: 2.5rem; // 40px
-    padding: 0 var(--spacing-16, 1rem);
+    min-width: calc(96 / 16 * 1rem);
+    min-height: calc(48 / 16 * 1rem);
+    border-radius: var(--border-radius-8, 0.5rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
   }
 
   &--sm {
-    min-height: 2rem; // 32px
-    padding: 0 var(--spacing-12, 0.75rem);
-    font-size: var(--font-size-14, 0.875rem);
+    position: relative;
+    min-width: calc(80 / 16 * 1rem);
+    min-height: calc(36 / 16 * 1rem);
+    border-radius: var(--border-radius-6, 0.375rem);
+    padding: calc(2 / 16 * 1rem) calc(12 / 16 * 1rem);
+    font-size: var(--font-size-16, 1rem);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      height: calc(44 / 16 * 1rem);
+    }
   }
 
   &--xs {
-    min-height: 1.75rem; // 28px
-    padding: 0 var(--spacing-8, 0.5rem);
+    position: relative;
+    min-width: calc(72 / 16 * 1rem);
+    min-height: calc(28 / 16 * 1rem);
+    border-radius: var(--border-radius-4, 0.25rem);
+    padding: calc(2 / 16 * 1rem) calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      height: calc(44 / 16 * 1rem);
+    }
   }
 
   // -------------------- block ---------------------------------------------
@@ -192,8 +222,9 @@ $dads-button-colors: (
   // chains.
   &:disabled,
   &[aria-disabled='true'] {
-    cursor: not-allowed;
-    opacity: 0.5;
+    // Official spec uses a dedicated disabled palette (set per variant below)
+    // rather than a uniform opacity dim, and keeps the default cursor.
+    cursor: default;
     pointer-events: none;
   }
 
@@ -205,47 +236,80 @@ $dads-button-colors: (
     $bg-subtle: list.nth($tokens, 4);
 
     &--#{$name}.dads-button--solid-fill {
+      // Transparent double border reserves layout space, matching the
+      // official solid-fill button.
+      border: 4px double transparent;
       background-color: var(#{$base});
-      color: var(--color-text-on-primary, #fff);
+      color: var(--color-neutral-white, #fff);
 
       &:hover {
         background-color: var(#{$hover});
+        text-decoration: underline;
+        text-decoration-thickness: calc(1 / 16 * 1rem);
       }
 
       &:active {
         background-color: var(#{$active});
+        text-decoration: underline;
+      }
+
+      &:disabled,
+      &[aria-disabled='true'] {
+        background-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+        color: var(--color-neutral-solid-gray-50, #f2f2f2);
+        text-decoration: none;
       }
     }
 
     &--#{$name}.dads-button--outline {
-      background-color: transparent;
+      background-color: var(--color-neutral-white, #fff);
       color: var(#{$base});
-      border: 1px solid var(#{$base});
+      border: 1px solid currentcolor;
 
       &:hover {
         background-color: var(#{$bg-subtle});
+        color: var(#{$hover});
+        text-decoration: underline;
+        text-decoration-thickness: calc(1 / 16 * 1rem);
       }
 
       &:active {
         background-color: var(#{$bg-subtle});
         border-color: var(#{$hover});
         color: var(#{$hover});
+        text-decoration: underline;
+      }
+
+      &:disabled,
+      &[aria-disabled='true'] {
+        background-color: var(--color-neutral-white, #fff);
+        color: var(--color-neutral-solid-gray-300, #b3b3b3);
+        text-decoration: none;
       }
     }
 
     &--#{$name}.dads-button--text {
       background-color: transparent;
       color: var(#{$base});
-      padding-left: var(--spacing-4, 0.25rem);
-      padding-right: var(--spacing-4, 0.25rem);
+      text-decoration: underline;
+      padding-left: calc(4 / 16 * 1rem);
+      padding-right: calc(4 / 16 * 1rem);
 
       &:hover {
-        text-decoration: underline;
-        text-underline-offset: 2px;
+        color: var(#{$hover});
+        text-decoration-thickness: calc(3 / 16 * 1rem);
       }
 
       &:active {
         background-color: var(#{$bg-subtle});
+        color: var(#{$active});
+      }
+
+      &:disabled,
+      &[aria-disabled='true'] {
+        background-color: transparent;
+        color: var(--color-neutral-solid-gray-300, #b3b3b3);
+        text-decoration-thickness: revert;
       }
     }
   }
@@ -253,6 +317,12 @@ $dads-button-colors: (
   // -------------------- forced colors -------------------------------------
   @include base.dads-forced-colors {
     border: 1px solid CanvasText;
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      border-color: GrayText;
+      color: GrayText;
+    }
   }
 }
 

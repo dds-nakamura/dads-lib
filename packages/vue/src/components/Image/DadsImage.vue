@@ -85,7 +85,7 @@ const rootClasses = computed(() => [
   display: inline-block;
   margin: 0;
   max-width: 100%;
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
 
   &__img {
@@ -93,7 +93,7 @@ const rootClasses = computed(() => [
     max-width: 100%;
     height: auto;
     border-radius: var(--border-radius-4, 0.25rem);
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.04));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.04));
     transition: opacity 0.2s ease;
   }
 
@@ -103,7 +103,7 @@ const rootClasses = computed(() => [
   // shimmer / opacity transition resolve to the final image.
   &--skeleton,
   &--skeleton#{&}__img {
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.04));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.04));
     background-image: linear-gradient(
       90deg,
       rgba(0, 0, 0, 0) 0%,
@@ -127,10 +127,11 @@ const rootClasses = computed(() => [
   }
 
   &__caption {
-    margin-top: var(--spacing-8, 0.5rem);
+    margin-top: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
-    color: var(--color-text-secondary, #555);
-    line-height: 1.5;
+    color: var(--color-neutral-solid-gray-700, #555);
+    line-height: 1.7;
+    letter-spacing: 0.02em;
   }
 
   // -------------------- object-fit modifiers ----------------------------

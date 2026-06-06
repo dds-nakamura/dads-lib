@@ -108,9 +108,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 .dads-radio {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- label wrapper ------------------------------------
   // `position: relative` anchors the absolutely-positioned input so its focus
@@ -119,9 +119,10 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     cursor: pointer;
-    line-height: var(--line-height-150, 1.5);
+    line-height: 1.3;
+    letter-spacing: 0;
   }
 
   // -------------------- input element ------------------------------------
@@ -145,8 +146,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     width: var(--dads-radio-size, 1.25rem);
     height: var(--dads-radio-size, 1.25rem);
     flex-shrink: 0;
-    background-color: var(--color-bg-surface, #fff);
-    border: 2px solid var(--color-border-default, rgba(0, 0, 0, 0.5));
+    background-color: var(--color-neutral-white, #fff);
+    border: 2px solid var(--color-neutral-solid-gray-600, #666666);
     border-radius: 50%;
     transition:
       border-color 0.15s ease,
@@ -160,7 +161,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       width: 0;
       height: 0;
       border-radius: 50%;
-      background-color: var(--color-primary, #0017c1);
+      background-color: var(--color-primitive-blue-900, #0017c1);
       transition:
         width 0.15s ease,
         height 0.15s ease;
@@ -173,24 +174,24 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__text {
     display: inline-flex;
     flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
   }
 
   &__title {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   &__description {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -201,24 +202,24 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- footer (hint / error) ---------------------------
   &__footer {
     display: flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
   // -------------------- size --------------------------------------------
   &--lg {
     --dads-radio-size: 1.5rem;
-    font-size: var(--font-size-18, 1.125rem);
+    font-size: calc(17 / 16 * 1rem);
   }
   &--md {
     --dads-radio-size: 1.25rem;
@@ -231,7 +232,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
   // -------------------- checked ----------------------------------------
   &--checked &__indicator {
-    border-color: var(--color-primary, #0017c1);
+    border-color: var(--color-primitive-blue-900, #0017c1);
 
     &::after {
       width: 50%;
@@ -241,31 +242,51 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
   // -------------------- hover (interactive) ----------------------------
   &:not(.dads-radio--disabled):not(.dads-radio--error) &__label:hover &__indicator {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-black, #000);
   }
 
   // -------------------- disabled ---------------------------------------
+  // Official uses dedicated disabled tokens (base gray-50 / accent + border
+  // gray-300) instead of a flat opacity dim. See radio.css:127-133.
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+
+    .dads-radio__indicator {
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+    }
+
+    &.dads-radio--checked .dads-radio__indicator::after {
+      background-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+    }
   }
 
   // -------------------- error ------------------------------------------
   &--error &__indicator {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
   }
   &--error.dads-radio--checked &__indicator::after {
-    background-color: var(--color-error, #ec0000);
+    background-color: var(--color-semantic-error-1, #ec0000);
   }
 
   // -------------------- forced colors ----------------------------------
+  // Mirror the official system-color mapping (radio.css:135-150): border uses
+  // ButtonText, the accent dot uses Highlight, disabled falls back to GrayText.
   @include base.dads-forced-colors {
     &__indicator {
-      border: 2px solid CanvasText;
+      border: 2px solid ButtonText;
       background-color: Canvas;
 
       &::after {
-        background-color: CanvasText;
+        background-color: Highlight;
+      }
+    }
+
+    &--disabled &__indicator {
+      border-color: GrayText;
+
+      &::after {
+        background-color: GrayText;
       }
     }
   }
