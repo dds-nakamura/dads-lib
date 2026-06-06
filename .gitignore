@@ -74,3 +74,6 @@ playwright-report/
 /design-system-example-components-html/dist
 /design-system-example-components-html/.astro
 /design-system-example-components-html/.svelte-kit
+
+# Visual verification screenshots (Playwright)
+screenshots/
