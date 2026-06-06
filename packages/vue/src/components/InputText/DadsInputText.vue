@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
+import DadsFormControlLabel from '../FormControlLabel/DadsFormControlLabel.vue'
 import type { DadsInputTextEmits, DadsInputTextProps } from './DadsInputText.types'
 
 const props = withDefaults(defineProps<DadsInputTextProps>(), {
@@ -10,7 +11,7 @@ const props = withDefaults(defineProps<DadsInputTextProps>(), {
   required: false,
   error: false,
   align: 'vertical',
-  requiredLabel: '必須',
+  requiredLabel: '※必須',
 })
 
 // Official DADS a11y guidance discourages both `placeholder` and `maxlength`:
@@ -83,9 +84,12 @@ const inputAttrs = computed(() => ({
   'aria-describedby': describedBy.value,
 }))
 
-const hasFooter = computed(
-  () => (isError.value && !!props.errorMessage) || !!props.hint || props.counter !== undefined,
-)
+// Field-label layer is delegated to DadsFormControlLabel. Map hint→support-text
+// and errorMessage→error-text, keeping the stable ids so aria-describedby still
+// resolves. Only one of support/error is shown at a time (error wins), matching
+// the previous footer behaviour.
+const supportText = computed(() => (isError.value && props.errorMessage ? undefined : props.hint))
+const errorText = computed(() => (isError.value ? props.errorMessage : undefined))
 
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -99,14 +103,19 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 </script>
 
 <template>
-  <div :class="rootClasses">
-    <label v-if="label" :for="inputId" class="dads-input-text__label">
-      {{ label }}
-      <span v-if="required" class="dads-input-text__required" aria-hidden="true">{{
-        requiredLabel
-      }}</span>
-    </label>
-
+  <DadsFormControlLabel
+    :class="rootClasses"
+    :size="size"
+    :label="label"
+    :label-for="inputId"
+    :required="required"
+    :required-label="requiredLabel"
+    :support-text="supportText"
+    :support-text-id="hintId"
+    :error-text="errorText"
+    :error-text-id="errorId"
+    :disabled="disabled"
+  >
     <div class="dads-input-text__control">
       <i
         v-if="prependIcon"
@@ -131,89 +140,24 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       />
     </div>
 
-    <div v-if="hasFooter" class="dads-input-text__footer">
-      <span
-        v-if="isError && errorMessage"
-        :id="errorId"
-        class="dads-input-text__error"
-        role="alert"
-        >{{ errorMessage }}</span
-      >
-      <span v-else-if="hint" :id="hintId" class="dads-input-text__hint">{{ hint }}</span>
-      <span v-if="counter !== undefined" :id="counterId" class="dads-input-text__counter"
-        >{{ currentLength }} / {{ counter }}</span
-      >
-    </div>
-  </div>
+    <span v-if="counter !== undefined" :id="counterId" class="dads-input-text__counter"
+      >{{ currentLength }} / {{ counter }}</span
+    >
+  </DadsFormControlLabel>
 </template>
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
+// The field-label layer (label / ※必須 / support-text / error-text) is owned
+// by DadsFormControlLabel. This stylesheet only styles the input control,
+// icons and the optional character counter.
 .dads-input-text {
-  display: flex;
-  flex-direction: column;
-  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
   line-height: 1.7;
   letter-spacing: 0.02em;
-
-  // -------------------- alignment ---------------------------------------
-  // vertical (default) stays as flex-direction: column.
-  // horizontal-* variants swap to a label-row + control-column grid.
-  &--align-horizontal-left,
-  &--align-horizontal-right,
-  &--align-fixed-label {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: start;
-    gap: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem);
-  }
-
-  &--align-horizontal-left &__label,
-  &--align-horizontal-right &__label,
-  &--align-fixed-label &__label {
-    align-self: center;
-    margin-bottom: 0;
-  }
-
-  &--align-horizontal-right &__label {
-    text-align: end;
-  }
-
-  &--align-fixed-label {
-    grid-template-columns: 8rem 1fr;
-  }
-
-  // The footer should span both columns regardless of alignment so it
-  // doesn't squeeze under the label.
-  &--align-horizontal-left &__footer,
-  &--align-horizontal-right &__footer,
-  &--align-fixed-label &__footer {
-    grid-column: 2;
-  }
-
-  // -------------------- label & required marker --------------------------
-  &__label {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(8 / 16 * 1rem);
-    font-size: var(--font-size-16, 1rem);
-    font-weight: 700;
-    line-height: var(--line-height-150, 1.5);
-  }
-
-  &__required {
-    background-color: var(--color-semantic-error-1, #ec0000);
-    color: var(--color-neutral-white, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
-  }
 
   // -------------------- control wrapper ----------------------------------
   // The focus ring lives on the wrapper so prepend / append icons share the
@@ -256,28 +200,63 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     font-size: 1.25em;
   }
 
-  // -------------------- footer (hint / error / counter) ------------------
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: calc(8 / 16 * 1rem);
+  // -------------------- counter ------------------------------------------
+  &__counter {
+    align-self: flex-end;
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-  }
-
-  &__hint {
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
-  }
-
-  &__error {
-    color: var(--color-semantic-error-1, #ec0000);
-    font-weight: 500;
-  }
-
-  &__counter {
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
-    margin-left: auto;
     font-variant-numeric: tabular-nums;
+  }
+
+  // -------------------- align (official label placement) -----------------
+  // Official DADS allows horizontal label placement (input-text MD「横幅設定 /
+  // 水平配置」): label (and support text) beside the control, optionally right-
+  // aligned or with a fixed-width label column. The field-label layer now lives
+  // in DadsFormControlLabel, so we re-establish these layouts with a grid on the
+  // merged root, targeting the form-control-label parts via :deep. The control
+  // wrapper uses `display: contents`, so `.dads-input-text__control` / counter
+  // participate directly in this grid.
+  &--align-horizontal-left,
+  &--align-horizontal-right,
+  &--align-fixed-label {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: calc(16 / 16 * 1rem);
+    row-gap: calc(4 / 16 * 1rem);
+
+    :deep(.dads-form-control-label__label) {
+      grid-column: 1;
+      grid-row: 1;
+      margin-bottom: 0;
+      // align label baseline with the control on the first row
+      align-self: center;
+    }
+    :deep(.dads-form-control-label__support-text) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .dads-input-text__control {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+    .dads-input-text__counter,
+    :deep(.dads-form-control-label__error-text) {
+      grid-column: 2;
+    }
+  }
+
+  &--align-horizontal-right {
+    :deep(.dads-form-control-label__label),
+    :deep(.dads-form-control-label__support-text) {
+      text-align: right;
+    }
+  }
+
+  // Fixed-width label column so multiple stacked fields align their inputs.
+  &--align-fixed-label {
+    grid-template-columns: calc(128 / 16 * 1rem) minmax(0, 1fr);
   }
 
   // -------------------- size ---------------------------------------------

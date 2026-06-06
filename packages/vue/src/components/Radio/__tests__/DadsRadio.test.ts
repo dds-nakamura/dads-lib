@@ -99,7 +99,9 @@ describe('DadsRadio', () => {
   describe('required', () => {
     it('renders a required marker when required and label are set', () => {
       const wrapper = createWrapper({ label: 'A', required: true })
-      expect(wrapper.find('.dads-radio__required').exists()).toBe(true)
+      const marker = wrapper.find('.dads-radio__requirement')
+      expect(marker.exists()).toBe(true)
+      expect(marker.attributes('data-required')).toBe('true')
     })
 
     it('sets aria-required on the input', () => {
@@ -107,9 +109,9 @@ describe('DadsRadio', () => {
       expect(wrapper.find('input').attributes('aria-required')).toBe('true')
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 label when required is true', () => {
       const wrapper = createWrapper({ label: 'A', required: true })
-      expect(wrapper.find('.dads-radio__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-radio__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -118,7 +120,7 @@ describe('DadsRadio', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-radio__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-radio__requirement').text()).toBe('Required')
     })
   })
 
@@ -135,12 +137,12 @@ describe('DadsRadio', () => {
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message without role="alert" (official a11y guidance)', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-radio__error')
+      const error = wrapper.find('.dads-radio__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBe('alert')
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid when errorMessage is present', () => {
@@ -156,22 +158,22 @@ describe('DadsRadio', () => {
 
     it('hides the hint when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-radio__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-radio__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-radio__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-radio__error-text').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
     it('renders the hint when provided', () => {
       const wrapper = createWrapper({ hint: 'いずれか選んでください' })
-      const hint = wrapper.find('.dads-radio__hint')
+      const hint = wrapper.find('.dads-radio__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('いずれか選んでください')
     })
 
     it('points aria-describedby at the hint id', () => {
       const wrapper = createWrapper({ hint: 'ヒント' })
-      const hintId = wrapper.find('.dads-radio__hint').attributes('id')
+      const hintId = wrapper.find('.dads-radio__support-text').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(hintId)
     })
   })
@@ -203,7 +205,7 @@ describe('DadsRadio', () => {
         hint: '後から変更可能',
       })
       const descId = wrapper.find('.dads-radio__description').attributes('id')
-      const hintId = wrapper.find('.dads-radio__hint').attributes('id')
+      const hintId = wrapper.find('.dads-radio__support-text').attributes('id')
       const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
       const ids = describedBy.split(' ')
       expect(ids).toContain(descId)
@@ -218,12 +220,12 @@ describe('DadsRadio', () => {
         errorMessage: 'エラー',
       })
       const descId = wrapper.find('.dads-radio__description').attributes('id')
-      const errorId = wrapper.find('.dads-radio__error').attributes('id')
+      const errorId = wrapper.find('.dads-radio__error-text').attributes('id')
       const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
       const ids = describedBy.split(' ')
       expect(ids).toContain(descId)
       expect(ids).toContain(errorId)
-      expect(wrapper.find('.dads-radio__hint').exists()).toBe(false)
+      expect(wrapper.find('.dads-radio__support-text').exists()).toBe(false)
     })
   })
 
