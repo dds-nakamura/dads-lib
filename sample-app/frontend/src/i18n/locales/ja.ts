@@ -5,11 +5,10 @@ export default {
   },
   header: {
     menuToggle: 'メニューを開く',
-    appSwitcher: 'アプリを切り替える',
+    appLauncher: 'アプリを選択',
     languageLabel: '言語を選択',
-    userMenu: 'ユーザーメニュー',
+    accountMenu: 'アカウントメニュー',
     logout: 'ログアウト',
-    profile: 'アカウント設定',
   },
   nav: {
     dashboard: 'ダッシュボード',

@@ -6,8 +6,8 @@ import { DadsHeaderContainer, DadsLanguageSelector } from '@dads/vue'
 
 import { SUPPORTED_LOCALES, setLocale } from '@/i18n'
 
-import AppSwitcher from './AppSwitcher.vue'
-import UserMenu from './UserMenu.vue'
+import AccountMenu from './AccountMenu.vue'
+import AppLauncherLink from './AppLauncherLink.vue'
 
 const { t, locale } = useI18n()
 
@@ -31,18 +31,28 @@ function onLanguageChange(value: string): void {
     @click:menu="emit('toggle-menu')"
   >
     <template #actions>
-      <!-- アプリ選択アイコンボタン -->
-      <AppSwitcher />
-      <!-- ユーザードロップダウンメニュー (ログアウト含む) -->
-      <UserMenu />
-      <!-- ランゲージセレクター -->
+      <!-- 1. ランゲージセレクター ("Language" 文字なし) -->
       <DadsLanguageSelector
+        class="header-language"
         :model-value="currentLocale"
         :options="languageOptions"
         :aria-label="t('header.languageLabel')"
+        opener-label=""
         size="sm"
         @update:model-value="onLanguageChange"
       />
+      <!-- 2. アカウントメニュー (頭文字アバター / ログアウト) -->
+      <AccountMenu />
+      <!-- 3. アプリ選択リンク (launcher へ画面遷移) -->
+      <AppLauncherLink />
     </template>
   </DadsHeaderContainer>
 </template>
+
+<style scoped>
+/* ランゲージセレクターの "Language" テキストを非表示にする。
+   アクセシブル名は aria-label 側で保持される。 */
+.header-language :deep(.dads-language-selector__opener-text) {
+  display: none;
+}
+</style>
