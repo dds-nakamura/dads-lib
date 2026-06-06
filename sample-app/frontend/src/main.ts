@@ -1,5 +1,10 @@
 import { createApp } from 'vue'
 
+// DADS の本文フォント Noto Sans JP (--font-family-sans の先頭)。
+// 自己ホスト (CDN 非依存)。必要な weight のみ読み込む。
+import '@fontsource/noto-sans-jp/400.css'
+import '@fontsource/noto-sans-jp/500.css'
+import '@fontsource/noto-sans-jp/700.css'
 // DADS デザイントークン (CSS 変数を :root に注入) → コンポーネント CSS の順で読み込む。
 import '@dads/tokens/css'
 import '@dads/vue/styles'

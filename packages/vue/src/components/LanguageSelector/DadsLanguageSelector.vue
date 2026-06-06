@@ -344,7 +344,8 @@ const setItemRef =
     min-width: 12rem;
     background-color: var(--color-bg-surface, #fff);
     border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    // 公式 (menu-list-box) のポップアップに合わせて 8px の角丸にする。
+    border-radius: var(--border-radius-8, 0.5rem);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 
@@ -411,8 +412,11 @@ const setItemRef =
       background-color: var(--color-info-bg, rgba(26, 115, 232, 0.08));
     }
   }
+  // 選択中項目は公式 (menu-list の data-current) に倣い、薄いアクセント色で
+  // 背景を塗る。light-blue は公式既定の blue-100 / blue-1000 に合わせる。
   &--light-blue &__item--current {
-    color: var(--color-brand-primary, #1a73e8);
+    background-color: var(--color-primitive-blue-100, #e8f1ff);
+    color: var(--color-primitive-blue-1000, #001a9c);
   }
 
   &--light-green &__opener {
@@ -423,6 +427,7 @@ const setItemRef =
     }
   }
   &--light-green &__item--current {
+    background-color: var(--color-success-bg, rgba(31, 138, 58, 0.1));
     color: var(--color-success, #1f8a3a);
   }
 
@@ -434,6 +439,7 @@ const setItemRef =
     }
   }
   &--light-gray &__item--current {
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     color: var(--color-text-primary, #1a1a1a);
   }
 
