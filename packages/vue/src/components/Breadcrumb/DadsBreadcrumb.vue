@@ -7,7 +7,6 @@ import type {
 } from './DadsBreadcrumb.types'
 
 const props = withDefaults(defineProps<DadsBreadcrumbProps>(), {
-  separator: '》',
   ariaLabel: 'パンくずリスト',
 })
 
@@ -50,9 +49,20 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
           :aria-disabled="entry.isDisabled ? 'true' : undefined"
           >{{ entry.item.title }}</span
         >
-        <span v-if="!entry.isLast" class="dads-breadcrumb__separator" aria-hidden="true">{{
-          separator
-        }}</span>
+        <span v-if="!entry.isLast" class="dads-breadcrumb__separator" aria-hidden="true">
+          <!-- 既定は公式の inline SVG chevron。`separator` prop 指定時はその文字で上書き。 -->
+          <svg
+            v-if="!separator"
+            class="dads-breadcrumb__separator-icon"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            aria-hidden="true"
+          >
+            <path d="M4.5 11L4 10.5L8 6.5L4 2.5L4.5 2L9 6.5L4.5 11Z" fill="currentColor" />
+          </svg>
+          <template v-else>{{ separator }}</template>
+        </span>
       </li>
     </ol>
   </nav>
@@ -115,9 +125,20 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
   }
 
   &__separator {
+    display: inline-flex;
+    align-items: center;
     margin: 0 calc(4 / 16 * 1rem);
     color: var(--color-neutral-solid-gray-900, #1a1a1a);
     user-select: none;
+  }
+
+  // Official inline SVG chevron separator (12×12, currentColor).
+  &__separator-icon {
+    display: inline-block;
+    width: calc(12 / 16 * 1rem);
+    height: calc(12 / 16 * 1rem);
+    vertical-align: middle;
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
   }
 
   // -------------------- forced colors -----------------------------------

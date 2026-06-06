@@ -150,10 +150,13 @@ describe('DadsBreadcrumb', () => {
   })
 
   describe('separator', () => {
-    it('uses "》" by default', () => {
+    it('renders the official inline SVG chevron by default', () => {
       const wrapper = createWrapper()
       const separators = wrapper.findAll('.dads-breadcrumb__separator')
-      expect(separators[0]?.text()).toBe('》')
+      // Default separator is the official SVG chevron, not a text character.
+      const icon = separators[0]?.find('svg.dads-breadcrumb__separator-icon')
+      expect(icon?.exists()).toBe(true)
+      expect(icon?.find('path').exists()).toBe(true)
     })
 
     it('renders n-1 separators for n items', () => {
