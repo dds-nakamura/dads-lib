@@ -65,6 +65,32 @@ describe('DadsHeaderContainer', () => {
     })
   })
 
+  describe('menu toggle aria state', () => {
+    it('sets aria-expanded="false" by default', () => {
+      const button = createWrapper().find('.dads-header-container__menu-toggle')
+      expect(button.attributes('aria-expanded')).toBe('false')
+    })
+
+    it('reflects menuExpanded via aria-expanded', () => {
+      const button = createWrapper({ menuExpanded: true }).find(
+        '.dads-header-container__menu-toggle',
+      )
+      expect(button.attributes('aria-expanded')).toBe('true')
+    })
+
+    it('sets aria-controls when menuControls is provided', () => {
+      const button = createWrapper({ menuControls: 'mobile-drawer' }).find(
+        '.dads-header-container__menu-toggle',
+      )
+      expect(button.attributes('aria-controls')).toBe('mobile-drawer')
+    })
+
+    it('omits aria-controls by default', () => {
+      const button = createWrapper().find('.dads-header-container__menu-toggle')
+      expect(button.attributes('aria-controls')).toBeUndefined()
+    })
+  })
+
   describe('click:menu emit', () => {
     it('emits click:menu when the hamburger is clicked', async () => {
       const wrapper = createWrapper()

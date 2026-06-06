@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<DadsHeaderContainerProps>(), {
   sticky: true,
   showMenuToggle: true,
   menuToggleLabel: 'メニューを開く',
+  menuExpanded: false,
   navAriaLabel: 'メインナビゲーション',
   variant: 'wide-full',
 })
@@ -39,6 +40,8 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
         type="button"
         class="dads-header-container__menu-toggle"
         :aria-label="menuToggleLabel"
+        :aria-expanded="menuExpanded"
+        :aria-controls="menuControls"
         @click="onMenuClick"
       >
         <DadsIcon name="menu" :size="24" />

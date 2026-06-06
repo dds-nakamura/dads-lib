@@ -78,6 +78,15 @@ const onLeave = () => {
   }
 }
 
+// WAI-ARIA Tooltip: Esc dismisses the tooltip while keeping focus on the
+// trigger (does not move focus).
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && isOpen.value) {
+    clearTimers()
+    close()
+  }
+}
+
 const GAP = 8
 
 const updatePosition = () => {
@@ -157,6 +166,7 @@ onBeforeUnmount(() => {
     @mouseleave="onLeave"
     @focusin="onEnter"
     @focusout="onLeave"
+    @keydown="onKeydown"
   >
     <slot name="trigger" />
     <Teleport to="body">
