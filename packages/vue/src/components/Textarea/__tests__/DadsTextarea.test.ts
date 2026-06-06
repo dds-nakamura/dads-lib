@@ -32,14 +32,16 @@ describe('DadsTextarea', () => {
 
     it('renders the label when provided', () => {
       const wrapper = createWrapper({ label: '備考' })
-      const label = wrapper.find('label.dads-textarea__label')
+      const label = wrapper.find('label.dads-form-control-label__label')
       expect(label.exists()).toBe(true)
       expect(label.text()).toContain('備考')
     })
 
-    it('does not render the footer when there is no hint, error or counter', () => {
+    it('does not render support / error text or counter when none are provided', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-textarea__footer').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-textarea__counter').exists()).toBe(false)
     })
   })
 
@@ -92,7 +94,7 @@ describe('DadsTextarea', () => {
   describe('required', () => {
     it('renders a required marker', () => {
       const wrapper = createWrapper({ label: 'Note', required: true })
-      expect(wrapper.find('.dads-textarea__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__requirement').exists()).toBe(true)
     })
 
     it('sets aria-required on the textarea', () => {
@@ -100,9 +102,9 @@ describe('DadsTextarea', () => {
       expect(wrapper.find('textarea').attributes('aria-required')).toBe('true')
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 label when required is true', () => {
       const wrapper = createWrapper({ label: 'Note', required: true })
-      expect(wrapper.find('.dads-textarea__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -111,7 +113,7 @@ describe('DadsTextarea', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-textarea__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('Required')
     })
   })
 
@@ -140,12 +142,13 @@ describe('DadsTextarea', () => {
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message as form-control-label error text (no role="alert")', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-textarea__error')
+      const error = wrapper.find('.dads-form-control-label__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBe('alert')
+      // Official a11y guidance: do not use role="alert" / aria-live on field errors.
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid when errorMessage is present', () => {
@@ -159,24 +162,24 @@ describe('DadsTextarea', () => {
       expect(wrapper.find('textarea').attributes('aria-invalid')).toBe('true')
     })
 
-    it('hides the hint when an error message is shown', () => {
+    it('hides the support text when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-textarea__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-textarea__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
-    it('renders the hint when provided', () => {
+    it('renders the hint as form-control-label support text', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hint = wrapper.find('.dads-textarea__hint')
+      const hint = wrapper.find('.dads-form-control-label__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('メモ')
     })
 
-    it('points aria-describedby at the hint id', () => {
+    it('points aria-describedby at the support text id', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hintId = wrapper.find('.dads-textarea__hint').attributes('id')
+      const hintId = wrapper.find('.dads-form-control-label__support-text').attributes('id')
       expect(wrapper.find('textarea').attributes('aria-describedby')).toBe(hintId)
     })
   })

@@ -17,8 +17,9 @@ export interface DadsCheckboxGroupProps {
   /** Selected values. Acts as v-model. */
   modelValue?: DadsCheckboxGroupValue[]
   items: DadsCheckboxGroupItem[]
-  /** Visible group label rendered inside `<legend>`. Omitted when empty so
-   *  callers can mount the group inside an externally labelled context. */
+  /** Visible group label rendered inside the form-control-label `<legend>`.
+   *  Omitted when empty so callers can mount the group inside an externally
+   *  labelled context. */
   legend?: string
   direction?: DadsCheckboxGroupDirection
   /** Forwarded to each child DadsCheckbox so the entire group shares one size. */
@@ -36,8 +37,8 @@ export interface DadsCheckboxGroupProps {
    *  hint / error references stay in sync. */
   id?: string
   /**
-   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-   * Default: `'必須'`.
+   * 必須マーカーに表示するテキスト。i18n 用にプロップで上書き可能。
+   * 公式の `※必須` 表現に統一。Default: `'※必須'`.
    */
   requiredLabel?: string
 }

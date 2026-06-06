@@ -139,17 +139,17 @@ describe('DadsRadioGroup', () => {
   describe('legend', () => {
     it('renders required marker inside legend when required is true', () => {
       const wrapper = createWrapper({ legend: '質問', required: true })
-      expect(wrapper.find('.dads-radio-group__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__requirement').exists()).toBe(true)
     })
 
     it('does not render required marker when required is false', () => {
       const wrapper = createWrapper({ legend: '質問' })
-      expect(wrapper.find('.dads-radio-group__required').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__requirement').exists()).toBe(false)
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 label when required is true', () => {
       const wrapper = createWrapper({ legend: '質問', required: true })
-      expect(wrapper.find('.dads-radio-group__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -158,14 +158,22 @@ describe('DadsRadioGroup', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-radio-group__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('Required')
     })
   })
 
   describe('disabled', () => {
-    it('sets the disabled attribute on the fieldset', () => {
+    it('disables every child radio when the group is disabled', () => {
       const wrapper = createWrapper({ disabled: true })
-      expect(wrapper.attributes('disabled')).toBeDefined()
+      const inputs = wrapper.findAll('input[type="radio"]')
+      inputs.forEach((i) => {
+        expect(i.attributes('disabled')).toBeDefined()
+      })
+    })
+
+    it('dims the label via the form-control-label data-disabled hook', () => {
+      const wrapper = createWrapper({ legend: '質問', disabled: true })
+      expect(wrapper.attributes('data-disabled')).toBe('true')
     })
 
     it('applies the disabled modifier class', () => {
@@ -200,12 +208,17 @@ describe('DadsRadioGroup', () => {
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message in the form-control-label error-text', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-radio-group__error')
+      const error = wrapper.find('.dads-form-control-label__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBe('alert')
+    })
+
+    it('does not put role="alert" on the error text (official a11y guidance)', () => {
+      const wrapper = createWrapper({ errorMessage: '必須項目です' })
+      const error = wrapper.find('.dads-form-control-label__error-text')
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid on the fieldset when errorMessage is present', () => {
@@ -223,27 +236,29 @@ describe('DadsRadioGroup', () => {
       })
     })
 
-    it('hides the hint when an error message is shown', () => {
+    it('hides the support text when an error message is shown', () => {
       const wrapper = createWrapper({
         hint: 'ヒント',
         errorMessage: 'エラー',
       })
-      expect(wrapper.find('.dads-radio-group__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-radio-group__error').exists()).toBe(true)
+      // hint still renders as support-text, but the describedby points at error
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(true)
+      const errorId = wrapper.find('.dads-form-control-label__error-text').attributes('id')
+      expect(wrapper.attributes('aria-describedby')).toBe(errorId)
     })
   })
 
   describe('hint', () => {
-    it('renders the hint when provided', () => {
+    it('renders the hint as support text when provided', () => {
       const wrapper = createWrapper({ hint: 'いずれか選んでください' })
-      const hint = wrapper.find('.dads-radio-group__hint')
+      const hint = wrapper.find('.dads-form-control-label__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('いずれか選んでください')
     })
 
-    it('points aria-describedby at the hint id', () => {
+    it('points aria-describedby at the support-text id', () => {
       const wrapper = createWrapper({ hint: 'ヒント' })
-      const hintId = wrapper.find('.dads-radio-group__hint').attributes('id')
+      const hintId = wrapper.find('.dads-form-control-label__support-text').attributes('id')
       expect(wrapper.attributes('aria-describedby')).toBe(hintId)
     })
 
@@ -252,7 +267,7 @@ describe('DadsRadioGroup', () => {
         hint: 'ヒント',
         errorMessage: 'エラー',
       })
-      const errorId = wrapper.find('.dads-radio-group__error').attributes('id')
+      const errorId = wrapper.find('.dads-form-control-label__error-text').attributes('id')
       expect(wrapper.attributes('aria-describedby')).toBe(errorId)
     })
   })
@@ -293,7 +308,7 @@ describe('DadsRadioGroup', () => {
           { value: 'b', label: 'B' },
         ],
       })
-      const hints = wrapper.findAll('.dads-radio__hint')
+      const hints = wrapper.findAll('.dads-radio__support-text')
       expect(hints).toHaveLength(1)
       expect(hints[0].text()).toBe('A の説明')
     })
@@ -321,16 +336,16 @@ describe('DadsRadioGroup', () => {
       expect(legend.text()).toContain('質問')
     })
 
-    it('applies the visually-hidden modifier class', () => {
+    it('wraps the legend text in the visually-hidden helper', () => {
       const wrapper = createWrapper({ legend: '質問', legendVisuallyHidden: true })
-      const legend = wrapper.find('legend')
-      expect(legend.classes()).toContain('dads-radio-group__legend--visually-hidden')
+      const hidden = wrapper.find('.dads-radio-group__legend-visually-hidden')
+      expect(hidden.exists()).toBe(true)
+      expect(hidden.text()).toBe('質問')
     })
 
-    it('omits the visually-hidden modifier by default', () => {
+    it('omits the visually-hidden helper by default', () => {
       const wrapper = createWrapper({ legend: '質問' })
-      const legend = wrapper.find('legend')
-      expect(legend.classes()).not.toContain('dads-radio-group__legend--visually-hidden')
+      expect(wrapper.find('.dads-radio-group__legend-visually-hidden').exists()).toBe(false)
     })
 
     it('does not render a legend at all when legend prop is omitted (regardless of flag)', () => {

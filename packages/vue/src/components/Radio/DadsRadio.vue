@@ -7,7 +7,7 @@ const props = withDefaults(defineProps<DadsRadioProps>(), {
   disabled: false,
   required: false,
   error: false,
-  requiredLabel: '必須',
+  requiredLabel: '※必須',
 })
 
 const emit = defineEmits<DadsRadioEmits>()
@@ -82,9 +82,13 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       <span v-if="label || required || description" class="dads-radio__text">
         <span class="dads-radio__title">
           <template v-if="label">{{ label }}</template>
-          <span v-if="required" class="dads-radio__required" aria-hidden="true">{{
-            requiredLabel
-          }}</span>
+          <span
+            v-if="required"
+            class="dads-radio__requirement"
+            data-required="true"
+            aria-hidden="true"
+            >{{ requiredLabel }}</span
+          >
         </span>
         <span v-if="description" :id="descriptionId" class="dads-radio__description">{{
           description
@@ -93,10 +97,10 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     </label>
 
     <div v-if="hasFooter" class="dads-radio__footer">
-      <span v-if="isError && errorMessage" :id="errorId" class="dads-radio__error" role="alert">{{
+      <span v-if="isError && errorMessage" :id="errorId" class="dads-radio__error-text">{{
         errorMessage
       }}</span>
-      <span v-else-if="hint" :id="hintId" class="dads-radio__hint">{{ hint }}</span>
+      <span v-else-if="hint" :id="hintId" class="dads-radio__support-text">{{ hint }}</span>
     </div>
   </div>
 </template>
@@ -189,17 +193,21 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     line-height: var(--line-height-150, 1.5);
   }
 
-  &__required {
-    background-color: var(--color-semantic-error-1, #ec0000);
-    color: var(--color-neutral-white, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
+  // Official `※必須` requirement marker (form-control-label.css): plain red
+  // text, not a filled badge. Mirrors .dads-form-control-label__requirement.
+  &__requirement {
+    margin-left: calc(4 / 16 * 1rem);
+    font-weight: normal;
+    font-size: calc(16 / 16 * 1rem);
+
+    &[data-required='true'] {
+      color: var(--color-semantic-error-1, #ec0000);
+    }
   }
 
-  // -------------------- footer (hint / error) ---------------------------
+  // -------------------- footer (support / error) ------------------------
+  // Colors / typography ported from form-control-label.css so the field-label
+  // layer matches the official system.
   &__footer {
     display: flex;
     gap: calc(8 / 16 * 1rem);
@@ -207,13 +215,14 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     line-height: var(--line-height-150, 1.5);
   }
 
-  &__hint {
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+  &__support-text {
+    color: var(--color-neutral-solid-gray-600, #666);
   }
 
-  &__error {
+  &__error-text {
     color: var(--color-semantic-error-1, #ec0000);
-    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0;
   }
 
   // -------------------- size --------------------------------------------

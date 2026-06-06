@@ -54,7 +54,7 @@ export interface DadsInputTextProps {
    *  on the error visual state and links it via `aria-describedby`. Prefer
    *  this over `error` so screen reader users hear the reason. */
   errorMessage?: string
-  /** Marks the field as required (renders the badge and sets aria-required). */
+  /** Marks the field as required (renders the ※必須 marker and sets aria-required). */
   required?: boolean
   /** Forces the error visual state when no message is available — for
    *  example, when the form-level error is shown elsewhere. Pair with an
@@ -77,8 +77,8 @@ export interface DadsInputTextProps {
    */
   align?: DadsInputTextAlign
   /**
-   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-   * Default: `'必須'`.
+   * 必須マーカーに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'※必須'` (公式 DADS form-control-label の requirement 表現)。
    */
   requiredLabel?: string
 }

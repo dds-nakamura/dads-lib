@@ -24,10 +24,11 @@ const createWrapper = (props: Partial<DadsCheckboxGroupProps> = {}) =>
 
 describe('DadsCheckboxGroup', () => {
   describe('rendering', () => {
-    it('renders a <fieldset> root element', () => {
+    it('renders a <fieldset> root element via DadsFormControlLabel', () => {
       const wrapper = createWrapper()
       expect(wrapper.element.tagName).toBe('FIELDSET')
       expect(wrapper.classes()).toContain('dads-checkbox-group')
+      expect(wrapper.classes()).toContain('dads-form-control-label')
     })
 
     it('renders one DadsCheckbox per item', () => {
@@ -40,16 +41,17 @@ describe('DadsCheckboxGroup', () => {
       expect(wrapper.find('.dads-checkbox-group__items').exists()).toBe(true)
     })
 
-    it('does not render footer without hint or error', () => {
+    it('does not render support-text or error-text without hint or error', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-checkbox-group__footer').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(false)
     })
   })
 
   describe('legend', () => {
     it('renders the legend when provided', () => {
       const wrapper = createWrapper({ legend: '好きな果物' })
-      const legend = wrapper.find('legend')
+      const legend = wrapper.find('legend.dads-form-control-label__label')
       expect(legend.exists()).toBe(true)
       expect(legend.text()).toContain('好きな果物')
     })
@@ -125,17 +127,17 @@ describe('DadsCheckboxGroup', () => {
   describe('required', () => {
     it('renders the required marker inside the legend', () => {
       const wrapper = createWrapper({ legend: '果物', required: true })
-      expect(wrapper.find('.dads-checkbox-group__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__requirement').exists()).toBe(true)
     })
 
     it('does not render the required marker when required is false', () => {
       const wrapper = createWrapper({ legend: '果物', required: false })
-      expect(wrapper.find('.dads-checkbox-group__required').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__requirement').exists()).toBe(false)
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 label when required is true', () => {
       const wrapper = createWrapper({ legend: '果物', required: true })
-      expect(wrapper.find('.dads-checkbox-group__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -144,14 +146,15 @@ describe('DadsCheckboxGroup', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-checkbox-group__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('Required')
     })
   })
 
   describe('disabled', () => {
-    it('sets the disabled attribute on the fieldset', () => {
-      const wrapper = createWrapper({ disabled: true })
-      expect(wrapper.attributes('disabled')).toBeDefined()
+    it('dims the legend via the disabled state', () => {
+      const wrapper = createWrapper({ legend: '果物', disabled: true })
+      expect(wrapper.attributes('data-disabled')).toBeDefined()
+      expect(wrapper.classes()).toContain('dads-checkbox-group--disabled')
     })
 
     it('forwards disabled to every child checkbox', () => {
@@ -183,12 +186,12 @@ describe('DadsCheckboxGroup', () => {
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message without role="alert"', () => {
       const wrapper = createWrapper({ errorMessage: '少なくとも 1 つ選択してください' })
-      const error = wrapper.find('.dads-checkbox-group__error')
+      const error = wrapper.find('.dads-form-control-label__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('少なくとも 1 つ選択してください')
-      expect(error.attributes('role')).toBe('alert')
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid on the fieldset when errorMessage is present', () => {
@@ -211,22 +214,22 @@ describe('DadsCheckboxGroup', () => {
 
     it('hides the hint when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-checkbox-group__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-checkbox-group__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
-    it('renders the hint when provided', () => {
+    it('renders the hint as support-text when provided', () => {
       const wrapper = createWrapper({ hint: '複数選択可' })
-      const hint = wrapper.find('.dads-checkbox-group__hint')
+      const hint = wrapper.find('.dads-form-control-label__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('複数選択可')
     })
 
-    it('points aria-describedby at the hint id', () => {
+    it('points aria-describedby at the support-text id', () => {
       const wrapper = createWrapper({ hint: '複数選択可' })
-      const hintId = wrapper.find('.dads-checkbox-group__hint').attributes('id')
+      const hintId = wrapper.find('.dads-form-control-label__support-text').attributes('id')
       expect(wrapper.attributes('aria-describedby')).toBe(hintId)
     })
   })

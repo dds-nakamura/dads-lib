@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<DadsCheckboxProps>(), {
   readonly: false,
   required: false,
   error: false,
-  requiredLabel: '必須',
+  requiredLabel: '※必須',
 })
 
 const emit = defineEmits<DadsCheckboxEmits>()
@@ -131,21 +131,21 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       <span class="dads-checkbox__indicator" aria-hidden="true" />
       <span v-if="label" class="dads-checkbox__text">
         {{ label }}
-        <span v-if="required" class="dads-checkbox__required" aria-hidden="true">{{
-          requiredLabel
-        }}</span>
+        <span
+          v-if="required"
+          class="dads-checkbox__requirement"
+          data-required="true"
+          aria-hidden="true"
+          >{{ requiredLabel }}</span
+        >
       </span>
     </label>
 
     <div v-if="hasFooter" class="dads-checkbox__footer">
-      <span
-        v-if="isError && errorMessage"
-        :id="errorId"
-        class="dads-checkbox__error"
-        role="alert"
-        >{{ errorMessage }}</span
-      >
-      <span v-else-if="hint" :id="hintId" class="dads-checkbox__hint">{{ hint }}</span>
+      <p v-if="isError && errorMessage" :id="errorId" class="dads-checkbox__error-text">
+        {{ errorMessage }}
+      </p>
+      <p v-else-if="hint" :id="hintId" class="dads-checkbox__support-text">{{ hint }}</p>
     </div>
   </div>
 </template>
@@ -248,29 +248,40 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     gap: calc(8 / 16 * 1rem);
   }
 
-  &__required {
-    background-color: var(--color-semantic-error-1, #ec0000);
-    color: var(--color-neutral-white, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
+  // Official requirement marker (matches DadsFormControlLabel __requirement):
+  // inline, normal weight, 16px, error-1 color, leading half-width space.
+  &__requirement {
+    margin-left: calc(4 / 16 * 1rem);
+    font-weight: normal;
+    font-size: calc(16 / 16 * 1rem);
+
+    &::before {
+      content: ' ';
+    }
+
+    &[data-required='true'] {
+      color: var(--color-semantic-error-1, #ec0000);
+    }
   }
 
-  // -------------------- footer (hint / error) ----------------------------
+  // -------------------- footer (support-text / error-text) ---------------
+  // Match the official form-control-label support/error typography & color.
   &__footer {
-    font-size: var(--font-size-14, 0.875rem);
-    line-height: var(--line-height-150, 1.5);
+    font-size: calc(16 / 16 * 1rem);
   }
 
-  &__hint {
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+  &__support-text {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--color-neutral-solid-gray-600, #666);
   }
 
-  &__error {
+  &__error-text {
+    margin-top: 0;
+    margin-bottom: 0;
     color: var(--color-semantic-error-1, #ec0000);
-    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0;
   }
 
   // -------------------- size ---------------------------------------------

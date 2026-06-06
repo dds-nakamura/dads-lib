@@ -34,8 +34,9 @@ export interface DadsRadioProps {
    *  ARIA `aria-describedby` references stay in sync. */
   id?: string
   /**
-   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-   * Default: `'必須'`.
+   * 必須マーカーに表示するテキスト。公式の `※必須` 表現に統一。i18n 用に
+   * プロップで上書き可能。
+   * Default: `'※必須'`.
    */
   requiredLabel?: string
 }

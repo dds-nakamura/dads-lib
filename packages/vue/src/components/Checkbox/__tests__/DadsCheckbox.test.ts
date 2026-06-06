@@ -142,7 +142,7 @@ describe('DadsCheckbox', () => {
   describe('required', () => {
     it('renders a required marker', () => {
       const wrapper = createWrapper({ label: 'Agree', required: true })
-      expect(wrapper.find('.dads-checkbox__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-checkbox__requirement').exists()).toBe(true)
     })
 
     it('sets aria-required on the input', () => {
@@ -150,9 +150,9 @@ describe('DadsCheckbox', () => {
       expect(wrapper.find('input').attributes('aria-required')).toBe('true')
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 label when required is true', () => {
       const wrapper = createWrapper({ label: 'Agree', required: true })
-      expect(wrapper.find('.dads-checkbox__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-checkbox__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -161,7 +161,7 @@ describe('DadsCheckbox', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-checkbox__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-checkbox__requirement').text()).toBe('Required')
     })
   })
 
@@ -203,12 +203,12 @@ describe('DadsCheckbox', () => {
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message without role="alert" (official a11y guidance)', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-checkbox__error')
+      const error = wrapper.find('.dads-checkbox__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBe('alert')
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid when errorMessage is present', () => {
@@ -224,28 +224,28 @@ describe('DadsCheckbox', () => {
 
     it('hides the hint when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-checkbox__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-checkbox__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-checkbox__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-checkbox__error-text').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
     it('renders the hint when provided', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hint = wrapper.find('.dads-checkbox__hint')
+      const hint = wrapper.find('.dads-checkbox__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('メモ')
     })
 
     it('points aria-describedby at the hint id', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hintId = wrapper.find('.dads-checkbox__hint').attributes('id')
+      const hintId = wrapper.find('.dads-checkbox__support-text').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(hintId)
     })
 
     it('points aria-describedby at the error id when error is present', () => {
       const wrapper = createWrapper({ hint: 'メモ', errorMessage: 'エラー' })
-      const errorId = wrapper.find('.dads-checkbox__error').attributes('id')
+      const errorId = wrapper.find('.dads-checkbox__error-text').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(errorId)
     })
   })
