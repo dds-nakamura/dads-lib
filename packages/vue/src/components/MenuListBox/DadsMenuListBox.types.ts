@@ -4,7 +4,7 @@
  * The menu list box renders a boxed, card-like container that wraps a vertical
  * list of menu items. Each item is rendered as a `<button>` by default, or as
  * an `<a href>` when `href` is provided. Items may optionally display an icon
- * (Material Design Icons class name) and a secondary description line.
+ * (Material Symbols icon name) and a secondary description line.
  *
  * Reference: https://design.digital.go.jp/dads/components/menu-list-box/
  * HTML source: design-system-example-components-html/src/components/menu-list-box/
@@ -34,7 +34,7 @@ export interface DadsMenuListBoxItem {
   href?: string
   /** Optional secondary description line shown below the label. */
   description?: string
-  /** Material Design Icons class name (e.g. `"mdi-home"`). */
+  /** Material Symbols icon name (e.g. `"home"`). */
   iconName?: string
   /** Mark the item as the currently active entry. Adds `aria-current="page"`. */
   active?: boolean
@@ -58,7 +58,7 @@ export interface DadsMenuListBoxProps {
    * is rendered before the box surface and toggles its visibility.
    */
   triggerLabel?: string
-  /** Material Design Icons class name for the trigger button (e.g. `"mdi-menu"`). */
+  /** Material Symbols icon name for the trigger button (e.g. `"menu"`). */
   triggerIcon?: string
   /** Size of the trigger button. Defaults to `'md'`. */
   triggerSize?: DadsMenuListBoxTriggerSize

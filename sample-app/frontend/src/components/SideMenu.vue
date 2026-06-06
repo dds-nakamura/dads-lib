@@ -17,7 +17,7 @@ const menuItems = computed<DadsMenuListItem[]>(() => [
   {
     label: t('nav.dashboard'),
     href: '/',
-    frontIcon: 'mdi-view-dashboard',
+    frontIcon: 'dashboard',
     active: route.name === 'dashboard',
   },
 ])
@@ -27,7 +27,7 @@ const drawerItems = computed<DadsDrawerItem[]>(() => [
   {
     label: t('nav.dashboard'),
     href: '/',
-    icon: 'mdi-view-dashboard',
+    icon: 'dashboard',
   },
 ])
 

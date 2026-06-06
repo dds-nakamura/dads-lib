@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, ref, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import DadsDrawerItem from './DadsDrawerItem.vue'
 import type {
   DadsDrawerEmits,
@@ -103,7 +104,7 @@ watch(
               :aria-label="closeLabel"
               @click="close"
             >
-              <i class="mdi mdi-close" aria-hidden="true" />
+              <DadsIcon name="close" :size="24" />
             </button>
           </header>
           <nav class="dads-drawer__nav" :aria-label="navAriaLabel">

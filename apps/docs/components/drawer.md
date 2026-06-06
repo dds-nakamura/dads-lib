@@ -10,19 +10,19 @@ import { DadsButton, DadsDrawer } from '@dads/vue'
 
 const basicOpen = ref(false)
 const basicItems = [
-  { label: 'ホーム', href: '/', icon: 'mdi-home' },
-  { label: 'タスク', href: '/tasks', icon: 'mdi-checkbox-marked-outline' },
-  { label: '設定', icon: 'mdi-cog' },
+  { label: 'ホーム', href: '/', icon: 'home' },
+  { label: 'タスク', href: '/tasks', icon: 'check_circle' },
+  { label: '設定', icon: 'settings' },
 ]
 
 const titledOpen = ref(false)
 
 const nestedOpen = ref(false)
 const nestedItems = [
-  { label: 'ホーム', href: '/', icon: 'mdi-home' },
+  { label: 'ホーム', href: '/', icon: 'home' },
   {
     label: 'プロジェクト',
-    icon: 'mdi-folder-outline',
+    icon: 'description',
     children: [
       { label: '一覧', href: '/projects' },
       { label: '新規作成', href: '/projects/new' },
@@ -30,7 +30,7 @@ const nestedItems = [
   },
   {
     label: 'レポート',
-    icon: 'mdi-chart-bar',
+    icon: 'dashboard',
     children: [
       { label: '月次', href: '/reports/monthly' },
       { label: '年次', href: '/reports/annual' },
@@ -70,9 +70,9 @@ import { DadsButton, DadsDrawer } from '@dads/vue'
 
 const open = ref(false)
 const items = [
-  { label: 'ホーム', href: '/', icon: 'mdi-home' },
+  { label: 'ホーム', href: '/', icon: 'home' },
   { label: 'タスク', href: '/tasks' },
-  { label: '設定', icon: 'mdi-cog' },
+  { label: '設定', icon: 'settings' },
 ]
 </script>
 
@@ -176,7 +176,7 @@ const items = [
 | `onClick`  | `(event: MouseEvent) => void` | 任意のクリックハンドラ                                             |
 | `disabled` | `boolean`                     | 視覚的に dim 化し、ナビゲーション・イベントを抑止                  |
 | `children` | `DadsDrawerItem[]`            | 子項目。指定時は `<details>` アコーディオンとして展開 (1 段ネスト) |
-| `icon`     | `string`                      | Material Design Icons のクラス名 (例: `'mdi-home'`)                |
+| `icon`     | `string`                      | Material Symbols 名 (例: `'home'`)                                 |
 
 ## Events
 

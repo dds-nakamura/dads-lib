@@ -111,10 +111,10 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
 
 ## icon — 見出し前のアイコン
 
-`icon` プロップで MDI クラスを指定するか、`#prepend-icon` スロットで任意の SVG / DOM を埋め込める。アイコンには `aria-hidden="true"` が自動付与される。
+`icon` プロップで Material Symbols 名を指定するか、`#prepend-icon` スロットで任意の SVG / DOM を埋め込める。アイコンには `aria-hidden="true"` が自動付与される。
 
 ```vue
-<DadsHeading icon="mdi-information">注意事項</DadsHeading>
+<DadsHeading icon="info">注意事項</DadsHeading>
 
 <!-- カスタム SVG はスロットで -->
 <DadsHeading>
@@ -205,7 +205,7 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
 | `size`     | `'14' \| '16' \| '18' \| '20' \| '24' \| '28' \| '32' \| '36'` | -                       | px 単位の明示フォントサイズ。指定すると `level` を上書きする               |
 | `shoulder` | `string`                                                       | -                       | 見出しの上に表示する小さなラベル (`<p>`)。`#shoulder` スロットで上書き可能 |
 | `subtitle` | `string`                                                       | -                       | 見出しの下に表示する補助テキスト (`<p>`)。`#subtitle` スロットで上書き可能 |
-| `icon`     | `string`                                                       | -                       | MDI クラス名 (`'mdi-xxx'`)。`#prepend-icon` スロットで上書き可能           |
+| `icon`     | `string`                                                       | -                       | Material Symbols 名 (`'info'` 等)。`#prepend-icon` スロットで上書き可能    |
 
 ## Events
 

@@ -11,7 +11,7 @@
  *
  * - `shoulder`: small label rendered above the heading inside `<hgroup>`
  * - `subtitle`: descriptive line rendered below the heading inside `<hgroup>`
- * - `icon`: leading icon (string class name for `<i class>` glyph fonts)
+ * - `icon`: leading icon (Material Symbols name rendered via DadsIcon SVG)
  * - `chip`: inline chip badge — `#chip` slot for full DadsChipLabel control
  */
 
@@ -54,9 +54,9 @@ export interface DadsHeadingProps {
    */
   subtitle?: string
   /**
-   * Material Design Icon class name rendered before the heading text.
-   * The `#prepend-icon` slot takes precedence when provided (use the slot
-   * for custom SVG, the prop for MDI classes).
+   * Material Symbols name rendered before the heading text via DadsIcon
+   * (inline SVG). The `#prepend-icon` slot takes precedence when provided
+   * (use the slot for custom SVG, the prop for a registry icon name).
    */
   icon?: string
 }

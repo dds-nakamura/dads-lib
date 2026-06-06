@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted, ref, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { DadsIcon } from '@dads/vue'
 
 import { useCurrentUser } from '@/composables/useCurrentUser'
 
@@ -67,10 +68,11 @@ onBeforeUnmount(() => {
       @click="toggle"
     >
       <span class="account-menu__avatar" aria-hidden="true">{{ initial }}</span>
-      <i
-        class="mdi mdi-chevron-down account-menu__caret"
+      <DadsIcon
+        name="keyboard_arrow_down"
+        class="account-menu__caret"
         :class="{ 'account-menu__caret--open': open }"
-        aria-hidden="true"
+        :size="20"
       />
     </button>
 
@@ -82,7 +84,7 @@ onBeforeUnmount(() => {
       </div>
       <hr class="account-menu__divider" />
       <button type="button" class="account-menu__item" role="menuitem" @click="onLogout">
-        <i class="mdi mdi-logout account-menu__item-icon" aria-hidden="true" />
+        <DadsIcon name="logout" class="account-menu__item-icon" :size="20" />
         <span>{{ t('header.logout') }}</span>
       </button>
     </div>

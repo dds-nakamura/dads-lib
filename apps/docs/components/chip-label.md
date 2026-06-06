@@ -57,7 +57,7 @@ import { DadsChipLabel } from '@dads/vue'
 ```vue
 <DadsChipLabel color="success">
   <template #prepend>
-    <i class="mdi mdi-check-circle" />
+    <DadsIcon name="check_circle" />
   </template>
   公開中
 </DadsChipLabel>

@@ -542,10 +542,9 @@ describe('DadsSelect', () => {
     })
 
     it('renders the prefix icon when prop is set', () => {
-      const wrapper = createWrapper({ prefixIcon: 'mdi-magnify' })
-      const icon = wrapper.find('.dads-select__prefix-icon')
+      const wrapper = createWrapper({ prefixIcon: 'search' })
+      const icon = wrapper.find('svg.dads-icon.dads-select__prefix-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-magnify')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
   })

@@ -177,21 +177,19 @@ describe('DadsMenuList', () => {
   describe('icons', () => {
     it('renders the front icon when frontIcon is set', () => {
       const wrapper = createWrapper({
-        items: [{ label: 'ホーム', href: '/', frontIcon: 'mdi-home' }],
+        items: [{ label: 'ホーム', href: '/', frontIcon: 'home' }],
       })
-      const icon = wrapper.find('.dads-menu-list__front-icon')
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list__front-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-home')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
 
     it('renders the end icon when endIcon is set', () => {
       const wrapper = createWrapper({
-        items: [{ label: '展開', endIcon: 'mdi-chevron-down' }],
+        items: [{ label: '展開', endIcon: 'keyboard_arrow_down' }],
       })
-      const icon = wrapper.find('.dads-menu-list__end-icon')
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list__end-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-chevron-down')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
 
@@ -201,12 +199,12 @@ describe('DadsMenuList', () => {
           {
             label: '外部リンク',
             href: 'https://example.com',
-            tailIcon: 'mdi-open-in-new',
+            tailIcon: 'open_in_new',
             tailIconLabel: '新規タブで開きます',
           },
         ],
       })
-      const icon = wrapper.find('.dads-menu-list__tail-icon')
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list__tail-icon')
       expect(icon.exists()).toBe(true)
       expect(icon.attributes('role')).toBe('img')
       expect(icon.attributes('aria-label')).toBe('新規タブで開きます')
@@ -215,9 +213,9 @@ describe('DadsMenuList', () => {
 
     it('marks the tail icon as aria-hidden when no label is provided', () => {
       const wrapper = createWrapper({
-        items: [{ label: 'item', href: '/x', tailIcon: 'mdi-arrow-right' }],
+        items: [{ label: 'item', href: '/x', tailIcon: 'arrow_forward' }],
       })
-      const icon = wrapper.find('.dads-menu-list__tail-icon')
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list__tail-icon')
       expect(icon.exists()).toBe(true)
       expect(icon.attributes('aria-hidden')).toBe('true')
       expect(icon.attributes('aria-label')).toBeUndefined()
@@ -339,8 +337,8 @@ describe('DadsMenuList', () => {
           {
             label: 'ホーム',
             href: '/',
-            frontIcon: 'mdi-home',
-            endIcon: 'mdi-chevron-right',
+            frontIcon: 'home',
+            endIcon: 'chevron_right',
           },
         ],
       })

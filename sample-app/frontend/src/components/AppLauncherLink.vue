@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { DadsIcon } from '@dads/vue'
 
 const { t } = useI18n()
 
@@ -26,7 +27,7 @@ const launcherUrl = computed(() => {
 <template>
   <!-- アプリ選択リンク (プルダウンではなく画面遷移)。枠なしのアイコンリンク。 -->
   <a class="app-launcher-link" :href="launcherUrl" :aria-label="t('header.appLauncher')">
-    <i class="mdi mdi-apps app-launcher-link__icon" aria-hidden="true" />
+    <DadsIcon name="apps" class="app-launcher-link__icon" :size="24" />
   </a>
 </template>
 

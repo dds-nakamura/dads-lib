@@ -39,7 +39,7 @@ const nestedItems = [
   {
     label: '項目 2',
     expanded: true,
-    endIcon: 'mdi-chevron-up',
+    endIcon: 'keyboard_arrow_up',
     children: [
       { label: '項目 2-1', href: '/2/1' },
       { label: '項目 2-2', href: '/2/2', active: true },
@@ -50,16 +50,16 @@ const nestedItems = [
 ]
 
 const iconItems = [
-  { label: 'ホーム', href: '/', frontIcon: 'mdi-home' },
-  { label: '受信トレイ', href: '/inbox', frontIcon: 'mdi-email-outline' },
+  { label: 'ホーム', href: '/', frontIcon: 'home' },
+  { label: '受信トレイ', href: '/inbox', frontIcon: 'notifications' },
   {
     label: '外部サイト',
     href: 'https://design.digital.go.jp/dads/',
-    frontIcon: 'mdi-link',
-    tailIcon: 'mdi-open-in-new',
+    frontIcon: 'open_in_new',
+    tailIcon: 'open_in_new',
     tailIconLabel: '新規タブで開きます',
   },
-  { label: '設定', href: '/settings', frontIcon: 'mdi-cog', endIcon: 'mdi-chevron-right' },
+  { label: '設定', href: '/settings', frontIcon: 'settings', endIcon: 'chevron_right' },
 ]
 
 const lastClicked = ref('')
@@ -144,7 +144,7 @@ const items = [
   {
     label: '項目 2',
     expanded: true,
-    endIcon: 'mdi-chevron-up',
+    endIcon: 'keyboard_arrow_up',
     children: [
       { label: '項目 2-1', href: '/2/1' },
       { label: '項目 2-2', href: '/2/2', active: true },
@@ -155,8 +155,7 @@ const items = [
 
 ## アイコン
 
-`frontIcon` (項目先頭) / `tailIcon` (ラベル末尾) / `endIcon` (項目末尾) に Material Design Icons のクラス名を渡せる。`tailIconLabel` を付けると `role="img"` + `aria-label` で読み上げ対象になる (外部リンクアイコン等)。  
-※ カタログ側では `@mdi/font` を読み込んでいないため見た目は表示されない。利用側で CSS を読み込む前提。
+`frontIcon` (項目先頭) / `tailIcon` (ラベル末尾) / `endIcon` (項目末尾) に Material Symbols 名を渡せる。`tailIconLabel` を付けると `role="img"` + `aria-label` で読み上げ対象になる (外部リンクアイコン等)。アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 ```vue
 <DadsMenuList :items="iconItems" aria-label="サイドナビゲーション" />
@@ -164,15 +163,15 @@ const items = [
 
 ```ts
 const iconItems = [
-  { label: 'ホーム', href: '/', frontIcon: 'mdi-home' },
+  { label: 'ホーム', href: '/', frontIcon: 'home' },
   {
     label: '外部サイト',
     href: 'https://design.digital.go.jp/dads/',
-    frontIcon: 'mdi-link',
-    tailIcon: 'mdi-open-in-new',
+    frontIcon: 'open_in_new',
+    tailIcon: 'open_in_new',
     tailIconLabel: '新規タブで開きます',
   },
-  { label: '設定', href: '/settings', frontIcon: 'mdi-cog', endIcon: 'mdi-chevron-right' },
+  { label: '設定', href: '/settings', frontIcon: 'settings', endIcon: 'chevron_right' },
 ]
 ```
 
@@ -215,8 +214,8 @@ const iconItems = [
 | `href`          | `string`             | 指定時は `<a href>` でレンダリング、未指定なら `<button>`                  |
 | `active`        | `boolean`            | 現在地ハイライト。`aria-current="page"` も付与                             |
 | `disabled`      | `boolean`            | 操作不可化。`href` があっても `<button disabled>` として描画               |
-| `frontIcon`     | `string`             | 項目先頭のアイコン (MDI クラス名)                                          |
-| `tailIcon`      | `string`             | ラベル末尾の補助アイコン (MDI クラス名)                                    |
+| `frontIcon`     | `string`             | 項目先頭のアイコン (Material Symbols 名)                                   |
+| `tailIcon`      | `string`             | ラベル末尾の補助アイコン (Material Symbols 名)                             |
 | `tailIconLabel` | `string`             | tail icon に `role="img"` + `aria-label` を付与し読み上げ対象にする        |
 | `endIcon`       | `string`             | 項目末尾のアイコン (`expanded` 時は 180 度回転)                            |
 | `expanded`      | `boolean`            | 子メニューが展開中であることを示す。`data-expanded` / `aria-expanded` 付与 |

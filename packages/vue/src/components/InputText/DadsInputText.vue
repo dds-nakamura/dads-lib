@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
 import DadsFormControlLabel from '../FormControlLabel/DadsFormControlLabel.vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsInputTextEmits, DadsInputTextProps } from './DadsInputText.types'
 
 const props = withDefaults(defineProps<DadsInputTextProps>(), {
@@ -117,10 +118,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     :disabled="disabled"
   >
     <div class="dads-input-text__control">
-      <i
+      <DadsIcon
         v-if="prependIcon"
-        :class="['mdi', prependIcon, 'dads-input-text__icon', 'dads-input-text__icon--prepend']"
-        aria-hidden="true"
+        :name="prependIcon"
+        :size="20"
+        class="dads-input-text__icon dads-input-text__icon--prepend"
       />
       <input
         :id="inputId"
@@ -133,10 +135,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         @focus="onFocus"
         @blur="onBlur"
       />
-      <i
+      <DadsIcon
         v-if="appendIcon"
-        :class="['mdi', appendIcon, 'dads-input-text__icon', 'dads-input-text__icon--append']"
-        aria-hidden="true"
+        :name="appendIcon"
+        :size="20"
+        class="dads-input-text__icon dads-input-text__icon--append"
       />
     </div>
 

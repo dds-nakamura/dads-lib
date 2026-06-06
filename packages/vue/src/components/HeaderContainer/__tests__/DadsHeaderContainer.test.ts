@@ -109,7 +109,7 @@ describe('DadsHeaderContainer', () => {
   describe('hamburger icon accessibility', () => {
     it('marks the visual icon as aria-hidden', () => {
       const wrapper = createWrapper()
-      const icon = wrapper.find('.dads-header-container__menu-toggle .mdi-menu')
+      const icon = wrapper.find('.dads-header-container__menu-toggle svg.dads-icon')
       expect(icon.exists()).toBe(true)
       expect(icon.attributes('aria-hidden')).toBe('true')
     })

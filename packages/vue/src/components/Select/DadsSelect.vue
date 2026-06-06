@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsSelectEmits,
   DadsSelectItem,
@@ -316,10 +317,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         @focus="onFocus"
         @blur="onBlur"
       >
-        <i
+        <DadsIcon
           v-if="prefixIcon"
-          :class="['mdi', prefixIcon, 'dads-select__prefix-icon']"
-          aria-hidden="true"
+          :name="prefixIcon"
+          class="dads-select__prefix-icon"
+          :size="20"
         />
         <span class="dads-select__value-wrap">
           <template v-if="multiple && selectedItems.length > 0 && chips">
@@ -355,10 +357,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
             <span class="dads-select__placeholder">{{ placeholder }}</span>
           </template>
         </span>
-        <i
-          class="mdi mdi-chevron-down dads-select__icon"
+        <DadsIcon
+          name="keyboard_arrow_down"
+          class="dads-select__icon"
           :class="{ 'dads-select__icon--open': isOpen }"
-          aria-hidden="true"
+          :size="20"
         />
       </button>
 

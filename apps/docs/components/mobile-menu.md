@@ -19,8 +19,8 @@ const items = [
 ]
 
 const utilityItems = [
-  { label: 'ログイン', href: '/login', iconName: 'mdi-login' },
-  { label: 'お問い合わせ', href: '/contact', iconName: 'mdi-email-outline' },
+  { label: 'ログイン', href: '/login', iconName: 'account_circle' },
+  { label: 'お問い合わせ', href: '/contact', iconName: 'notifications' },
 ]
 
 const open2 = ref(false)

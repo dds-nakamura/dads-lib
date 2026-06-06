@@ -9,7 +9,6 @@ import '@fontsource/noto-sans-jp/700.css'
 import '@dads/tokens/css'
 import '@dads/vue/styles'
 // コンポーネントが参照する Material Design Icons の webfont。
-import '@mdi/font/css/materialdesignicons.css'
 import './styles/global.css'
 
 import App from './App.vue'

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsNotificationBannerColor,
   DadsNotificationBannerEmits,
@@ -16,17 +17,17 @@ const props = withDefaults(defineProps<DadsNotificationBannerProps>(), {
 
 const emit = defineEmits<DadsNotificationBannerEmits>()
 
-// Default mdi icons per color. The slot `icon` always wins, so this only
-// matters when the consumer hasn't supplied one.
+// Default Material Symbols icons per color. The slot `icon` always wins, so
+// this only matters when the consumer hasn't supplied one.
 const DEFAULT_ICONS: Record<DadsNotificationBannerColor, string> = {
-  success: 'mdi-check-circle',
-  error: 'mdi-alert-circle',
-  warning: 'mdi-alert',
-  info: 'mdi-information',
-  neutral: 'mdi-bell',
+  success: 'check_circle',
+  error: 'error',
+  warning: 'warning',
+  info: 'info',
+  neutral: 'notifications',
 }
 
-const defaultIconClass = computed(() => DEFAULT_ICONS[props.color])
+const defaultIconName = computed(() => DEFAULT_ICONS[props.color])
 
 const rootClasses = computed(() => [
   'dads-notification-banner',
@@ -91,7 +92,7 @@ const onClose = () => {
     <div v-if="modelValue" :class="rootClasses" :role="ariaRole" :aria-live="ariaLive">
       <span class="dads-notification-banner__icon" aria-hidden="true">
         <slot name="icon">
-          <i :class="['mdi', defaultIconClass]" />
+          <DadsIcon :name="defaultIconName" :size="20" />
         </slot>
       </span>
       <div class="dads-notification-banner__content">
@@ -115,7 +116,7 @@ const onClose = () => {
         :aria-label="closeLabel"
         @click="onClose"
       >
-        <i class="mdi mdi-close" aria-hidden="true" />
+        <DadsIcon name="close" :size="20" />
       </button>
     </div>
   </Transition>

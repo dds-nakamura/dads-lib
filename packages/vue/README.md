@@ -189,8 +189,17 @@ import { DadsButton, DadsInputText } from '@dads/vue'
 
 ## アイコン
 
-`prependIcon` / `appendIcon` は Material Design Icons のクラス名を受け取る (例: `mdi-download`)。
-利用側で別途 `@mdi/font` を入れる前提 (本パッケージにはフォントを含めない / R-2)。
+アイコンは **inline SVG の `DadsIcon`**（Google Material Symbols, outlined / weight 400）で描画する。
+webfont は読み込まず、**使用アイコンのみ同梱**する（`@mdi/font` 依存は撤廃 / R-2 改訂）。
+
+```vue
+<DadsIcon name="search" :size="20" />
+<DadsIcon name="open_in_new" :size="16" label="新しいタブで開く" />
+```
+
+- `prependIcon` / `appendIcon` / `iconName` / `triggerIcon` 等の icon 系 props は **Material Symbols 名**を受け取る (例: `search`, `keyboard_arrow_down`)。旧 `mdi-*` クラス名からの移行表は [`docs/quality/icon-mapping.md`](../../docs/quality/icon-mapping.md) を参照。
+- 利用可能なアイコンはレジストリ (`src/components/Icon/icon-registry.ts`) に同梱されたもの。追加は `scripts/generate-icon-registry.mjs` で再生成する。
+- 利用側でのフォント読み込みは不要。
 
 ## 依存
 

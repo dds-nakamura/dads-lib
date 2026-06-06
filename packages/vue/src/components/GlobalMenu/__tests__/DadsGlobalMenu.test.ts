@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsGlobalMenu from '../DadsGlobalMenu.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsGlobalMenuItem, DadsGlobalMenuProps } from '../DadsGlobalMenu.types'
 
 enableAutoUnmount(afterEach)
@@ -208,11 +209,12 @@ describe('DadsGlobalMenu', () => {
   describe('icons', () => {
     it('renders the front icon when frontIcon is set', () => {
       const wrapper = createWrapper({
-        items: [{ label: 'ホーム', href: '/', frontIcon: 'mdi-home' }],
+        items: [{ label: 'ホーム', href: '/', frontIcon: 'home' }],
       })
-      const icon = wrapper.find('.dads-global-menu__front-icon')
+      const icon = wrapper.find('svg.dads-global-menu__front-icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-home')
+      expect(icon.element.tagName.toLowerCase()).toBe('svg')
+      expect(wrapper.findComponent(DadsIcon).props('name')).toBe('home')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
 
@@ -277,7 +279,7 @@ describe('DadsGlobalMenu', () => {
 
     it('renders front icons as aria-hidden so screen readers skip them', () => {
       const wrapper = createWrapper({
-        items: [{ label: 'ホーム', href: '/', frontIcon: 'mdi-home' }],
+        items: [{ label: 'ホーム', href: '/', frontIcon: 'home' }],
       })
       expect(wrapper.find('.dads-global-menu__front-icon').attributes('aria-hidden')).toBe('true')
     })

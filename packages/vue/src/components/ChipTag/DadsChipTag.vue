@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsChipTagEmits, DadsChipTagProps } from './DadsChipTag.types'
 
 const props = withDefaults(defineProps<DadsChipTagProps>(), {
@@ -86,7 +87,7 @@ const onClose = (event: MouseEvent) => {
       :disabled="disabled"
       @click.stop="onClose"
     >
-      <i class="mdi mdi-close" aria-hidden="true" />
+      <DadsIcon name="close" :size="16" />
     </button>
   </component>
 </template>

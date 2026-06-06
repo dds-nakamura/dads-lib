@@ -32,9 +32,9 @@ const headerItems = [
 ]
 
 const iconItems = [
-  { label: 'ヘルプ', href: '/help', iconName: 'mdi-help-circle-outline' },
-  { label: 'お問合わせ', href: '/contact', iconName: 'mdi-email-outline' },
-  { label: 'GitHub', href: 'https://github.com/', iconName: 'mdi-github', external: true },
+  { label: 'ヘルプ', href: '/help', iconName: 'help' },
+  { label: 'お問合わせ', href: '/contact', iconName: 'notifications' },
+  { label: 'GitHub', href: 'https://github.com/', iconName: 'open_in_new', external: true },
 ]
 
 const lastClicked = ref('')
@@ -105,21 +105,21 @@ const footerItems = [
 
 ## icon
 
-`iconName` プロパティで Material Design Icon のクラス名（`mdi-*`）を渡すと、ラベルの前にリードアイコンが描画される。
+`iconName` プロパティで Material Symbols 名を渡すと、ラベルの前にリードアイコンが描画される。
 
 <div class="demo">
   <span class="demo-label">単一</span>
   <DadsUtilityLink
     href="/help"
     label="ヘルプ"
-    iconName="mdi-help-circle-outline"
+    iconName="help"
   />
   <span class="demo-label" style="margin-top:1rem">リスト（項目ごとにアイコン指定可）</span>
   <DadsUtilityLink :items="iconItems" aria-label="サポートリンク" />
 </div>
 
 ```vue
-<DadsUtilityLink href="/help" label="ヘルプ" iconName="mdi-help-circle-outline" />
+<DadsUtilityLink href="/help" label="ヘルプ" iconName="help" />
 ```
 
 ## クリックイベント
@@ -152,7 +152,7 @@ const footerItems = [
 | ----------------- | ----------------------- | ------------------------ | ---------------------------------------------------------------------------------- |
 | `href`            | `string`                | -                        | 単一リンクモード: リンク先 URL                                                     |
 | `label`           | `string`                | -                        | 単一リンクモード: 表示テキスト                                                     |
-| `iconName`        | `string`                | -                        | 単一リンクモード: リードアイコンの MDI クラス名（例: `mdi-help`）                  |
+| `iconName`        | `string`                | -                        | 単一リンクモード: リードアイコンの Material Symbols 名（例: `help`）               |
 | `external`        | `boolean`               | `false`                  | 単一リンクモード: 外部リンクなら `true`                                            |
 | `items`           | `DadsUtilityLinkItem[]` | -                        | リストモード: 複数リンクを `<ul>` 内に並べる                                       |
 | `ariaLabel`       | `string`                | `'ユーティリティリンク'` | リストモード時の `<ul>` の `aria-label`                                            |
@@ -166,7 +166,7 @@ const footerItems = [
 | ---------- | --------- | ---------- | ------------------------------------------------------ |
 | `label`    | `string`  | (必須)     | リンクテキスト                                         |
 | `href`     | `string`  | (必須)     | リンク先 URL                                           |
-| `iconName` | `string`  | -          | リードアイコンの MDI クラス名                          |
+| `iconName` | `string`  | -          | リードアイコンの Material Symbols 名                   |
 | `external` | `boolean` | `false`    | 外部リンクなら `true` (`target=_blank` + 安全な `rel`) |
 
 ## Events

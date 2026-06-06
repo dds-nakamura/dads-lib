@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsDialogEmits, DadsDialogFocusTarget, DadsDialogProps } from './DadsDialog.types'
 
 const props = withDefaults(defineProps<DadsDialogProps>(), {
@@ -150,7 +151,7 @@ watch(
               :aria-label="closeLabel"
               @click="close"
             >
-              <i class="mdi mdi-close" aria-hidden="true" />
+              <DadsIcon name="close" :size="24" />
             </button>
           </header>
           <div class="dads-dialog__body">

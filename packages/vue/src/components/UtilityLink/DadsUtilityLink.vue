@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsUtilityLinkEmits,
   DadsUtilityLinkItem,
@@ -53,10 +54,11 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
         :rel="item.external ? 'noopener noreferrer' : undefined"
         @click="handleClick(item, index, $event)"
       >
-        <i
+        <DadsIcon
           v-if="item.iconName"
-          :class="['mdi', item.iconName, 'dads-utility-link__lead-icon']"
-          aria-hidden="true"
+          :name="item.iconName"
+          class="dads-utility-link__lead-icon"
+          :size="16"
         />
         <span class="dads-utility-link__label">{{ item.label }}</span>
         <svg
@@ -84,10 +86,11 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
     :rel="normalizedItems[0]!.external ? 'noopener noreferrer' : undefined"
     @click="handleClick(normalizedItems[0]!, 0, $event)"
   >
-    <i
+    <DadsIcon
       v-if="normalizedItems[0]!.iconName"
-      :class="['mdi', normalizedItems[0]!.iconName, 'dads-utility-link__lead-icon']"
-      aria-hidden="true"
+      :name="normalizedItems[0]!.iconName"
+      class="dads-utility-link__lead-icon"
+      :size="16"
     />
     <span class="dads-utility-link__label">{{ normalizedItems[0]!.label }}</span>
     <svg

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsHeaderContainerEmits,
   DadsHeaderContainerProps,
@@ -40,7 +41,7 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
         :aria-label="menuToggleLabel"
         @click="onMenuClick"
       >
-        <i class="mdi mdi-menu" aria-hidden="true" />
+        <DadsIcon name="menu" :size="24" />
       </button>
       <div v-if="hasLogo" class="dads-header-container__logo">
         <slot name="logo">

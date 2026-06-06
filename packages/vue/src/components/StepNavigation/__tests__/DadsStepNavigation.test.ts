@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsStepNavigation from '../DadsStepNavigation.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsStepNavigationProps, DadsStepNavigationStep } from '../DadsStepNavigation.types'
 
 enableAutoUnmount(afterEach)
@@ -77,8 +78,7 @@ describe('DadsStepNavigation', () => {
       })
       const indicator = wrapper.find('.dads-step-navigation__indicator')
       expect(indicator.text()).toBe('1')
-      expect(indicator.find('.mdi-check').exists()).toBe(false)
-      expect(indicator.find('.mdi-close').exists()).toBe(false)
+      expect(indicator.find('svg.dads-icon').exists()).toBe(false)
     })
 
     it('shows the step number for current status', () => {
@@ -87,7 +87,7 @@ describe('DadsStepNavigation', () => {
       })
       const indicator = wrapper.find('.dads-step-navigation__indicator')
       expect(indicator.text()).toBe('1')
-      expect(indicator.find('.mdi-check').exists()).toBe(false)
+      expect(indicator.find('svg.dads-icon').exists()).toBe(false)
     })
 
     it('shows the check icon for done status', () => {
@@ -95,7 +95,9 @@ describe('DadsStepNavigation', () => {
         steps: [{ title: 'A', status: 'done' }],
       })
       const indicator = wrapper.find('.dads-step-navigation__indicator')
-      expect(indicator.find('.mdi-check').exists()).toBe(true)
+      const icon = indicator.findComponent(DadsIcon)
+      expect(icon.exists()).toBe(true)
+      expect(icon.props('name')).toBe('check')
       expect(indicator.text()).toBe('')
     })
 
@@ -104,7 +106,9 @@ describe('DadsStepNavigation', () => {
         steps: [{ title: 'A', status: 'error' }],
       })
       const indicator = wrapper.find('.dads-step-navigation__indicator')
-      expect(indicator.find('.mdi-close').exists()).toBe(true)
+      const icon = indicator.findComponent(DadsIcon)
+      expect(icon.exists()).toBe(true)
+      expect(icon.props('name')).toBe('close')
       expect(indicator.text()).toBe('')
     })
 

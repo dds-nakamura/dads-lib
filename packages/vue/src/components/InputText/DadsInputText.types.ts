@@ -64,9 +64,9 @@ export interface DadsInputTextProps {
   disabled?: boolean
   /** Render as read-only (dashed border). */
   readonly?: boolean
-  /** Material Design Icon class name shown before the input. e.g. `mdi-tag`. */
+  /** Material Symbols name (rendered via DadsIcon) shown before the input. e.g. `label`. */
   prependIcon?: string
-  /** Material Design Icon class name shown after the input. e.g. `mdi-magnify`. */
+  /** Material Symbols name (rendered via DadsIcon) shown after the input. e.g. `search`. */
   appendIcon?: string
   /** Show a counter `current / counter` below the input. The component does
    *  not enforce the limit; pair with `maxlength` to do so. */

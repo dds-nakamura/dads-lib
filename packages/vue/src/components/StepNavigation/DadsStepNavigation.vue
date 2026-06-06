@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsStepNavigationEmits,
   DadsStepNavigationProps,
@@ -47,8 +48,8 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
           @click="clickable ? onStepClick(step, idx, $event) : undefined"
         >
           <span class="dads-step-navigation__indicator" aria-hidden="true">
-            <i v-if="stepStatus(step) === 'done'" class="mdi mdi-check" />
-            <i v-else-if="stepStatus(step) === 'error'" class="mdi mdi-close" />
+            <DadsIcon v-if="stepStatus(step) === 'done'" name="check" :size="20" />
+            <DadsIcon v-else-if="stepStatus(step) === 'error'" name="close" :size="20" />
             <span v-else>{{ idx + 1 }}</span>
           </span>
           <span class="dads-step-navigation__title">{{ step.title }}</span>

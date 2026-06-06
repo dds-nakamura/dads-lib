@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsDatePickerEmits, DadsDatePickerProps } from './DadsDatePicker.types'
 
 const props = withDefaults(defineProps<DadsDatePickerProps>(), {
@@ -516,8 +517,12 @@ const warekiHint = computed(() => {
         data-js-calendar-button
         @click="toggleCalendar"
       >
-        <i class="mdi mdi-calendar dads-date-picker__calendar-icon" aria-hidden="true" />
-        <i class="mdi mdi-chevron-down dads-date-picker__calendar-chevron" aria-hidden="true" />
+        <DadsIcon name="calendar_today" class="dads-date-picker__calendar-icon" :size="24" />
+        <DadsIcon
+          name="keyboard_arrow_down"
+          class="dads-date-picker__calendar-chevron"
+          :size="16"
+        />
       </button>
 
       <div
@@ -537,7 +542,7 @@ const warekiHint = computed(() => {
             :aria-label="prevMonthAriaLabel"
             @click="navigateMonth(-1)"
           >
-            <i class="mdi mdi-chevron-left" aria-hidden="true" />
+            <DadsIcon name="chevron_left" :size="20" />
           </button>
           <span class="dads-date-picker__current-month" aria-live="polite">
             {{ displayMonthLabel }}
@@ -549,7 +554,7 @@ const warekiHint = computed(() => {
             :aria-label="nextMonthAriaLabel"
             @click="navigateMonth(1)"
           >
-            <i class="mdi mdi-chevron-right" aria-hidden="true" />
+            <DadsIcon name="chevron_right" :size="20" />
           </button>
         </div>
         <table class="dads-date-picker__calendar-table" role="grid" :aria-label="displayMonthLabel">
