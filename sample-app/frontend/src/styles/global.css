@@ -1,0 +1,22 @@
+/* アプリ全体の最小限のリセット。色・余白は DADS トークン (CSS 変数) を参照する。 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  color: var(--color-text-body, #1a1a1a);
+  background-color: var(--color-background-primary, #fff);
+}
+
+#app {
+  min-height: 100vh;
+}

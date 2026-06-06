@@ -1,6 +1,7 @@
 packages:
   - 'packages/*'
   - 'apps/*'
+  - 'sample-app/*'
 # Approve native install scripts. esbuild ships an arch-specific binary that
 # needs its postinstall to run; vitest/vite both depend on it transitively.
 allowBuilds:
