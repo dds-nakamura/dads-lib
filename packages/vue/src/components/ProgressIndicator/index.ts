@@ -1,7 +1,6 @@
 export { default as DadsProgressIndicator } from './DadsProgressIndicator.vue'
 export type {
   DadsProgressIndicatorProps,
-  DadsProgressIndicatorVariant,
-  DadsProgressIndicatorSize,
-  DadsProgressIndicatorColor,
+  DadsProgressIndicatorType,
+  DadsProgressIndicatorIndicator,
 } from './DadsProgressIndicator.types'

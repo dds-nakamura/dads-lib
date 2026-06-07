@@ -9,7 +9,6 @@ const props = withDefaults(defineProps<DadsCheckboxProps>(), {
   indeterminate: false,
   size: 'md',
   disabled: false,
-  readonly: false,
   required: false,
   error: false,
   requiredLabel: '※必須',
@@ -19,8 +18,8 @@ const emit = defineEmits<DadsCheckboxEmits>()
 
 // Forward fallthrough ARIA / data-* attributes to the native <input> so that
 // e.g. `aria-label` on the component lands on the focusable element rather
-// than the wrapper <div>. Keep `class` / `style` on the wrapper so consumer
-// styling continues to work as expected.
+// than the wrapper. Keep `class` / `style` on the wrapper so consumer styling
+// continues to work as expected.
 const attrs = useAttrs()
 const inputForwardedAttrs = computed(() => {
   const result: Record<string, unknown> = {}
@@ -41,9 +40,9 @@ const wrapperForwardedAttrs = computed(() => {
 
 const inputRef = ref<HTMLInputElement | null>(null)
 
-// Generated once per instance so the label `for` and `aria-describedby` ids
-// stay stable across renders. Calling useId() inside a computed would re-run
-// on every dependency change.
+// Generated once per instance so the `aria-describedby` ids stay stable across
+// renders. Calling useId() inside a computed would re-run on every dependency
+// change.
 const generatedId = useId()
 const checkboxId = computed(() => props.id ?? `dads-checkbox-${generatedId}`)
 const hintId = computed(() => `${checkboxId.value}-hint`)
@@ -58,17 +57,15 @@ const describedBy = computed(() => {
 })
 
 const rootClasses = computed(() => [
-  'dads-checkbox',
-  `dads-checkbox--${props.size}`,
+  'dads-checkbox-field',
   {
-    'dads-checkbox--checked': props.modelValue && !props.indeterminate,
-    'dads-checkbox--indeterminate': props.indeterminate,
-    'dads-checkbox--disabled': props.disabled,
-    'dads-checkbox--readonly': props.readonly,
-    'dads-checkbox--error': isError.value,
+    'dads-checkbox-field--disabled': props.disabled,
+    'dads-checkbox-field--error': isError.value,
   },
 ])
 
+// Mirror the official `aria-invalid` accent hook. The visible control colours
+// switch to the error palette via `.dads-checkbox__input[aria-invalid="true"]`.
 const inputAttrs = computed(() => ({
   name: props.name,
   disabled: props.disabled || undefined,
@@ -95,15 +92,6 @@ onMounted(syncIndeterminate)
 watch(() => props.indeterminate, syncIndeterminate)
 
 const onChange = (event: Event) => {
-  // Native <input type="checkbox"> has no readonly concept, so we suppress the
-  // model update ourselves while leaving the input focusable for keyboard
-  // users. Reset the DOM checked state so it stays in sync with modelValue.
-  if (props.readonly) {
-    if (inputRef.value) {
-      inputRef.value.checked = props.modelValue
-    }
-    return
-  }
   const target = event.target as HTMLInputElement
   emit('update:modelValue', target.checked)
   emit('change', event)
@@ -115,21 +103,22 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 
 <template>
   <div :class="rootClasses" v-bind="wrapperForwardedAttrs">
-    <label class="dads-checkbox__label" :for="checkboxId">
-      <input
-        :id="checkboxId"
-        ref="inputRef"
-        type="checkbox"
-        class="dads-checkbox__input"
-        :checked="modelValue"
-        :value="value"
-        v-bind="{ ...inputAttrs, ...inputForwardedAttrs }"
-        @change="onChange"
-        @focus="onFocus"
-        @blur="onBlur"
-      />
-      <span class="dads-checkbox__indicator" aria-hidden="true" />
-      <span v-if="label" class="dads-checkbox__text">
+    <label class="dads-checkbox" :data-size="size">
+      <span class="dads-checkbox__checkbox">
+        <input
+          :id="checkboxId"
+          ref="inputRef"
+          type="checkbox"
+          class="dads-checkbox__input"
+          :checked="modelValue"
+          :value="value"
+          v-bind="{ ...inputAttrs, ...inputForwardedAttrs }"
+          @change="onChange"
+          @focus="onFocus"
+          @blur="onBlur"
+        />
+      </span>
+      <span v-if="label" class="dads-checkbox__label">
         {{ label }}
         <span
           v-if="required"
@@ -141,131 +130,35 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       </span>
     </label>
 
-    <div v-if="hasFooter" class="dads-checkbox__footer">
-      <p v-if="isError && errorMessage" :id="errorId" class="dads-checkbox__error-text">
+    <div v-if="hasFooter" class="dads-checkbox-field__footer">
+      <p v-if="isError && errorMessage" :id="errorId" class="dads-checkbox-field__error-text">
         {{ errorMessage }}
       </p>
-      <p v-else-if="hint" :id="hintId" class="dads-checkbox__support-text">{{ hint }}</p>
+      <p v-else-if="hint" :id="hintId" class="dads-checkbox-field__support-text">{{ hint }}</p>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
-@use '../../styles/focus-ring' as focus-ring;
 
-.dads-checkbox {
+// =============================================================================
+// Canonical DADS checkbox — faithful port of
+// design-system-example-components-html/src/components/checkbox/checkbox.css.
+// The visible control IS the native <input> (appearance:none); the check mark
+// is drawn via `::before` with the official `clip-path` SVG path. No hidden
+// input / pseudo-control indicator.
+// =============================================================================
+
+// Field wrapper hosts the optional per-item support / error text. The official
+// single checkbox has no footer of its own (that lives on form-control-label /
+// fieldset), so this layer is structural only.
+.dads-checkbox-field {
   display: flex;
   flex-direction: column;
   gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
-  &__label {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(8 / 16 * 1rem);
-    cursor: pointer;
-    line-height: 1.3;
-    letter-spacing: 0;
-  }
-
-  // The native checkbox is visually hidden (not display:none) so it stays
-  // focusable and announces its state to assistive tech.
-  &__input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  // Project the keyboard focus indication onto the visible indicator since
-  // the real input is hidden.
-  &__input:focus-visible + &__indicator {
-    @include focus-ring.dads-focus-ring-style;
-  }
-
-  // -------------------- indicator (visible box) --------------------------
-  &__indicator {
-    position: relative;
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-neutral-solid-gray-600, #767676);
-    border-radius: 12.5%;
-    transition:
-      background-color 0.15s ease,
-      border-color 0.15s ease,
-      box-shadow 0.15s ease;
-  }
-
-  &__indicator::before {
-    content: '';
-    position: absolute;
-    width: 30%;
-    height: 60%;
-    border-right: 2px solid var(--color-neutral-white, #fff);
-    border-bottom: 2px solid var(--color-neutral-white, #fff);
-    transform: rotate(45deg) translate(-10%, -10%);
-    opacity: 0;
-  }
-
-  &__indicator::after {
-    content: '';
-    position: absolute;
-    width: 60%;
-    height: 2px;
-    background-color: var(--color-neutral-white, #fff);
-    opacity: 0;
-  }
-
-  &--checked &__indicator,
-  &--indeterminate &__indicator {
-    background-color: var(--color-primitive-blue-900, #0017c1);
-    border-color: var(--color-primitive-blue-900, #0017c1);
-  }
-
-  &--checked &__indicator::before {
-    opacity: 1;
-  }
-
-  &--indeterminate &__indicator::after {
-    opacity: 1;
-  }
-
-  // -------------------- label text + required marker --------------------
-  &__text {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(8 / 16 * 1rem);
-  }
-
-  // Official requirement marker (matches DadsFormControlLabel __requirement):
-  // inline, normal weight, 16px, error-1 color, leading half-width space.
-  &__requirement {
-    margin-left: calc(4 / 16 * 1rem);
-    font-weight: normal;
-    font-size: calc(16 / 16 * 1rem);
-
-    &::before {
-      content: ' ';
-    }
-
-    &[data-required='true'] {
-      color: var(--color-semantic-error-1, #ec0000);
-    }
-  }
-
-  // -------------------- footer (support-text / error-text) ---------------
-  // Match the official form-control-label support/error typography & color.
   &__footer {
     font-size: calc(16 / 16 * 1rem);
   }
@@ -283,89 +176,195 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     line-height: 1.3;
     letter-spacing: 0;
   }
+}
 
-  // -------------------- size ---------------------------------------------
-  // Box sizes / border widths / label font sizes follow the official spec
-  // (checkbox.css: 24/32/44px box, 2/2/3px border, 16/16/17px label).
-  &--lg &__indicator {
-    width: calc(44 / 16 * 1rem); // 44px
-    height: calc(44 / 16 * 1rem);
-    border-width: calc(3 / 16 * 1rem);
+.dads-checkbox {
+  display: flex;
+  align-items: start;
+  gap: var(--_gap);
+  width: fit-content;
+  cursor: pointer;
+}
+
+.dads-checkbox:has(.dads-checkbox__label:not(:empty)) {
+  padding-top: calc(8 / 16 * 1rem);
+  padding-bottom: calc(8 / 16 * 1rem);
+}
+
+.dads-checkbox[data-size='sm'] {
+  --_gap: calc(4 / 16 * 1rem);
+  --_checkbox-size: calc(24 / 16 * 1rem);
+  --_checkbox-border-width: calc(2 / 16 * 1rem);
+  --_checkbox-scale: 1;
+  --_label-padding-top: calc(1 / 16 * 1rem);
+  --_label-font-size: calc(16 / 16 * 1rem);
+}
+
+.dads-checkbox[data-size='md'] {
+  --_gap: calc(8 / 16 * 1rem);
+  --_checkbox-size: calc(32 / 16 * 1rem);
+  --_checkbox-border-width: calc(2 / 16 * 1rem);
+  --_checkbox-scale: calc(20 / 14);
+  --_label-padding-top: calc(4 / 16 * 1rem);
+  --_label-font-size: calc(16 / 16 * 1rem);
+}
+
+.dads-checkbox[data-size='lg'] {
+  --_gap: calc(8 / 16 * 1rem);
+  --_checkbox-size: calc(44 / 16 * 1rem);
+  --_checkbox-border-width: calc(3 / 16 * 1rem);
+  --_checkbox-scale: calc(27 / 14);
+  --_label-padding-top: calc(10 / 16 * 1rem);
+  --_label-font-size: calc(17 / 16 * 1rem);
+}
+
+.dads-checkbox__checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--_checkbox-size);
+  height: var(--_checkbox-size);
+  border-radius: 12.5%;
+}
+
+@media (hover: hover) {
+  .dads-checkbox__checkbox:has(:not(:focus, :disabled, [aria-disabled='true']):hover) {
+    background-color: var(--color-neutral-solid-gray-420, #949494);
   }
-  &--lg &__label {
-    font-size: calc(17 / 16 * 1rem);
+}
+
+.dads-checkbox__input {
+  --_base-color: var(--color-neutral-white, #fff);
+  --_accent-color: var(--color-primitive-blue-900, #0017c1);
+  --_accent-hover-color: var(--color-primitive-blue-1100, #00118f);
+  --_border-color: var(--color-neutral-solid-gray-600, #767676);
+  --_border-hover-color: var(--color-neutral-black, #000);
+  --_check-color: var(--color-neutral-white, #fff);
+
+  margin: 0;
+  appearance: none;
+  width: 75%;
+  height: 75%;
+  border-radius: calc(2 / 18 * 100%);
+  background-color: var(--_base-color);
+  background-clip: padding-box;
+  border: var(--_checkbox-border-width) solid var(--_border-color);
+  cursor: inherit;
+}
+
+.dads-checkbox__input:focus {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+  outline-offset: calc(2 / 16 * 1rem);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+}
+
+@media (hover: hover) {
+  .dads-checkbox__input:not(:disabled, [aria-disabled='true']):hover {
+    border-color: var(--_border-hover-color);
+  }
+}
+
+.dads-checkbox__input:is(:checked, :indeterminate) {
+  border-color: var(--_accent-color);
+  background-color: var(--_accent-color);
+}
+
+@media (hover: hover) {
+  .dads-checkbox__input:is(:checked, :indeterminate):not(:disabled, [aria-disabled='true']):hover {
+    border-color: var(--_accent-hover-color);
+    background-color: var(--_accent-hover-color);
+  }
+}
+
+.dads-checkbox__input::before {
+  display: none;
+  width: calc(14 / 16 * 1rem);
+  height: calc(14 / 16 * 1rem);
+  background-color: var(--_check-color);
+  transform-origin: left top;
+  transform: scale(var(--_checkbox-scale, 1));
+  content: '';
+}
+
+.dads-checkbox__input:checked::before {
+  display: block;
+  clip-path: path('M5.6,11.2L12.65,4.15L11.25,2.75L5.6,8.4L2.75,5.55L1.35,6.95L5.6,11.2Z');
+}
+
+.dads-checkbox__input:indeterminate::before {
+  display: block;
+  clip-path: path('M2,6h10v2H2Z');
+}
+
+.dads-checkbox__input[aria-invalid='true'] {
+  --_accent-color: var(--color-semantic-error-1, #ec0000);
+  --_accent-hover-color: var(--color-primitive-red-1000, #b00000);
+  --_border-color: var(--color-semantic-error-1, #ec0000);
+  --_border-hover-color: var(--color-primitive-red-1000, #b00000);
+}
+
+.dads-checkbox__input:is(:disabled, [aria-disabled='true']) {
+  --_base-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+  --_accent-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+  --_accent-hover-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+  --_border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+  --_border-hover-color: var(--color-neutral-solid-gray-300, #d6d6d6);
+  cursor: not-allowed;
+}
+
+.dads-checkbox__label {
+  padding-top: var(--_label-padding-top);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  font-weight: normal;
+  font-size: var(--_label-font-size);
+  line-height: 1.3;
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  letter-spacing: 0;
+}
+
+// Official requirement marker (matches DadsFormControlLabel __requirement):
+// inline, normal weight, 16px, error-1 color, leading half-width space.
+.dads-checkbox__requirement {
+  margin-left: calc(4 / 16 * 1rem);
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
+
+  &::before {
+    content: ' ';
   }
 
-  &--md &__indicator {
-    width: calc(32 / 16 * 1rem); // 32px
-    height: calc(32 / 16 * 1rem);
-    border-width: calc(2 / 16 * 1rem);
+  &[data-required='true'] {
+    color: var(--color-semantic-error-1, #ec0000);
   }
-  &--md &__label {
-    font-size: var(--font-size-16, 1rem);
+}
+
+// Dim the standalone label text when the field is disabled.
+.dads-checkbox-field--disabled .dads-checkbox__label {
+  color: var(--color-neutral-solid-gray-420, #949494);
+}
+
+// -------------------- forced colors --------------------------------------
+// Improve coverage per official checkbox.css: disabled → GrayText, check →
+// HighlightText, plus Canvas for the disabled check fill.
+// NOTE: plain @media (not base.dads-forced-colors) — the mixin emits a bare
+// `forced-color-adjust: auto`, which is invalid at stylesheet root.
+@media (forced-colors: active) {
+  .dads-checkbox__input,
+  .dads-checkbox__input[aria-invalid='true'] {
+    --_accent-color: Highlight;
+    --_accent-hover-color: Highlight;
+    --_border-color: ButtonText;
+    --_border-hover-color: ButtonText;
+    --_check-color: HighlightText;
   }
 
-  &--sm &__indicator {
-    width: calc(24 / 16 * 1rem); // 24px
-    height: calc(24 / 16 * 1rem);
-    border-width: calc(2 / 16 * 1rem);
-  }
-  &--sm &__label {
-    font-size: var(--font-size-16, 1rem);
-  }
-
-  // -------------------- hover (interactive) ------------------------------
-  &:not(.dads-checkbox--readonly):not(.dads-checkbox--disabled):not(.dads-checkbox--error)
-    .dads-checkbox__label:hover
-    .dads-checkbox__indicator {
-    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
-  }
-
-  // -------------------- readonly -----------------------------------------
-  &--readonly &__label {
-    cursor: default;
-  }
-  &--readonly &__indicator {
-    border-style: dashed;
-    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
-  }
-
-  // -------------------- disabled -----------------------------------------
-  // Official disabled config (checkbox.css:132-138): base gray-50,
-  // accent/border gray-300, label text gray-420 — not a blanket opacity dim.
-  &--disabled {
-    pointer-events: none;
-  }
-  &--disabled &__label {
-    cursor: default;
-    color: var(--color-neutral-solid-gray-420, #949494);
-  }
-  &--disabled &__indicator {
-    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
-    border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
-  }
-  &--disabled.dads-checkbox--checked &__indicator,
-  &--disabled.dads-checkbox--indeterminate &__indicator {
-    background-color: var(--color-neutral-solid-gray-300, #d6d6d6);
-    border-color: var(--color-neutral-solid-gray-300, #d6d6d6);
-  }
-
-  // -------------------- error --------------------------------------------
-  &--error &__indicator {
-    border-color: var(--color-semantic-error-1, #ec0000);
-  }
-
-  // -------------------- forced colors ------------------------------------
-  @include base.dads-forced-colors {
-    &__indicator {
-      border: 1px solid CanvasText;
-    }
-
-    &--checked &__indicator,
-    &--indeterminate &__indicator {
-      background-color: Highlight;
-      border-color: Highlight;
-    }
+  .dads-checkbox__input:is(:disabled, [aria-disabled='true']) {
+    --_accent-color: GrayText;
+    --_accent-hover-color: GrayText;
+    --_border-color: GrayText;
+    --_border-hover-color: GrayText;
+    --_check-color: Canvas;
   }
 }
 </style>

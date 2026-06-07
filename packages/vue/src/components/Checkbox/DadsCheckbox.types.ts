@@ -16,9 +16,6 @@ export interface DadsCheckboxProps {
   /** Forces the error visual state when no message is available. */
   error?: boolean
   disabled?: boolean
-  /** Native checkboxes do not support readonly. The component blocks
-   *  modelValue updates while keeping the input focusable. */
-  readonly?: boolean
   name?: string
   /** Native `id`. When omitted, an id is generated so the label `for` and
    *  ARIA `aria-describedby` references stay in sync. */

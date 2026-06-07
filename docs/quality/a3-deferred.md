@@ -53,11 +53,13 @@
 
 ## Checkbox
 
-- [ ] 正準構造への作り直し: 公式は input.dads-checkbox__input を appearance:none で見せ ::before の clip-path(SVG path) でチェック描画。現状は input を sr-only 化し __indicator 疑似要素の border 回転√で自作。DOM/クラス名 (__checkbox/__input) 変更を伴うため A3。
-- [ ] readonly 状態 (破線ボーダー) は公式に存在しない独自状態。API (props/types) に関わるため A3。
-- [ ] __required バッジ (塗りつぶし+反転色) は公式の form-control-label 連携・※必須 表現と異なる。DOM/表現変更を伴うため A3。
-- [ ] footer __error / __required の font-weight:500/700 (非トークン値) の整理は構造側 (form-control-label) と合わせて A3。
-- [ ] forced-colors の網羅度向上 (disabled時 GrayText / check HighlightText 等) は A3 で対応。
+> **T4 解消済み (PR: issue-18-a3-t4, 案X フル)** — 公式 checkbox.css の正準構造へ作り直し。
+
+- [x] 正準構造への作り直し: `input.dads-checkbox__input` を `appearance:none`、チェックを `::before` clip-path(SVG path) で描画
+- [x] readonly 状態 (公式に無い独自状態) を削除
+- [x] __required バッジ → form-control-label / ※必須 連携へ
+- [x] footer __error / __required の font-weight 整理
+- [x] forced-colors の網羅度向上 (disabled時 GrayText / check HighlightText 等)
 
 ## CheckboxGroup
 
@@ -232,20 +234,24 @@
 
 ## ProgressIndicator
 
-- [ ] Architecture: official SVG <line> linear + spinner (<g> nesting + JS) — Vue uses div-fill linear + <circle> ring; full re-implementation
-- [ ] type taxonomy stacked/inlined/stacked-underlay (currently variant=linear/circular + size=sm/md/lg which are non-official)
-- [ ] Removal of non-official circular ring form and size axis (public API removal)
-- [ ] intent/active display-control model + :not([active]) animation stop
-- [ ] 1px --color-primitive-blue-1200 underline accent on linear bar (missing element)
-- [ ] stacked-underlay container (1px gray-500 border + 16px radius + padding + min-size)
-- [ ] Bar shape: official rectangular SVG line (no rounded caps) vs Vue radius-4 + stroke-linecap:round
-- [ ] indeterminate animation curves (official cubic-bezier g-double-rotation) vs Vue translateX/dash
+> **T4 解消済み (PR: issue-18-a3-t4, 案X フル)** — 公式 progress-indicator.css の SVG 構造へ全面再実装。circular/size 軸を削除。
+
+- [x] Architecture: 公式 SVG `<line>` linear + spinner(`<g>` nesting) へ全面再実装
+- [x] type taxonomy stacked/inlined/stacked-underlay (旧 variant/size を置換)
+- [x] 非公式 circular ring + size 軸を削除 (public API removal)
+- [x] active 表示制御モデル + `:not([active])` アニメ停止
+- [x] 1px --color-primitive-blue-1200 underline accent on linear bar
+- [x] stacked-underlay container (1px gray-500 border + 16px radius + padding + min-size)
+- [x] Bar shape: 公式 rectangular SVG line (no rounded caps) へ
+- [x] indeterminate animation: 公式 cubic-bezier g-double-rotation を移植
 
 ## Radio
 
-- [ ] Full DOM rework to canonical structure: official uses the <input> itself (appearance:none) as the visible control with a __radio centering wrapper; Vue hides the input (opacity:0) and paints a separate __indicator pseudo-control. Affects class system (__indicator/__text/__title/__required/__description/__hint/__error/__footer are all non-official), and is required for the gap-report's size/border-width fidelity (radio 24/32/44, outer 20/26/36, inner 10/12/16px, border 2/2/3px) plus the __radio hover background ring (gray-420) and click-target padding-block:8px — none achievable without structural change.
-- [ ] Inner-dot sizing uses 50% ratio vs official fixed px (10/12/16) — depends on the structural rework above.
-- [ ] __required / __description / __hint / __error / __footer are Vue-only API extensions (official delegates to form-control-label); keeping or removing them is an API decision, not pure CSS.
+> **T4 解消済み (PR: issue-18-a3-t4, 案X フル)** — 公式 radio.css の正準構造へ作り直し。Vue 独自サブ要素は form-control-label / RadioGroup へ委譲。
+
+- [x] 正準構造へ: `<input>` 自身を `appearance:none` の可視コントロール + `__radio` センタリング。サイズ 24/32/44・外 20/26/36・border 2/2/3px・hover ring・click-target を実装
+- [x] inner-dot を固定 px (10/12/16) へ (50% 比率を廃止)
+- [x] Vue 独自 __required / __description / __hint / __error / __footer を削除し form-control-label / RadioGroup へ委譲 (`ariaDescribedby` で wiring)
 
 ## RadioGroup
 
@@ -277,11 +283,13 @@
 
 ## StepNavigation
 
-- [ ] Class/structure drift: official uses __step/__header/__number/__description with ::before/::after connectors and data-state/data-size attributes; Vue uses independent __item/__button/__indicator/__title/__connector(<span>) names. Renaming = breaking DOM/public class change (gap-report diff #2)
-- [ ] Size variant data-size normal/small (number 44/32px, title 18/16px) is absent; adding it is a new public size prop (gap-report diff #3). Current fixed 32px circle was tuned to the official SMALL size (16px bold number) accordingly
-- [ ] Status model: official reached/completed/error/skipped/editing + aria-current vs Vue pending/current/done/error. Adding completed/skipped/editing changes the public status enum/types (gap-report diff #5) — out of A-2
-- [ ] state-icon / state-label / description sub-elements not implemented (gap-report diff #10) — requires template/DOM additions
-- [ ] Connector as <span> vs official ::before/::after pseudo-elements (gap-report diff #11) — DOM structure
+> **T4 解消済み (PR: issue-18-a3-t4, 案X フル)** — 公式 step-navigation.css の正準構造へ作り直し。
+
+- [x] クラス/構造を公式 __step/__header/__number/__description + `::before/::after` connector + data-state/data-size へ
+- [x] data-size normal/small (number 44/32px, title 18/16px) を追加
+- [x] status enum を reached/completed/error/skipped/editing + aria-current へ
+- [x] state-icon / state-label / description サブ要素を実装
+- [x] connector を `<span>` から `::before/::after` 疑似要素へ
 
 ## Tab
 
@@ -290,10 +298,12 @@
 
 ## Table
 
-- [ ] 列ヘッダ直下/行ヘッダ右端の 1px solid black 強調ボーダー (公式の象徴的特徴, fix-4): 公式の .dads-table__col-header/__row-header + :last-of-type 構造に依存し、現行 DOM(thead th 直書き)では辺別制御不能。構造/クラス追加が必要
-- [ ] data-cell-border / data-border 相当の辺別ボーダー API (fix-1): data-* 属性駆動への作り替えは公開 API 変更
-- [ ] 行 hover ハイライト (--color-primitive-blue-50) / 選択行ハイライト (--color-primitive-blue-100) 機能 (fix-8): 現行 API に無く prop/属性追加が必要
-- [ ] 公式 .dads-table(コンテナ)>.dads-table__table+__col-header 構造への寄せ (fix-1 構造ドリフト): DOM/クラス契約の major 変更
+> **T4 解消済み (PR: issue-18-a3-t4, 案X フル)** — 公式 table.css の正準構造へ作り直し。`table-control.md` の利用箇所も追従。
+
+- [x] 列ヘッダ直下/行ヘッダ右端の 1px solid black 強調ボーダー を `.dads-table__col-header/__row-header` + `:last-of-type` で実装
+- [x] data-cell-border / data-border 辺別ボーダー API を実装
+- [x] 行 hover (blue-50) / 選択行 (blue-100) ハイライトを prop/属性で追加
+- [x] 公式 `.dads-table`(コンテナ)>`.dads-table__table`+`__col-header` 構造へ寄せ
 
 ## TableControl
 

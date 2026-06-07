@@ -2,20 +2,19 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsStepNavigation from '../DadsStepNavigation.vue'
-import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsStepNavigationProps, DadsStepNavigationStep } from '../DadsStepNavigation.types'
 
 enableAutoUnmount(afterEach)
 
 const defaultSteps: DadsStepNavigationStep[] = [
-  { title: '入力', status: 'done' },
-  { title: '確認', status: 'current' },
-  { title: '完了', status: 'pending' },
+  { title: '入力', status: 'completed' },
+  { title: '確認' },
+  { title: '完了' },
 ]
 
 const createWrapper = (props: Partial<DadsStepNavigationProps> = {}) =>
   mount(DadsStepNavigation, {
-    props: { steps: defaultSteps, ...props } as DadsStepNavigationProps,
+    props: { steps: defaultSteps, current: 1, ...props } as DadsStepNavigationProps,
   })
 
 describe('DadsStepNavigation', () => {
@@ -26,189 +25,239 @@ describe('DadsStepNavigation', () => {
       expect(wrapper.classes()).toContain('dads-step-navigation')
     })
 
-    it('renders an <ol> list inside the nav', () => {
+    it('renders a <ul> list inside the nav', () => {
       const wrapper = createWrapper()
-      const list = wrapper.find('.dads-step-navigation__list')
+      const list = wrapper.find('ul')
       expect(list.exists()).toBe(true)
-      expect(list.element.tagName).toBe('OL')
     })
 
-    it('renders one <li> per step', () => {
+    it('renders one __step <li> per step', () => {
       const wrapper = createWrapper()
-      const items = wrapper.findAll('.dads-step-navigation__item')
-      expect(items).toHaveLength(defaultSteps.length)
+      const steps = wrapper.findAll('.dads-step-navigation__step')
+      expect(steps).toHaveLength(defaultSteps.length)
+      steps.forEach((s) => expect(s.element.tagName).toBe('LI'))
     })
 
-    it('renders the title of each step', () => {
+    it('renders the title of each step in __title', () => {
       const wrapper = createWrapper()
       const titles = wrapper.findAll('.dads-step-navigation__title')
       expect(titles.map((t) => t.text())).toEqual(['入力', '確認', '完了'])
     })
 
-    it('renders no items when steps is empty', () => {
-      const wrapper = createWrapper({ steps: [] })
-      expect(wrapper.findAll('.dads-step-navigation__item')).toHaveLength(0)
-      expect(wrapper.findAll('.dads-step-navigation__connector')).toHaveLength(0)
+    it('renders the step number in __number', () => {
+      const wrapper = createWrapper()
+      const numbers = wrapper.findAll('.dads-step-navigation__number')
+      expect(numbers.map((n) => n.text().trim().charAt(0))).toEqual(['1', '2', '3'])
+    })
+
+    it('renders the visually-hidden progress summary', () => {
+      const wrapper = createWrapper()
+      const summary = wrapper.find('.dads-step-navigation > .dads-u-visually-hidden')
+      expect(summary.exists()).toBe(true)
+      // 1 step (completed) is reached.
+      expect(summary.text()).toBe('全3ステップ中、1ステップ目まで到達済み')
+    })
+
+    it('honours an explicit reached prop in the summary', () => {
+      const wrapper = createWrapper({ reached: 2 })
+      const summary = wrapper.find('.dads-step-navigation > .dads-u-visually-hidden')
+      expect(summary.text()).toBe('全3ステップ中、2ステップ目まで到達済み')
+    })
+
+    it('renders no steps when steps is empty', () => {
+      const wrapper = createWrapper({ steps: [], current: undefined })
+      expect(wrapper.findAll('.dads-step-navigation__step')).toHaveLength(0)
     })
   })
 
-  describe('orientation prop', () => {
-    it('applies horizontal class by default', () => {
+  describe('data-first / data-last', () => {
+    it('marks first and last steps for connector suppression', () => {
       const wrapper = createWrapper()
-      expect(wrapper.classes()).toContain('dads-step-navigation--horizontal')
-      expect(wrapper.classes()).not.toContain('dads-step-navigation--vertical')
+      const steps = wrapper.findAll('.dads-step-navigation__step')
+      expect(steps[0]?.attributes('data-first')).toBe('')
+      expect(steps[0]?.attributes('data-last')).toBeUndefined()
+      expect(steps[2]?.attributes('data-first')).toBeUndefined()
+      expect(steps[2]?.attributes('data-last')).toBe('')
+      expect(steps[1]?.attributes('data-first')).toBeUndefined()
+      expect(steps[1]?.attributes('data-last')).toBeUndefined()
+    })
+  })
+
+  describe('size prop (data-size)', () => {
+    it('applies data-size="normal" by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.attributes('data-size')).toBe('normal')
     })
 
-    it('applies vertical class when orientation="vertical"', () => {
+    it('applies data-size="small" when size="small"', () => {
+      const wrapper = createWrapper({ size: 'small' })
+      expect(wrapper.attributes('data-size')).toBe('small')
+    })
+  })
+
+  describe('orientation prop (data-orientation)', () => {
+    it('applies data-orientation="horizontal" by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.attributes('data-orientation')).toBe('horizontal')
+    })
+
+    it('applies data-orientation="vertical" when orientation="vertical"', () => {
       const wrapper = createWrapper({ orientation: 'vertical' })
-      expect(wrapper.classes()).toContain('dads-step-navigation--vertical')
-      expect(wrapper.classes()).not.toContain('dads-step-navigation--horizontal')
-    })
-
-    it('applies horizontal class when orientation="horizontal" is explicit', () => {
-      const wrapper = createWrapper({ orientation: 'horizontal' })
-      expect(wrapper.classes()).toContain('dads-step-navigation--horizontal')
+      expect(wrapper.attributes('data-orientation')).toBe('vertical')
     })
   })
 
-  describe('status indicator', () => {
-    it('shows the step number for pending status', () => {
-      const wrapper = createWrapper({
-        steps: [{ title: 'A', status: 'pending' }],
-      })
-      const indicator = wrapper.find('.dads-step-navigation__indicator')
-      expect(indicator.text()).toBe('1')
-      expect(indicator.find('svg.dads-icon').exists()).toBe(false)
-    })
-
-    it('shows the step number for current status', () => {
-      const wrapper = createWrapper({
-        steps: [{ title: 'A', status: 'current' }],
-      })
-      const indicator = wrapper.find('.dads-step-navigation__indicator')
-      expect(indicator.text()).toBe('1')
-      expect(indicator.find('svg.dads-icon').exists()).toBe(false)
-    })
-
-    it('shows the check icon for done status', () => {
-      const wrapper = createWrapper({
-        steps: [{ title: 'A', status: 'done' }],
-      })
-      const indicator = wrapper.find('.dads-step-navigation__indicator')
-      const icon = indicator.findComponent(DadsIcon)
-      expect(icon.exists()).toBe(true)
-      expect(icon.props('name')).toBe('check')
-      expect(indicator.text()).toBe('')
-    })
-
-    it('shows the close icon for error status', () => {
-      const wrapper = createWrapper({
-        steps: [{ title: 'A', status: 'error' }],
-      })
-      const indicator = wrapper.find('.dads-step-navigation__indicator')
-      const icon = indicator.findComponent(DadsIcon)
-      expect(icon.exists()).toBe(true)
-      expect(icon.props('name')).toBe('close')
-      expect(indicator.text()).toBe('')
-    })
-
-    it('treats omitted status as pending and shows the step number', () => {
-      const wrapper = createWrapper({ steps: [{ title: '無指定' }] })
-      const indicator = wrapper.find('.dads-step-navigation__indicator')
-      expect(indicator.text()).toBe('1')
-    })
-
-    it('shows correct step numbers for multiple pending steps', () => {
-      const wrapper = createWrapper({
-        steps: [
-          { title: 'A', status: 'pending' },
-          { title: 'B', status: 'pending' },
-          { title: 'C', status: 'pending' },
-        ],
-      })
-      const indicators = wrapper.findAll('.dads-step-navigation__indicator')
-      expect(indicators.map((i) => i.text())).toEqual(['1', '2', '3'])
-    })
-
-    it('marks indicators as decorative for assistive tech', () => {
-      const wrapper = createWrapper()
-      const indicators = wrapper.findAll('.dads-step-navigation__indicator')
-      indicators.forEach((indicator) => {
-        expect(indicator.attributes('aria-hidden')).toBe('true')
-      })
-    })
-  })
-
-  describe('item status class', () => {
+  describe('status (data-state)', () => {
     it.each([
-      ['pending', 'dads-step-navigation__item--pending'],
-      ['current', 'dads-step-navigation__item--current'],
-      ['done', 'dads-step-navigation__item--done'],
-      ['error', 'dads-step-navigation__item--error'],
-    ] as const)('applies %s status class', (status, className) => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status }] })
-      const item = wrapper.find('.dads-step-navigation__item')
-      expect(item.classes()).toContain(className)
+      ['reached'],
+      ['completed'],
+      ['error'],
+      ['skipped'],
+      ['editing'],
+    ] as const)('sets data-state="%s" on the step', (status) => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status }], current: undefined })
+      const step = wrapper.find('.dads-step-navigation__step')
+      expect(step.attributes('data-state')).toBe(status)
     })
 
-    it('defaults the status class to pending when omitted', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A' }] })
-      const item = wrapper.find('.dads-step-navigation__item')
-      expect(item.classes()).toContain('dads-step-navigation__item--pending')
+    it('omits data-state for an upcoming step (no status)', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A' }], current: undefined })
+      const step = wrapper.find('.dads-step-navigation__step')
+      expect(step.attributes('data-state')).toBeUndefined()
+    })
+
+    it('renders the completed check state-icon', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'completed' }], current: undefined })
+      const icon = wrapper.find('.dads-step-navigation__state-icon')
+      expect(icon.exists()).toBe(true)
+      expect(icon.find('svg circle').exists()).toBe(true)
+    })
+
+    it('renders a visually-hidden "完了" label for completed', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'completed' }], current: undefined })
+      const number = wrapper.find('.dads-step-navigation__number')
+      expect(number.find('.dads-u-visually-hidden').text()).toBe('完了')
+      expect(number.find('.dads-step-navigation__state-label').exists()).toBe(false)
+    })
+
+    it('renders a visible state-label "編集中" for editing', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'editing' }], current: undefined })
+      const label = wrapper.find('.dads-step-navigation__state-label')
+      expect(label.exists()).toBe(true)
+      expect(label.text()).toBe('編集中')
+      expect(wrapper.find('.dads-step-navigation__state-icon').exists()).toBe(true)
+    })
+
+    it('renders a visible state-label "エラー" for error', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'error' }], current: undefined })
+      const label = wrapper.find('.dads-step-navigation__state-label')
+      expect(label.exists()).toBe(true)
+      expect(label.text()).toBe('エラー')
+      expect(wrapper.find('.dads-step-navigation__state-icon').exists()).toBe(true)
+    })
+
+    it('renders a visually-hidden "スキップされました" label for skipped without a state-icon', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'skipped' }], current: undefined })
+      const number = wrapper.find('.dads-step-navigation__number')
+      expect(number.find('.dads-u-visually-hidden').text()).toBe('スキップされました')
+      expect(number.find('.dads-step-navigation__state-icon').exists()).toBe(false)
+      expect(number.find('.dads-step-navigation__state-label').exists()).toBe(false)
+    })
+
+    it('renders no state-icon/label for a plain reached step', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'reached' }], current: undefined })
+      const number = wrapper.find('.dads-step-navigation__number')
+      expect(number.find('.dads-step-navigation__state-icon').exists()).toBe(false)
+      expect(number.find('.dads-step-navigation__state-label').exists()).toBe(false)
+    })
+  })
+
+  describe('description sub-element', () => {
+    it('renders __description when description is provided', () => {
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', description: '説明文' }],
+        current: undefined,
+      })
+      const desc = wrapper.find('.dads-step-navigation__description')
+      expect(desc.exists()).toBe(true)
+      expect(desc.text()).toBe('説明文')
+      expect(desc.element.tagName).toBe('P')
+    })
+
+    it('omits __description when description is absent', () => {
+      const wrapper = createWrapper({ steps: [{ title: 'A' }], current: undefined })
+      expect(wrapper.find('.dads-step-navigation__description').exists()).toBe(false)
     })
   })
 
   describe('aria-current', () => {
     it('sets aria-current="step" only on the current step', () => {
-      const wrapper = createWrapper()
-      const items = wrapper.findAll('.dads-step-navigation__item')
-      expect(items[0]?.attributes('aria-current')).toBeUndefined()
-      expect(items[1]?.attributes('aria-current')).toBe('step')
-      expect(items[2]?.attributes('aria-current')).toBeUndefined()
+      const wrapper = createWrapper({ current: 1 })
+      const steps = wrapper.findAll('.dads-step-navigation__step')
+      expect(steps[0]?.attributes('aria-current')).toBeUndefined()
+      expect(steps[1]?.attributes('aria-current')).toBe('step')
+      expect(steps[2]?.attributes('aria-current')).toBeUndefined()
     })
 
-    it('omits aria-current entirely when no step is current', () => {
-      const wrapper = createWrapper({
-        steps: [
-          { title: 'A', status: 'done' },
-          { title: 'B', status: 'pending' },
-        ],
-      })
-      const items = wrapper.findAll('.dads-step-navigation__item')
-      items.forEach((item) => {
-        expect(item.attributes('aria-current')).toBeUndefined()
+    it('omits aria-current when current is not set', () => {
+      const wrapper = createWrapper({ current: undefined })
+      wrapper.findAll('.dads-step-navigation__step').forEach((step) => {
+        expect(step.attributes('aria-current')).toBeUndefined()
       })
     })
   })
 
-  describe('clickable prop', () => {
-    it('renders <button> elements by default', () => {
-      const wrapper = createWrapper()
-      const buttons = wrapper.findAll('.dads-step-navigation__button')
-      expect(buttons).toHaveLength(defaultSteps.length)
-      buttons.forEach((b) => {
-        expect(b.element.tagName).toBe('BUTTON')
-        expect(b.attributes('type')).toBe('button')
+  describe('header element', () => {
+    it('renders interactive steps as <button type="button"> when clickable', () => {
+      const wrapper = createWrapper({ current: undefined })
+      const headers = wrapper.findAll('.dads-step-navigation__header')
+      headers.forEach((h) => {
+        expect(h.element.tagName).toBe('BUTTON')
+        expect(h.attributes('type')).toBe('button')
       })
-      expect(wrapper.find('.dads-step-navigation__static').exists()).toBe(false)
     })
 
-    it('renders <div> static wrappers when clickable=false', () => {
-      const wrapper = createWrapper({ clickable: false })
-      const statics = wrapper.findAll('.dads-step-navigation__static')
-      expect(statics).toHaveLength(defaultSteps.length)
-      statics.forEach((d) => {
-        expect(d.element.tagName).toBe('DIV')
+    it('renders the current step header as an inert <span>', () => {
+      const wrapper = createWrapper({ current: 1 })
+      const headers = wrapper.findAll('.dads-step-navigation__header')
+      expect(headers[1]?.element.tagName).toBe('SPAN')
+      expect(headers[0]?.element.tagName).toBe('BUTTON')
+    })
+
+    it('renders <span> headers for every step when clickable=false', () => {
+      const wrapper = createWrapper({ clickable: false, current: undefined })
+      wrapper.findAll('.dads-step-navigation__header').forEach((h) => {
+        expect(h.element.tagName).toBe('SPAN')
       })
-      expect(wrapper.find('.dads-step-navigation__button').exists()).toBe(false)
+      expect(wrapper.find('button.dads-step-navigation__header').exists()).toBe(false)
+    })
+
+    it('renders an <a href> header when href is provided', () => {
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', href: '/step-a' }],
+        current: undefined,
+      })
+      const header = wrapper.find('.dads-step-navigation__header')
+      expect(header.element.tagName).toBe('A')
+      expect(header.attributes('href')).toBe('/step-a')
+    })
+
+    it('renders a disabled <button> when step.disabled is set', () => {
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', disabled: true }],
+        current: undefined,
+      })
+      const header = wrapper.find('.dads-step-navigation__header')
+      expect(header.element.tagName).toBe('BUTTON')
+      expect(header.attributes('disabled')).toBeDefined()
     })
   })
 
   describe('click:step event', () => {
-    it('emits click:step when a button is clicked', async () => {
-      const wrapper = createWrapper()
-      const buttons = wrapper.findAll('.dads-step-navigation__button')
-      await buttons[1]?.trigger('click')
+    it('emits click:step when an interactive button is clicked', async () => {
+      const wrapper = createWrapper({ current: undefined })
+      const headers = wrapper.findAll('button.dads-step-navigation__header')
+      await headers[1]?.trigger('click')
       const events = wrapper.emitted('click:step')
       expect(events).toHaveLength(1)
       expect(events?.[0]?.[0]).toEqual(defaultSteps[1])
@@ -216,11 +265,11 @@ describe('DadsStepNavigation', () => {
       expect(events?.[0]?.[2]).toBeInstanceOf(Event)
     })
 
-    it('emits click:step for each step independently', async () => {
-      const wrapper = createWrapper()
-      const buttons = wrapper.findAll('.dads-step-navigation__button')
-      await buttons[0]?.trigger('click')
-      await buttons[2]?.trigger('click')
+    it('emits click:step for each interactive step independently', async () => {
+      const wrapper = createWrapper({ current: undefined })
+      const headers = wrapper.findAll('button.dads-step-navigation__header')
+      await headers[0]?.trigger('click')
+      await headers[2]?.trigger('click')
       const events = wrapper.emitted('click:step')
       expect(events).toHaveLength(2)
       expect(events?.[0]?.[1]).toBe(0)
@@ -228,38 +277,9 @@ describe('DadsStepNavigation', () => {
     })
 
     it('does not emit click:step when clickable=false', async () => {
-      const wrapper = createWrapper({ clickable: false })
-      const statics = wrapper.findAll('.dads-step-navigation__static')
-      await statics[0]?.trigger('click')
+      const wrapper = createWrapper({ clickable: false, current: undefined })
+      await wrapper.find('.dads-step-navigation__header').trigger('click')
       expect(wrapper.emitted('click:step')).toBeUndefined()
-    })
-  })
-
-  describe('connector', () => {
-    it('renders n-1 connectors for n steps', () => {
-      const wrapper = createWrapper()
-      const connectors = wrapper.findAll('.dads-step-navigation__connector')
-      expect(connectors).toHaveLength(defaultSteps.length - 1)
-    })
-
-    it('renders zero connectors for a single step', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A' }] })
-      expect(wrapper.findAll('.dads-step-navigation__connector')).toHaveLength(0)
-    })
-
-    it('renders one connector for two steps', () => {
-      const wrapper = createWrapper({
-        steps: [{ title: 'A' }, { title: 'B' }],
-      })
-      expect(wrapper.findAll('.dads-step-navigation__connector')).toHaveLength(1)
-    })
-
-    it('marks connectors as decorative for assistive tech', () => {
-      const wrapper = createWrapper()
-      const connectors = wrapper.findAll('.dads-step-navigation__connector')
-      connectors.forEach((connector) => {
-        expect(connector.attributes('aria-hidden')).toBe('true')
-      })
     })
   })
 
@@ -278,36 +298,24 @@ describe('DadsStepNavigation', () => {
   describe('reactivity', () => {
     it('updates rendered title when steps prop changes', async () => {
       const wrapper = createWrapper()
-      await wrapper.setProps({
-        steps: [{ title: 'X' }, { title: 'Y' }],
-      })
+      await wrapper.setProps({ steps: [{ title: 'X' }, { title: 'Y' }], current: undefined })
       const titles = wrapper.findAll('.dads-step-navigation__title')
       expect(titles.map((t) => t.text())).toEqual(['X', 'Y'])
     })
 
-    it('updates aria-current when status of a step changes', async () => {
-      const wrapper = createWrapper({
-        steps: [
-          { title: 'A', status: 'current' },
-          { title: 'B', status: 'pending' },
-        ],
-      })
-      await wrapper.setProps({
-        steps: [
-          { title: 'A', status: 'done' },
-          { title: 'B', status: 'current' },
-        ],
-      })
-      const items = wrapper.findAll('.dads-step-navigation__item')
-      expect(items[0]?.attributes('aria-current')).toBeUndefined()
-      expect(items[1]?.attributes('aria-current')).toBe('step')
+    it('updates aria-current when current changes', async () => {
+      const wrapper = createWrapper({ current: 0 })
+      await wrapper.setProps({ current: 1 })
+      const steps = wrapper.findAll('.dads-step-navigation__step')
+      expect(steps[0]?.attributes('aria-current')).toBeUndefined()
+      expect(steps[1]?.attributes('aria-current')).toBe('step')
     })
   })
 
   describe('a11y (vitest-axe)', () => {
     const mountInBody = (props: Partial<DadsStepNavigationProps> = {}) =>
       mount(DadsStepNavigation, {
-        props: { steps: defaultSteps, ...props } as DadsStepNavigationProps,
+        props: { steps: defaultSteps, current: 1, ...props } as DadsStepNavigationProps,
         attachTo: document.body,
       })
 
@@ -321,18 +329,20 @@ describe('DadsStepNavigation', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations when not clickable (inert <div> steps)', async () => {
+    it('has no violations when clickable=false', async () => {
       const wrapper = mountInBody({ clickable: false })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations with all 4 statuses present', async () => {
+    it('has no violations with all states present', async () => {
       const wrapper = mountInBody({
+        current: 2,
         steps: [
-          { title: 'A', status: 'done' },
-          { title: 'B', status: 'error' },
-          { title: 'C', status: 'current' },
-          { title: 'D', status: 'pending' },
+          { title: 'A', status: 'completed' },
+          { title: 'B', status: 'skipped' },
+          { title: 'C', status: 'editing' },
+          { title: 'D', status: 'error' },
+          { title: 'E' },
         ],
       })
       expect(await axe(wrapper.element)).toHaveNoViolations()

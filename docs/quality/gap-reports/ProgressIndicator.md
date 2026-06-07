@@ -68,3 +68,21 @@
 - **優先度**: high
 - **想定 changeset レベル**: **major**(`variant`/`size`/`color` prop を公式 `type`(stacked/inlined/stacked-underlay)+ `intent` 体系へ作り替えると public API が破壊的に変わるため)。
 - **API/aria 不変を保てるか**: 困難。`role="progressbar"` + aria-valuemin/max/now は維持できるが、prop 体系(variant/size/color → type/intent)と DOM(div → SVG line)は大幅変更が必要。後方互換が要件なら旧 prop の deprecation 期間を設ける。
+
+## T4 解消
+
+Issue #18 / T4 (案X フル) で公式正準構造へ全面再実装し、上記 11 件の差異を解消した(MAJOR 破壊的変更)。
+
+- **アーキテクチャ (#1, #4)**: linear を矩形 SVG `<line>`(track/bar/border の 3 本)に置換。spinner を `<g><g><circle></g></g>` ネスト + cubic-bezier 二重回転アニメに置換。非公式の `<circle>` リング(circular)は撤廃。
+- **カラー (#2)**: 公式 `--color-primitive-blue-100`(track)/`--color-primitive-blue-1200`(bar・下線)単色系に統一。非定義トークン(`--color-brand-*`/`--color-success`/`--color-error`/`--color-warning`/`--color-secondary`/`--color-bg-subtle`/`--color-text-*`)を全廃。
+- **バリアント体系 (#3)**: `type: stacked / inlined / stacked-underlay`(公式 `data-type`)を採用。非公式の `variant`(linear/circular)・`size`(sm/md/lg)public API を削除。`indicator: linear / spinner` で表示形態を選択。
+- **下線アクセント (#5)**: linear に 1px `--color-primitive-blue-1200` の下線(`__border` line, y=3.5)を追加。
+- **stacked-underlay コンテナ (#6)**: 1px `--color-neutral-solid-gray-500` ボーダー + 16px 角丸 + 白背景 + padding(linear=24 / spinner=16)+ min 128px を `:has()` で実装。
+- **形状 (#7)**: 矩形 SVG line(`stroke-linecap:round` / radius-4 なし)。
+- **タイポ (#8)**: root を `font-size:1rem` / `line-height:1.7` / `letter-spacing:0.02em` に。percentage span を `min-width:2ch` + `text-align:right` + `tabular-nums` に。
+- **indeterminate アニメ (#9)**: 公式 keyframes(`dads-spinner-rotate`/`-group-rotate`/`-bar-rotate`/`-bar-dash` の cubic-bezier、`dads-linear-rotate`)を verbatim 移植。
+- **active/intent モデル (#10)**: `active` prop(デフォルト true)+ `--inactive` 修飾クラスで `display:none` + `animation:none` を再現(公式 `:not([active])` 相当)。
+- **forced-colors (#11)**: track=Canvas / bar・border=CanvasText に修正。circular 用ルールは撤廃。
+- **値制御**: `--value` CSS 変数 + `stroke-dashoffset: calc(100 - clamp(...))` で公式と同じ value 駆動に。`aria-valuenow` は clamp + 整数丸め。可視 `label` 時は `aria-labelledby`、無いときは `ariaLabel`。
+
+> 注: 公式 JS(`progress-indicator.js`)の live-region によるスクリーンリーダー読み上げ(announce/intent/long)は、Vue ラッパでは宣言的 prop に馴染まないため本 T4 では非対応(`active`/value/aria は対応)。必要なら別途 `intent` + visually-hidden status region の追加で拡張可能。`static`(休憩アイコン)フォームも今回の `indicator` 軸には含めていない(linear/spinner のみ)。
