@@ -39,9 +39,11 @@ describe('DadsList', () => {
       expect(wrapper.element.tagName).toBe('UL')
     })
 
-    it('renders an <ol> root element when type="ordered"', () => {
+    it('renders a <ul> root element (never <ol>) when type="ordered"', () => {
+      // Per the official DADS spec, numbered lists are still <ul> — the number
+      // is emitted as copyable text, not an <ol> marker.
       const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered' })
-      expect(wrapper.element.tagName).toBe('OL')
+      expect(wrapper.element.tagName).toBe('UL')
     })
 
     it('applies the dads-list root class', () => {
@@ -86,19 +88,56 @@ describe('DadsList', () => {
     })
   })
 
-  describe('start attribute (ordered)', () => {
-    it('forwards `start` to the <ol> element when type="ordered"', () => {
+  describe('numbered list (type="ordered") text markers', () => {
+    it('renders a copyable text marker span before each label', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered' })
+      const lis = wrapper.findAll(':scope > li')
+      // Each <li> has a leading marker <span> and a label <span>.
+      const firstSpans = lis[0].findAll(':scope > span')
+      expect(firstSpans).toHaveLength(2)
+      expect(firstSpans[0].classes()).toContain('dads-list__marker')
+      expect(firstSpans[0].text()).toBe('1.')
+      expect(firstSpans[1].text()).toBe('親項目A')
+    })
+
+    it('auto-numbers items sequentially starting at 1 by default', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered' })
+      const markers = wrapper.findAll('.dads-list__marker')
+      expect(markers.map((m) => m.text())).toEqual(['1.', '2.', '3.'])
+    })
+
+    it('offsets auto-generated markers by `start`', () => {
       const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered', start: 5 })
-      expect(wrapper.attributes('start')).toBe('5')
+      const markers = wrapper.findAll('.dads-list__marker')
+      expect(markers.map((m) => m.text())).toEqual(['5.', '6.', '7.'])
+    })
+
+    it('uses an explicit `marker` field when provided on the item', () => {
+      const wrapper = createWrapper({
+        items: [
+          { label: '最初', marker: '①　' },
+          { label: '次', marker: '②　' },
+        ],
+        type: 'ordered',
+      })
+      const markers = wrapper.findAll('.dads-list__marker')
+      expect(markers.map((m) => m.text())).toEqual(['①', '②'])
+    })
+
+    it('does not render marker spans when type="unordered"', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS, type: 'unordered' })
+      expect(wrapper.findAll('.dads-list__marker')).toHaveLength(0)
     })
 
     it('ignores `start` when type="unordered"', () => {
       const wrapper = createWrapper({ items: STRING_ITEMS, type: 'unordered', start: 5 })
+      expect(wrapper.findAll('.dads-list__marker')).toHaveLength(0)
+      // No <ol>-style start attribute is emitted on the <ul>.
       expect(wrapper.attributes('start')).toBeUndefined()
     })
 
-    it('omits the start attribute when not provided', () => {
-      const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered' })
+    it('never emits a native <ol> start attribute', () => {
+      const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered', start: 5 })
       expect(wrapper.attributes('start')).toBeUndefined()
     })
   })
@@ -144,12 +183,14 @@ describe('DadsList', () => {
       expect(grandLis[0].textContent?.trim()).toBe('孫項目α')
     })
 
-    it('propagates the type to nested lists (ordered → nested <ol>)', () => {
+    it('propagates the type to nested lists (ordered → nested <ul data-marker="number">)', () => {
       const wrapper = createWrapper({ items: NESTED_ITEMS, type: 'ordered' })
-      expect(wrapper.element.tagName).toBe('OL')
+      expect(wrapper.element.tagName).toBe('UL')
+      expect(wrapper.attributes('data-marker')).toBe('number')
       const secondLi = wrapper.element.querySelectorAll(':scope > li')[1]
-      const nested = secondLi.querySelector(':scope > ol')
+      const nested = secondLi.querySelector(':scope > ul')
       expect(nested).not.toBeNull()
+      expect(nested!.tagName).toBe('UL')
       expect(nested!.getAttribute('data-marker')).toBe('number')
     })
 
@@ -230,11 +271,13 @@ describe('DadsList', () => {
       expect(wrapper.find('.fallback').exists()).toBe(true)
     })
 
-    it('changes the root element when type switches from ordered to unordered', async () => {
+    it('toggles numbered markers when type switches from ordered to unordered', async () => {
       const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered' })
-      expect(wrapper.element.tagName).toBe('OL')
+      expect(wrapper.element.tagName).toBe('UL')
+      expect(wrapper.findAll('.dads-list__marker')).toHaveLength(STRING_ITEMS.length)
       await wrapper.setProps({ type: 'unordered' })
       expect(wrapper.element.tagName).toBe('UL')
+      expect(wrapper.findAll('.dads-list__marker')).toHaveLength(0)
     })
   })
 
@@ -254,6 +297,15 @@ describe('DadsList', () => {
       const directNested = root.querySelectorAll(':scope > ul')
       expect(directNested).toHaveLength(0)
     })
+
+    it('emits numbers as copyable text content (not a CSS marker)', () => {
+      // The key reason DADS avoids <ol>: the number must be selectable text.
+      const wrapper = createWrapper({ items: STRING_ITEMS, type: 'ordered' })
+      const firstLi = wrapper.findAll(':scope > li')[0]
+      // The number lives in the DOM as real text content, not a ::marker.
+      expect(firstLi.element.textContent).toContain('1.')
+      expect(firstLi.element.textContent).toContain('親項目A')
+    })
   })
 
   describe('spacing', () => {
@@ -267,6 +319,16 @@ describe('DadsList', () => {
       const wrapper = createWrapper({ items: STRING_ITEMS, spacing: s })
       expect(wrapper.classes()).toContain(`dads-list--spacing-${s}`)
       expect(wrapper.attributes('data-spacing')).toBe(s)
+    })
+
+    it('propagates spacing + data-spacing to nested lists', () => {
+      const wrapper = createWrapper({ items: NESTED_ITEMS, spacing: '12' })
+      const nested = wrapper.element
+        .querySelectorAll(':scope > li')[1]
+        .querySelector(':scope > ul')
+      expect(nested).not.toBeNull()
+      expect(nested!.getAttribute('data-spacing')).toBe('12')
+      expect(nested!.classList.contains('dads-list--spacing-12')).toBe(true)
     })
   })
 

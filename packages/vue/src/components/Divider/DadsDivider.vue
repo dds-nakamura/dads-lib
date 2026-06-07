@@ -4,7 +4,7 @@ import type { DadsDividerProps } from './DadsDivider.types'
 
 const props = withDefaults(defineProps<DadsDividerProps>(), {
   orientation: 'horizontal',
-  color: 'default',
+  color: 'gray-420',
   variant: 'full-width',
   thickness: 1,
   lineStyle: 'solid',
@@ -59,9 +59,9 @@ const rootClasses = computed(() => [
 
   &__line {
     flex: 1 1 auto;
-    // Background color is owned by the color modifiers below (`--default` /
-    // `--strong`) so each variant lives in exactly one place — no base rule
-    // to override and re-override.
+    // Background color is owned by the color modifiers below
+    // (`--gray-420` / `--gray-536` / `--black`) so each variant lives in
+    // exactly one place — no base rule to override and re-override.
   }
 
   &__label {
@@ -94,15 +94,20 @@ const rootClasses = computed(() => [
   }
 
   // -------------------- color variants -----------------------------------
+  // Official `data-color` の 3 段階 (gray-420 / gray-536 / black) に対応。
   // For solid lines: use background-color on the line element.
   // For dashed lines: switch to border-top (border-style supports dashed
   // while background-color cannot).
-  &--default &__line {
+  &--gray-420 &__line {
     background-color: var(--color-neutral-solid-gray-420, #949494);
   }
 
-  &--strong &__line {
+  &--gray-536 &__line {
     background-color: var(--color-neutral-solid-gray-536, #767676);
+  }
+
+  &--black &__line {
+    background-color: var(--color-neutral-black, #000000);
   }
 
   // -------------------- width variants -----------------------------------
@@ -154,12 +159,20 @@ const rootClasses = computed(() => [
     width: 0;
   }
 
-  &--style-dashed.dads-divider--strong.dads-divider--horizontal &__line {
+  &--style-dashed.dads-divider--gray-536.dads-divider--horizontal &__line {
     border-top-color: var(--color-neutral-solid-gray-536, #767676);
   }
 
-  &--style-dashed.dads-divider--strong.dads-divider--vertical &__line {
+  &--style-dashed.dads-divider--gray-536.dads-divider--vertical &__line {
     border-left-color: var(--color-neutral-solid-gray-536, #767676);
+  }
+
+  &--style-dashed.dads-divider--black.dads-divider--horizontal &__line {
+    border-top-color: var(--color-neutral-black, #000000);
+  }
+
+  &--style-dashed.dads-divider--black.dads-divider--vertical &__line {
+    border-left-color: var(--color-neutral-black, #000000);
   }
 
   // -------------------- forced colors ------------------------------------

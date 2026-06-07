@@ -4,8 +4,10 @@
  * DadsDescriptionList is a presentation-only wrapper around the native
  * `<dl>` / `<dt>` / `<dd>` elements. It renders pairs of terms and their
  * descriptions and exposes the DADS marker variants (`none` / `bullet` /
- * `custom`) and a Vue-layer `layout` (`horizontal` / `vertical`) so the
- * component can be reused in both inline forms and stacked detail views.
+ * `custom`). The official DADS example defines a single canonical layout —
+ * a vertical stack with each `<dd>` indented 32px — so `layout` only accepts
+ * `'vertical'`. (The previous non-official `'horizontal'` two-column variant
+ * has been removed to stay faithful to the reference implementation.)
  */
 
 /**
@@ -24,10 +26,13 @@ export interface DadsDescriptionListItem {
 
 /**
  * Layout of each term / description pair.
- * - `horizontal`: `<dt>` and `<dd>` sit on the same row (default).
- * - `vertical`:   `<dd>` stacks below its `<dt>` (mobile-friendly).
+ * - `vertical`: `<dd>` stacks below its `<dt>` with a 32px indent.
+ *
+ * This is the only layout defined by the official DADS example, so it is
+ * also the default. The value is kept as a (single-member) union to leave
+ * room for future official layouts without another breaking change.
  */
-export type DadsDescriptionListLayout = 'horizontal' | 'vertical'
+export type DadsDescriptionListLayout = 'vertical'
 
 /**
  * Marker variant on the `<dt>` element. Mirrors the official HTML example's
@@ -47,7 +52,7 @@ export interface DadsDescriptionListProps {
    * verbatim so consumers can hand-author `<dt>` / `<dd>` markup.
    */
   items?: DadsDescriptionListItem[]
-  /** Layout of each pair. Defaults to `'horizontal'`. */
+  /** Layout of each pair. Only `'vertical'` is supported; defaults to `'vertical'`. */
   layout?: DadsDescriptionListLayout
   /** Marker variant on every `<dt>`. Defaults to `'none'`. */
   marker?: DadsDescriptionListMarker

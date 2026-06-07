@@ -3,7 +3,6 @@ import { computed, ref, useId } from 'vue'
 import type { DadsFileUploadEmits, DadsFileUploadProps } from './DadsFileUpload.types'
 
 const props = withDefaults(defineProps<DadsFileUploadProps>(), {
-  size: 'md',
   multiple: false,
   disabled: false,
   readonly: false,
@@ -50,7 +49,6 @@ const currentFiles = computed<File[]>(() => {
 
 const rootClasses = computed(() => [
   'dads-file-upload',
-  `dads-file-upload--${props.size}`,
   {
     'dads-file-upload--disabled': props.disabled,
     'dads-file-upload--readonly': props.readonly,
@@ -312,6 +310,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex-wrap: wrap;
     align-items: center;
     gap: calc(12 / 16 * 1rem);
+    // Official drop area uses a single uniform size (no sm/md/lg variants).
+    padding: calc(16 / 16 * 1rem) calc(24 / 16 * 1rem);
     // Official drop area: 1px SOLID gray-536 border, 8px radius, gray-50 fill.
     border: 1px solid var(--color-neutral-solid-gray-536, #767676);
     border-radius: var(--border-radius-8, 0.5rem);
@@ -349,6 +349,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     border-radius: var(--border-radius-8, 0.5rem);
     color: var(--color-primitive-blue-900, #0017c1);
     background-color: transparent;
+    // Uniform trigger sizing (mirrors official outline button data-size="md").
+    min-height: 2.5rem;
+    padding: 0 calc(16 / 16 * 1rem);
     font-weight: bold;
     line-height: var(--line-height-150, 1.5);
     transition:
@@ -468,37 +471,6 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     font-weight: 500;
   }
 
-  // -------------------- size ---------------------------------------------
-  &--lg &__dropzone {
-    padding: calc(24 / 16 * 1rem) calc(32 / 16 * 1rem);
-    font-size: var(--font-size-18, 1.125rem);
-  }
-  &--lg &__button {
-    min-height: 3rem;
-    padding: 0 calc(24 / 16 * 1rem);
-    font-size: var(--font-size-18, 1.125rem);
-  }
-
-  &--md &__dropzone {
-    padding: calc(16 / 16 * 1rem) calc(24 / 16 * 1rem);
-    font-size: var(--font-size-16, 1rem);
-  }
-  &--md &__button {
-    min-height: 2.5rem;
-    padding: 0 calc(16 / 16 * 1rem);
-    font-size: var(--font-size-16, 1rem);
-  }
-
-  &--sm &__dropzone {
-    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
-    font-size: var(--font-size-14, 0.875rem);
-  }
-  &--sm &__button {
-    min-height: 2rem;
-    padding: 0 calc(12 / 16 * 1rem);
-    font-size: var(--font-size-14, 0.875rem);
-  }
-
   // -------------------- readonly -----------------------------------------
   &--readonly &__dropzone {
     pointer-events: none;
@@ -506,9 +478,31 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- disabled -----------------------------------------
+  // Per-element official disabled coloring (no flat opacity dim). The trigger
+  // button keeps its own :disabled outline-button treatment above.
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+
+    .dads-file-upload__dropzone {
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-file-upload__dropzone-text {
+      color: var(--color-neutral-solid-gray-420, #949494);
+    }
+
+    .dads-file-upload__file-name {
+      color: var(--color-neutral-solid-gray-420, #949494);
+    }
+
+    .dads-file-upload__file-size {
+      color: var(--color-neutral-solid-gray-420, #949494);
+    }
+
+    .dads-file-upload__remove {
+      color: var(--color-neutral-solid-gray-420, #949494);
+    }
   }
 
   // -------------------- error --------------------------------------------

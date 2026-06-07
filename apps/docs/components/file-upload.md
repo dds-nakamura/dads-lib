@@ -85,15 +85,9 @@ const file = (ref < File) | (null > null)
 <DadsFileUpload v-model="file" :max-size="1024 * 100" label="100 KB まで" />
 ```
 
-## Size
+## サイズ
 
-3 サイズ (`sm` / `md` / `lg`)。デフォルトは `md`。
-
-<div class="demo">
-  <DadsFileUpload size="sm" label="Small" />
-  <DadsFileUpload size="md" label="Medium" />
-  <DadsFileUpload size="lg" label="Large" />
-</div>
+公式 DADS の file-upload は単一サイズで、サイズバリアントは持たない。ドロップエリアは一律のパディング (16px / 24px) で描画される。
 
 ## 状態
 
@@ -133,7 +127,6 @@ const file = (ref < File) | (null > null)
 | `accept`            | `string`                   | -                                  | 受け入れる拡張子 / MIME (例: `.csv,image/*`)。ドロップ時も検証       |
 | `multiple`          | `boolean`                  | `false`                            | 複数選択を許可                                                       |
 | `maxSize`           | `number`                   | -                                  | 1 ファイルあたりの最大バイト数。超過時は拒否                         |
-| `size`              | `'lg' \| 'md' \| 'sm'`     | `'md'`                             | サイズ                                                               |
 | `label`             | `string`                   | -                                  | ラベルテキスト                                                       |
 | `hint`              | `string`                   | -                                  | 補助テキスト                                                         |
 | `errorMessage`      | `string`                   | -                                  | 呼び出し側のエラー文言（内部検証メッセージが優先）                   |

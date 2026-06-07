@@ -88,36 +88,15 @@ const handleClick = (event: MouseEvent) => {
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
+// Official DADS button is single-color (blue / primary). The non-official
+// success / error / warning / secondary entries — and their inert tokens that
+// do not exist in design-tokens — were removed in Issue #18 柱A-3 / T6.
 $dads-button-colors: (
   primary: (
     --color-primitive-blue-900,
     --color-primitive-blue-1000,
     --color-primitive-blue-1200,
     --color-primitive-blue-50,
-  ),
-  success: (
-    --color-semantic-success-1,
-    --color-semantic-success-2,
-    --color-semantic-success-2,
-    --color-success-bg,
-  ),
-  error: (
-    --color-semantic-error-1,
-    --color-semantic-error-2,
-    --color-semantic-error-2,
-    --color-error-bg,
-  ),
-  warning: (
-    --color-semantic-warning-orange-1,
-    --color-semantic-warning-orange-2,
-    --color-semantic-warning-orange-2,
-    --color-warning-bg,
-  ),
-  secondary: (
-    --color-brand-secondary,
-    --color-neutral-solid-gray-800,
-    --color-neutral-solid-gray-900,
-    --color-neutral-solid-gray-50,
   ),
 );
 

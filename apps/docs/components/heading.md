@@ -56,9 +56,9 @@ import { DadsHeading } from '@dads/vue'
   <DadsHeading :level="3">レベル 3</DadsHeading>
 </div>
 
-## size — px トークン (8 段階) [NEW]
+## size — px トークン (10 段階) [NEW]
 
-DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 px) に直接対応する `size` プロップ。`level` のような 6 段階より細かく、また `as` ・ `level` の組み合わせを超えて任意の px サイズを指定できる。
+DADS 公式 `data-size` スケール (64 / 57 / 45 / 36 / 32 / 28 / 24 / 20 / 18 / 16 px) に直接対応する `size` プロップ。各段階は公式の `line-height`・`letter-spacing` を併せ持つ。`level` のような 6 段階より細かく、また `as` ・ `level` の組み合わせを超えて任意の px サイズを指定できる。
 
 <div class="demo">
   <DadsHeading as="h1" size="20">h1 のまま 20px (サイドバー見出し用途)</DadsHeading>
@@ -133,7 +133,7 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
   <DadsHeading as="h2">
     新機能のご案内
     <template #chip>
-      <DadsChipLabel color="success" size="sm">NEW</DadsChipLabel>
+      <DadsChipLabel color="green" appearance="filled-outline">NEW</DadsChipLabel>
     </template>
   </DadsHeading>
 </div>
@@ -142,7 +142,7 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
 <DadsHeading as="h2">
   新機能のご案内
   <template #chip>
-    <DadsChipLabel color="success" size="sm">NEW</DadsChipLabel>
+    <DadsChipLabel color="green" appearance="filled-outline">NEW</DadsChipLabel>
   </template>
 </DadsHeading>
 ```
@@ -158,7 +158,7 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
   >
     申請履歴
     <template #chip>
-      <DadsChipLabel color="primary" size="sm">2026</DadsChipLabel>
+      <DadsChipLabel color="blue" appearance="filled-outline">2026</DadsChipLabel>
     </template>
   </DadsHeading>
 </div>
@@ -167,7 +167,7 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
 <DadsHeading as="h1" size="32" shoulder="マイページ" subtitle="2026 年度の申請状況を確認できます">
   申請履歴
   <template #chip>
-    <DadsChipLabel color="primary" size="sm">2026</DadsChipLabel>
+    <DadsChipLabel color="blue" appearance="filled-outline">2026</DadsChipLabel>
   </template>
 </DadsHeading>
 ```
@@ -202,7 +202,7 @@ DADS Figma の `data-size` スケール (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36 p
 | ---------- | -------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------- |
 | `as`       | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6'`                 | `'h2'`                  | レンダリングする HTML 要素。セマンティックアウトラインを制御する           |
 | `level`    | `1 \| 2 \| 3 \| 4 \| 5 \| 6`                                   | `as` の数値部分と同じ値 | 視覚的なサイズレベル (6 段階)。未指定なら `as` に追随する                  |
-| `size`     | `'14' \| '16' \| '18' \| '20' \| '24' \| '28' \| '32' \| '36'` | -                       | px 単位の明示フォントサイズ。指定すると `level` を上書きする               |
+| `size`     | `'64' \| '57' \| '45' \| '36' \| '32' \| '28' \| '24' \| '20' \| '18' \| '16'` | -                       | px 単位の明示フォントサイズ (公式 data-size 10 段階)。指定すると `level` を上書きする               |
 | `shoulder` | `string`                                                       | -                       | 見出しの上に表示する小さなラベル (`<p>`)。`#shoulder` スロットで上書き可能 |
 | `subtitle` | `string`                                                       | -                       | 見出しの下に表示する補助テキスト (`<p>`)。`#subtitle` スロットで上書き可能 |
 | `icon`     | `string`                                                       | -                       | Material Symbols 名 (`'info'` 等)。`#prepend-icon` スロットで上書き可能    |

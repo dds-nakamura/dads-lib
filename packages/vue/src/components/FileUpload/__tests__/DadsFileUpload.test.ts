@@ -78,10 +78,11 @@ describe('DadsFileUpload', () => {
     })
   })
 
-  describe('size', () => {
-    it.each(['lg', 'md', 'sm'] as const)('applies dads-file-upload--%s class', (size) => {
-      const wrapper = createWrapper({ size })
-      expect(wrapper.classes()).toContain(`dads-file-upload--${size}`)
+  describe('size (official single uniform size)', () => {
+    it('does not emit any size modifier class', () => {
+      const wrapper = createWrapper()
+      const sizeClass = wrapper.classes().find((c) => /^dads-file-upload--(sm|md|lg)$/.test(c))
+      expect(sizeClass).toBeUndefined()
     })
   })
 

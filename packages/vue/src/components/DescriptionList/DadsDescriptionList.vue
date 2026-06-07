@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { DadsDescriptionListProps } from './DadsDescriptionList.types'
 
 const props = withDefaults(defineProps<DadsDescriptionListProps>(), {
-  layout: 'horizontal',
+  layout: 'vertical',
   marker: 'none',
   bordered: false,
 })
@@ -39,7 +39,13 @@ const rootClasses = computed(() => [
 @use '../../styles/base' as base;
 
 .dads-description-list {
+  // The official example (description-list.css) makes the <dl> itself a grid
+  // with an 8px row gap and indents each <dd> by 32px — a single canonical
+  // vertical stack. There is no two-column / "horizontal" layout in DADS, so
+  // the component now mirrors that single layout exactly.
   margin: calc(16 / 16 * 1rem) 0;
+  display: grid;
+  gap: calc(8 / 16 * 1rem) 0;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
   font-size: var(--font-size-16, 1rem);
@@ -51,11 +57,15 @@ const rootClasses = computed(() => [
     font-weight: 700;
   }
 
-  // Native <dl> default margin on <dd> would push descriptions out by 40px
-  // on most engines; the DADS reference normalises this to 32px and the
-  // horizontal layout overrides it to 0.
+  // Each pair is a block so <dt>/<dd> stack vertically; <dd> is indented 32px
+  // to match the DADS reference (description-list.css:24-26).
+  .dads-description-list__item {
+    display: block;
+  }
+
   dd {
     margin: 0;
+    margin-left: calc(32 / 16 * 1rem);
   }
 
   // ----- marker: bullet ---------------------------------------------------
@@ -72,53 +82,6 @@ const rootClasses = computed(() => [
   &[data-marker='custom'] dt > span:first-child {
     display: inline-block;
     min-width: calc(32 / 16 * 1rem);
-  }
-
-  // ----- layout: vertical -------------------------------------------------
-  // Each pair is its own block; <dd> stacks under <dt> with a small indent
-  // matching the DADS reference (32px).
-  &--vertical {
-    display: grid;
-    gap: calc(8 / 16 * 1rem) 0;
-
-    .dads-description-list__item {
-      display: block;
-    }
-
-    dd {
-      margin-left: calc(32 / 16 * 1rem);
-    }
-  }
-
-  // ----- layout: horizontal ----------------------------------------------
-  // Each item is a two-column grid (term | description) that reflows to a
-  // single column on narrow viewports so the layout stays readable on
-  // phones.
-  &--horizontal {
-    display: grid;
-    gap: calc(12 / 16 * 1rem) 0;
-
-    .dads-description-list__item {
-      display: grid;
-      grid-template-columns: minmax(8rem, 1fr) 3fr;
-      gap: calc(16 / 16 * 1rem);
-      align-items: baseline;
-    }
-
-    dd {
-      margin: 0;
-    }
-
-    @media (max-width: 599px) {
-      .dads-description-list__item {
-        grid-template-columns: 1fr;
-        gap: calc(4 / 16 * 1rem);
-      }
-
-      dd {
-        margin-left: calc(16 / 16 * 1rem);
-      }
-    }
   }
 
   // ----- bordered ---------------------------------------------------------

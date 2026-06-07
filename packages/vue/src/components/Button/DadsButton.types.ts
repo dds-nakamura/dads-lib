@@ -1,16 +1,21 @@
 import type { ButtonHTMLAttributes } from 'vue'
-import type { DadsSemanticColor, DadsSize } from '../../types/common'
+import type { DadsSize } from '../../types/common'
 
 export type DadsButtonVariant = 'solid-fill' | 'outline' | 'text'
 export type DadsButtonSize = DadsSize
-export type DadsButtonColor = DadsSemanticColor
+/**
+ * Official DADS button is single-color (blue / primary). The previous
+ * `success` / `error` / `warning` / `secondary` values had no official
+ * counterpart and have been removed (Issue #18 柱A-3 / T6).
+ */
+export type DadsButtonColor = 'primary'
 
 export interface DadsButtonProps {
   /** Visual style. Default: `solid-fill`. */
   variant?: DadsButtonVariant
   /** Size token. Default: `md`. */
   size?: DadsButtonSize
-  /** Semantic color. Default: `primary`. */
+  /** Color axis. Official button is single-color, so only `primary`. Default: `primary`. */
   color?: DadsButtonColor
   /** Disable interaction. */
   disabled?: boolean

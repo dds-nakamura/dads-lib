@@ -64,16 +64,25 @@ describe('DadsDivider', () => {
     })
   })
 
-  describe('color', () => {
-    it('defaults to color="default"', () => {
+  describe('color (gray-420 / gray-536 / black)', () => {
+    it('defaults to color="gray-420"', () => {
       const wrapper = createWrapper()
-      expect(wrapper.classes()).toContain('dads-divider--default')
+      expect(wrapper.classes()).toContain('dads-divider--gray-420')
     })
 
-    it('applies the strong modifier when color="strong"', () => {
-      const wrapper = createWrapper({ color: 'strong' })
-      expect(wrapper.classes()).toContain('dads-divider--strong')
-      expect(wrapper.classes()).not.toContain('dads-divider--default')
+    it.each(['gray-420', 'gray-536', 'black'] as const)(
+      'applies the %s modifier when color="%s"',
+      (c) => {
+        const wrapper = createWrapper({ color: c })
+        expect(wrapper.classes()).toContain(`dads-divider--${c}`)
+      },
+    )
+
+    it('applies only the requested color modifier (gray-536)', () => {
+      const wrapper = createWrapper({ color: 'gray-536' })
+      expect(wrapper.classes()).toContain('dads-divider--gray-536')
+      expect(wrapper.classes()).not.toContain('dads-divider--gray-420')
+      expect(wrapper.classes()).not.toContain('dads-divider--black')
     })
   })
 

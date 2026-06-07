@@ -3,7 +3,7 @@
 用語とその説明を対にして表示するための説明リスト。`DadsDescriptionList` はネイティブ `<dl>` / `<dt>` / `<dd>` の薄いラッパで、`items` プロップから自動生成するモードと、スロットでマークアップを直接書くモードの 2 通りを提供する。
 
 ::: tip ✅ 公式仕様充足
-公式 DADS のガイドラインは「準備中」ですが、本コンポーネントは公式 HTML リファレンス (`design-system-example-components-html`) と整合した `layout` (horizontal/vertical) / `marker` (none/bullet/custom) / `bordered` のバリエーションを提供しており、現状で公式仕様を満たしています。
+公式 DADS のガイドラインは「準備中」ですが、本コンポーネントは公式 HTML リファレンス (`design-system-example-components-html`) と整合した単一レイアウト（縦積み: `<dd>` を 32px インデント）と `marker` (none/bullet/custom) / `bordered` のバリエーションを提供しており、現状で公式仕様を満たしています。
 :::
 
 ## 基本
@@ -42,16 +42,12 @@ const profile = [
 
 ## Layout
 
-2 つのレイアウト (`horizontal` / `vertical`)。デフォルトは `horizontal`。
+公式 DADS の唯一のレイアウトは縦積み（`vertical`）。`<dd>` が `<dt>` の下に重なり、説明は 32px インデントされる。`layout` プロップは `'vertical'` のみを受け付け、デフォルトも `'vertical'`。
 
-- `horizontal` — `<dt>` と `<dd>` が同じ行に並ぶ 2 カラムレイアウト。表形式の詳細表示に最適。狭幅では自動的に 1 カラムに折り返す。
-- `vertical` — `<dd>` が `<dt>` の下に重なるブロックレイアウト。モバイル向けや長文の説明に向く。
+> 旧 `'horizontal'`（2 カラム）バリアントは公式リファレンスに存在しないため撤廃された。
 
 <div class="demo">
-  <span class="demo-label">horizontal（デフォルト）</span>
-  <DadsDescriptionList :items="profile" layout="horizontal" />
-  <span class="demo-label" style="margin-top:1rem">vertical</span>
-  <DadsDescriptionList :items="profile" layout="vertical" />
+  <DadsDescriptionList :items="profile" />
 </div>
 
 ## Marker
@@ -136,7 +132,7 @@ const profile = [
 | Prop       | 型                               | デフォルト     | 説明                                                                        |
 | ---------- | -------------------------------- | -------------- | --------------------------------------------------------------------------- |
 | `items`    | `DadsDescriptionListItem[]`      | -              | `{ term, description }` の配列。指定時は内部で `<dt>`/`<dd>` を自動生成する |
-| `layout`   | `'horizontal' \| 'vertical'`     | `'horizontal'` | 用語と説明の並び方。`vertical` は説明が `<dt>` の下に積まれる               |
+| `layout`   | `'vertical'`                     | `'vertical'`   | 用語と説明の並び方。公式の唯一のレイアウト（`<dd>` を 32px インデント）     |
 | `marker`   | `'none' \| 'bullet' \| 'custom'` | `'none'`       | `<dt>` の先頭に付くマーカー。DADS 公式の `data-marker` と対応               |
 | `bordered` | `boolean`                        | `false`        | 項目間に 1px の区切り線を入れる                                             |
 

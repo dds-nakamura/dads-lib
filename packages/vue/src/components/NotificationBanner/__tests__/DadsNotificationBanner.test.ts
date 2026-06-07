@@ -45,7 +45,13 @@ describe('DadsNotificationBanner', () => {
   })
 
   describe('color variants', () => {
-    const colors: DadsNotificationBannerColor[] = ['success', 'error', 'warning', 'info', 'neutral']
+    const colors: DadsNotificationBannerColor[] = [
+      'success',
+      'error',
+      'warning',
+      'info-1',
+      'info-2',
+    ]
 
     for (const color of colors) {
       it(`applies the modifier class dads-notification-banner--${color}`, () => {
@@ -55,18 +61,20 @@ describe('DadsNotificationBanner', () => {
       })
     }
 
-    it('defaults the color to "info" when no prop is passed', () => {
+    it('defaults the color to "info-1" when no prop is passed', () => {
       const wrapper = createWrapper()
-      expect(findRoot(wrapper).classes()).toContain('dads-notification-banner--info')
+      expect(findRoot(wrapper).classes()).toContain('dads-notification-banner--info-1')
     })
   })
 
   describe('content', () => {
-    it('renders the title when prop is provided', () => {
+    it('renders the title in an <h2> heading element when prop is provided', () => {
       const wrapper = createWrapper({ title: '保存しました' })
-      const title = wrapper.find('.dads-notification-banner__title')
-      expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('保存しました')
+      const heading = wrapper.find('.dads-notification-banner__heading')
+      expect(heading.exists()).toBe(true)
+      // Banner title is a required heading element per DADS (official <h2 __heading>).
+      expect(heading.element.tagName).toBe('H2')
+      expect(heading.text()).toBe('保存しました')
     })
 
     it('renders the message prop in the message paragraph', () => {
@@ -152,15 +160,15 @@ describe('DadsNotificationBanner', () => {
       expect(root.attributes('aria-live')).toBe('polite')
     })
 
-    it('uses role="status" + aria-live="polite" for color="info"', () => {
-      const wrapper = createWrapper({ color: 'info' })
+    it('uses role="status" + aria-live="polite" for color="info-1"', () => {
+      const wrapper = createWrapper({ color: 'info-1' })
       const root = findRoot(wrapper)
       expect(root.attributes('role')).toBe('status')
       expect(root.attributes('aria-live')).toBe('polite')
     })
 
-    it('uses role="status" + aria-live="polite" for color="neutral"', () => {
-      const wrapper = createWrapper({ color: 'neutral' })
+    it('uses role="status" + aria-live="polite" for color="info-2"', () => {
+      const wrapper = createWrapper({ color: 'info-2' })
       const root = findRoot(wrapper)
       expect(root.attributes('role')).toBe('status')
       expect(root.attributes('aria-live')).toBe('polite')
@@ -181,8 +189,8 @@ describe('DadsNotificationBanner', () => {
       ['success', 'check_circle'],
       ['error', 'error'],
       ['warning', 'warning'],
-      ['info', 'info'],
-      ['neutral', 'notifications'],
+      ['info-1', 'info'],
+      ['info-2', 'info'],
     ]
 
     for (const [color, symbolName] of defaultIconCases) {
@@ -316,12 +324,12 @@ describe('DadsNotificationBanner', () => {
   })
 
   describe('a11y (vitest-axe)', () => {
-    it('has no violations with default info color', async () => {
+    it('has no violations with default info-1 color', async () => {
       const wrapper = createWrapper({ message: 'システムメッセージ' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it.each(['success', 'error', 'warning', 'info', 'neutral'] as const)(
+    it.each(['success', 'error', 'warning', 'info-1', 'info-2'] as const)(
       'has no violations with color=%s',
       async (color) => {
         const wrapper = createWrapper({ color, title: 'お知らせ', message: 'メッセージ本文' })

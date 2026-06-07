@@ -20,11 +20,23 @@ export type DadsHeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 export type DadsHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
 /**
- * Font-size token matching the DADS Figma `data-size` scale (`14` ... `36`
- * px). Independent from `level` and `as` so callers can produce e.g. an
- * `<h1>` with size `'20'` for a narrow sidebar heading.
+ * Font-size step matching the official DADS `data-size` scale in px
+ * (`64` / `57` / `45` / `36` / `32` / `28` / `24` / `20` / `18` / `16`).
+ * Independent from `level` and `as` so callers can produce e.g. an `<h1>`
+ * with size `'20'` for a narrow sidebar heading. Each step carries the
+ * official per-size `line-height` and `letter-spacing` (see DadsHeading.vue).
  */
-export type DadsHeadingSize = '14' | '16' | '18' | '20' | '24' | '28' | '32' | '36'
+export type DadsHeadingSize =
+  | '64'
+  | '57'
+  | '45'
+  | '36'
+  | '32'
+  | '28'
+  | '24'
+  | '20'
+  | '18'
+  | '16'
 
 export interface DadsHeadingProps {
   /**

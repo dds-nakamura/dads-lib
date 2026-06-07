@@ -9,7 +9,7 @@ import type {
 
 const props = withDefaults(defineProps<DadsNotificationBannerProps>(), {
   modelValue: true,
-  color: 'info',
+  color: 'info-1',
   style: 'standard',
   closable: true,
   closeLabel: '閉じる',
@@ -18,13 +18,14 @@ const props = withDefaults(defineProps<DadsNotificationBannerProps>(), {
 const emit = defineEmits<DadsNotificationBannerEmits>()
 
 // Default Material Symbols icons per color. The slot `icon` always wins, so
-// this only matters when the consumer hasn't supplied one.
+// this only matters when the consumer hasn't supplied one. `info-1` and
+// `info-2` (official taxonomy) both use the generic info glyph.
 const DEFAULT_ICONS: Record<DadsNotificationBannerColor, string> = {
   success: 'check_circle',
   error: 'error',
   warning: 'warning',
-  info: 'info',
-  neutral: 'notifications',
+  'info-1': 'info',
+  'info-2': 'info',
 }
 
 const defaultIconName = computed(() => DEFAULT_ICONS[props.color])
@@ -96,9 +97,9 @@ const onClose = () => {
         </slot>
       </span>
       <div class="dads-notification-banner__content">
-        <p v-if="title" class="dads-notification-banner__title">
+        <h2 v-if="title" class="dads-notification-banner__heading">
           {{ title }}
-        </p>
+        </h2>
         <p v-if="message || $slots.default" class="dads-notification-banner__message">
           <slot>{{ message }}</slot>
         </p>
@@ -136,8 +137,8 @@ $dads-notification-banner-colors: (
   success: --color-semantic-success-2,
   error: --color-semantic-error-1,
   warning: --color-semantic-warning-yellow-2,
-  info: --color-primitive-blue-900,
-  neutral: --color-neutral-solid-gray-536,
+  info-1: --color-primitive-blue-900,
+  info-2: --color-neutral-solid-gray-536,
 );
 
 .dads-notification-banner {
@@ -168,15 +169,18 @@ $dads-notification-banner-colors: (
     min-width: 0;
   }
 
-  &__title {
+  // Banner title is a required heading element (official `<h2 class="__heading">`).
+  // Reset the UA heading margins/size so it sits inline with the banner layout.
+  &__heading {
     margin: 0;
     font-weight: 700;
     font-size: var(--font-size-16, 1rem);
+    line-height: inherit;
   }
 
-  // When both title and message render, give the message a small offset so
+  // When both heading and message render, give the message a small offset so
   // the two lines don't collapse together.
-  &__title + &__message {
+  &__heading + &__message {
     margin-top: calc(4 / 16 * 1rem);
   }
 
@@ -234,7 +238,7 @@ $dads-notification-banner-colors: (
     }
 
     &--#{$name} .dads-notification-banner__icon,
-    &--#{$name} .dads-notification-banner__title {
+    &--#{$name} .dads-notification-banner__heading {
       color: var(#{$fg});
     }
   }
