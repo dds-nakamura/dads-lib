@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsChipLabel from '../DadsChipLabel.vue'
-import type { DadsChipLabelProps } from '../DadsChipLabel.types'
+import type { DadsChipLabelColor, DadsChipLabelProps } from '../DadsChipLabel.types'
 
 enableAutoUnmount(afterEach)
 
@@ -15,6 +15,20 @@ const createWrapper = (
     slots,
     attachTo: document.body,
   })
+
+const ALL_COLORS: readonly DadsChipLabelColor[] = [
+  'gray',
+  'blue',
+  'light-blue',
+  'cyan',
+  'green',
+  'lime',
+  'yellow',
+  'orange',
+  'red',
+  'magenta',
+  'purple',
+]
 
 describe('DadsChipLabel', () => {
   describe('rendering', () => {
@@ -68,29 +82,29 @@ describe('DadsChipLabel', () => {
     })
   })
 
-  describe('size variants', () => {
-    it('applies the md modifier by default', () => {
+  describe('color axis (official 11 primitive hues via data-color)', () => {
+    it('applies data-color=gray by default', () => {
       const wrapper = createWrapper()
-      expect(wrapper.classes()).toContain('dads-chip-label--md')
+      expect(wrapper.attributes('data-color')).toBe('gray')
     })
 
-    it.each(['sm', 'md', 'lg'] as const)('applies the %s modifier when size=%s', (size) => {
-      const wrapper = createWrapper({ size })
-      expect(wrapper.classes()).toContain(`dads-chip-label--${size}`)
+    it.each(ALL_COLORS)('applies data-color=%s when color=%s', (color) => {
+      const wrapper = createWrapper({ color })
+      expect(wrapper.attributes('data-color')).toBe(color)
     })
   })
 
-  describe('color variants', () => {
-    it('applies the primary modifier by default', () => {
+  describe('style axis (official 4 styles via data-style)', () => {
+    it('applies data-style=text by default', () => {
       const wrapper = createWrapper()
-      expect(wrapper.classes()).toContain('dads-chip-label--primary')
+      expect(wrapper.attributes('data-style')).toBe('text')
     })
 
-    it.each(['primary', 'success', 'error', 'warning', 'secondary'] as const)(
-      'applies the %s modifier when color=%s',
-      (color) => {
-        const wrapper = createWrapper({ color })
-        expect(wrapper.classes()).toContain(`dads-chip-label--${color}`)
+    it.each(['text', 'outline', 'filled-outline', 'fill'] as const)(
+      'applies data-style=%s when appearance=%s',
+      (appearance) => {
+        const wrapper = createWrapper({ appearance })
+        expect(wrapper.attributes('data-style')).toBe(appearance)
       },
     )
   })
@@ -103,22 +117,10 @@ describe('DadsChipLabel', () => {
 
     it('has no violations with a prepend icon', async () => {
       const wrapper = createWrapper(
-        { color: 'success' },
+        { color: 'green' },
         { default: '公開中', prepend: '<span class="icon">✓</span>' },
       )
       expect(await axe(wrapper.element)).toHaveNoViolations()
-    })
-  })
-
-  describe('appearance', () => {
-    it('applies appearance-filled by default', () => {
-      const wrapper = createWrapper()
-      expect(wrapper.classes()).toContain('dads-chip-label--appearance-filled')
-    })
-
-    it('applies appearance-outlined when prop is outlined', () => {
-      const wrapper = createWrapper({ appearance: 'outlined' })
-      expect(wrapper.classes()).toContain('dads-chip-label--appearance-outlined')
     })
   })
 })

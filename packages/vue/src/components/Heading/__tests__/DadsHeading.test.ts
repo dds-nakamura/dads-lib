@@ -366,11 +366,12 @@ describe('DadsHeading', () => {
   })
 
   // ----------------------------------------------------------------------
-  // size prop — explicit font-size token from the DADS scale (14..36 px),
-  // independent of level and as.
+  // size prop — explicit font-size step from the official DADS `data-size`
+  // scale (64 / 57 / 45 / 36 / 32 / 28 / 24 / 20 / 18 / 16 px), independent
+  // of level and as.
   // ----------------------------------------------------------------------
   describe('size prop', () => {
-    it.each(['14', '16', '18', '20', '24', '28', '32', '36'] as const)(
+    it.each(['64', '57', '45', '36', '32', '28', '24', '20', '18', '16'] as const)(
       'applies the dads-heading--size-%s modifier when size=%s',
       (size) => {
         const wrapper = createWrapper({ size })

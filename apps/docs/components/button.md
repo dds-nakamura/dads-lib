@@ -53,32 +53,15 @@ import { DadsButton } from '@dads/vue'
 
 ## Color
 
-5 つの semantic color (`primary` / `success` / `error` / `warning` / `secondary`)。デフォルトは `primary`。
+公式 DADS のボタンは blue 単色です。`color` は `primary` のみで、デフォルトも `primary`。
+（旧 `success` / `error` / `warning` / `secondary` は公式に対応が無いため Issue #18 で撤廃しました。）
 
 <div class="demo">
-  <span class="demo-label">Solid fill</span>
+  <span class="demo-label">Solid fill / Outline / Text</span>
   <div class="demo-row">
-    <DadsButton color="primary">Primary</DadsButton>
-    <DadsButton color="success">Success</DadsButton>
-    <DadsButton color="error">Error</DadsButton>
-    <DadsButton color="warning">Warning</DadsButton>
-    <DadsButton color="secondary">Secondary</DadsButton>
-  </div>
-  <span class="demo-label" style="margin-top:1rem">Outline</span>
-  <div class="demo-row">
-    <DadsButton variant="outline" color="primary">Primary</DadsButton>
-    <DadsButton variant="outline" color="success">Success</DadsButton>
-    <DadsButton variant="outline" color="error">Error</DadsButton>
-    <DadsButton variant="outline" color="warning">Warning</DadsButton>
-    <DadsButton variant="outline" color="secondary">Secondary</DadsButton>
-  </div>
-  <span class="demo-label" style="margin-top:1rem">Text</span>
-  <div class="demo-row">
-    <DadsButton variant="text" color="primary">Primary</DadsButton>
-    <DadsButton variant="text" color="success">Success</DadsButton>
-    <DadsButton variant="text" color="error">Error</DadsButton>
-    <DadsButton variant="text" color="warning">Warning</DadsButton>
-    <DadsButton variant="text" color="secondary">Secondary</DadsButton>
+    <DadsButton color="primary">Solid fill</DadsButton>
+    <DadsButton variant="outline" color="primary">Outline</DadsButton>
+    <DadsButton variant="text" color="primary">Text</DadsButton>
   </div>
 </div>
 
@@ -126,7 +109,7 @@ import { DadsButton } from '@dads/vue'
 | ------------- | --------------------------------------------------------------- | -------------- | --------------------------------------------- |
 | `variant`     | `'solid-fill' \| 'outline' \| 'text'`                           | `'solid-fill'` | 視覚バリアント                                |
 | `size`        | `'lg' \| 'md' \| 'sm' \| 'xs'`                                  | `'md'`         | サイズ                                        |
-| `color`       | `'primary' \| 'success' \| 'error' \| 'warning' \| 'secondary'` | `'primary'`    | セマンティックカラー                          |
+| `color`       | `'primary'`                                                    | `'primary'`    | カラー軸（公式は blue 単色）                   |
 | `disabled`    | `boolean`                                                       | `false`        | 操作不可化                                    |
 | `loading`     | `boolean`                                                       | `false`        | ロード中（スピナー表示、クリック抑止）        |
 | `prependIcon` | `string`                                                        | -              | 前置アイコンの Material Symbols 名            |

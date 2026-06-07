@@ -53,13 +53,12 @@ describe('DadsButton', () => {
   })
 
   describe('color prop', () => {
-    it.each(['primary', 'success', 'error', 'warning', 'secondary'] as const)(
-      'applies dads-button--%s class',
-      (color) => {
-        const wrapper = createWrapper({ color })
-        expect(wrapper.classes()).toContain(`dads-button--${color}`)
-      },
-    )
+    // Official DADS button is single-color (blue / primary). The non-official
+    // success / error / warning / secondary values were removed (Issue #18 T6).
+    it('applies the dads-button--primary class', () => {
+      const wrapper = createWrapper({ color: 'primary' })
+      expect(wrapper.classes()).toContain('dads-button--primary')
+    })
   })
 
   describe('disabled state', () => {

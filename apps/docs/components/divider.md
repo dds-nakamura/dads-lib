@@ -4,7 +4,7 @@
 
 ## 基本
 
-最小構成は props なし。デフォルトで `horizontal` / `color="default"` のラインを 1 本描画する。
+最小構成は props なし。デフォルトで `horizontal` / `color="gray-420"` のラインを 1 本描画する。
 
 <script setup>
 import { DadsDivider } from '@dads/vue'
@@ -50,17 +50,21 @@ import { DadsDivider } from '@dads/vue'
 
 ## Color
 
-2 つの濃度 (`default` / `strong`)。デフォルトは `default`。
-情報のグルーピングを強調したい場合に `strong` を使う。
+公式 `data-color` に対応する 3 段階 (`gray-420` / `gray-536` / `black`)。デフォルトは `gray-420`。
+区切りを強調したいほど濃い色を使う。
 
 <div class="demo">
-  <span class="demo-label">default</span>
+  <span class="demo-label">gray-420 (default)</span>
   <div style="max-width: 360px">
-    <DadsDivider color="default" />
+    <DadsDivider color="gray-420" />
   </div>
-  <span class="demo-label" style="margin-top:1rem">strong</span>
+  <span class="demo-label" style="margin-top:1rem">gray-536</span>
   <div style="max-width: 360px">
-    <DadsDivider color="strong" />
+    <DadsDivider color="gray-536" />
+  </div>
+  <span class="demo-label" style="margin-top:1rem">black</span>
+  <div style="max-width: 360px">
+    <DadsDivider color="black" />
   </div>
 </div>
 
@@ -78,9 +82,9 @@ import { DadsDivider } from '@dads/vue'
   <div style="max-width: 360px">
     <DadsDivider>または</DadsDivider>
   </div>
-  <span class="demo-label" style="margin-top:1rem">strong + ラベル</span>
+  <span class="demo-label" style="margin-top:1rem">black + ラベル</span>
   <div style="max-width: 360px">
-    <DadsDivider color="strong">セクション区切り</DadsDivider>
+    <DadsDivider color="black">セクション区切り</DadsDivider>
   </div>
 </div>
 
@@ -111,7 +115,7 @@ import { DadsDivider } from '@dads/vue'
 | Prop          | 型                           | デフォルト     | 説明                                                     |
 | ------------- | ---------------------------- | -------------- | -------------------------------------------------------- |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | レイアウト方向                                           |
-| `color`       | `'default' \| 'strong'`      | `'default'`    | 線の視覚的強調度                                         |
+| `color`       | `'gray-420' \| 'gray-536' \| 'black'` | `'gray-420'` | 線の色（公式 `data-color` 3 段階）            |
 | `ariaLabel`   | `string`                     | -              | スクリーンリーダーが読み上げるラベル。装飾用途では省略可 |
 
 ## Slots
