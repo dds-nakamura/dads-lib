@@ -1,73 +1,53 @@
 /**
  * Type definitions for DadsImageSlider.
  *
- * 公式 DADS の image-slider は Carousel の「コンテナタイプ - マルチ - 幅狭サイズ」
- * を再構成したコンポーネント。複数の画像を切り替えて閲覧できる。
+ * 公式 DADS の image-slider は **カルーセルの「コンテナ型・マルチ・幅狭サイズ」**
+ * をそのまま使うコンポーネント (公式 MD 明記)。本実装でも DadsImageSlider は
+ * DadsCarousel の薄いラッパとし、見出し必須のコンテナ型プリセットとして提供する。
  *
  * 参考: dads-document-md/dads/components/image-slider/index.md
+ *  > このコンポーネントはカルーセルコンポーネントの
+ *  > 「コンテナタイプ - マルチ - 幅狭サイズ」を使用することで実装できます。
  */
 
-/** スライド 1 枚分の定義。 */
-export interface DadsImageSliderSlide {
-  /** 表示する画像の URL。 */
-  src: string
-  /** スクリーンリーダ向け代替テキスト。必須。 */
-  alt: string
-  /** スライド下部に表示する任意のキャプション。 */
-  caption?: string
-}
+import type { DadsCarouselSlide, DadsCarouselHeadingLevel } from '../Carousel/DadsCarousel.types'
+
+/**
+ * 1 スライド分のデータ。DadsCarousel のスライド型をそのまま再利用する
+ * (画像 1 枚 + 任意のリンク)。公式 image-slider はギャラリー用途のため
+ * 画像ベースで、独自キャプション等の非公式拡張は持たない。
+ */
+export type DadsImageSliderSlide = DadsCarouselSlide
 
 export interface DadsImageSliderProps {
-  /** 現在表示中のスライドインデックス。v-model 対象。 */
-  modelValue?: number
-  /** スライドの配列。 */
+  /** 表示するスライド配列。必須。 */
   slides: DadsImageSliderSlide[]
-  /** true のとき `interval` ms ごとに次のスライドへ自動遷移する。 */
-  autoPlay?: boolean
-  /** 自動再生の間隔 (ms)。 */
-  interval?: number
-  /** ホバー中に自動再生を一時停止する。 */
-  pauseOnHover?: boolean
-  /** 左右の矢印ボタンを表示する。 */
-  showArrows?: boolean
-  /** インジケータ (ドット) を表示する。 */
-  showIndicators?: boolean
-  /** true のとき末尾の次で先頭へ、先頭の前で末尾へラップする。 */
-  loop?: boolean
-  /** スライダ全体のアクセシブル名 (`aria-label`)。 */
-  ariaLabel?: string
+  /** 現在表示中のスライドインデックス (0 始まり)。v-model 対象。デフォルト `0`。 */
+  modelValue?: number
   /**
-   * セクション見出し。指定時はスライダ上部に `<h{headingLevel}>` で描画される。
-   * 公式 DADS は image-slider が見出しを伴うことを想定している。
+   * セクション見出し。image-slider はコンテナ型 (見出しあり) のため **必須**。
+   * `<h{headingLevel}>` として描画され、`role="region"` に紐付く。
    */
-  heading?: string
-  /** 見出しの HTML レベル (1-6)。デフォルト `2`。 */
-  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6
-  /** 「すべてのスライド」リンクのラベル (showAllHref とセットで指定)。 */
+  heading: string
+  /** 見出しの HTML レベル (`h1`〜`h6`)。デフォルト `2`。 */
+  headingLevel?: DadsCarouselHeadingLevel
+  /**
+   * ワイド / ナローを切り替えるブレークポイント (rem)。デフォルト `64`。
+   * image-slider は通常ナロー幅で使うが、レイアウトはコンテナ幅で自動切替される。
+   */
+  breakpointRem?: number
+  /** スクリーンリーダ向けラベルで使うスライドの単位語。デフォルト `'スライド'`。 */
+  unit?: string
+  /** 「すべてのスライド」disclosure の summary ラベル。デフォルト `'すべてのスライド'`。 */
   showAllLabel?: string
-  /** 「すべてのスライド」リンクの href。 */
-  showAllHref?: string
-  /**
-   * 「前のスライド」ボタンの `aria-label`。デフォルトは `'前のスライド'`。
-   * i18n 対応で英語等に差し替え可能。
-   */
+  /** ナロー時 page-nav「前のスライド」ボタンの `aria-label`。デフォルト `'前のスライド'`。 */
   prevSlideAriaLabel?: string
-  /**
-   * 「次のスライド」ボタンの `aria-label`。デフォルトは `'次のスライド'`。
-   * i18n 対応で英語等に差し替え可能。
-   */
+  /** ナロー時 page-nav「次のスライド」ボタンの `aria-label`。デフォルト `'次のスライド'`。 */
   nextSlideAriaLabel?: string
-  /**
-   * インジケータ群 (tablist) の `aria-label`。デフォルトは `'スライド位置'`。
-   * i18n 対応で英語等に差し替え可能。
-   */
-  slidePositionAriaLabel?: string
-  /**
-   * 各インジケータの `aria-label` を生成するフォーマッタ。
-   * デフォルトは `(i) => \`スライド ${i + 1}\``。i18n 対応で英語等に差し替え可能。
-   * @param idx 0 始まりのスライドインデックス
-   */
-  formatSlideAriaLabel?: (idx: number) => string
+  /** ネクストプレビューボタンの可視ラベル。デフォルト `'次のスライド'`。 */
+  nextPreviewLabel?: string
+  /** ステップナビ (tablist) の `aria-label`。デフォルト `'スライド選択'`。 */
+  stepNavAriaLabel?: string
 }
 
 export interface DadsImageSliderEmits {

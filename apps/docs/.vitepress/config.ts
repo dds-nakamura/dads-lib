@@ -56,6 +56,7 @@ const components = {
     { text: 'Image', link: '/components/image' },
     { text: 'ImageSlider', link: '/components/image-slider' },
     { text: 'Carousel', link: '/components/carousel' },
+    { text: 'CarouselSingle', link: '/components/carousel-single' },
     { text: 'List', link: '/components/list' },
     { text: 'Blockquote', link: '/components/blockquote' },
     { text: 'ResourceList', link: '/components/resource-list' },

@@ -43,11 +43,13 @@
 
 ## Carousel
 
-- [ ] 公式 UI 構造への刷新: 数値ステップナビ(aria-current 番号反転)/next blur プレビュー/「すべて表示」disclosure 展開/幅狭 page-nav を一切再現していない。現状の汎用 translateX スライダー+円形ドット tablist は DOM/role の全面変更を要する → A3
-- [ ] autoPlay/interval/pauseOnHover の削除: MD が明確に禁止する自動再生機能。公開 props のため削除は破壊的変更 → A3 (現状は dev 警告のみ維持)
-- [ ] レスポンシブ思想: 公式は @container で std⇔幅狭を自動切替、現状は visibleCount 手動指定。コンテナクエリ対応は構造変更を伴う → A3
-- [ ] ナビ role=tablist/tab → 数値ステップナビ + aria-current への変更: aria/role 変更のため A3
-- [ ] next エリア blur プレビュー(機能丸ごと欠落)の実装 → A3
+> **T7 解消済み (PR: issue-18-a3-t7, 案X フル)** — 公式 `dads-carousel`(container.html/carousel.css/carousel.js) を忠実移植。`slides[]` データ駆動へ全面書き換え。新規に静的単一バリアント `DadsCarouselSingle` も追加。
+
+- [x] 公式 UI 構造への刷新: 数値ステップナビ(aria-current 番号反転)/next blur プレビュー/「すべて表示」disclosure 展開/幅狭 page-nav を移植
+- [x] autoPlay/interval/pauseOnHover の削除: MD が禁止する自動再生機能を API ごと削除
+- [x] レスポンシブ思想: `@container (min-width: {breakpointRem}rem)` で std⇔幅狭を自動切替。ResizeObserver はワイド時 `role=tabpanel` 同期のみ
+- [x] ナビ role=tablist/tab → 数値ステップナビ + aria-current へ変更
+- [x] next エリア blur プレビューの実装
 
 ## Checkbox
 
@@ -167,13 +169,15 @@
 
 ## ImageSlider
 
-- [ ] 差異#1 構造の全面ドリフト (公式は carousel example=dads-carousel の tablist 番号バッジ/next プレビュー/全スライド disclosure/blur 背景を流用すべきだが、現状は独自フェード式スライダー)。template/props/slot 形状の再設計を伴う major 変更のため A-2 対象外
-- [ ] 差異#4 選択状態 UI の乖離 (公式=番号バッジ反転 vs 現状=丸ドット indicator)。DOM/role 構造の作り直しを要するため A-3
-- [ ] 差異#6 aria-current 不使用 (公式 carousel は現在スライドに aria-current=true)。aria 変更のため A-3
-- [ ] 差異#8 arrow ヒットターゲットの寸法の出し方 (公式は 24px+疑似要素 44px) は構造前提が異なり A-3
-- [ ] 差異#5 コンテナ外枠 border-radius-8 は独自付与だが、carousel 構造移植時にまとめて見直すべきため A-3 に集約 (単独で外すと現行の overflow:hidden 角丸演出のみ崩れるため)
-- [ ] 矢印グリフ ‹/› の文字直書き → SVG path 化は DOM 変更を伴うため A-3
-- [ ] heading のレスポンシブ拡大 (20→24→32px) は独自構造上の追加スタイルで carousel 移植と同時対応が妥当なため A-3
+> **T7 解消済み (PR: issue-18-a3-t7, 案X フル)** — 公式 MD どおり **DadsCarousel の薄ラッパ**(見出し必須のコンテナ型プリセット)へ再実装。独自フェード式スライダーを全廃し、構造・挙動・a11y は DadsCarousel に委譲。
+
+- [x] 差異#1 構造の全面ドリフト → DadsCarousel(公式 dads-carousel 構造) へ委譲し独自フェード式を全廃
+- [x] 差異#4 選択状態 UI の乖離 → 公式の番号バッジ tablist へ (Carousel 由来)
+- [x] 差異#6 aria-current 不使用 → 現在番号バッジに aria-current=true (Carousel 由来)
+- [x] 差異#8 arrow ヒットターゲット → 公式 page-nav (24px + 疑似要素 44px) へ (Carousel 由来)
+- [x] 差異#5 コンテナ外枠 border-radius-8 → 撤去 (Carousel 由来)
+- [x] 矢印グリフ ‹/› → 公式 SVG path へ (Carousel 由来)
+- [x] heading のレスポンシブ拡大 20→24→32px → 実装 (Carousel 由来)
 
 ## InputText
 

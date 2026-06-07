@@ -65,3 +65,12 @@
 - 想定 changeset レベル: **major** (構造移植は template/props/slot 形状の変更を伴い、現行 `slides`/`autoPlay`/`showArrows`/`showIndicators` 等の API が破壊的に変わる可能性が高い)。最低でも minor だが API 互換維持は困難。
 - API / aria 不変は **保てない見込み**: 公式 carousel 構造へ寄せると、独自の `showArrows`/`showIndicators`/`autoPlay`/`pauseOnHover` 系 props や dot indicator の aria (`role=tab` on dot) が公式 (`dads-carousel__step` tablist / page-nav) と整合せず再設計が要る。段階移行を計画すべき。
 </content>
+
+## T7 解消 (PR: issue-18-a3-t7, 案X フル)
+
+- 公式 MD の定義 (image-slider = カルーセルの「コンテナ型・マルチ・幅狭サイズ」) に従い、**DadsCarousel の薄いラッパ** (見出し必須のコンテナ型プリセット) へ再実装。
+- 独自フェード式スライダー (translateX + 丸ドット indicator + autoPlay) を全廃。構造・挙動・アクセシビリティはすべて DadsCarousel(公式 dads-carousel 構造) に委譲。
+- スライド型 `DadsImageSliderSlide` は `DadsCarouselSlide` のエイリアス (画像 + 任意リンク)。非公式 `caption` 拡張は撤去。
+- 差異 #1/#4/#5/#6/#8 および矢印 SVG 化・heading レスポンシブは Carousel 移植により一括解消。
+- 想定どおり changeset は **major** (slides 型変更・autoPlay/showArrows/showIndicators/loop 等の API 削除)。
+- **総合判定**: ✅ 解消。
