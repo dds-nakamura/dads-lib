@@ -1,34 +1,37 @@
 # ImageSlider
 
-イメージスライダー (Image Slider) は、複数のイメージを切り替えて閲覧できるコンポーネント。ギャラリーやヒーローエリアでの実装に活用される。DADS 公式仕様では Carousel コンポーネントの「コンテナタイプ - マルチ - 幅狭サイズ」を再構成したもの。
+複数のイメージを切り替えて閲覧できる、ギャラリー用途のスライダー。
 
-参考: <https://design.digital.go.jp/dads/components/image-slider/>
+公式 DADS では image-slider は **カルーセルの「コンテナ型・マルチ・幅狭サイズ」** と定義されているため、本コンポーネントは [`DadsCarousel`](./carousel) の薄いラッパとして実装されており、**見出し (`heading`) を必須にしたコンテナ型プリセット** です。構造・挙動・アクセシビリティはすべて Carousel に準拠します。
+
+> 公式 DADS は **自動再生機能を備えていません**。本コンポーネントにも自動再生 API はありません。
 
 ## 基本
 
-`slides` に表示するスライドの配列、`v-model` に現在のインデックスを渡す。左右の矢印・ドットインジケータ・キーボード矢印キー (←/→) で操作できる。
+`heading` は必須です (image-slider はコンテナ型のため)。各スライドは 1 枚の画像 (任意でリンク付き) を `slides[]` で渡します。
 
 <script setup>
 import { ref } from 'vue'
 import { DadsImageSlider } from '@dads/vue'
 
-const slides = [
-  { src: 'https://placehold.co/600x400/0017c1/ffffff?text=Slide+1', alt: 'スライド 1', caption: '最初のスライド' },
-  { src: 'https://placehold.co/600x400/00bcd4/ffffff?text=Slide+2', alt: 'スライド 2', caption: '2 枚目のスライド' },
-  { src: 'https://placehold.co/600x400/4caf50/ffffff?text=Slide+3', alt: 'スライド 3', caption: '3 枚目のスライド' },
+const gallerySlides = [
+  { src: '/carousel/image-1.webp', alt: '写真1: SDGsワークショップの様子', width: 696, height: 392 },
+  { src: '/carousel/image-2.webp', alt: '写真2: 地産地消キャンペーン', width: 696, height: 392 },
+  { src: '/carousel/image-3.webp', alt: '写真3: スタンプラリー', width: 696, height: 392 },
 ]
-const idx = ref(0)
 
-const idxAuto = ref(0)
-const idxNoArrows = ref(0)
-const idxNoIndicators = ref(0)
-const idxNoLoop = ref(0)
-const idxInterval = ref(0)
+const linkedSlides = [
+  { src: '/carousel/image-1.webp', alt: '記事1のサムネイル', href: '#article1', width: 696, height: 392 },
+  { src: '/carousel/image-2.webp', alt: '記事2のサムネイル', href: '#article2', width: 696, height: 392 },
+]
+
+const idxA = ref(0)
+const idxB = ref(0)
 </script>
 
 <div class="demo">
-  <DadsImageSlider v-model="idx" :slides="slides" />
-  <p class="demo-label">現在のインデックス: <strong>{{ idx }}</strong></p>
+  <DadsImageSlider v-model="idxA" :slides="gallerySlides" heading="フォトギャラリー" />
+  <p class="demo-label">現在のインデックス: {{ idxA }}</p>
 </div>
 
 ```vue
@@ -36,127 +39,64 @@ const idxInterval = ref(0)
 import { ref } from 'vue'
 import { DadsImageSlider } from '@dads/vue'
 
+const current = ref(0)
 const slides = [
-  {
-    src: 'https://placehold.co/600x400?text=Slide+1',
-    alt: 'スライド 1',
-    caption: '最初のスライド',
-  },
-  {
-    src: 'https://placehold.co/600x400?text=Slide+2',
-    alt: 'スライド 2',
-    caption: '2 枚目のスライド',
-  },
-  { src: 'https://placehold.co/600x400?text=Slide+3', alt: 'スライド 3' },
+  { src: '/img/1.webp', alt: '写真1', width: 696, height: 392 },
+  { src: '/img/2.webp', alt: '写真2', width: 696, height: 392 },
+  { src: '/img/3.webp', alt: '写真3', width: 696, height: 392 },
 ]
-const idx = ref(0)
 </script>
 
 <template>
-  <DadsImageSlider v-model="idx" :slides="slides" />
+  <DadsImageSlider v-model="current" :slides="slides" heading="フォトギャラリー" />
 </template>
 ```
 
-## autoPlay
+## リンク付きスライド
 
-`auto-play` を有効にすると `interval` (ms) 毎に自動で次のスライドへ遷移する。デフォルトでホバー中は一時停止する (`pause-on-hover`)。
+各スライドに `href` を指定すると、画像が `<a href>` でラップされます。
 
 <div class="demo">
-  <DadsImageSlider v-model="idxAuto" :slides="slides" auto-play :interval="3000" />
-  <p class="demo-label">マウスを乗せると一時停止します</p>
+  <DadsImageSlider v-model="idxB" :slides="linkedSlides" heading="特集記事" :heading-level="3" />
 </div>
 
 ```vue
-<DadsImageSlider v-model="idx" :slides="slides" auto-play :interval="3000" />
-```
-
-## showArrows
-
-`show-arrows="false"` で左右矢印ボタンを非表示にできる。
-
-<div class="demo">
-  <DadsImageSlider v-model="idxNoArrows" :slides="slides" :show-arrows="false" />
-</div>
-
-```vue
-<DadsImageSlider v-model="idx" :slides="slides" :show-arrows="false" />
-```
-
-## showIndicators
-
-`show-indicators="false"` でドットインジケータを非表示にできる。
-
-<div class="demo">
-  <DadsImageSlider v-model="idxNoIndicators" :slides="slides" :show-indicators="false" />
-</div>
-
-```vue
-<DadsImageSlider v-model="idx" :slides="slides" :show-indicators="false" />
-```
-
-## loop
-
-`loop="false"` のとき、最後のスライドで次へ、最初のスライドで前へ進むことはできない。境界に達した矢印ボタンは disabled になる。
-
-<div class="demo">
-  <DadsImageSlider v-model="idxNoLoop" :slides="slides" :loop="false" />
-</div>
-
-```vue
-<DadsImageSlider v-model="idx" :slides="slides" :loop="false" />
-```
-
-## interval
-
-`interval` (ms) で自動再生の切替速度を指定する。デフォルトは `5000`。
-
-<div class="demo">
-  <DadsImageSlider v-model="idxInterval" :slides="slides" auto-play :interval="1500" />
-</div>
-
-```vue
-<DadsImageSlider v-model="idx" :slides="slides" auto-play :interval="1500" />
+<DadsImageSlider
+  v-model="current"
+  :slides="[
+    { src: '/img/1.webp', alt: '記事1', href: '/articles/1' },
+    { src: '/img/2.webp', alt: '記事2', href: '/articles/2' },
+  ]"
+  heading="特集記事"
+  :heading-level="3"
+/>
 ```
 
 ## Props
 
-| Prop                     | 型                        | デフォルト                     | 説明                                                                 |
-| ------------------------ | ------------------------- | ------------------------------ | -------------------------------------------------------------------- |
-| `modelValue`             | `number`                  | `0`                            | 現在表示中のスライドインデックス (v-model 対象)                      |
-| `slides`                 | `DadsImageSliderSlide[]`  | -                              | 表示するスライド配列 (必須)                                          |
-| `autoPlay`               | `boolean`                 | `false`                        | `true` のとき自動再生                                                |
-| `interval`               | `number`                  | `5000`                         | 自動再生の間隔 (ms)                                                  |
-| `pauseOnHover`           | `boolean`                 | `true`                         | ホバー時に自動再生を一時停止                                         |
-| `showArrows`             | `boolean`                 | `true`                         | 前へ/次への矢印ボタンを表示                                          |
-| `showIndicators`         | `boolean`                 | `true`                         | スライド位置を示すドットインジケータを表示                           |
-| `loop`                   | `boolean`                 | `true`                         | 末尾から先頭へ (および先頭から末尾へ) ラップする                     |
-| `ariaLabel`              | `string`                  | `'イメージスライダー'`         | スライダ全体のアクセシブル名 (`aria-label`)                          |
-| `prevSlideAriaLabel`     | `string`                  | `'前のスライド'`               | 「前へ」矢印ボタンの aria-label。i18n 用に上書き可能                 |
-| `nextSlideAriaLabel`     | `string`                  | `'次のスライド'`               | 「次へ」矢印ボタンの aria-label。i18n 用に上書き可能                 |
-| `slidePositionAriaLabel` | `string`                  | `'スライド位置'`               | インジケータ群 (`role="tablist"`) の aria-label。i18n 用に上書き可能 |
-| `formatSlideAriaLabel`   | `(idx: number) => string` | `` (i) => `スライド ${i+1}` `` | 各インジケータの aria-label フォーマッタ。i18n 用に上書き可能        |
+| Prop                 | 型                           | デフォルト           | 説明                                                            |
+| -------------------- | ---------------------------- | -------------------- | --------------------------------------------------------------- |
+| `slides`             | `DadsImageSliderSlide[]`     | (必須)               | 表示するスライド配列                                            |
+| `heading`            | `string`                     | (必須)               | セクション見出し。`role="region"` に `aria-labelledby` で紐付け |
+| `modelValue`         | `number`                     | `0`                  | 現在表示中のスライドインデックス (v-model 対象)                 |
+| `headingLevel`       | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `2`                  | 見出しの HTML レベル                                            |
+| `breakpointRem`      | `number`                     | `64`                 | ワイド / ナローを切り替えるブレークポイント (rem)              |
+| `unit`               | `string`                     | `'スライド'`         | SR ラベルで使うスライドの単位語                                |
+| `showAllLabel`       | `string`                     | `'すべてのスライド'` | 「すべてのスライド」disclosure の summary ラベル               |
+| `prevSlideAriaLabel` | `string`                     | `'前のスライド'`     | ナロー page-nav「前へ」ボタンの aria-label                     |
+| `nextSlideAriaLabel` | `string`                     | `'次のスライド'`     | ナロー page-nav「次へ」ボタンの aria-label                     |
+| `nextPreviewLabel`   | `string`                     | `'次のスライド'`     | ネクストプレビューボタンの可視ラベル                          |
+| `stepNavAriaLabel`   | `string`                     | `'スライド選択'`     | ステップナビ (tablist) の aria-label                           |
 
-### `DadsImageSliderSlide`
-
-| プロパティ | 型       | 必須 | 説明                                       |
-| ---------- | -------- | ---- | ------------------------------------------ |
-| `src`      | `string` | はい | 表示する画像の URL                         |
-| `alt`      | `string` | はい | スクリーンリーダ向けの代替テキスト         |
-| `caption`  | `string` | -    | 任意のキャプション。指定時は画像下部に表示 |
+`DadsImageSliderSlide` は [`DadsCarouselSlide`](./carousel#dadscarouselslide) と同一です (`src` / `alt` 必須、`srcset` / `href` / `target` / `rel` / `width` / `height` 任意)。
 
 ## Events
 
-| Event               | Payload  | 説明                                   |
-| ------------------- | -------- | -------------------------------------- |
-| `update:modelValue` | `number` | v-model 用。新しいスライドインデックス |
-| `change`            | `number` | スライドが切り替わったとき発火         |
+| Event               | Payload  | 説明                          |
+| ------------------- | -------- | ----------------------------- |
+| `update:modelValue` | `number` | v-model 更新 (新インデックス) |
+| `change`            | `number` | スライド変更時に発火          |
 
 ## アクセシビリティ
 
-- ルート要素に `aria-roledescription="carousel"` と `aria-label`（既定: `イメージスライダー`）を付与
-- 各スライドは `role="group"` / `aria-roledescription="slide"` を持ち、非アクティブなスライドには `aria-hidden="true"` が付与される
-- ビューポートは `aria-live="polite"` で変更がスクリーンリーダに通知される
-- 矢印ボタンには `前のスライド` / `次のスライド` の `aria-label` を付与
-- インジケータは `role="tablist"` + `role="tab"` で構成し、アクティブな項目に `aria-selected="true"` を設定
-- ルートにフォーカスが当たっている状態で、左右矢印キー (`ArrowLeft` / `ArrowRight`) で前後のスライドへ移動できる
-- `auto-play` 利用時は `pause-on-hover` を有効にしておくこと（読み上げ中の意図しない切替を防ぐ）
+[`DadsCarousel` のアクセシビリティ](./carousel#アクセシビリティ) に準拠します (region / `aria-live` メイン / ワイド時 tabpanel / tablist ステップナビ / ナロー page-nav / 自動再生なし)。image-slider は見出し必須のため、常に `aria-labelledby` で名前付けされます。

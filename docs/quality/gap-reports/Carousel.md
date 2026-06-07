@@ -67,3 +67,20 @@
 - 優先度: 高(構造観点では最優先)。色トークン置換だけでは不足で、UI 構造そのものの再設計が必要。
 - 想定 changeset レベル: **major**。公式 UI への構造刷新は公開 props(`mode`/`visibleCount`/`autoPlay`/`interval`/`pauseOnHover`/`showArrows`/`showIndicators` 等)の大幅変更を伴う。最低でも autoPlay 系の削除は破壊的変更。色/focus のみの是正に留めるなら一時的に minor だが、本質的な準拠には major。
 - API/aria 不変: 不変を保てない。公式準拠には DOM 構造・aria(`role=tablist/tab` → 数値ステップナビ + `aria-current`)・props の刷新が必要。
+
+## T7 解消
+
+公式 carousel (`container.html` / `key-visual-multi.html` / `carousel.css` / `carousel.js`) を Vue へ忠実移植し、上記差異を解消した (major / 破壊的変更)。
+
+- **構造刷新**: 汎用 translate スライダー + 円形ドット indicator + 左右矢印を撤去し、公式構造へ全面置換。
+  - 数値ステップナビ (`role="tablist"` / `role="tab"` / `aria-selected` + ロービングタブインデックス + Arrow キー移動)
+  - ネクストプレビュー (次スライドのサムネイル + ラベルボタン)
+  - ナロー時 page-nav (前後矢印 + 「現在 / 総数」)
+  - 「すべてのスライド」disclosure 展開 (`<details>`、現在の次→末尾→先頭の順で他スライドを一覧)
+  - main-bg / next-bg の blur 25px ぼかしプレビュー
+- **レスポンシブ**: `@container (min-width: {breakpointRem}rem)` でワイド / ナローを自動切替。ResizeObserver はワイド時の `role="tabpanel"` 付与のみ同期 (happy-dom 非対応環境はガード)。
+- **CSS**: `carousel.css` + 依存する `disclosure.css` 最小セットをスコープ `<style>` へ移植。色は `--color-neutral-*` / `--color-primitive-*` トークン、寸法は `calc(N / 16 * 1rem)`。focus-ring を公式 (4px / offset 2px / box-shadow 2px) に是正。
+- **a11y**: 数値バッジに `aria-current="true"` を付与。
+- **削除**: 自動再生 (`autoPlay` / `interval` / `pauseOnHover`)、汎用デフォルトスロット + `itemCount`、`type` / `mode` / `visibleCount`、`showArrows` / `showIndicators` / `loop`、ドット indicator 系 props。
+- **見出し**: コンテナの外周角丸を撤去。見出しを 20px → (30rem) 24px → (64rem) 32px のレスポンシブ昇格、line-height 1.5、letter-spacing 0.02em に是正。
+- **総合判定**: ✅ 解消。

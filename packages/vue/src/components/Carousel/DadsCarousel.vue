@@ -1,475 +1,929 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, useId } from 'vue'
 import type { DadsCarouselEmits, DadsCarouselProps } from './DadsCarousel.types'
 
 const props = withDefaults(defineProps<DadsCarouselProps>(), {
   modelValue: 0,
-  type: 'key-visual',
-  mode: 'single',
-  visibleCount: 3,
   headingLevel: 2,
-  autoPlay: false,
-  interval: 5000,
-  pauseOnHover: true,
-  showArrows: true,
-  showIndicators: true,
-  loop: true,
-  ariaLabel: 'カルーセル',
+  ariaLabel: 'スライドショー',
+  breakpointRem: 64,
+  unit: 'スライド',
+  showAllLabel: 'すべてのスライド',
   prevSlideAriaLabel: '前のスライド',
   nextSlideAriaLabel: '次のスライド',
-  slidePositionAriaLabel: 'スライド位置',
-  formatSlideAriaLabel: (idx: number) => `スライド ${idx + 1}`,
+  nextPreviewLabel: '次のスライド',
+  stepNavAriaLabel: 'スライド選択',
 })
-
-// Dev-mode warning: official DADS specifies the carousel does NOT auto-play.
-// We do not remove the prop (existing callers depend on it) but flag misuse
-// so consumers can make an informed choice.
-if (props.autoPlay && (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV) {
-  console.warn(
-    '[DadsCarousel] autoPlay は公式 DADS で非推奨です。' +
-      'モーション過敏症ユーザーへの配慮として、手動操作を基本とすることを推奨します。',
-  )
-}
-
-// Container type requires a heading per official spec — warn in dev when the
-// caller forgets to pass one so the structural contract is enforceable.
-if (
-  props.type === 'container' &&
-  !props.heading &&
-  (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV
-) {
-  console.warn(
-    '[DadsCarousel] type="container" は heading プロップを必須とします。' +
-      'スライド群を囲むコンテナの見出しを必ず指定してください。',
-  )
-}
 
 const emit = defineEmits<DadsCarouselEmits>()
 
-defineSlots<{
-  default(props: { index: number; isActive: boolean }): unknown
-}>()
-
 const generatedId = useId()
-const baseId = computed(() => `dads-carousel-${generatedId}`)
-const slideId = (idx: number) => `${baseId.value}-slide-${idx}`
+const headingId = `dads-carousel-heading-${generatedId}`
 
-const total = computed(() => Math.max(0, props.itemCount))
-
-const clampIndex = (n: number): number => {
-  if (total.value === 0) return 0
-  if (n < 0) return 0
-  if (n >= total.value) return Math.max(0, total.value - 1)
-  return n
-}
-
-const safeIndex = computed(() => clampIndex(props.modelValue ?? 0))
-
-const goTo = (next: number) => {
-  if (total.value === 0) return
-  let target: number
-  if (props.loop) {
-    target = ((next % total.value) + total.value) % total.value
-  } else {
-    target = clampIndex(next)
-  }
-  if (target === safeIndex.value) return
-  emit('update:modelValue', target)
-  emit('change', target)
-}
-
-const goNext = () => goTo(safeIndex.value + 1)
-const goPrev = () => goTo(safeIndex.value - 1)
-
-const canPrev = computed(() => props.loop || safeIndex.value > 0)
-const canNext = computed(() => props.loop || safeIndex.value < total.value - 1)
-
-// -------------------- autoPlay --------------------------------------------
-let timerId: ReturnType<typeof setInterval> | null = null
-const isPaused = ref(false)
-
-const stopTimer = () => {
-  if (timerId !== null) {
-    clearInterval(timerId)
-    timerId = null
-  }
-}
-
-const startTimer = () => {
-  stopTimer()
-  if (!props.autoPlay || isPaused.value || total.value <= 1) return
-  timerId = setInterval(() => {
-    // When loop is disabled, stop at the last slide instead of wrapping.
-    if (!props.loop && safeIndex.value >= total.value - 1) {
-      stopTimer()
-      return
-    }
-    goNext()
-  }, props.interval)
-}
-
-const onMouseEnter = () => {
-  if (!props.pauseOnHover) return
-  isPaused.value = true
-  stopTimer()
-}
-
-const onMouseLeave = () => {
-  if (!props.pauseOnHover) return
-  isPaused.value = false
-  startTimer()
-}
-
-const onKeydown = (event: KeyboardEvent) => {
-  switch (event.key) {
-    case 'ArrowRight':
-      event.preventDefault()
-      goNext()
-      break
-    case 'ArrowLeft':
-      event.preventDefault()
-      goPrev()
-      break
-    default:
-      return
-  }
-}
-
-onMounted(() => {
-  startTimer()
-})
-
-onBeforeUnmount(() => {
-  stopTimer()
-})
-
-// Restart the timer whenever autoPlay / interval / item count changes.
-watch(
-  () => [props.autoPlay, props.interval, total.value],
-  () => {
-    startTimer()
-  },
-)
-
-const indices = computed(() => Array.from({ length: total.value }, (_, idx) => idx))
-
-const rootClasses = computed(() => [
-  'dads-carousel',
-  `dads-carousel--type-${props.type}`,
-  `dads-carousel--mode-${props.mode}`,
-])
+const total = computed(() => props.slides.length)
 
 const headingTag = computed(() => `h${props.headingLevel}` as const)
 
-const hasShowAll = computed(() => Boolean(props.showAllLabel) && Boolean(props.showAllHref))
-
-const isMulti = computed(() => props.mode === 'multi')
-
-// Visible count clamped to [1, total]. In single mode we hard-code 1 so the
-// viewport math below stays a single source of truth for both modes.
-const effectiveVisible = computed(() => {
-  if (!isMulti.value) return 1
-  return Math.max(1, Math.min(props.visibleCount, total.value || 1))
+// --------------------------------------------------------------------------
+// Index / navigation (mirrors carousel.js next / prev / goTo).
+// currentIndex is derived from the clamped modelValue so the component stays a
+// controlled v-model. Emitting update:modelValue + change drives the change.
+// --------------------------------------------------------------------------
+const currentIndex = computed(() => {
+  if (total.value === 0) return 0
+  const raw = props.modelValue ?? 0
+  if (raw < 0) return 0
+  if (raw >= total.value) return total.value - 1
+  return raw
 })
 
-// CSS custom properties drive the multi-mode layout: each slide gets a
-// flex-basis of (100% / visible) and the track translates by (index * basis).
-const multiTrackStyle = computed<Record<string, string> | undefined>(() => {
-  if (!isMulti.value) return undefined
-  return {
-    '--dads-carousel-visible': String(effectiveVisible.value),
-    transform: `translateX(calc(-${safeIndex.value} * (100% / var(--dads-carousel-visible))))`,
+const nextIndex = computed(() =>
+  total.value === 0 ? 0 : (currentIndex.value + 1) % total.value,
+)
+
+const current = computed(() => props.slides[currentIndex.value])
+const nextSlide = computed(() => props.slides[nextIndex.value])
+
+const goTo = (index: number) => {
+  if (index < 0 || index >= total.value) return
+  if (index === currentIndex.value) return
+  emit('update:modelValue', index)
+  emit('change', index)
+}
+
+const next = () => {
+  if (total.value === 0) return
+  goTo((currentIndex.value + 1) % total.value)
+}
+
+const prev = () => {
+  if (total.value === 0) return
+  goTo((currentIndex.value + total.value - 1) % total.value)
+}
+
+// --------------------------------------------------------------------------
+// Wide / narrow detection via ResizeObserver (replaces WidthObserver +
+// @container in carousel.js). isWide = rootWidthPx / rootFontSizePx >=
+// breakpointRem. happy-dom may lack ResizeObserver, so guard for it; when it
+// is absent isWide stays false (narrow layout) and the DOM is still testable.
+// CSS @container queries also drive the show/hide independently for the real
+// browser; isWide only toggles the JS-owned ARIA on the main panel.
+// --------------------------------------------------------------------------
+const isWide = ref(false)
+const rootRef = ref<HTMLElement | null>(null)
+let resizeObserver: ResizeObserver | null = null
+
+const measure = (widthPx: number) => {
+  const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+  isWide.value = widthPx / rootFontSize >= props.breakpointRem
+}
+
+onMounted(() => {
+  if (typeof ResizeObserver === 'undefined' || !rootRef.value) return
+  resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const box = entry.borderBoxSize?.[0]
+      const widthPx = box ? box.inlineSize : entry.contentRect.width
+      measure(widthPx)
+    }
+  })
+  resizeObserver.observe(rootRef.value)
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  resizeObserver = null
+})
+
+// --------------------------------------------------------------------------
+// Step nav (mirrors CarouselStepNav). Selection tracks currentIndex; arrow
+// keys move selection, focus the target tab, and request goTo.
+// --------------------------------------------------------------------------
+const stepRefs = ref<HTMLButtonElement[]>([])
+
+const setStepRef = (el: Element | null, index: number) => {
+  if (el) stepRefs.value[index] = el as HTMLButtonElement
+}
+
+const focusStep = (index: number) => {
+  stepRefs.value[index]?.focus()
+}
+
+const onStepKeydown = (event: KeyboardEvent) => {
+  if (total.value === 0) return
+  let target: number | null = null
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+    target = (currentIndex.value + 1) % total.value
+  } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+    target = (currentIndex.value + total.value - 1) % total.value
   }
+  if (target === null) return
+  event.preventDefault()
+  goTo(target)
+  focusStep(target)
+}
+
+// --------------------------------------------------------------------------
+// "すべてのスライド" disclosure ordering (mirrors carousel.js slideContainer):
+// slides after current, then slides before current. Each entry keeps its
+// original 1-based number for the badge + visually-hidden label.
+// --------------------------------------------------------------------------
+const otherSlides = computed(() => {
+  const indexed = props.slides.map((slide, index) => ({ slide, index, number: index + 1 }))
+  return [...indexed.slice(currentIndex.value + 1), ...indexed.slice(0, currentIndex.value)]
 })
-
-const slideClasses = (idx: number) => [
-  'dads-carousel__slide',
-  {
-    'dads-carousel__slide--active': idx === safeIndex.value,
-  },
-]
-
-const indicatorClasses = (idx: number) => [
-  'dads-carousel__indicator',
-  {
-    'dads-carousel__indicator--active': idx === safeIndex.value,
-  },
-]
-
-const onIndicatorClick = (idx: number) => goTo(idx)
-
-const slideAriaLabel = (idx: number) => `${idx + 1} / ${total.value}`
 </script>
 
 <template>
-  <section
-    :class="rootClasses"
-    :aria-label="ariaLabel"
-    aria-roledescription="carousel"
-    tabindex="0"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
-    @keydown="onKeydown"
+  <div
+    ref="rootRef"
+    class="dads-carousel"
+    role="region"
+    :aria-labelledby="heading ? headingId : undefined"
+    :aria-label="heading ? undefined : ariaLabel"
   >
-    <header v-if="heading || hasShowAll" class="dads-carousel__header">
-      <component :is="headingTag" v-if="heading" class="dads-carousel__heading">
+    <div class="dads-carousel__inner">
+      <component :is="headingTag" v-if="heading" :id="headingId" class="dads-carousel__heading">
         {{ heading }}
       </component>
-      <a v-if="hasShowAll" :href="showAllHref" class="dads-carousel__show-all">
-        {{ showAllLabel }}
-      </a>
-    </header>
-    <div class="dads-carousel__viewport" aria-live="polite">
-      <div class="dads-carousel__track" :style="multiTrackStyle">
-        <div
-          v-for="idx in indices"
-          :id="slideId(idx)"
-          :key="idx"
-          role="group"
-          aria-roledescription="slide"
-          :aria-label="slideAriaLabel(idx)"
-          :aria-hidden="!isMulti && idx !== safeIndex ? 'true' : undefined"
-          :class="slideClasses(idx)"
-        >
-          <slot :index="idx" :is-active="idx === safeIndex" />
+
+      <div class="dads-carousel__panels">
+        <div class="dads-carousel__panel-set">
+          <p
+            class="dads-carousel__number dads-carousel__panel-number"
+            aria-current="true"
+            aria-hidden="true"
+          >
+            {{ currentIndex + 1 }}
+          </p>
+
+          <div class="dads-carousel__main" aria-live="polite" aria-atomic="true">
+            <div
+              class="dads-carousel__main-panel"
+              :role="isWide ? 'tabpanel' : undefined"
+              :aria-label="isWide ? `${unit}${currentIndex + 1}` : undefined"
+            >
+              <component
+                :is="current?.href ? 'a' : 'div'"
+                class="dads-carousel__main-link"
+                :href="current?.href"
+                :target="current?.href ? current?.target : undefined"
+                :rel="current?.href ? current?.rel : undefined"
+              >
+                <span class="dads-u-visually-hidden">{{ unit }}{{ currentIndex + 1 }}</span>
+                <div class="dads-carousel__image-container">
+                  <img
+                    v-if="current"
+                    :src="current.src"
+                    :srcset="current.srcset"
+                    :alt="current.alt"
+                    :width="current.width"
+                    :height="current.height"
+                  />
+                </div>
+              </component>
+            </div>
+          </div>
+
+          <p class="dads-carousel__next">
+            <button type="button" @click="next">
+              <span class="dads-carousel__next-image-container">
+                <img
+                  v-if="nextSlide"
+                  :src="nextSlide.src"
+                  :srcset="nextSlide.srcset"
+                  alt=""
+                  :width="nextSlide.width"
+                  :height="nextSlide.height"
+                />
+              </span>
+              <span class="dads-carousel__next-image-label">{{ nextPreviewLabel }}</span>
+            </button>
+          </p>
+
+          <div class="dads-carousel__main-bg">
+            <div>
+              <img
+                v-if="current"
+                :src="current.src"
+                :srcset="current.srcset"
+                alt=""
+                aria-hidden="true"
+                :width="current.width"
+                :height="current.height"
+              />
+            </div>
+          </div>
+          <div class="dads-carousel__next-bg">
+            <div>
+              <img
+                v-if="nextSlide"
+                :src="nextSlide.src"
+                :srcset="nextSlide.srcset"
+                alt=""
+                aria-hidden="true"
+                :width="nextSlide.width"
+                :height="nextSlide.height"
+              />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <button
-      v-if="showArrows && total > 1"
-      type="button"
-      class="dads-carousel__arrow dads-carousel__arrow--prev"
-      :aria-label="prevSlideAriaLabel"
-      :disabled="!canPrev || undefined"
-      @click="goPrev"
-    >
-      <span aria-hidden="true">‹</span>
-    </button>
-    <button
-      v-if="showArrows && total > 1"
-      type="button"
-      class="dads-carousel__arrow dads-carousel__arrow--next"
-      :aria-label="nextSlideAriaLabel"
-      :disabled="!canNext || undefined"
-      @click="goNext"
-    >
-      <span aria-hidden="true">›</span>
-    </button>
+      <div class="dads-carousel__controls">
+        <div class="dads-carousel__step-nav-wrap">
+          <ul
+            class="dads-carousel__step-nav"
+            role="tablist"
+            :aria-label="stepNavAriaLabel"
+            @keydown="onStepKeydown"
+          >
+            <li v-for="(slide, index) in slides" :key="index" role="presentation">
+              <button
+                :ref="(el) => setStepRef(el as Element | null, index)"
+                class="dads-carousel__step dads-carousel__number"
+                type="button"
+                role="tab"
+                :aria-selected="index === currentIndex ? 'true' : 'false'"
+                :tabindex="index === currentIndex ? 0 : -1"
+                @click="goTo(index)"
+              >
+                <span class="dads-u-visually-hidden">{{ unit }}</span>{{ index + 1 }}
+              </button>
+            </li>
+          </ul>
+        </div>
 
-    <div
-      v-if="showIndicators && total > 1"
-      class="dads-carousel__indicators"
-      role="tablist"
-      :aria-label="slidePositionAriaLabel"
-    >
-      <button
-        v-for="idx in indices"
-        :key="idx"
-        type="button"
-        role="tab"
-        :aria-selected="idx === safeIndex"
-        :aria-controls="slideId(idx)"
-        :aria-label="formatSlideAriaLabel(idx)"
-        :class="indicatorClasses(idx)"
-        @click="onIndicatorClick(idx)"
-      >
-        <span class="dads-carousel__indicator-dot" aria-hidden="true" />
-      </button>
+        <p class="dads-carousel__page-nav">
+          <button type="button" @click="prev">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+              <path
+                d="m5.27 8 5.33-5.33-.93-.94L3.4 8l6.27 6.27.93-.94L5.27 8Z"
+                fill="currentcolor"
+              />
+            </svg>
+            <span class="dads-u-visually-hidden">{{ prevSlideAriaLabel }}</span>
+          </button>
+          <span>{{ currentIndex + 1 }} / {{ total }}</span>
+          <button type="button" @click="next">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+              <path
+                d="m6 1.73-.93.94L10.4 8l-5.33 5.33.93.94L12.27 8 6 1.73Z"
+                fill="currentcolor"
+              />
+            </svg>
+            <span class="dads-u-visually-hidden">{{ nextSlideAriaLabel }}</span>
+          </button>
+        </p>
+
+        <details class="dads-carousel__others dads-disclosure">
+          <summary class="dads-disclosure__summary">
+            <svg
+              class="dads-disclosure__icon"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="11" fill="currentcolor" />
+              <circle class="dads-disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor" />
+              <path class="dads-disclosure__icon-triangle" d="M17 10H7L12 15L17 10Z" fill="Canvas" />
+            </svg>
+            {{ showAllLabel }}
+          </summary>
+          <div class="dads-carousel__others-content dads-disclosure__content">
+            <ul>
+              <li
+                v-for="entry in otherSlides"
+                :key="entry.index"
+                class="dads-carousel__panel-set"
+              >
+                <p class="dads-carousel__number dads-carousel__panel-number" aria-hidden="true">
+                  {{ entry.number }}
+                </p>
+                <div class="dads-carousel__main">
+                  <component
+                    :is="entry.slide.href ? 'a' : 'div'"
+                    class="dads-carousel__main-link"
+                    :href="entry.slide.href"
+                    :target="entry.slide.href ? entry.slide.target : undefined"
+                    :rel="entry.slide.href ? entry.slide.rel : undefined"
+                  >
+                    <span class="dads-u-visually-hidden">{{ unit }}{{ entry.number }}</span>
+                    <div class="dads-carousel__image-container">
+                      <img
+                        :src="entry.slide.src"
+                        :srcset="entry.slide.srcset"
+                        :alt="entry.slide.alt"
+                        :width="entry.slide.width"
+                        :height="entry.slide.height"
+                      />
+                    </div>
+                  </component>
+                </div>
+                <div class="dads-carousel__main-bg">
+                  <div>
+                    <img
+                      :src="entry.slide.src"
+                      :srcset="entry.slide.srcset"
+                      alt=""
+                      aria-hidden="true"
+                      :width="entry.slide.width"
+                      :height="entry.slide.height"
+                    />
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </details>
+      </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
+// ===========================================================================
+// Ported verbatim from
+// design-system-example-components-html/src/components/carousel/carousel.css
+// plus the minimal disclosure rules the carousel relies on from
+// .../disclosure/disclosure.css. Class names, @container queries, blur bg,
+// focus rings, number badge [aria-current]/[aria-selected] colors and the
+// :has([open]) expand rules are preserved.
+//
+// NOTE: the official `dads-carousel-step-nav { display:none }` custom-element
+// show/hide is replicated on .dads-carousel__step-nav-wrap so the @container
+// query still toggles the step nav.
+// ===========================================================================
+
+// visually-hidden ユーティリティ (公式 global.css の dads-u-visually-hidden 相当)。
+.dads-carousel :deep(.dads-u-visually-hidden),
+.dads-u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 .dads-carousel {
-  @include ring.dads-focus-ring;
-
-  position: relative;
+  container-type: inline-size;
   display: block;
-  width: 100%;
-  background-color: var(--color-neutral-white, #fff);
-  border-radius: var(--border-radius-8, 0.5rem);
-  overflow: hidden;
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-800, #333);
+}
 
-  // -------------------- type variants -----------------------------------
-  // key-visual (default): full-bleed flagship area. No outer chrome — slide
-  // content owns its own visual composition.
-  // container: bounded panel with a header section above the viewport.
-  &--type-container {
-    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
+.dads-carousel__inner {
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  max-width: calc(1024 / 16 * 1rem);
+  color: var(--color-neutral-solid-gray-800);
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
+  line-height: 1.7;
+  font-family: var(--font-family-sans);
+  letter-spacing: 0.02em;
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel__inner {
+    padding-right: calc(48 / 16 * 1rem);
+    padding-left: calc(48 / 16 * 1rem);
+  }
+}
+
+.dads-carousel__heading {
+  margin-top: 0;
+  margin-bottom: calc(16 / 16 * 1rem);
+  font-size: calc(20 / 16 * 1rem);
+  line-height: 1.5;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 30rem) {
+  .dads-carousel__heading {
+    font-size: calc(24 / 16 * 1rem);
+  }
+}
+
+@media (min-width: 64rem) {
+  .dads-carousel__heading {
+    font-size: calc(32 / 16 * 1rem);
+    letter-spacing: 0.01em;
+  }
+}
+
+.dads-carousel__number {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: calc(32 / 16 * 1rem);
+  height: calc(32 / 16 * 1rem);
+  border: 1px solid var(--color-neutral-solid-gray-800);
+  border-radius: 50%;
+  background-color: var(--color-neutral-white);
+  padding: 0 0 calc(2 / 16 * 1rem);
+  color: var(--color-neutral-solid-gray-800);
+  font: inherit;
+  font-weight: bold;
+  font-size: calc(16 / 16 * 1rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.dads-carousel__number[aria-current='true'],
+.dads-carousel__number[aria-selected='true'] {
+  background-color: var(--color-neutral-solid-gray-800);
+  color: var(--color-neutral-white);
+  box-shadow: 0 0 0 2px var(--color-neutral-white);
+  outline: 1px solid var(--color-neutral-solid-gray-800);
+  outline-offset: 2px;
+}
+
+.dads-carousel__panel-set {
+  display: grid;
+  grid-template: 'main' auto / auto;
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel__panel-set {
+    margin-right: calc(-48 / 16 * 1rem);
+    margin-left: calc(-48 / 16 * 1rem);
+    grid-template:
+      'number main next .' auto /
+      calc(48 / 16 * 1rem) 3fr 1fr calc(48 / 16 * 1rem);
+  }
+}
+
+.dads-carousel__panel-set::before {
+  grid-area: number;
+  justify-self: center;
+  display: none;
+  border-right: 1px solid var(--color-neutral-black);
+  height: 100%;
+  content: '';
+}
+
+.dads-carousel__panel-number {
+  grid-area: number;
+  justify-self: center;
+  display: none;
+}
+
+.dads-carousel__main-bg {
+  position: relative;
+  z-index: -1;
+  grid-area: main;
+  overflow: clip;
+}
+
+.dads-carousel__main-bg > div {
+  position: absolute;
+  inset: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: blur(25px);
+  transform: translate3d(0, 0, 0); /* for better performance on Safari */
+}
+
+.dads-carousel__main-bg > div img {
+  width: auto;
+  height: 200%;
+}
+
+.dads-carousel__main-bg > div::after {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-neutral-white);
+  mix-blend-mode: soft-light;
+  content: '';
+}
+
+.dads-carousel__main {
+  grid-area: main;
+  position: relative;
+  min-width: 0;
+}
+
+.dads-carousel__main-link {
+  display: block;
+}
+
+@media (hover: hover) {
+  .dads-carousel__main-link:any-link:hover:not(:focus-visible) {
+    outline: calc(4 / 16 * 1rem) solid var(--color-primitive-blue-900);
+    outline-offset: calc(-2 / 16 * 1rem);
   }
 
-  // -------------------- header (heading + show-all) ---------------------
-  // Only rendered when at least one of heading or showAllLabel/Href is set.
-  &__header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: calc(8 / 16 * 1rem);
-    padding: calc(16 / 16 * 1rem);
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
-
-    .dads-carousel--type-key-visual & {
-      // For key-visual type the header is optional and sits without divider.
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-  }
-
-  &__heading {
-    margin: 0;
-    font-size: var(--font-size-20, 1.25rem);
-    font-weight: bold;
-    line-height: var(--line-height-150, 1.5);
-    letter-spacing: 0.02em;
-  }
-
-  &__show-all {
-    color: var(--color-primitive-blue-1000, #00118f);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    font-size: var(--font-size-14, 0.875rem);
-    white-space: nowrap;
-
-    &:hover {
-      color: var(--color-primitive-blue-900, #0017c1);
-      text-decoration: underline;
-    }
-  }
-
-  // -------------------- viewport / slides --------------------------------
-  &__viewport {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  // Track wraps every slide in a horizontal flex row. The single-mode CSS
-  // relies on display: none for inactive slides and never reads the track's
-  // own layout. Multi mode flips the track to flex and translates it.
-  &__track {
-    width: 100%;
-  }
-
-  &__slide {
-    display: none;
-    width: 100%;
-
-    &--active {
-      display: block;
-    }
-  }
-
-  // -------------------- multi-mode layout --------------------------------
-  // Render every slide in a flex row, each with a flex-basis derived from
-  // --dads-carousel-visible (set inline). Translate the track to scroll the
-  // active slide into view. Smooth transition makes the next/prev arrows
-  // feel like a real horizontal scroll without manual scroll handling.
-  &--mode-multi &__track {
-    display: flex;
-    transition: transform 0.25s ease;
-    will-change: transform;
-  }
-
-  &--mode-multi &__slide {
-    display: block;
-    flex: 0 0 calc(100% / var(--dads-carousel-visible, 1));
-    width: auto;
-  }
-
-  // -------------------- arrow buttons ------------------------------------
-  &__arrow {
-    @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
-
+  .dads-carousel__main-link:any-link:hover:not(:focus-visible)::after {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 2.75rem; // 44px hit-target
-    height: 2.75rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-24, 1.5rem);
-    line-height: 1;
-    color: var(--color-neutral-solid-gray-800, #333);
-    background-color: var(--color-neutral-white, #fff);
-    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
-    border-radius: 50%;
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.4;
-      pointer-events: none;
-    }
-
-    &--prev {
-      left: calc(8 / 16 * 1rem);
-    }
-
-    &--next {
-      right: calc(8 / 16 * 1rem);
-    }
+    inset: 2px;
+    box-shadow: inset 0 0 0 calc(2 / 16 * 1rem) var(--color-neutral-white);
+    pointer-events: none;
+    content: '';
   }
+}
 
-  // -------------------- indicators ---------------------------------------
-  &__indicators {
-    display: flex;
-    justify-content: center;
-    gap: calc(8 / 16 * 1rem);
-    padding: calc(8 / 16 * 1rem);
-  }
+.dads-carousel__main-link:focus-visible {
+  overflow: hidden;
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(-2 / 16 * 1rem);
+  border-radius: calc(8 / 16 * 1rem);
+}
 
-  &__indicator {
-    @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+.dads-carousel__main-link:focus-visible::after {
+  position: absolute;
+  inset: 2px;
+  box-shadow: inset 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+  border-radius: calc(6 / 16 * 1rem);
+  pointer-events: none;
+  content: '';
+}
 
-    width: 1.25rem;
-    height: 1.25rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-  }
+.dads-carousel__image-container {
+  display: grid;
+  place-content: center;
+  height: 100%;
+  border-radius: inherit;
+  outline: 2px solid var(--color-neutral-black);
+  outline-offset: -2px;
+}
 
-  &__indicator-dot {
+.dads-carousel__image-container img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.dads-carousel__next-bg {
+  position: relative;
+  z-index: -1;
+  display: none;
+  grid-area: next;
+  overflow: clip;
+}
+
+.dads-carousel__next-bg > div {
+  position: absolute;
+  inset: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: blur(25px);
+  transform: translate3d(0, 0, 0); /* for better performance on Safari */
+}
+
+.dads-carousel__next-bg > div img {
+  width: auto;
+  height: 200%;
+  max-width: none;
+}
+
+.dads-carousel__next-bg > div::after {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-neutral-white);
+  mix-blend-mode: soft-light;
+  content: '';
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel__next-bg {
     display: block;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background-color: var(--color-neutral-solid-gray-420, #949494);
-    transition: background-color 0.15s ease;
+  }
+}
+
+.dads-carousel__next {
+  grid-area: next;
+  margin: 0;
+  display: none;
+  min-width: 0;
+  border: 1px solid var(--color-neutral-solid-gray-420);
+  border-left-width: 0;
+  padding: calc(24 / 16 * 1rem);
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel__next {
+    display: block;
+  }
+}
+
+.dads-carousel__next > button {
+  position: relative;
+  border: 1px solid var(--color-neutral-solid-gray-420);
+  background-color: var(--color-neutral-white);
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-thickness: calc(1 / 16 * 1rem);
+  text-underline-offset: calc(3 / 16 * 1rem);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+@media (hover: hover) {
+  .dads-carousel__next > button:hover {
+    outline: calc(4 / 16 * 1rem) solid var(--color-primitive-blue-900);
+    outline-offset: -1px;
+    text-decoration-thickness: calc(3 / 16 * 1rem);
   }
 
-  &__indicator--active &__indicator-dot {
-    background-color: var(--color-primitive-blue-900, #0017c1);
+  .dads-carousel__next > button:hover:not(:focus-visible)::after {
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 calc(2 / 16 * 1rem) var(--color-neutral-white);
+    pointer-events: none;
+    content: '';
+  }
+}
+
+.dads-carousel__next > button:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(2 / 16 * 1rem);
+  border-radius: calc(4 / 16 * 1rem);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+}
+
+.dads-carousel__next-image-container img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.dads-carousel__next-image-label {
+  display: block;
+  border-top: 1px solid var(--color-neutral-solid-gray-420);
+  padding: calc(16 / 16 * 1rem);
+  font-weight: bold;
+  font-size: calc(16 / 16 * 1rem);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  text-decoration-thickness: inherit;
+}
+
+.dads-carousel__controls {
+  display: flex;
+  align-items: center;
+  column-gap: calc(20 / 16 * 1rem);
+  padding: calc(12 / 16 * 1rem) 0;
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel__controls {
+    column-gap: calc(32 / 16 * 1rem);
+  }
+}
+
+.dads-carousel__others[open] {
+  flex: 1;
+}
+
+.dads-carousel__others .dads-disclosure__summary {
+  border-radius: calc(8 / 16 * 1rem);
+  border: 1px solid var(--color-neutral-solid-gray-600);
+  background-color: var(--color-neutral-white) !important;
+  padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
+  cursor: pointer;
+}
+
+.dads-carousel__others-content.dads-disclosure__content {
+  margin: calc(12 / 16 * 1rem) 0 0;
+  padding-left: 0;
+}
+
+.dads-carousel__others-content > ul {
+  display: grid;
+  row-gap: calc(24 / 16 * 1rem);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.dads-carousel .dads-carousel__step-nav-wrap {
+  display: none;
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel .dads-carousel__step-nav-wrap {
+    display: flex;
+  }
+}
+
+.dads-carousel__step-nav {
+  position: relative;
+  margin: 0;
+  display: flex;
+  justify-content: end;
+  column-gap: calc(16 / 16 * 1rem);
+  padding: 0;
+  list-style-type: none;
+}
+
+.dads-carousel__step-nav > li {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dads-carousel__step-nav > li:not(:last-child)::before {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: calc(16 / 16 * 1rem);
+  border-bottom: 1px solid var(--color-neutral-solid-gray-800);
+  content: '';
+}
+
+.dads-carousel__step {
+  position: relative;
+}
+
+.dads-carousel__step:not([aria-selected='true']) {
+  text-decoration: underline;
+  text-decoration-thickness: calc(1 / 16 * 1rem);
+  text-underline-offset: calc(3 / 16 * 1rem);
+}
+
+.dads-carousel__step::after {
+  position: absolute;
+  inset: calc(-7 / 16 * 1rem);
+  content: '';
+}
+
+@media (hover: hover) {
+  .dads-carousel__step:not([aria-selected='true']):hover {
+    text-decoration-thickness: calc(3 / 16 * 1rem);
+    cursor: pointer;
+  }
+}
+
+.dads-carousel__step:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(2 / 16 * 1rem);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+}
+
+.dads-carousel__page-nav {
+  flex-shrink: 0;
+  position: relative;
+  margin: 0;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  column-gap: calc(12 / 16 * 1rem);
+  padding: 0;
+}
+
+@container (min-width: 64rem) {
+  .dads-carousel__page-nav {
+    display: none;
+  }
+}
+
+.dads-carousel__page-nav > button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(24 / 16 * 1rem);
+  height: calc(24 / 16 * 1rem);
+  border: 1px solid var(--color-primitive-blue-1000);
+  border-radius: 50%;
+  background-color: var(--color-neutral-white);
+  padding: 0;
+  color: var(--color-primitive-blue-1000);
+  cursor: pointer;
+}
+
+.dads-carousel__page-nav > button::after {
+  position: absolute;
+  inset: -100%;
+  margin: auto;
+  width: calc(44 / 16 * 1rem);
+  height: calc(44 / 16 * 1rem);
+  content: '';
+}
+
+.dads-carousel__page-nav > button:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(2 / 16 * 1rem);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+}
+
+.dads-carousel__page-nav > span {
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+.dads-carousel__others {
+  order: -1;
+}
+
+// ---- 「すべてのスライド」展開中の disclosure 連動 (公式 :has([open])) -------
+
+@container (min-width: 64rem) {
+  .dads-carousel:has([open]) .dads-carousel__panel-set::before {
+    display: block;
   }
 
-  // -------------------- forced colors ------------------------------------
-  @include base.dads-forced-colors {
-    .dads-carousel__arrow {
-      border-color: CanvasText;
-      color: CanvasText;
-      background-color: Canvas;
-    }
-
-    .dads-carousel__indicator-dot {
-      background-color: CanvasText;
-    }
-
-    .dads-carousel__indicator--active .dads-carousel__indicator-dot {
-      background-color: Highlight;
-    }
+  .dads-carousel:has([open]) .dads-carousel__panel-number {
+    display: flex;
   }
+
+  .dads-carousel:has([open]) .dads-carousel__next-bg {
+    display: none;
+  }
+
+  .dads-carousel:has([open]) .dads-carousel__next {
+    display: none;
+  }
+
+  .dads-carousel:has([open]) .dads-carousel__step-nav-wrap {
+    display: none;
+  }
+}
+
+.dads-carousel:has([open]) .dads-carousel__controls {
+  padding-bottom: calc(56 / 16 * 1rem);
+}
+
+.dads-carousel:has([open]) .dads-carousel__page-nav {
+  display: none;
+}
+
+// ---- disclosure summary icon (公式 disclosure.css の流用最小セット) ---------
+
+.dads-disclosure__summary {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  gap: calc(8 / 16 * 1rem);
+  width: fit-content;
+  cursor: default;
+  list-style-type: none;
+}
+
+@media (hover: hover) {
+  .dads-disclosure__summary:hover {
+    text-decoration: underline;
+    text-underline-offset: calc(3 / 16 * 1rem);
+  }
+}
+
+.dads-disclosure__summary:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(2 / 16 * 1rem);
+  border-radius: calc(4 / 16 * 1rem);
+  background-color: var(--color-primitive-yellow-300);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+}
+
+.dads-disclosure__summary::marker {
+  content: '';
+}
+
+.dads-disclosure__summary::-webkit-details-marker {
+  display: none;
+}
+
+.dads-disclosure__icon {
+  flex-shrink: 0;
+  margin-top: calc((1lh - 24px) / 2);
+  color: var(--color-primitive-blue-1000);
+}
+
+@media (forced-colors: active) {
+  .dads-disclosure__icon {
+    color: inherit;
+  }
+}
+
+.dads-disclosure[open] .dads-disclosure__icon {
+  rotate: 180deg;
+}
+
+@media (hover: hover) {
+  .dads-disclosure__summary:hover .dads-disclosure__icon-circle {
+    fill: Canvas;
+  }
+
+  .dads-disclosure__summary:hover .dads-disclosure__icon-triangle {
+    fill: currentcolor;
+  }
+}
+
+.dads-disclosure__content {
+  padding-left: calc(32 / 16 * 1rem);
+  margin: calc(16 / 16 * 1rem) 0;
 }
 </style>
