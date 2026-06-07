@@ -27,16 +27,21 @@ describe('DadsMenuListBox', () => {
       expect(wrapper.classes()).toContain('dads-menu-list-box')
     })
 
-    it('renders a <ul role="menu"> as the list container', () => {
+    it('renders the official popup container (dads-menu-list-box__popup)', () => {
       const wrapper = createWrapper()
-      const list = wrapper.find('ul.dads-menu-list-box__list')
+      expect(wrapper.find('.dads-menu-list-box__popup').exists()).toBe(true)
+    })
+
+    it('renders a <ul class="dads-menu-list" role="menu"> as the list container', () => {
+      const wrapper = createWrapper()
+      const list = wrapper.find('ul.dads-menu-list')
       expect(list.exists()).toBe(true)
       expect(list.attributes('role')).toBe('menu')
     })
 
     it('renders one <li role="presentation"> per item', () => {
       const wrapper = createWrapper()
-      const lis = wrapper.findAll('li.dads-menu-list-box__list-item')
+      const lis = wrapper.findAll('.dads-menu-list > li')
       expect(lis).toHaveLength(sampleItems.length)
       for (const li of lis) {
         expect(li.attributes('role')).toBe('presentation')
@@ -45,119 +50,98 @@ describe('DadsMenuListBox', () => {
 
     it('renders one menuitem element per item with the correct label text', () => {
       const wrapper = createWrapper()
-      const items = wrapper.findAll('.dads-menu-list-box__item')
+      const items = wrapper.findAll('.dads-menu-list__item')
       expect(items).toHaveLength(sampleItems.length)
       expect(items[0]?.text()).toContain('メニュー項目1')
       expect(items[1]?.text()).toContain('メニュー項目2')
       expect(items[2]?.text()).toContain('メニュー項目3')
     })
 
-    it('renders <button type="button"> when no href is provided', () => {
+    it('renders <button type="button"> with the official box data attributes when no href', () => {
       const wrapper = createWrapper()
-      const buttons = wrapper.findAll('button.dads-menu-list-box__item')
+      const buttons = wrapper.findAll('button.dads-menu-list__item')
       expect(buttons).toHaveLength(sampleItems.length)
       for (const btn of buttons) {
         expect(btn.attributes('type')).toBe('button')
         expect(btn.attributes('role')).toBe('menuitem')
+        expect(btn.attributes('data-type')).toBe('box')
+        expect(btn.attributes('data-size')).toBe('regular')
       }
+    })
+
+    it('wraps each item label in dads-menu-list__label', () => {
+      const wrapper = createWrapper()
+      const labels = wrapper.findAll('.dads-menu-list__label')
+      expect(labels).toHaveLength(sampleItems.length)
+      expect(labels[0]?.text()).toBe('メニュー項目1')
     })
 
     it('handles an empty items array gracefully', () => {
       const wrapper = createWrapper({ items: [] })
-      const items = wrapper.findAll('.dads-menu-list-box__item')
+      const items = wrapper.findAll('.dads-menu-list__item')
       expect(items).toHaveLength(0)
-      expect(wrapper.find('ul.dads-menu-list-box__list').exists()).toBe(true)
+      expect(wrapper.find('ul.dads-menu-list').exists()).toBe(true)
     })
   })
 
-  describe('description', () => {
-    it('renders the description element when item.description is set', () => {
-      const wrapper = createWrapper({
-        items: [{ label: 'プロフィール', description: 'アカウント情報の編集' }],
-      })
-      const desc = wrapper.find('.dads-menu-list-box__item-description')
-      expect(desc.exists()).toBe(true)
-      expect(desc.text()).toBe('アカウント情報の編集')
-    })
-
-    it('omits the description element when item.description is absent', () => {
-      const wrapper = createWrapper({ items: [{ label: 'プロフィール' }] })
-      expect(wrapper.find('.dads-menu-list-box__item-description').exists()).toBe(false)
-    })
-
-    it('always renders the label element regardless of description presence', () => {
-      const wrapper = createWrapper()
-      const labels = wrapper.findAll('.dads-menu-list-box__item-label')
-      expect(labels).toHaveLength(sampleItems.length)
-    })
-  })
-
-  describe('icon', () => {
-    it('renders an icon element when item.iconName is set', () => {
+  describe('icon (front-icon)', () => {
+    it('renders the front-icon element when item.iconName is set', () => {
       const wrapper = createWrapper({ items: [{ label: 'ホーム', iconName: 'home' }] })
-      const icon = wrapper.find('svg.dads-icon.dads-menu-list-box__item-icon')
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list__front-icon')
       expect(icon.exists()).toBe(true)
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
 
-    it('omits the icon element when item.iconName is absent', () => {
+    it('omits the front-icon element when item.iconName is absent', () => {
       const wrapper = createWrapper({ items: [{ label: 'ホーム' }] })
-      expect(wrapper.find('.dads-menu-list-box__item-icon').exists()).toBe(false)
+      expect(wrapper.find('.dads-menu-list__front-icon').exists()).toBe(false)
     })
   })
 
-  describe('active state', () => {
-    it('applies the --active modifier on active items', () => {
+  describe('active / current state', () => {
+    it('sets the data-current attribute on active items', () => {
       const wrapper = createWrapper({
         items: [{ label: '一覧' }, { label: '詳細', active: true }, { label: '設定' }],
       })
-      const items = wrapper.findAll('.dads-menu-list-box__item')
-      expect(items[0]?.classes()).not.toContain('dads-menu-list-box__item--active')
-      expect(items[1]?.classes()).toContain('dads-menu-list-box__item--active')
-      expect(items[2]?.classes()).not.toContain('dads-menu-list-box__item--active')
+      const items = wrapper.findAll('.dads-menu-list__item')
+      expect(items[0]?.attributes('data-current')).toBeUndefined()
+      expect(items[1]?.attributes('data-current')).toBe('')
+      expect(items[2]?.attributes('data-current')).toBeUndefined()
     })
 
     it('sets aria-current="page" on active items', () => {
       const wrapper = createWrapper({
         items: [{ label: 'A' }, { label: 'B', active: true }],
       })
-      const items = wrapper.findAll('.dads-menu-list-box__item')
+      const items = wrapper.findAll('.dads-menu-list__item')
       expect(items[0]?.attributes('aria-current')).toBeUndefined()
       expect(items[1]?.attributes('aria-current')).toBe('page')
     })
   })
 
   describe('disabled state', () => {
-    it('applies the --disabled modifier on disabled items', () => {
-      const wrapper = createWrapper({
-        items: [{ label: 'A' }, { label: 'B', disabled: true }],
-      })
-      const items = wrapper.findAll('.dads-menu-list-box__item')
-      expect(items[1]?.classes()).toContain('dads-menu-list-box__item--disabled')
-    })
-
     it('sets the disabled attribute on the native button for disabled items', () => {
       const wrapper = createWrapper({ items: [{ label: 'B', disabled: true }] })
-      const btn = wrapper.find('button.dads-menu-list-box__item')
+      const btn = wrapper.find('button.dads-menu-list__item')
       expect(btn.attributes('disabled')).toBeDefined()
       expect(btn.attributes('aria-disabled')).toBe('true')
     })
 
-    it('renders disabled href items as <span>-like buttons (not anchors)', () => {
+    it('renders disabled href items as <button> (not anchors)', () => {
       // Disabled + href: we deliberately render as <button> so the link cannot be
       // followed by mouse / keyboard.
       const wrapper = createWrapper({
         items: [{ label: 'B', href: '/b', disabled: true }],
       })
-      expect(wrapper.find('a.dads-menu-list-box__item').exists()).toBe(false)
-      expect(wrapper.find('button.dads-menu-list-box__item').exists()).toBe(true)
+      expect(wrapper.find('a.dads-menu-list__item').exists()).toBe(false)
+      expect(wrapper.find('button.dads-menu-list__item').exists()).toBe(true)
     })
 
     it('does not emit click:item when a disabled item is clicked', async () => {
       const wrapper = createWrapper({
         items: [{ label: 'A' }, { label: 'B', disabled: true }],
       })
-      const items = wrapper.findAll('.dads-menu-list-box__item')
+      const items = wrapper.findAll('.dads-menu-list__item')
       await items[1]?.trigger('click')
       expect(wrapper.emitted('click:item')).toBeFalsy()
     })
@@ -168,17 +152,18 @@ describe('DadsMenuListBox', () => {
       const wrapper = createWrapper({
         items: [{ label: '外部', href: 'https://example.com' }],
       })
-      const link = wrapper.find('a.dads-menu-list-box__item')
+      const link = wrapper.find('a.dads-menu-list__item')
       expect(link.exists()).toBe(true)
       expect(link.attributes('href')).toBe('https://example.com')
       expect(link.attributes('role')).toBe('menuitem')
+      expect(link.attributes('data-type')).toBe('box')
     })
 
     it('does not set the type attribute on anchor items', () => {
       const wrapper = createWrapper({
         items: [{ label: '外部', href: 'https://example.com' }],
       })
-      const link = wrapper.find('a.dads-menu-list-box__item')
+      const link = wrapper.find('a.dads-menu-list__item')
       expect(link.attributes('type')).toBeUndefined()
     })
 
@@ -186,38 +171,45 @@ describe('DadsMenuListBox', () => {
       const wrapper = createWrapper({
         items: [{ label: 'リンク', href: '/x' }, { label: 'ボタン' }],
       })
-      expect(wrapper.findAll('a.dads-menu-list-box__item')).toHaveLength(1)
-      expect(wrapper.findAll('button.dads-menu-list-box__item')).toHaveLength(1)
+      expect(wrapper.findAll('a.dads-menu-list__item')).toHaveLength(1)
+      expect(wrapper.findAll('button.dads-menu-list__item')).toHaveLength(1)
     })
   })
 
   describe('aria semantics', () => {
     it('applies the aria-label prop to the <ul role="menu">', () => {
       const wrapper = createWrapper({ ariaLabel: 'グローバルメニュー' })
-      const list = wrapper.find('ul.dads-menu-list-box__list')
+      const list = wrapper.find('ul.dads-menu-list')
       expect(list.attributes('aria-label')).toBe('グローバルメニュー')
     })
 
     it('omits aria-label on the list when not provided', () => {
       const wrapper = createWrapper()
-      const list = wrapper.find('ul.dads-menu-list-box__list')
+      const list = wrapper.find('ul.dads-menu-list')
       expect(list.attributes('aria-label')).toBeUndefined()
     })
 
     it('uses role="menu" on the list and role="menuitem" on actionable items', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('ul.dads-menu-list-box__list').attributes('role')).toBe('menu')
-      const items = wrapper.findAll('.dads-menu-list-box__item')
+      expect(wrapper.find('ul.dads-menu-list').attributes('role')).toBe('menu')
+      const items = wrapper.findAll('.dads-menu-list__item')
       for (const item of items) {
         expect(item.attributes('role')).toBe('menuitem')
       }
+    })
+
+    it('labels the menu from the opener via aria-labelledby when no aria-label is given', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
+      const opener = wrapper.find('.dads-menu-list-box__opener')
+      const list = wrapper.find('ul.dads-menu-list')
+      expect(list.attributes('aria-labelledby')).toBe(opener.attributes('id'))
     })
   })
 
   describe('click interactions', () => {
     it('emits click:item with the item, index, and MouseEvent when a button item is clicked', async () => {
       const wrapper = createWrapper()
-      const items = wrapper.findAll('.dads-menu-list-box__item')
+      const items = wrapper.findAll('.dads-menu-list__item')
       await items[1]?.trigger('click')
       const emitted = wrapper.emitted('click:item')
       expect(emitted).toBeTruthy()
@@ -230,7 +222,7 @@ describe('DadsMenuListBox', () => {
       const wrapper = createWrapper({
         items: [{ label: 'L', href: '/x' }],
       })
-      const link = wrapper.find('a.dads-menu-list-box__item')
+      const link = wrapper.find('a.dads-menu-list__item')
       await link.trigger('click')
       expect(wrapper.emitted('click:item')).toBeTruthy()
     })
@@ -238,73 +230,94 @@ describe('DadsMenuListBox', () => {
 
   // ----------------------------------------------------------------------
   // Opener mode — triggerLabel turns the component into a dropdown with an
-  // opener button, hidden surface, v-model open state, and open/close events.
+  // opener button, hidden popup, v-model open state, and open/close events.
   // ----------------------------------------------------------------------
   describe('opener mode', () => {
-    it('does not render the trigger button when triggerLabel is omitted', () => {
+    it('does not render the opener button when triggerLabel is omitted', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-menu-list-box__trigger').exists()).toBe(false)
+      expect(wrapper.find('.dads-menu-list-box__opener').exists()).toBe(false)
     })
 
-    it('renders the trigger button when triggerLabel is provided', () => {
+    it('renders the opener button with official aria-haspopup when triggerLabel is provided', () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー' })
-      const trigger = wrapper.find('button.dads-menu-list-box__trigger')
-      expect(trigger.exists()).toBe(true)
-      expect(trigger.text()).toContain('メニュー')
+      const opener = wrapper.find('button.dads-menu-list-box__opener')
+      expect(opener.exists()).toBe(true)
+      expect(opener.text()).toContain('メニュー')
+      expect(opener.attributes('aria-haspopup')).toBe('menu')
     })
 
-    it('renders the trigger icon when triggerIcon is provided', () => {
+    it('renders the opener icon when triggerIcon is provided', () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerIcon: 'menu' })
-      const icon = wrapper.find('svg.dads-icon.dads-menu-list-box__trigger-icon')
+      const icon = wrapper.find('svg.dads-icon.dads-menu-list-box__opener-icon')
       expect(icon.exists()).toBe(true)
     })
 
-    it('applies the trigger size modifier', () => {
-      const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerSize: 'lg' })
-      expect(wrapper.find('.dads-menu-list-box__trigger').classes()).toContain(
-        'dads-menu-list-box__trigger--lg',
-      )
+    it('always renders the opener arrow', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー' })
+      expect(wrapper.find('.dads-menu-list-box__opener-arrow').exists()).toBe(true)
     })
 
-    it('reflects open state via aria-expanded on the trigger', async () => {
+    it('applies the opener data-size attribute (md by default)', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー' })
+      expect(wrapper.find('.dads-menu-list-box__opener').attributes('data-size')).toBe('md')
+    })
+
+    it('applies the sm opener data-size attribute', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー', triggerSize: 'sm' })
+      expect(wrapper.find('.dads-menu-list-box__opener').attributes('data-size')).toBe('sm')
+    })
+
+    it('applies the opener data-style attribute (text by default)', () => {
+      const wrapper = createWrapper({ triggerLabel: 'メニュー' })
+      expect(wrapper.find('.dads-menu-list-box__opener').attributes('data-style')).toBe('text')
+    })
+
+    it('applies the outlined / filled opener data-style attribute', () => {
+      const outlined = createWrapper({ triggerLabel: 'メニュー', triggerStyle: 'outlined' })
+      expect(outlined.find('.dads-menu-list-box__opener').attributes('data-style')).toBe('outlined')
+      const filled = createWrapper({ triggerLabel: 'メニュー', triggerStyle: 'filled' })
+      expect(filled.find('.dads-menu-list-box__opener').attributes('data-style')).toBe('filled')
+    })
+
+    it('reflects open state via aria-expanded on the opener', async () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
-      const trigger = wrapper.find('.dads-menu-list-box__trigger')
-      expect(trigger.attributes('aria-expanded')).toBe('false')
+      const opener = wrapper.find('.dads-menu-list-box__opener')
+      expect(opener.attributes('aria-expanded')).toBe('false')
       await wrapper.setProps({ modelValue: true })
-      expect(trigger.attributes('aria-expanded')).toBe('true')
+      expect(opener.attributes('aria-expanded')).toBe('true')
     })
 
-    it('aria-controls points to the surface element', () => {
+    it('aria-controls points to the popup menu element', () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
-      const trigger = wrapper.find('.dads-menu-list-box__trigger')
-      const surface = wrapper.find('.dads-menu-list-box__surface')
-      expect(trigger.attributes('aria-controls')).toBe(surface.attributes('id'))
+      const opener = wrapper.find('.dads-menu-list-box__opener')
+      const list = wrapper.find('ul.dads-menu-list')
+      expect(opener.attributes('aria-controls')).toBe(list.attributes('id'))
     })
 
-    it('hides the surface via display: none when modelValue=false (v-show)', () => {
+    it('hides the popup via display: none when modelValue=false (v-show)', () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
-      const surface = wrapper.find('.dads-menu-list-box__surface')
-      expect(surface.exists()).toBe(true)
+      const popup = wrapper.find('.dads-menu-list-box__popup')
+      expect(popup.exists()).toBe(true)
       // v-show keeps the element in the DOM with display:none.
-      expect((surface.element as HTMLElement).style.display).toBe('none')
+      expect((popup.element as HTMLElement).style.display).toBe('none')
     })
 
-    it('shows the surface when modelValue=true', () => {
+    it('shows the popup when modelValue=true', () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
-      const surface = wrapper.find('.dads-menu-list-box__surface')
-      expect((surface.element as HTMLElement).style.display).not.toBe('none')
+      const popup = wrapper.find('.dads-menu-list-box__popup')
+      expect((popup.element as HTMLElement).style.display).not.toBe('none')
     })
 
-    it('emits update:modelValue when the trigger is clicked (closed → open)', async () => {
+    it('emits update:modelValue when the opener is clicked (closed → open)', async () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: false })
-      await wrapper.find('.dads-menu-list-box__trigger').trigger('click')
+      await wrapper.find('.dads-menu-list-box__opener').trigger('click')
       const emitted = wrapper.emitted('update:modelValue')
       expect(emitted?.[0]?.[0]).toBe(true)
     })
 
-    it('emits update:modelValue when the trigger is clicked (open → closed)', async () => {
+    it('emits update:modelValue when the opener is clicked (open → closed)', async () => {
       const wrapper = createWrapper({ triggerLabel: 'メニュー', modelValue: true })
-      await wrapper.find('.dads-menu-list-box__trigger').trigger('click')
+      await wrapper.find('.dads-menu-list-box__opener').trigger('click')
       const emitted = wrapper.emitted('update:modelValue')
       expect(emitted?.[0]?.[0]).toBe(false)
     })
@@ -351,12 +364,12 @@ describe('DadsMenuListBox', () => {
   })
 
   describe('standalone mode (no opener)', () => {
-    it('always shows the surface even when modelValue=false', () => {
+    it('always shows the popup even when modelValue=false', () => {
       const wrapper = createWrapper({ modelValue: false })
-      const surface = wrapper.find('.dads-menu-list-box__surface')
-      expect(surface.exists()).toBe(true)
+      const popup = wrapper.find('.dads-menu-list-box__popup')
+      expect(popup.exists()).toBe(true)
       // No v-show display:none should be applied in standalone mode.
-      expect((surface.element as HTMLElement).style.display).not.toBe('none')
+      expect((popup.element as HTMLElement).style.display).not.toBe('none')
     })
   })
 
@@ -382,12 +395,12 @@ describe('DadsMenuListBox', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations with item descriptions and icons', async () => {
+    it('has no violations with item icons', async () => {
       const wrapper = mountInLandmark({
         ariaLabel: 'カテゴリ一覧',
         items: [
-          { label: 'ホーム', iconName: 'home', description: 'トップページに戻ります' },
-          { label: 'ニュース', iconName: 'newspaper', description: '最新のお知らせ' },
+          { label: 'ホーム', iconName: 'home' },
+          { label: 'ニュース', iconName: 'newspaper' },
         ],
       })
       expect(await axe(wrapper.element)).toHaveNoViolations()
