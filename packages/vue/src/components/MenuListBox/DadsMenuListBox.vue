@@ -10,18 +10,21 @@ import type {
 const props = withDefaults(defineProps<DadsMenuListBoxProps>(), {
   modelValue: false,
   triggerSize: 'md',
+  triggerStyle: 'text',
   placement: 'start',
 })
 const emit = defineEmits<DadsMenuListBoxEmits>()
 
 // Opener mode is detected by the presence of a trigger label. In standalone
-// mode the box is always visible regardless of modelValue, preserving the
+// mode the popup is always visible regardless of modelValue, preserving the
 // pre-2026-05 behaviour.
 const hasOpener = computed(() => Boolean(props.triggerLabel))
 const isOpen = computed(() => (hasOpener.value ? props.modelValue : true))
 
-// Stable id so the opener's aria-controls points to the right box.
-const surfaceId = useId()
+// Stable ids so the opener's aria-controls points at the popup and the menu
+// can label itself from the opener (official uses aria-labelledby).
+const popupId = useId()
+const openerId = useId()
 
 // Emit open / close lifecycle events only in Opener mode and only on real
 // transitions (avoids spurious events on mount when modelValue starts true).
@@ -67,75 +70,73 @@ const rootClasses = computed(() => [
     [`dads-menu-list-box--placement-${props.placement}`]: hasOpener.value,
   },
 ])
-
-const triggerClasses = computed(() => [
-  'dads-menu-list-box__trigger',
-  `dads-menu-list-box__trigger--${props.triggerSize}`,
-])
 </script>
 
 <template>
   <div :class="rootClasses">
     <button
       v-if="hasOpener"
+      :id="openerId"
       type="button"
-      :class="triggerClasses"
+      class="dads-menu-list-box__opener"
+      :data-size="triggerSize"
+      :data-style="triggerStyle"
+      aria-haspopup="menu"
       :aria-expanded="isOpen ? 'true' : 'false'"
-      :aria-controls="surfaceId"
+      :aria-controls="popupId"
       @click="toggle"
     >
       <DadsIcon
         v-if="triggerIcon"
         :name="triggerIcon"
-        class="dads-menu-list-box__trigger-icon"
+        class="dads-menu-list-box__opener-icon"
         :size="20"
       />
-      <span class="dads-menu-list-box__trigger-label">{{ triggerLabel }}</span>
-      <DadsIcon name="keyboard_arrow_down" class="dads-menu-list-box__trigger-caret" :size="20" />
+      {{ triggerLabel }}
+      <DadsIcon
+        name="keyboard_arrow_down"
+        class="dads-menu-list-box__opener-arrow"
+        :size="16"
+      />
     </button>
-    <div v-show="isOpen" :id="surfaceId" class="dads-menu-list-box__surface">
-      <ul class="dads-menu-list-box__list" role="menu" :aria-label="ariaLabel">
+    <div v-show="isOpen" class="dads-menu-list-box__popup">
+      <ul
+        :id="popupId"
+        class="dads-menu-list"
+        role="menu"
+        :aria-label="ariaLabel || undefined"
+        :aria-labelledby="!ariaLabel && hasOpener ? openerId : undefined"
+      >
         <li
           v-for="entry in renderedItems"
           :key="entry.index"
-          class="dads-menu-list-box__list-item"
           role="presentation"
         >
           <a
             v-if="entry.isLink"
             :href="entry.item.href"
-            class="dads-menu-list-box__item"
-            :class="{
-              'dads-menu-list-box__item--active': entry.item.active,
-              'dads-menu-list-box__item--disabled': entry.item.disabled,
-            }"
+            class="dads-menu-list__item"
+            data-type="box"
+            data-size="regular"
             role="menuitem"
             :aria-current="entry.item.active ? 'page' : undefined"
-            :aria-disabled="entry.item.disabled || undefined"
             :data-current="entry.item.active ? '' : undefined"
             @click="onItemClick(entry.item, entry.index, $event)"
           >
             <DadsIcon
               v-if="entry.item.iconName"
               :name="entry.item.iconName"
-              class="dads-menu-list-box__item-icon"
-              :size="20"
+              class="dads-menu-list__front-icon"
+              :size="24"
             />
-            <span class="dads-menu-list-box__item-body">
-              <span class="dads-menu-list-box__item-label">{{ entry.item.label }}</span>
-              <span v-if="entry.item.description" class="dads-menu-list-box__item-description">
-                {{ entry.item.description }}
-              </span>
-            </span>
+            <span class="dads-menu-list__label">{{ entry.item.label }}</span>
           </a>
           <button
             v-else
             type="button"
-            class="dads-menu-list-box__item"
-            :class="{
-              'dads-menu-list-box__item--active': entry.item.active,
-              'dads-menu-list-box__item--disabled': entry.item.disabled,
-            }"
+            class="dads-menu-list__item"
+            data-type="box"
+            data-size="regular"
             role="menuitem"
             :disabled="entry.item.disabled"
             :aria-current="entry.item.active ? 'page' : undefined"
@@ -146,15 +147,10 @@ const triggerClasses = computed(() => [
             <DadsIcon
               v-if="entry.item.iconName"
               :name="entry.item.iconName"
-              class="dads-menu-list-box__item-icon"
-              :size="20"
+              class="dads-menu-list__front-icon"
+              :size="24"
             />
-            <span class="dads-menu-list-box__item-body">
-              <span class="dads-menu-list-box__item-label">{{ entry.item.label }}</span>
-              <span v-if="entry.item.description" class="dads-menu-list-box__item-description">
-                {{ entry.item.description }}
-              </span>
-            </span>
+            <span class="dads-menu-list__label">{{ entry.item.label }}</span>
           </button>
         </li>
       </ul>
@@ -165,33 +161,82 @@ const triggerClasses = computed(() => [
 <style scoped lang="scss">
 @use '../../styles/base' as base;
 
+// =============================================================================
+// MenuListBox — official markup parity.
+// The popup item styles are ported from the shared menu-list.css (box variant)
+// so the component renders the canonical `dads-menu-list` markup without
+// importing the DadsMenuList component (lightweight T2 approach).
+// =============================================================================
+
 .dads-menu-list-box {
   position: relative;
-  display: inline-block;
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  display: block;
+  width: fit-content;
   color: var(--color-neutral-solid-gray-900, #1a1a1a);
-  font-size: var(--font-size-16, 1rem);
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
   line-height: 1.2;
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   letter-spacing: 0.02em;
 
-  // -------------------- trigger button ----------------------------------
-  &__trigger {
-    @include base.dads-reset-button;
-
-    display: inline-flex;
+  // -------------------- opener button (data-size / data-style) ----------
+  &__opener {
+    display: flex;
     align-items: center;
-    gap: calc(8 / 16 * 1rem);
-    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
-    border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
-    border-radius: var(--border-radius-8, 0.5rem);
-    background-color: var(--color-neutral-white, #fff);
+    box-sizing: border-box;
+    border-radius: calc(8 / 16 * 1rem);
+    border: 0;
+    background: transparent;
+    padding-top: calc(4 / 16 * 1rem);
+    padding-bottom: calc(4 / 16 * 1rem);
     color: inherit;
     font: inherit;
+    letter-spacing: inherit;
     cursor: pointer;
-    transition: background-color 0.15s ease;
 
-    // Official opener focus: 4px outline + 2px offset + yellow-300 fill +
-    // 2px yellow shadow (keeps the 8px radius, unlike the generic fill mixin).
+    &[data-size='sm'] {
+      min-height: calc(36 / 16 * 1rem);
+      padding-right: calc(4 / 16 * 1rem);
+      padding-left: calc(4 / 16 * 1rem);
+      column-gap: calc(4 / 16 * 1rem);
+    }
+
+    &[data-size='md'] {
+      min-height: calc(44 / 16 * 1rem);
+      padding-right: calc(16 / 16 * 1rem);
+      padding-left: calc(16 / 16 * 1rem);
+      column-gap: calc(8 / 16 * 1rem);
+    }
+
+    &[data-style='outlined'] {
+      border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
+      background-color: transparent;
+    }
+
+    &[data-style='filled'] {
+      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
+    }
+
+    &[data-text-weight='bold'] {
+      font-weight: bold;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
+        text-decoration: underline;
+        text-underline-offset: calc(3 / 16 * 1rem);
+      }
+
+      &[data-style='outlined']:hover {
+        border-color: var(--color-neutral-black, #000);
+      }
+
+      &[data-style='filled']:hover {
+        background-color: var(--color-neutral-solid-gray-100, #e6e6e6);
+      }
+    }
+
     &:focus-visible {
       outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
       outline-offset: calc(2 / 16 * 1rem);
@@ -199,198 +244,183 @@ const triggerClasses = computed(() => [
       box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
     }
 
+    &[data-style='filled']:focus-visible {
+      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
+    }
+
     &:focus:not(:focus-visible) {
       outline: none;
     }
-
-    &:hover {
-      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
-      text-decoration: underline;
-      text-underline-offset: calc(3 / 16 * 1rem);
-    }
-
-    // Indicate open state on the caret.
-    &[aria-expanded='true'] .dads-menu-list-box__trigger-caret {
-      transform: rotate(180deg);
-    }
-
-    &--sm {
-      min-height: calc(36 / 16 * 1rem);
-      padding: calc(4 / 16 * 1rem) calc(4 / 16 * 1rem);
-      column-gap: calc(4 / 16 * 1rem);
-      font-size: var(--font-size-14, 0.875rem);
-    }
-
-    &--md {
-      min-height: calc(44 / 16 * 1rem);
-      padding: calc(4 / 16 * 1rem) calc(16 / 16 * 1rem);
-      font-size: var(--font-size-16, 1rem);
-    }
-
-    &--lg {
-      min-height: 3rem;
-      padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
-      font-size: var(--font-size-18, 1.125rem);
-    }
   }
 
-  &__trigger-icon {
-    font-size: 1.25em;
-    line-height: 1;
+  &__opener-icon {
+    flex-shrink: 0;
+    width: calc(20 / 16 * 1rem);
+    height: calc(20 / 16 * 1rem);
   }
 
-  &__trigger-label {
-    flex: 1 1 auto;
-  }
-
-  &__trigger-caret {
-    font-size: 1.25em;
-    line-height: 1;
+  &__opener-arrow {
+    margin-top: calc(4 / 16 * 1rem);
+    flex-shrink: 0;
+    width: calc(16 / 16 * 1rem);
+    height: calc(16 / 16 * 1rem);
     transition: transform 0.15s ease;
   }
 
-  // -------------------- surface (the boxed menu) ------------------------
-  // In standalone mode (no opener), the surface lives inline as the only
-  // child. In opener mode, it is absolutely positioned beneath the trigger.
-  &__surface {
-    width: max-content;
-    max-width: 100%;
+  &__opener[aria-expanded='true'] .dads-menu-list-box__opener-arrow {
+    transform: rotate(180deg);
+  }
+
+  // -------------------- popup -------------------------------------------
+  // In standalone mode (no opener) the popup lives inline as the only child.
+  // In opener mode it is absolutely positioned beneath the opener.
+  &__popup {
     box-sizing: border-box;
+    width: max-content;
+    max-height: calc((16 + 44 * 6.5) / 16 * 1rem);
+    overflow-y: auto;
     // Official popup rounds only the leading side (8px 0 0 8px), hugging the
     // screen edge on the trailing side.
-    border-radius: var(--border-radius-8, 0.5rem) 0 0 var(--border-radius-8, 0.5rem);
+    border-radius: calc(8 / 16 * 1rem) 0 0 calc(8 / 16 * 1rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
     background-color: var(--color-neutral-white, #fff);
     padding: calc(16 / 16 * 1rem) 0;
     box-shadow: var(--elevation-1, 0 1px 2px rgba(0, 0, 0, 0.08));
   }
 
-  &--with-opener &__surface {
+  &--with-opener &__popup {
     position: absolute;
     top: 100%;
+    left: 0;
     margin-top: calc(4 / 16 * 1rem);
-    z-index: 10;
+    z-index: 1;
   }
 
-  &--placement-start &__surface {
-    inset-inline-start: 0;
-  }
-
-  &--placement-end &__surface {
-    inset-inline-end: 0;
+  &--placement-end &__popup {
+    left: auto;
+    right: 0;
     // Mirror the leading-side rounding so the rounded edge faces inward when
     // the popup is anchored to the trailing edge.
-    border-radius: 0 var(--border-radius-8, 0.5rem) var(--border-radius-8, 0.5rem) 0;
+    border-radius: 0 calc(8 / 16 * 1rem) calc(8 / 16 * 1rem) 0;
   }
 
-  // -------------------- list --------------------------------------------
-  &__list {
-    list-style: none;
+  // -------------------- shared menu-list (box variant) ------------------
+  // Ported from menu-list.css so the popup uses the canonical class names
+  // without importing the DadsMenuList component.
+  .dads-menu-list {
+    position: relative;
+    z-index: 0;
     margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    list-style-type: none;
+    padding-left: 0;
+    color: var(--color-neutral-solid-gray-800, #333);
+    font-weight: normal;
+    font-size: calc(16 / 16 * 1rem);
+    line-height: 1.3;
+    font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+    letter-spacing: 0;
   }
 
-  &__list-item {
-    display: block;
-  }
-
-  // -------------------- item --------------------------------------------
-  &__item {
-    @include base.dads-reset-button;
-
+  .dads-menu-list__item,
+  .dads-menu-list__item:any-link {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     column-gap: calc(8 / 16 * 1rem);
     box-sizing: border-box;
-    width: 100%;
-    min-height: calc(44 / 16 * 1rem);
-    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: stretch;
     border: 0;
     background-color: transparent;
+    padding-right: calc(16 / 16 * 1rem);
+    padding-left: calc(16 / 16 * 1rem);
     color: inherit;
-    text-decoration: none;
-    text-align: start;
+    text-align: left;
     font: inherit;
+    letter-spacing: inherit;
+    text-decoration: none;
+    text-decoration-thickness: calc(1 / 16 * 1rem);
     cursor: pointer;
+  }
 
-    &:focus-visible {
-      position: relative;
-      z-index: 1;
-      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
-      outline-offset: calc(-4 / 16 * 1rem);
-      box-shadow: inset 0 0 0 calc(6 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
-      background-color: var(--color-primitive-yellow-300, #ffd43d);
+  .dads-menu-list__item[data-size='regular'] {
+    min-height: calc(44 / 16 * 1rem);
+    padding-top: calc(10 / 16 * 1rem);
+    padding-bottom: calc(10 / 16 * 1rem);
+    line-height: 1.3;
+  }
+
+  .dads-menu-list__item[data-size='small'] {
+    min-height: calc(36 / 16 * 1rem);
+    padding-top: calc(6 / 16 * 1rem);
+    padding-bottom: calc(6 / 16 * 1rem);
+    line-height: 1.2;
+  }
+
+  .dads-menu-list__item[data-type='box'] {
+    border-radius: 0;
+    padding-left: calc(16 / 16 * 1rem + 1rem * var(--menu-list-indentation, 0));
+  }
+
+  .dads-menu-list__item[data-current] {
+    background-color: var(--color-primitive-blue-100, #e6efff);
+    color: var(--color-primitive-blue-1000, #001a9c);
+    font-weight: bold;
+  }
+
+  @media (hover: hover) {
+    .dads-menu-list__item:hover {
+      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
+      text-decoration: underline;
+      text-underline-offset: calc(3 / 16 * 1rem);
     }
 
-    @media (hover: hover) {
-      &:hover:not(.dads-menu-list-box__item--disabled) {
-        background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
-        text-decoration: underline;
-        text-underline-offset: calc(3 / 16 * 1rem);
-      }
-    }
-
-    &--active {
-      background-color: var(--color-primitive-blue-100, #e6efff);
-      color: var(--color-primitive-blue-1000, #001a9c);
-      font-weight: bold;
-
-      @media (hover: hover) {
-        &:hover {
-          background-color: var(--color-primitive-blue-50, #f0f5ff);
-          color: var(--color-primitive-blue-900, #001480);
-        }
-      }
-    }
-
-    &--disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-      pointer-events: none;
+    .dads-menu-list__item[data-current]:hover {
+      background-color: var(--color-primitive-blue-50, #f0f5ff);
+      color: var(--color-primitive-blue-900, #001480);
     }
   }
 
-  &__item-icon {
+  .dads-menu-list__item:focus-visible {
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  .dads-menu-list__item[data-type='box']:focus-visible {
+    outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+    outline-offset: calc(-4 / 16 * 1rem);
+    box-shadow: inset 0 0 0 calc(6 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  .dads-menu-list__item[data-current]:focus-visible {
+    background-color: var(--color-primitive-blue-100, #e6efff);
+  }
+
+  // Disabled menu items: dim and block interaction. (Not present in the
+  // official CSS but required for the disabled-item API.)
+  .dads-menu-list__item:disabled,
+  .dads-menu-list__item[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .dads-menu-list__front-icon {
     flex-shrink: 0;
-    font-size: 1.25em;
-    line-height: 1;
-    margin-top: 0.125em;
-  }
-
-  &__item-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  &__item-label {
-    display: block;
-    font-weight: inherit;
-  }
-
-  &__item-description {
-    display: block;
-    margin-top: calc(2 / 16 * 1rem);
-    font-size: var(--font-size-14, 0.875rem);
-    line-height: 1.4;
-    font-weight: normal;
-    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   // -------------------- forced colors -----------------------------------
   @include base.dads-forced-colors {
-    &__surface {
+    &__popup {
       border: 1px solid CanvasText;
     }
 
-    &__trigger {
+    &__opener {
       border: 1px solid CanvasText;
     }
 
-    &__item {
+    .dads-menu-list__item {
       border: 1px solid transparent;
 
       &:focus-visible {
@@ -398,11 +428,12 @@ const triggerClasses = computed(() => [
         outline-offset: -2px;
       }
 
-      &--active {
+      &[data-current] {
         border-color: CanvasText;
       }
 
-      &--disabled {
+      &:disabled,
+      &[aria-disabled='true'] {
         color: GrayText;
       }
     }
