@@ -11,10 +11,12 @@
 
 ## Accordion
 
-- [ ] <div>+<h3>+<button aria-expanded> 構造 → 公式 <details>/<summary> ネイティブ disclosure への作り直し (DOM/aria 変更)
-- [ ] chevron web-font アイコン → 公式の円形 border アイコン+SVG chevron 回転への置換 (DOM/アイコン構造変更)
-- [ ] 公式に無い size=l/m/s/xs 公開 API の廃止と @media(min-width:48rem) レスポンシブ挙動の実装 (public props 変更・テストが size 修飾クラスに依存)
-- [ ] 公式に無い disabled 状態の扱い (opacity 0.6 ディミングは維持。状態自体の除去は公開挙動の変更のため見送り)
+> **T3 解消済み (PR: issue-18-a3-t3, 案X フル)** — 単一 native `<details>/<summary>` へ作り直し。DadsDisclosure と同型の API (`title`/`modelValue`/`defaultOpen`/`headingLevel`/`backLink`) に統一し、`items[]`/`type`(single/multiple)/`size`/独自矢印キーナビ/`panel-{id}` slot を全廃。
+
+- [x] <div>+<h3>+<button aria-expanded> 構造 → 公式 <details>/<summary> ネイティブ disclosure への作り直し (DOM/aria 変更)
+- [x] chevron web-font アイコン → 公式の円形 border アイコン+SVG chevron 回転への置換 (公式 inline SVG `M3.3 7.3L12 16L20.7 7.3` を採用、`[open]` で 180° 回転)
+- [x] 公式に無い size=l/m/s/xs 公開 API の廃止と @media(min-width:48rem) レスポンシブ挙動の実装 (`--_icon-size` 20→32px)
+- [x] 公式に無い disabled 状態の扱い (opacity 0.6 ディミングは維持。DadsDisclosure と同じ click/keydown インターセプト方式)
 
 ## Blockquote
 
@@ -116,13 +118,15 @@
 
 ## Drawer
 
-- [ ] ネイティブ <dialog> + showModal() + ::backdrop への構造刷新 (現状 Teleport + <div role=dialog> + 手書き overlay/focus-trap)。DOM/aria/挙動の破壊的変更のため A-2 対象外
-- [ ] 公式 drawer に存在しない item ナビ機能 (DadsDrawerItem 再帰) と関連 props/slot/状態スタイルの整理
-- [ ] 閉じるボタンを公式共有部品 hamburger-menu-button (SVG) に寄せる件 (現状 mdi-close フォントアイコン)
-- [ ] __item-button の disabled (opacity:.5) を公式専用トークン配色へ: 公式 drawer に item/disabled 定義が無く正準トークンが gap-report に無いため見送り
-- [ ] forced-colors で公式は ::backdrop を #000b に強調するが、Vue は overlay が div で ::backdrop 非使用。dialog 化と一体のため A3
-- [ ] __title の独自 18px/700 と __close の 4px 角丸 (公式 drawer 本体に無い装飾) の扱い
-- [ ] 公式 header 下線は本来存在しない (Vue 独自) が、border 削除はビジュアル仕様判断のため誤フォールバック修正に留めた
+> **T3 解消済み (PR: issue-18-a3-t3, 案X フル)** — native `<dialog>` + `showModal()` + `::backdrop` へ構造刷新。本文は default slot（フリーフォーム）に統一し、非公式の item ナビ (`items[]`/`DadsDrawerItem` 再帰) と `full` placement を全廃。閉じるは `DadsHamburgerMenuButton`(X)。`sample-app/SideMenu.vue` は slot + `DadsMenuList` へ追従。
+
+- [x] ネイティブ <dialog> + showModal() + ::backdrop への構造刷新 (Teleport/Transition/手書き overlay/focus-trap/Tab ハンドラを全廃。native dialog が focus-trap/Esc/inert を肩代わり)
+- [x] 公式 drawer に存在しない item ナビ機能 (DadsDrawerItem 再帰) と関連 props/slot/状態スタイルの整理 → 全廃し default slot へ
+- [x] 閉じるボタンを公式共有部品 hamburger-menu-button (SVG) に寄せる件 → `DadsHamburgerMenuButton` を close 状態で採用
+- [x] __item-button の disabled (opacity:.5) → item ナビ廃止により消滅 (slot 側の責務)
+- [x] forced-colors で公式は ::backdrop を #000b に強調 → native `::backdrop` + `@media (forced-colors: active)` で実装
+- [x] __title の独自 18px/700 と __close の 4px 角丸 → 公式に無い装飾を撤去 (visually-hidden `<h2>` + aria-labelledby に置換)
+- [x] 公式 header 下線は本来存在しない (Vue 独自) → 撤去
 
 ## EmergencyBanner
 

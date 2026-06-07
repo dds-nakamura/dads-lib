@@ -67,3 +67,14 @@
 - 優先度: high。token 直書き 3 件 (elevation/overlay/bg) と幅 288px は patch で是正可能。`<dialog>` ベースへの寄せ・item ナビ機能 (DadsDrawerItem) の扱いは設計判断 (公式 drawer は item 機能を持たない)。
 - 想定 changeset レベル: **patch (CSS トークン是正のみ)** 〜 **major (構造を `<dialog>` ベースへ刷新 + item API 見直し)**。最小修正 (token/elevation/幅/backdrop) なら patch で DOM・props 不変を保てる。構造刷新まで踏み込むと major。
 - API/aria 不変: **最小修正なら保てる** (CSS のみ)。`<dialog>` 化や DadsDrawerItem の整理に踏み込む場合は props/slot/aria の破壊的変更を伴う。
+
+## T3 解消
+
+構造刷新 (major) を採用し、公式 drawer を 1:1 で再現した。
+
+- **ネイティブ `<dialog>` 化**: `<div role=dialog>` + 手書き overlay / focus-trap を廃し、`<dialog class="dads-drawer">` + `showModal()` + `::backdrop` に刷新。モーダル化・フォーカストラップ・背景 inert・Esc-to-close・フォーカス復帰はブラウザ任せ。
+- **CSS 全面移植**: `drawer.css` を 1:1 移植 (幅 288px・`height: 100dvh`・`box-shadow: var(--elevation-2)`・backdrop `var(--color-neutral-opacity-gray-100)`・header padding `20px 16px`・`line-height: 1.7` / `letter-spacing: 0.02em`)。直書き / 非実在トークンを排除。`forced-colors` backdrop `#000b` も対応。
+- **閉じるボタン**: 共有部品 `DadsHamburgerMenuButton` (× アイコン + 「閉じる」、`aria-controls` = dialog id) を使用。
+- **アクセシブル名**: 視覚的に隠した `<h2 class="dads-u-visually-hidden">` + `aria-labelledby`。
+- **削除した非公式機能**: item ナビ (`items[]` / `DadsDrawerItem` 再帰アコーディオン) / `placement="full"` / `Teleport` / `Transition` / 手書き focus-trap / `click:item` emit。body はデフォルトスロットに変更。
+- backdrop クリックのみネイティブが閉じないため軽量ハンドラ (`event.target === dialog`) を追加。

@@ -1,349 +1,176 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
-import DadsIcon from '../Icon/DadsIcon.vue'
-import DadsDrawerItem from './DadsDrawerItem.vue'
-import type {
-  DadsDrawerEmits,
-  DadsDrawerItem as DadsDrawerItemType,
-  DadsDrawerProps,
-} from './DadsDrawer.types'
+import { onMounted, ref, useId, watch } from 'vue'
+import DadsHamburgerMenuButton from '../HamburgerMenuButton/DadsHamburgerMenuButton.vue'
+import type { DadsDrawerEmits, DadsDrawerProps } from './DadsDrawer.types'
 
 const props = withDefaults(defineProps<DadsDrawerProps>(), {
   modelValue: false,
-  closeLabel: '閉じる',
-  defaultAriaLabel: 'ナビゲーション',
-  navAriaLabel: 'ドロワーナビゲーション',
+  // 公式 playground のアクセシブル名に合わせる。i18n 用に上書き可能。
+  title: 'メニュー',
   placement: 'left',
+  closeLabel: '閉じる',
 })
 
 const emit = defineEmits<DadsDrawerEmits>()
 
-const panelRef = ref<HTMLElement | null>(null)
+const dialogRef = ref<HTMLDialogElement | null>(null)
 
-// Track which element had focus when the drawer opened so it can be restored
-// on close. Module-scoped via closure rather than reactive — there is no UI
-// concern that needs to react to changes here.
-let previousActive: HTMLElement | null = null
+const generatedId = useId()
+const dialogId = `dads-drawer-${generatedId}`
+const headingId = `dads-drawer-heading-${generatedId}`
 
 const close = () => {
   emit('update:modelValue', false)
 }
 
-const onItemClick = (item: DadsDrawerItemType, event: MouseEvent) => {
-  // DadsDrawerItem already filters out disabled clicks before emitting, so
-  // by the time we get here the item is actionable.
-  emit('click:item', item, event)
-  if (item.onClick) item.onClick(event)
-  // Leaf items navigate away or fire a callback — close the drawer to mirror
-  // typical mobile drawer UX. Parents with children stay open so the user can
-  // explore the accordion.
-  if (!item.children) {
-    close()
+// modelValue の状態をネイティブ <dialog> の showModal/close へ反映する。
+// happy-dom など showModal を実装しない環境では open 属性で代替する。
+const syncDialog = (open: boolean) => {
+  const dialog = dialogRef.value
+  if (!dialog) return
+  if (open) {
+    if (typeof dialog.showModal === 'function') {
+      // 既に open の場合 showModal は例外を投げるため二重起動を避ける。
+      if (!dialog.open) dialog.showModal()
+    } else {
+      dialog.setAttribute('open', '')
+    }
+  } else if (typeof dialog.close === 'function') {
+    if (dialog.open) dialog.close()
+  } else {
+    dialog.removeAttribute('open')
   }
 }
 
-const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+// 初期表示 (modelValue=true でマウント) を反映してから、以降の変化を追従する。
+onMounted(() => syncDialog(props.modelValue))
+watch(() => props.modelValue, syncDialog)
 
-const collectFocusables = (): HTMLElement[] => {
-  if (!panelRef.value) return []
-  return Array.from(panelRef.value.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+// ネイティブ close イベントは Esc / .close() の双方で発火する。これにより
+// Esc-to-close を無償で得る。modelValue が既に false のとき (= こちら起点で
+// 閉じた場合) は再発火させず無限ループを防ぐ。
+const onClose = () => {
+  if (props.modelValue) close()
 }
 
-const onTab = (event: KeyboardEvent) => {
-  const focusables = collectFocusables()
-  if (focusables.length === 0) return
-  const first = focusables[0]
-  const last = focusables[focusables.length - 1]
-  const active = document.activeElement as HTMLElement | null
-  if (event.shiftKey) {
-    if (active === first || active === panelRef.value) {
-      event.preventDefault()
-      last.focus()
-    }
-  } else if (active === last) {
-    event.preventDefault()
-    first.focus()
-  }
+// ネイティブ <dialog> は backdrop クリックでは閉じないため軽量ハンドラを追加。
+// クリックが backdrop 領域 (= dialog 自身) に着地したときのみ閉じる。
+const onClick = (event: MouseEvent) => {
+  if (event.target === dialogRef.value) close()
 }
-
-watch(
-  () => props.modelValue,
-  async (open) => {
-    if (open) {
-      previousActive = document.activeElement as HTMLElement | null
-      await nextTick()
-      panelRef.value?.focus()
-    } else if (previousActive) {
-      previousActive.focus()
-      previousActive = null
-    }
-  },
-)
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition :name="`dads-drawer-${placement}`">
-      <div
-        v-if="modelValue"
-        class="dads-drawer"
-        :class="`dads-drawer--${placement}`"
-        role="dialog"
-        aria-modal="true"
-        :aria-label="title || defaultAriaLabel"
-        @keydown.esc="close"
-        @keydown.tab="onTab"
-      >
-        <div class="dads-drawer__overlay" aria-hidden="true" @click="close" />
-        <aside ref="panelRef" class="dads-drawer__panel" tabindex="-1">
-          <header class="dads-drawer__header">
-            <h2 v-if="title" class="dads-drawer__title">{{ title }}</h2>
-            <button
-              type="button"
-              class="dads-drawer__close"
-              :aria-label="closeLabel"
-              @click="close"
-            >
-              <DadsIcon name="close" :size="24" />
-            </button>
-          </header>
-          <nav class="dads-drawer__nav" :aria-label="navAriaLabel">
-            <ul class="dads-drawer__list">
-              <DadsDrawerItem
-                v-for="(item, idx) in items"
-                :key="idx"
-                :item="item"
-                @click:item="onItemClick"
-              />
-            </ul>
-          </nav>
-        </aside>
-      </div>
-    </Transition>
-  </Teleport>
+  <dialog
+    :id="dialogId"
+    ref="dialogRef"
+    class="dads-drawer"
+    :data-placement="placement"
+    :aria-labelledby="headingId"
+    @close="onClose"
+    @click="onClick"
+  >
+    <h2 :id="headingId" class="dads-u-visually-hidden">{{ title }}</h2>
+    <div class="dads-drawer__header">
+      <!-- eslint-disable vue/attribute-hyphenation -->
+      <!-- ariaControls は HamburgerMenuButton の prop 名。aria- 前置のため
+           vue-tsc は kebab (:aria-controls) を prop と認識せず camelCase 必須。 -->
+      <DadsHamburgerMenuButton
+        :model-value="true"
+        :ariaControls="dialogId"
+        :close-label="closeLabel"
+        @click="close"
+      />
+      <!-- eslint-enable vue/attribute-hyphenation -->
+    </div>
+    <div class="dads-drawer__body">
+      <slot />
+    </div>
+  </dialog>
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
-
+// 公式 drawer.css を 1:1 で移植。DADS には --spacing-* 軸が無いため
+// 余白は calc(N / 16 * 1rem) で表現する (公式と同じ手法)。
 .dads-drawer {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+  margin: unset;
+  max-width: 100%;
+  max-height: unset;
+  box-sizing: border-box;
+  width: calc(288 / 16 * 1rem);
+  height: 100vh;
+  height: 100dvh;
+  box-shadow: var(--elevation-2);
+  background-color: var(--color-neutral-white, #fff);
+  border: 0;
+  padding: 0;
   color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
   line-height: 1.7; // --line-height-170
+  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   letter-spacing: 0.02em;
 
-  // -------------------- overlay ------------------------------------------
-  &__overlay {
-    position: absolute;
-    inset: 0;
-    // Official drawer dims the page via `::backdrop` with the
-    // opacity-gray-100 token; our overlay div mirrors that value.
+  &[data-placement='right'] {
+    left: auto;
+    border-left: 1px solid transparent;
+  }
+
+  &[data-placement='left'] {
+    right: auto;
+    border-right: 1px solid transparent;
+  }
+
+  &[open] {
+    display: grid;
+    grid-template: 'header' auto 'body' 1fr / 1fr;
+  }
+
+  &::backdrop {
     background-color: var(--color-neutral-opacity-gray-100, rgba(0, 0, 0, 0.1));
   }
 
-  // -------------------- panel --------------------------------------------
-  &__panel {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: min(calc(288 / 16 * 1rem), 80vw); // official drawer width: 288px
-    max-width: 100%;
-    height: 100%;
-    background-color: var(--color-neutral-white, #fff);
-    box-shadow: var(--elevation-2);
-    overflow-y: auto;
-
-    &:focus {
-      outline: none;
-    }
+  // visually-hidden ユーティリティ (公式 global.css の dads-u-visually-hidden 相当)。
+  // Vue パッケージには無いためスコープ内で標準レシピを再現する。
+  .dads-u-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
 
-  // -------------------- placement ----------------------------------------
-  // Default (`left`): the panel sits at the start of the flex row, matching
-  // pre-2026-05 behavior. Explicit modifier kept for symmetry with right/full.
-  &--left &__panel {
-    margin-inline-end: auto;
-  }
-
-  &--right &__panel {
-    margin-inline-start: auto;
-  }
-
-  &--full &__panel {
-    width: 100%;
-    max-width: 100%;
-    box-shadow: none;
-  }
-
-  // -------------------- header / title / close --------------------------
   &__header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: calc(8 / 16 * 1rem);
-    padding: calc(20 / 16 * 1rem) calc(16 / 16 * 1rem); // official: 20px 16px
-    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
+    grid-area: header;
+    padding: calc(20 / 16 * 1rem) calc(16 / 16 * 1rem);
   }
 
-  &__title {
-    margin: 0;
-    font-size: var(--font-size-18, 1.125rem);
-    font-weight: 700;
-    line-height: var(--line-height-150, 1.5);
+  &[data-placement='right'] &__header {
+    justify-content: end;
   }
 
-  &__close {
-    @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-neutral-solid-gray-800, #1a1a1a);
-    font-size: 1.5rem;
-
-    &:hover {
-      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
-    }
+  &[data-placement='left'] &__header {
+    justify-content: start;
   }
 
-  // -------------------- nav / list ---------------------------------------
-  &__nav {
-    flex: 1 1 auto;
-    padding: calc(8 / 16 * 1rem) 0;
-  }
-
-  &__list,
-  &__item-children {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  // -------------------- item ---------------------------------------------
-  &__item {
-    display: block;
-  }
-
-  &__item-details {
-    // Hide the user-agent disclosure triangle so we can ship our own chevron.
-    > summary {
-      list-style: none;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-    }
-
-    &[open] > summary > .dads-drawer__item-chevron {
-      transform: rotate(180deg);
-    }
-  }
-
-  &__item-button {
-    @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
-
-    display: flex;
-    align-items: center;
-    gap: calc(12 / 16 * 1rem);
-    width: 100%;
-    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
-    color: var(--color-neutral-solid-gray-800, #1a1a1a);
-    text-decoration: none;
-    font-size: var(--font-size-16, 1rem);
-    line-height: 1.7; // official drawer body line-height (--line-height-170)
-
-    &:hover {
-      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
-    }
-
-    &:disabled,
-    &[aria-disabled='true'] {
-      cursor: not-allowed;
-      opacity: 0.5;
-      pointer-events: none;
-    }
-  }
-
-  &__item-icon {
-    font-size: 1.25em;
-    line-height: 1;
-  }
-
-  &__item-label {
-    flex: 1 1 auto;
-    text-align: start;
-  }
-
-  &__item-chevron {
-    font-size: 1.25em;
-    line-height: 1;
-    transition: transform 0.15s ease;
-  }
-
-  // Nested children inherit the indent so the hierarchy is visible.
-  &__item-children &__item-button {
-    padding-inline-start: calc(32 / 16 * 1rem);
-  }
-
-  // -------------------- forced colors -----------------------------------
-  @include base.dads-forced-colors {
-    &__panel {
-      border: 1px solid CanvasText;
-    }
-
-    &__item-button {
-      border: 1px solid transparent;
-    }
+  &__body {
+    grid-area: body;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
 }
 
-// -------------------- transitions (per placement) ----------------------
-// Each placement gets its own named transition so the slide direction
-// follows the visual position (left panels slide in from -X, right panels
-// from +X, and full overlays just fade).
-.dads-drawer-left-enter-active,
-.dads-drawer-left-leave-active,
-.dads-drawer-right-enter-active,
-.dads-drawer-right-leave-active,
-.dads-drawer-full-enter-active,
-.dads-drawer-full-leave-active {
-  transition: opacity 0.2s ease;
-
-  .dads-drawer__panel {
-    transition: transform 0.2s ease;
+// 公式の forced-colors backdrop 強調。mixin はルートで使えない (bare
+// forced-color-adjust を吐く) ため、素の @media ブロックで記述する。
+@media (forced-colors: active) {
+  .dads-drawer::backdrop {
+    background-color: #000b;
   }
-}
-
-.dads-drawer-left-enter-from,
-.dads-drawer-left-leave-to {
-  opacity: 0;
-
-  .dads-drawer__panel {
-    transform: translateX(-100%);
-  }
-}
-
-.dads-drawer-right-enter-from,
-.dads-drawer-right-leave-to {
-  opacity: 0;
-
-  .dads-drawer__panel {
-    transform: translateX(100%);
-  }
-}
-
-.dads-drawer-full-enter-from,
-.dads-drawer-full-leave-to {
-  opacity: 0;
 }
 </style>
