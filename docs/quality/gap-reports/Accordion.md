@@ -60,3 +60,14 @@
 - 想定 changeset レベル: **minor** (サイズ API の扱い次第では major)。色/状態/トークンのみなら patch〜minor だが、`<details>` ベースへの構造刷新やサイズ API 廃止を伴うと公開 props (`size`, `type`, slot) が変わり major。
 - API/aria 不変: 色・トークン・focus-ring 修正のみなら API/aria 維持可。構造刷新を行う場合は不変を保てない。
 
+## T3 解消 (Issue #18 / A3-T3, 本リリースで対応)
+
+上記ギャップを **構造刷新（案X / full）** で解消した。**意図的な MAJOR 破壊的変更**。
+
+- **構造**: ARIA `<div>+<h3>+<button aria-expanded>` パターンを廃止し、公式どおりネイティブ `<details>/<summary>` の単一 disclosure へ全面移行。兄弟コンポーネント `DadsDisclosure` と同種の API 形（`modelValue` / `defaultOpen` 制御・非制御、`title`、`disabled`、`toggle` emit）に統一。複数項目は `<DadsAccordion>` を縦に並べて構成する。
+- **公式パリティ**: `accordion.css` をスコープ SCSS にそのまま移植。クラス名・DOM・インライン chevron SVG（`path d="M3.3 7.3L12 16L20.7 7.3"`、円形ボーダーアイコン `--_icon-size` 20px→48rem で 32px）・レスポンシブ media query・focus-visible（黒 4px outline + offset 2px + yellow-300 背景/box-shadow + 角丸 4px）・hover・back-link を 1:1 再現。アイコンの 180° 回転は `.dads-accordion[open]` で CSS 制御（JS 差し替えを廃止、DadsIcon / Material Symbols 依存を除去）。
+- **トークン**: 存在しないセマンティックトークン（`--color-text-primary` 等）を公式の primitive / solid-gray トークン（`--color-neutral-solid-gray-800`/`-420`/`-50`、`--color-primitive-blue-1000`/`-900`、`--color-primitive-orange-800`、`--color-primitive-yellow-300`、`--color-neutral-black`/`-white`）へ全面置換。
+- **API 削除**: `items[]` / `type`（single|multiple）/ `size`（l/m/s/xs）/ 矢印キーナビ / `returnLink` オブジェクト prop / `panel-{id}` スロット、および型 `DadsAccordionItem` / `DadsAccordionType` / `DadsAccordionSize` / `DadsAccordionReturnLink` を削除。
+- **API 追加**: `defaultOpen` / `headingLevel`(1–6, 既定 3) / `backLink`(boolean, 公式アンカー) / `backLinkLabel`、`toggle` emit。
+- **disabled**: 公式には無い状態だが a3-deferred の方針どおり dimming（opacity 0.6）+ `aria-disabled` + `tabindex=-1` + クリック/キー抑止を維持。
+

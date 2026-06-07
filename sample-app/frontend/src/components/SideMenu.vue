@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
-import { DadsDrawer, DadsMenuList, type DadsDrawerItem, type DadsMenuListItem } from '@dads/vue'
+import { DadsDrawer, DadsMenuList, type DadsMenuListItem } from '@dads/vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -22,20 +22,11 @@ const menuItems = computed<DadsMenuListItem[]>(() => [
   },
 ])
 
-// Drawer 用 (DadsDrawerItem)。href は semantics 用に残しつつ SPA 遷移する。
-const drawerItems = computed<DadsDrawerItem[]>(() => [
-  {
-    label: t('nav.dashboard'),
-    href: '/',
-    icon: 'dashboard',
-  },
-])
-
 /**
  * href 付き項目を vue-router で SPA 遷移させる。`<a>` の既定挙動 (フルリロード)
  * を抑止し、修飾キー併用時 (新規タブ等) はブラウザ既定に委ねる。
  */
-function navigate(item: DadsMenuListItem | DadsDrawerItem, event: MouseEvent): void {
+function navigate(item: DadsMenuListItem, event: MouseEvent): void {
   if (!item.href) return
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
   event.preventDefault()
@@ -51,14 +42,9 @@ function navigate(item: DadsMenuListItem | DadsDrawerItem, event: MouseEvent): v
   </nav>
 
   <!-- モバイル: ハンバーガーから開く Drawer (768px 未満) -->
-  <DadsDrawer
-    v-model="open"
-    :items="drawerItems"
-    :title="t('nav.section')"
-    :nav-aria-label="t('nav.section')"
-    placement="left"
-    @click:item="navigate"
-  />
+  <DadsDrawer v-model="open" :title="t('nav.section')" placement="left">
+    <DadsMenuList :items="menuItems" type="box" @click:item="navigate" />
+  </DadsDrawer>
 </template>
 
 <style scoped>
