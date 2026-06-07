@@ -121,6 +121,17 @@ describe('DadsTooltip', () => {
       await nextTick()
       expect(queryTooltip()).toBeNull()
     })
+
+    it('closes on Escape (WAI-ARIA tooltip dismiss)', async () => {
+      createWrapper()
+      const wrap = queryWrap() as HTMLElement
+      wrap.dispatchEvent(new FocusEvent('focusin', { bubbles: true }))
+      await nextTick()
+      expect(queryTooltip()).not.toBeNull()
+      wrap.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+      await nextTick()
+      expect(queryTooltip()).toBeNull()
+    })
   })
 
   describe('disabled', () => {

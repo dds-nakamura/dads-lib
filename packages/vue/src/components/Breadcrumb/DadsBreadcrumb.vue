@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import type {
   DadsBreadcrumbEmits,
   DadsBreadcrumbItem,
@@ -7,8 +7,13 @@ import type {
 } from './DadsBreadcrumb.types'
 
 const props = withDefaults(defineProps<DadsBreadcrumbProps>(), {
-  ariaLabel: 'パンくずリスト',
+  // 公式 example の visually-hidden ラベル文言に合わせる。
+  ariaLabel: '現在位置',
 })
+
+// 公式は nav を aria-labelledby + visually-hidden ラベルで命名する。
+const generatedId = useId()
+const labelId = computed(() => `dads-breadcrumb-label-${generatedId}`)
 
 const emit = defineEmits<DadsBreadcrumbEmits>()
 
@@ -29,7 +34,8 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
 </script>
 
 <template>
-  <nav class="dads-breadcrumb" :aria-label="ariaLabel">
+  <nav class="dads-breadcrumb" :aria-labelledby="labelId">
+    <span :id="labelId" class="dads-breadcrumb__label">{{ ariaLabel }}</span>
     <ol class="dads-breadcrumb__list">
       <li v-for="entry in renderedItems" :key="entry.index" class="dads-breadcrumb__item">
         <a
@@ -78,6 +84,20 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
   line-height: var(--line-height-170, 1.7);
   letter-spacing: 0.02em;
   color: var(--color-neutral-solid-gray-800, #333333);
+
+  // Visually-hidden nav label (referenced by aria-labelledby), matching the
+  // official `dads-u-visually-hidden` pattern.
+  &__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 
   &__list {
     list-style: none;
