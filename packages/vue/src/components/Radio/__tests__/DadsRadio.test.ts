@@ -13,28 +13,46 @@ const createWrapper = (props: Partial<DadsRadioProps> = {}) =>
   })
 
 describe('DadsRadio', () => {
-  describe('rendering', () => {
-    it('renders an input[type=radio] and an indicator', () => {
+  describe('canonical structure', () => {
+    it('renders <label.dads-radio> as the root', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('input[type="radio"]').exists()).toBe(true)
-      expect(wrapper.find('.dads-radio__indicator').exists()).toBe(true)
+      expect(wrapper.element.tagName).toBe('LABEL')
+      expect(wrapper.classes()).toContain('dads-radio')
     })
 
-    it('renders the label text when provided', () => {
+    it('renders the input inside a __radio centering wrapper', () => {
+      const wrapper = createWrapper()
+      const radioWrapper = wrapper.find('.dads-radio__radio')
+      expect(radioWrapper.exists()).toBe(true)
+      expect(radioWrapper.find('input.dads-radio__input[type="radio"]').exists()).toBe(true)
+    })
+
+    it('uses the canonical input class and NOT the legacy pseudo indicator', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('input.dads-radio__input').exists()).toBe(true)
+      expect(wrapper.find('.dads-radio__indicator').exists()).toBe(false)
+    })
+
+    it('renders the label text in __label when provided', () => {
       const wrapper = createWrapper({ label: 'はい' })
-      expect(wrapper.find('.dads-radio__text').text()).toBe('はい')
+      expect(wrapper.find('.dads-radio__label').text()).toBe('はい')
     })
 
-    it('does not render the footer when there is no hint or error', () => {
+    it('does not render __label when no label is provided', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-radio__footer').exists()).toBe(false)
+      expect(wrapper.find('.dads-radio__label').exists()).toBe(false)
     })
   })
 
   describe('size', () => {
-    it.each(['lg', 'md', 'sm'] as const)('applies dads-radio--%s class', (size) => {
+    it.each(['lg', 'md', 'sm'] as const)('applies data-size="%s"', (size) => {
       const wrapper = createWrapper({ size })
-      expect(wrapper.classes()).toContain(`dads-radio--${size}`)
+      expect(wrapper.attributes('data-size')).toBe(size)
+    })
+
+    it('defaults to md', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.attributes('data-size')).toBe('md')
     })
   })
 
@@ -50,13 +68,11 @@ describe('DadsRadio', () => {
     it('reflects checked when modelValue === value', () => {
       const wrapper = createWrapper({ value: 'a', modelValue: 'a' })
       expect((wrapper.find('input').element as HTMLInputElement).checked).toBe(true)
-      expect(wrapper.classes()).toContain('dads-radio--checked')
     })
 
     it('does not mark as checked when modelValue !== value', () => {
       const wrapper = createWrapper({ value: 'a', modelValue: 'b' })
       expect((wrapper.find('input').element as HTMLInputElement).checked).toBe(false)
-      expect(wrapper.classes()).not.toContain('dads-radio--checked')
     })
   })
 
@@ -67,14 +83,13 @@ describe('DadsRadio', () => {
     })
   })
 
-  describe('label and id wiring', () => {
+  describe('id wiring', () => {
     it('uses the explicit id when provided', () => {
       const wrapper = createWrapper({ label: 'A', id: 'my-radio' })
       expect(wrapper.find('input').attributes('id')).toBe('my-radio')
-      expect(wrapper.find('label').attributes('for')).toBe('my-radio')
     })
 
-    it('auto-generates a unique id and links the label', () => {
+    it('auto-generates a unique id per instance', () => {
       const wrapper = mount({
         components: { DadsRadio },
         template: `
@@ -85,42 +100,11 @@ describe('DadsRadio', () => {
         `,
       })
       const inputs = wrapper.findAll('input')
-      const labels = wrapper.findAll('label')
       const idA = inputs[0].attributes('id')
       const idB = inputs[1].attributes('id')
       expect(idA).toBeTruthy()
       expect(idB).toBeTruthy()
       expect(idA).not.toBe(idB)
-      expect(labels[0].attributes('for')).toBe(idA)
-      expect(labels[1].attributes('for')).toBe(idB)
-    })
-  })
-
-  describe('required', () => {
-    it('renders a required marker when required and label are set', () => {
-      const wrapper = createWrapper({ label: 'A', required: true })
-      const marker = wrapper.find('.dads-radio__requirement')
-      expect(marker.exists()).toBe(true)
-      expect(marker.attributes('data-required')).toBe('true')
-    })
-
-    it('sets aria-required on the input', () => {
-      const wrapper = createWrapper({ required: true })
-      expect(wrapper.find('input').attributes('aria-required')).toBe('true')
-    })
-
-    it('renders the default ※必須 label when required is true', () => {
-      const wrapper = createWrapper({ label: 'A', required: true })
-      expect(wrapper.find('.dads-radio__requirement').text()).toBe('※必須')
-    })
-
-    it('renders a custom requiredLabel when provided (i18n override)', () => {
-      const wrapper = createWrapper({
-        label: 'A',
-        required: true,
-        requiredLabel: 'Required',
-      })
-      expect(wrapper.find('.dads-radio__requirement').text()).toBe('Required')
     })
   })
 
@@ -130,102 +114,33 @@ describe('DadsRadio', () => {
       expect(wrapper.find('input').attributes('disabled')).toBeDefined()
     })
 
-    it('applies the disabled modifier class', () => {
-      const wrapper = createWrapper({ disabled: true })
-      expect(wrapper.classes()).toContain('dads-radio--disabled')
+    it('is not disabled by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('input').attributes('disabled')).toBeUndefined()
     })
   })
 
-  describe('error / errorMessage', () => {
-    it('renders the error message without role="alert" (official a11y guidance)', () => {
-      const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-radio__error-text')
-      expect(error.exists()).toBe(true)
-      expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBeUndefined()
-    })
-
-    it('sets aria-invalid when errorMessage is present', () => {
-      const wrapper = createWrapper({ errorMessage: 'bad' })
-      expect(wrapper.find('input').attributes('aria-invalid')).toBe('true')
-    })
-
-    it('honors the explicit error prop', () => {
+  describe('error', () => {
+    it('sets aria-invalid on the input when error is true', () => {
       const wrapper = createWrapper({ error: true })
-      expect(wrapper.classes()).toContain('dads-radio--error')
       expect(wrapper.find('input').attributes('aria-invalid')).toBe('true')
     })
 
-    it('hides the hint when an error message is shown', () => {
-      const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-radio__support-text').exists()).toBe(false)
-      expect(wrapper.find('.dads-radio__error-text').exists()).toBe(true)
+    it('omits aria-invalid by default', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('input').attributes('aria-invalid')).toBeUndefined()
     })
   })
 
-  describe('hint', () => {
-    it('renders the hint when provided', () => {
-      const wrapper = createWrapper({ hint: 'いずれか選んでください' })
-      const hint = wrapper.find('.dads-radio__support-text')
-      expect(hint.exists()).toBe(true)
-      expect(hint.text()).toBe('いずれか選んでください')
+  describe('aria-describedby passthrough', () => {
+    it('forwards ariaDescribedby to the input (used by DadsRadioGroup)', () => {
+      const wrapper = createWrapper({ ariaDescribedby: 'desc-1 hint-1' })
+      expect(wrapper.find('input').attributes('aria-describedby')).toBe('desc-1 hint-1')
     })
 
-    it('points aria-describedby at the hint id', () => {
-      const wrapper = createWrapper({ hint: 'ヒント' })
-      const hintId = wrapper.find('.dads-radio__support-text').attributes('id')
-      expect(wrapper.find('input').attributes('aria-describedby')).toBe(hintId)
-    })
-  })
-
-  describe('description', () => {
-    it('renders the description under the label when provided', () => {
-      const wrapper = createWrapper({ label: 'プランA', description: '月額 ¥980 / 5GB' })
-      const desc = wrapper.find('.dads-radio__description')
-      expect(desc.exists()).toBe(true)
-      expect(desc.text()).toBe('月額 ¥980 / 5GB')
-    })
-
-    it('does not render description when not provided', () => {
-      const wrapper = createWrapper({ label: 'はい' })
-      expect(wrapper.find('.dads-radio__description').exists()).toBe(false)
-    })
-
-    it('includes the description id in aria-describedby', () => {
-      const wrapper = createWrapper({ label: 'プランA', description: '5GB プラン' })
-      const descId = wrapper.find('.dads-radio__description').attributes('id')
-      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
-      expect(describedBy.split(' ')).toContain(descId)
-    })
-
-    it('combines description and hint ids in aria-describedby', () => {
-      const wrapper = createWrapper({
-        label: 'プランA',
-        description: '5GB プラン',
-        hint: '後から変更可能',
-      })
-      const descId = wrapper.find('.dads-radio__description').attributes('id')
-      const hintId = wrapper.find('.dads-radio__support-text').attributes('id')
-      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
-      const ids = describedBy.split(' ')
-      expect(ids).toContain(descId)
-      expect(ids).toContain(hintId)
-    })
-
-    it('prefers errorMessage over hint, while keeping description id', () => {
-      const wrapper = createWrapper({
-        label: 'プランA',
-        description: '5GB プラン',
-        hint: 'ヒント',
-        errorMessage: 'エラー',
-      })
-      const descId = wrapper.find('.dads-radio__description').attributes('id')
-      const errorId = wrapper.find('.dads-radio__error-text').attributes('id')
-      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
-      const ids = describedBy.split(' ')
-      expect(ids).toContain(descId)
-      expect(ids).toContain(errorId)
-      expect(wrapper.find('.dads-radio__support-text').exists()).toBe(false)
+    it('omits aria-describedby when not provided', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('input').attributes('aria-describedby')).toBeUndefined()
     })
   })
 
@@ -277,40 +192,10 @@ describe('DadsRadio', () => {
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations with a hint message', async () => {
-      const wrapper = createWrapper({
-        label: '同意する',
-        hint: '後から変更できます',
-        value: 'agree',
-        modelValue: null,
-      })
-      expect(await axe(wrapper.element)).toHaveNoViolations()
-    })
-
-    it('has no violations with a description', async () => {
-      const wrapper = createWrapper({
-        label: 'プランA',
-        description: '月額 ¥980 / 5GB',
-        value: 'a',
-        modelValue: null,
-      })
-      expect(await axe(wrapper.element)).toHaveNoViolations()
-    })
-
-    it('has no violations when required', async () => {
+    it('has no violations in error state', async () => {
       const wrapper = createWrapper({
         label: 'はい',
-        required: true,
-        value: 'yes',
-        modelValue: null,
-      })
-      expect(await axe(wrapper.element)).toHaveNoViolations()
-    })
-
-    it('has no violations in error state with a message', async () => {
-      const wrapper = createWrapper({
-        label: 'はい',
-        errorMessage: '必須項目です',
+        error: true,
         value: 'yes',
         modelValue: null,
       })

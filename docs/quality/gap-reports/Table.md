@@ -74,3 +74,17 @@
 - 最重要は **(a) 未定義トークン群の公式実在トークンへの一括置換**、**(b) 公式の `data-*` 属性 + `.dads-table__table`/`__col-header` 構造への寄せ(構造ドリフト解消)**、**(c) padding 20/16・line-height 1.7・ヘッダ直下黒ボーダー**。
 - 想定 changeset レベル: 構造クラス/`data-*` API を公式準拠に作り替えると **major**(現行 BEM modifier prop/slot 契約が変わる)。API を据え置き CSS 値とトークンのみ是正に留めるなら **minor〜patch**。視覚正準一致を優先するなら major 相当の作り替えを推奨。
 - API/aria 不変: 値置換のみなら aria 不変で可。ただし `data-cell-border` 等の辺別ボーダー・行 hover/選択ハイライトは現行 API に無いため、完全一致には prop/属性追加(=非破壊の minor 追加で吸収可)が必要。
+
+## T4 解消
+
+案X（フル）として **公式正準構造への作り替え（意図的 MAJOR 破壊）** を実施し、本レポートの全差異を解消した。
+
+- **構造ドリフト (fix-1)**: ルートを `.dads-table` コンテナ（caption 有り時 `<figure>`）+ 子 `<table class="dads-table__table">` の公式 DOM に作り替え。BEM modifier クラスの独自再実装を撤廃し、公式 `table.css` をスコープ SCSS として（`:deep()` でスロット境界を越えて）ほぼ逐語的に流用。
+- **ヘッダセル + scope**: 列ヘッダ `.dads-table__col-header`（`<th scope="col">`）/ 行ヘッダ `.dads-table__row-header`（`<th scope="row">`）を呼び出し側スロットで記述する方式に統一。
+- **ヘッダ黒強調ボーダー (fix-4)**: 列ヘッダ最下段下端 / 行ヘッダ右端の `1px solid var(--color-neutral-black)` を公式 `:last-of-type` セレクタで再現。
+- **辺別ボーダー API (fix-1)**: 公式 `data-cell-border` / `data-border` 文字列 API を `cellBorder` / `border` prop（`boolean | string`）として公開。アドホック BEM を撤廃。
+- **行 hover / 選択ハイライト (fix-8)**: `hoverable`（`data-row-hover-highlight` → `--color-primitive-blue-50`、`@media (hover:hover)` ガード）/ `selectable`（`data-selectable` → `tr:has(:checked)` を `--color-primitive-blue-100`）を新規 prop として追加。
+- **caption / dense / striped**: `caption`（`<figure>`+`<figcaption>`、bold 17px）/ `dense`（`data-size="dense"`、padding 12/16・行高 1.3）/ `striped`（`data-row-stripe`、偶数行 `--color-neutral-solid-gray-50`）を公式どおり実装。
+- **トークン / スペーシング**: 未定義トークン群（`--color-text-primary` 等）を公式実在トークン（`--color-neutral-solid-gray-{800,900,100,50,420,500}` / `--color-primitive-blue-{50,100}` / `--color-neutral-black`）へ置換。padding は `--spacing-*` を使わず `calc(N/16*1rem)`（comfortable 20/16・dense 12/16）。line-height 1.7 / dense 1.3、letter-spacing 0.02em を公式どおり付与。
+- **撤廃した非公式 prop**: `stickyHeader` / `density`（→`dense`）/ `bordered`（→`border`/`cellBorder`）/ `loading` 系スケルトン（公式非存在の独自機能）を削除。
+- 検証: typecheck / eslint クリーン、DadsTable ユニットテスト 31 件グリーン（col/row ヘッダ + scope、辺別ボーダー data-*、hover/selectable、caption、dense/striped、axe a11y を網羅）。

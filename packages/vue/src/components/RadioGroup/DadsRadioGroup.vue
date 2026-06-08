@@ -57,6 +57,21 @@ const onSelect = (value: DadsRadioGroupValue) => {
   emit('update:modelValue', value)
   emit('change', value)
 }
+
+// Per-item description / hint are not part of the official radio markup — they
+// belong to the form-control-label layer. We render them next to each radio
+// using the official `dads-form-control-label__support-text` class and wire the
+// radio input's `aria-describedby` at them so screen readers announce them.
+const itemDescriptionId = (value: DadsRadioGroupValue) =>
+  `${rootId.value}-item-${String(value)}-description`
+const itemHintId = (value: DadsRadioGroupValue) => `${rootId.value}-item-${String(value)}-hint`
+
+const itemDescribedBy = (item: { value: DadsRadioGroupValue; hint?: string; description?: string }) => {
+  const ids: string[] = []
+  if (item.description) ids.push(itemDescriptionId(item.value))
+  if (item.hint) ids.push(itemHintId(item.value))
+  return ids.length > 0 ? ids.join(' ') : undefined
+}
 </script>
 
 <template>
@@ -81,20 +96,33 @@ const onSelect = (value: DadsRadioGroupValue) => {
     </template>
 
     <div class="dads-radio-group__items">
-      <DadsRadio
-        v-for="item in items"
-        :key="String(item.value)"
-        :model-value="modelValue ?? null"
-        :value="item.value"
-        :label="item.label"
-        :hint="item.hint"
-        :description="item.description"
-        :disabled="item.disabled || disabled"
-        :size="size"
-        :name="resolvedName"
-        :error="isError"
-        @update:model-value="onSelect"
-      />
+      <div v-for="item in items" :key="String(item.value)" class="dads-radio-group__item">
+        <DadsRadio
+          :model-value="modelValue ?? null"
+          :value="item.value"
+          :label="item.label"
+          :disabled="item.disabled || disabled"
+          :size="size"
+          :name="resolvedName"
+          :error="isError"
+          :aria-describedby="itemDescribedBy(item)"
+          @update:model-value="onSelect"
+        />
+        <p
+          v-if="item.description"
+          :id="itemDescriptionId(item.value)"
+          class="dads-radio__description dads-form-control-label__support-text"
+        >
+          {{ item.description }}
+        </p>
+        <p
+          v-if="item.hint"
+          :id="itemHintId(item.value)"
+          class="dads-radio__support-text dads-form-control-label__support-text"
+        >
+          {{ item.hint }}
+        </p>
+      </div>
     </div>
   </DadsFormControlLabel>
 </template>
@@ -106,6 +134,25 @@ const onSelect = (value: DadsRadioGroupValue) => {
 .dads-radio-group {
   &__items {
     display: flex;
+  }
+
+  // Each item groups its radio with the optional per-option description / hint
+  // paragraphs (form-control-label support-text styling, indented under the
+  // control). These paragraphs are the official `support-text` layer, not part
+  // of the radio markup itself.
+  &__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // The radio's own gap/padding owns the spacing; the description/hint sit just
+  // below, aligned with the label (control width + gap indent).
+  .dads-radio__description,
+  .dads-radio__support-text {
+    margin: 0;
+    color: var(--color-neutral-solid-gray-600, #666);
+    font-size: calc(14 / 16 * 1rem);
+    line-height: 1.5;
   }
 
   &--vertical &__items {

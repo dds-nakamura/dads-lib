@@ -70,3 +70,19 @@
 - **優先度: 最高。** 入力系の中核部品で CheckboxGroup の依存元。
 - **想定 changeset: minor**（CSS 全面差し替え + 公式サイズ採用で見た目が変わるため。`readonly` を非対応に変える場合は major 検討）。
 - **API/aria 不変: 概ね可能。** props/emits/`aria-checked=mixed`・`aria-describedby` 連携は維持しつつ CSS とマークアップ構造（input 表示化 + clip-path チェック）を公式準拠へ置換できる。`readonly` の扱いのみ要判断。
+
+## T4 解消 (Issue #18 / 案X フル — MAJOR)
+
+正準構造への全面刷新を実施。本ギャップレポートで指摘した 11 件の差異をすべて解消した。
+
+- **正準構造採用 (差異 #1 解消):** 隠し input + `__indicator` 疑似要素の自作実装を撤廃し、公式の `.dads-checkbox > .dads-checkbox__checkbox > input.dads-checkbox__input` (+ `.dads-checkbox__label`) を `checkbox.css` から verbatim 移植。ネイティブ `<input>` を `appearance:none` で**そのまま可視コントロール化**。
+- **clip-path チェック描画 (差異 #1):** チェックマークは `input::before` の `clip-path: path("M5.6,11.2...")`（公式 SVG パス）、indeterminate は `path("M2,6h10v2H2Z")` を描画。border 回転√の自作は廃止。
+- **色トークン正準化 (差異 #2 解消):** design-tokens に実在しない `--color-brand-primary` 等の誤トークンを撤去し、公式 `--color-primitive-blue-900/1100` `--color-neutral-solid-gray-50/300/420/600/800` `--color-neutral-white/black` `--color-semantic-error-1` `--color-primitive-red-1000` `--color-primitive-yellow-300` へ全面置換（comma フォールバック付き）。
+- **サイズ / ボーダー忠実化 (差異 #3,#4,#7,#9,#10 解消):** `data-size` 駆動で箱 24/32/44px・ボーダー 2/2/3px・ラベル font-size 16/16/17px・`--_label-padding-top` 1/4/10px による上揃え調整を公式どおり実装。`--spacing-*` 誤トークンは `calc(N/16*1rem)` に置換。
+- **角丸 (差異 #5 解消):** `__checkbox` は `border-radius:12.5%`、input は `calc(2/18*100%)` の相対指定へ。
+- **focus リング (差異 #6 解消):** input 自身に `outline:4px / offset:2px / box-shadow:2px yellow-300`（公式値）を適用。
+- **disabled (差異 #8 解消):** `opacity:.5` を撤廃し公式の専用グレートークン (base gray-50 / accent・border gray-300) へ。
+- **forced-colors 網羅向上 (差異 #11 周辺):** 無効時 `GrayText`、チェック `HighlightText`、disabled チェック塗り `Canvas`、border `ButtonText`、accent `Highlight` を網羅。
+- **readonly 削除 (差異 #11 解消 / MAJOR):** 公式に存在しない非公式 `readonly` prop / 状態 / 専用テストを削除。読み取り専用相当は `disabled` で代替。
+
+→ **総合判定: ✅ 解消。** `DadsCheckboxGroup` への影響なし（per-item の props/emits/`<input>` を維持しているためグループ側の変更不要、Checkbox+Group の単体テスト 84 件 green）。

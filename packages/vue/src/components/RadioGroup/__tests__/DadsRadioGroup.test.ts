@@ -202,7 +202,7 @@ describe('DadsRadioGroup', () => {
       const radios = wrapper.findAll('.dads-radio')
       expect(radios).toHaveLength(3)
       radios.forEach((r) => {
-        expect(r.classes()).toContain(`dads-radio--${size}`)
+        expect(r.attributes('data-size')).toBe(size)
       })
     })
   })
@@ -230,9 +230,9 @@ describe('DadsRadioGroup', () => {
       const wrapper = createWrapper({ error: true })
       expect(wrapper.classes()).toContain('dads-radio-group--error')
       expect(wrapper.attributes('aria-invalid')).toBe('true')
-      const radios = wrapper.findAll('.dads-radio')
-      radios.forEach((r) => {
-        expect(r.classes()).toContain('dads-radio--error')
+      const inputs = wrapper.findAll('input[type="radio"]')
+      inputs.forEach((input) => {
+        expect(input.attributes('aria-invalid')).toBe('true')
       })
     })
 
@@ -301,7 +301,7 @@ describe('DadsRadioGroup', () => {
   })
 
   describe('item hint', () => {
-    it('forwards item.hint to the corresponding DadsRadio', () => {
+    it('renders item.hint as a support-text paragraph next to the radio', () => {
       const wrapper = createWrapper({
         items: [
           { value: 'a', label: 'A', hint: 'A の説明' },
@@ -312,10 +312,20 @@ describe('DadsRadioGroup', () => {
       expect(hints).toHaveLength(1)
       expect(hints[0].text()).toBe('A の説明')
     })
+
+    it('wires the radio aria-describedby to its hint paragraph', () => {
+      const wrapper = createWrapper({
+        items: [{ value: 'a', label: 'A', hint: 'A の説明' }],
+      })
+      const hintId = wrapper.find('.dads-radio__support-text').attributes('id')
+      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
+      expect(hintId).toBeTruthy()
+      expect(describedBy.split(' ')).toContain(hintId)
+    })
   })
 
   describe('item description', () => {
-    it('forwards item.description to the corresponding DadsRadio', () => {
+    it('renders item.description as a paragraph next to the radio', () => {
       const wrapper = createWrapper({
         items: [
           { value: 'a', label: 'A', description: 'A プランの説明文' },
@@ -325,6 +335,16 @@ describe('DadsRadioGroup', () => {
       const descs = wrapper.findAll('.dads-radio__description')
       expect(descs).toHaveLength(1)
       expect(descs[0].text()).toBe('A プランの説明文')
+    })
+
+    it('wires the radio aria-describedby to its description paragraph', () => {
+      const wrapper = createWrapper({
+        items: [{ value: 'a', label: 'A', description: 'A プランの説明文' }],
+      })
+      const descId = wrapper.find('.dads-radio__description').attributes('id')
+      const describedBy = wrapper.find('input').attributes('aria-describedby') ?? ''
+      expect(descId).toBeTruthy()
+      expect(describedBy.split(' ')).toContain(descId)
     })
   })
 

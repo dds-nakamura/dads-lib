@@ -67,3 +67,16 @@
 - **優先度**: 高 (Radio は RadioGroup / ResourceList(with-control) の基盤部品でドリフトが波及)。
 - **想定 changeset レベル**: minor（DOM 構造・クラス名が大きく変わり CSS 互換が崩れるが、Vue の props/emit API は維持可能なら patch ではなく minor が妥当。`__required`/`__description` 等の独自スロットを残すか公式準拠にするかで major 化の可能性あり）。
 - **API/aria 不変**: props (`size`/`disabled`/`required`/`error`/`modelValue`/`value`/`name`) と emit は維持可能。`role`/`aria-describedby`/`aria-invalid`/`aria-required` も維持可能。内部クラス名 (`__indicator` 等) は非公開のため変更可。
+
+## T4 解消
+
+Issue #18 / T4 (案X フル) で公式正準構造へ全面リワークし、上記 12 件の差異をすべて解消した。**意図的な MAJOR 破壊的変更**。
+
+- **正準構造へ刷新**: `<div>` + 隠し input(`opacity:0`) + 疑似 `__indicator` という独自実装を廃止し、公式 `radio.css` / `all-radios.html` 準拠の `<label.dads-radio[data-size]>` > `<span.dads-radio__radio>`(中央寄せ wrapper) > `<input.dads-radio__input>` + `<span.dads-radio__label>` に再構築。**可視コントロールは `appearance: none` を適用した input 自身**で、疑似要素は使わない。クラス名は公式と完全一致。
+- **寸法/ボーダー/内丸の忠実化**: `data-size` ごとに公式値を再現 — クリック領域 24/32/44px、リング 20/26/36px、**内丸は固定 px 10/12/16 (旧 50% 比率を廃止)**、ボーダー 2/2/3px、gap 4/8/12px、label-padding-top 1/4/10px、label-font-size 16/16/17px、line-height 1.3。ラベルがある場合の `padding-block: calc(8/16*1rem)` クリックターゲットも追加。
+- **カラーを正準トークンへ**: 存在しないトークン (`--color-primary` / `--color-text-primary` / `--color-bg-surface` / `--color-border-default` / `--spacing-*` 等) を全廃し、公式の `--color-primitive-blue-900/1100` / `--color-primitive-red-1000` / `--color-neutral-white/black/solid-gray-50/300/420/600/800` / `--color-semantic-error-1` / `--color-primitive-yellow-300` に置換 (comma fallback 付き)。
+- **状態の忠実化**: focus は input 自身に `outline 4px / offset 2px / box-shadow 2px yellow-300` (公式値)。hover は `__radio` wrapper の背景リング (`gray-420`) + input border を black へ。checked / disabled / `aria-invalid` は公式同様 `--_accent-color` / `--_border-color` などの CSS 変数切替で表現 (disabled は `opacity` でなく gray-50/gray-300 トークン)。forced-colors は `Highlight` / `ButtonText` / `GrayText` にマッピング。
+- **Vue 独自サブ要素を削除 → FCL へ委譲**: `__required` / `__description` / `__hint` / `__error` / `__footer` と対応プロップ (`required` / `requiredLabel` / `description` / `hint` / `errorMessage`) を撤廃。ラベル / 必須 / 補足 / エラー / 項目説明は公式同様 `DadsFormControlLabel` (= `DadsRadioGroup`) が担当する。`DadsRadio` に残すのは `modelValue` / `value` / `size` / `label` / `error` / `disabled` / `name` / `id` と、グループからの説明文配線用 `ariaDescribedby` のみ。
+- **RadioGroup 追随**: 項目ごとの `item.hint` / `item.description` は `DadsRadioGroup` が `dads-form-control-label__support-text` 付き `<p>` として描画し、各 `DadsRadio` の `aria-describedby` に配線する形へ移行。既存テストの `dads-radio--{size}` / `dads-radio--error` アサーションは `data-size` 属性 / input の `aria-invalid` 検証へ更新。
+- **検証**: `@dads/vue` typecheck / eslint (Radio + RadioGroup) クリーン、Radio + RadioGroup のユニットテスト 84 件グリーン (axe 含む)。
+- **総合判定**: ❌ 要修正 → ✅ 解消 (公式正準構造に一致)。

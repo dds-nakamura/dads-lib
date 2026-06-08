@@ -1,10 +1,17 @@
 # Table
 
-行と列で構造化されたデータを一覧表示するためのテーブル。`DadsTable` はネイティブ `<table>` の薄いラッパとして振る舞い、密度・縞模様・外枠・スティッキーヘッダといった見た目だけを担当する。並び替えやページネーション、行選択は呼び出し側で実装する。
+行と列で構造化されたデータを一覧表示するためのテーブル。`DadsTable` は DADS 公式の正準構造（`.dads-table` コンテナ + `.dads-table__table`）をそのまま再現するプレゼンテーション層で、密度・縞模様・行 hover / 選択ハイライト・辺別ボーダーといった見た目だけを担当する。並び替え・ページネーション・行選択ロジックは呼び出し側で実装する。
+
+ヘッダセルは **呼び出し側がデフォルトスロット内** で公式クラスを付けて記述する:
+
+- 列ヘッダ: `<th class="dads-table__col-header" scope="col">`
+- 行ヘッダ: `<th class="dads-table__row-header" scope="row">`
+
+これにより、列ヘッダ最下段の下端 / 行ヘッダ右端の **1px solid 黒** 強調ボーダー（公式の象徴的特徴）が自動で描画される。
 
 ## 基本
 
-`<thead>` と `<tbody>` をそのままデフォルトスロットに渡す。`DadsTable` は外枠の `<div>` と `<table>` を組み立てるだけで、内部のセルマークアップにはまったく介入しない。
+`<thead>` / `<tbody>` をそのままデフォルトスロットに渡す。`cell-border="bottom"` でヘッダ下線と行区切り線を引くのが最も一般的な構成。
 
 <script setup>
 import { DadsTable } from '@dads/vue'
@@ -17,12 +24,12 @@ const rows = [
 </script>
 
 <div class="demo">
-  <DadsTable caption="申請一覧">
+  <DadsTable cell-border="bottom">
     <thead>
       <tr>
-        <th scope="col">申請ID</th>
-        <th scope="col">氏名</th>
-        <th scope="col">提出日</th>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
       </tr>
     </thead>
     <tbody>
@@ -47,12 +54,12 @@ const rows = [
 </script>
 
 <template>
-  <DadsTable caption="申請一覧">
+  <DadsTable cell-border="bottom">
     <thead>
       <tr>
-        <th scope="col">申請ID</th>
-        <th scope="col">氏名</th>
-        <th scope="col">提出日</th>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
       </tr>
     </thead>
     <tbody>
@@ -66,102 +73,46 @@ const rows = [
 </template>
 ```
 
-## Density
+## 行ヘッダ（第 1 列を見出しに）
 
-2 つの密度 (`comfortable` / `compact`)。デフォルトは `comfortable`（12px パディング）。`compact` はパディング 8px・フォント 14px で、行数が多いデータテーブル向け。
+第 1 列を `dads-table__row-header` にすると、各行の右端に黒い強調ボーダーが付く。`cell-border="right"` を併用するのが公式の構成。
 
 <div class="demo">
-  <span class="demo-label">comfortable（デフォルト）</span>
-  <DadsTable density="comfortable">
-    <thead>
-      <tr><th scope="col">申請ID</th><th scope="col">氏名</th><th scope="col">提出日</th></tr>
-    </thead>
+  <DadsTable cell-border="right">
     <tbody>
       <tr v-for="row in rows" :key="row.id">
-        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
-      </tr>
-    </tbody>
-  </DadsTable>
-  <span class="demo-label" style="margin-top:1rem">compact</span>
-  <DadsTable density="compact">
-    <thead>
-      <tr><th scope="col">申請ID</th><th scope="col">氏名</th><th scope="col">提出日</th></tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in rows" :key="row.id">
-        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
+        <th class="dads-table__row-header" scope="row">{{ row.name }}</th>
+        <td>{{ row.id }}</td>
+        <td>{{ row.submittedAt }}</td>
       </tr>
     </tbody>
   </DadsTable>
 </div>
-
-## Striped
-
-`striped` を有効にすると偶数行に淡い背景色が付き、視線移動が容易になる。
-
-<div class="demo">
-  <DadsTable striped>
-    <thead>
-      <tr><th scope="col">申請ID</th><th scope="col">氏名</th><th scope="col">提出日</th></tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in rows" :key="row.id">
-        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
-      </tr>
-    </tbody>
-  </DadsTable>
-</div>
-
-## Bordered
-
-`bordered` を有効にするとテーブル外周に 1px の枠線が付く。セル間の罫線は常に表示される。
-
-<div class="demo">
-  <DadsTable bordered>
-    <thead>
-      <tr><th scope="col">申請ID</th><th scope="col">氏名</th><th scope="col">提出日</th></tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in rows" :key="row.id">
-        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
-      </tr>
-    </tbody>
-  </DadsTable>
-</div>
-
-## Sticky Header
-
-`stickyHeader` を有効にすると、ラッパが `overflow-y: auto` になり、`<thead>` のセルがスクロール中もページ上端に固定される。スクロールさせるためには高さ制約のある親要素に置く必要がある。
 
 ```vue
-<div style="max-height: 240px">
-  <DadsTable sticky-header>
-    <thead>
-      <tr><th scope="col">申請ID</th><th scope="col">氏名</th><th scope="col">提出日</th></tr>
-    </thead>
-    <tbody>
-      <!-- 多数の行 -->
-    </tbody>
-  </DadsTable>
-</div>
+<DadsTable cell-border="right">
+  <tbody>
+    <tr v-for="row in rows" :key="row.id">
+      <th class="dads-table__row-header" scope="row">{{ row.name }}</th>
+      <td>{{ row.id }}</td>
+      <td>{{ row.submittedAt }}</td>
+    </tr>
+  </tbody>
+</DadsTable>
 ```
 
-## Slot
+## Dense（高密度）
 
-| Slot      | 用途                                                            |
-| --------- | --------------------------------------------------------------- |
-| `default` | `<thead>` / `<tbody>` 等のテーブル本体マークアップ              |
-| `caption` | `<caption>` の中身（指定時は `caption` プロップより優先される） |
-
-`caption` スロットを使うと、リッチなマークアップ（強調、リンク等）をキャプションに含められる。
+`dense` を有効にすると公式の `data-size="dense"`（縦 padding 12px・行高 1.3）になる。デフォルトは comfortable（縦 padding 20px・行高 1.7）。
 
 <div class="demo">
-  <DadsTable>
-    <template #caption>
-      <strong>2026 年 5 月</strong> の申請一覧
-    </template>
+  <DadsTable dense cell-border="bottom">
     <thead>
-      <tr><th scope="col">申請ID</th><th scope="col">氏名</th><th scope="col">提出日</th></tr>
+      <tr>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
+      </tr>
     </thead>
     <tbody>
       <tr v-for="row in rows" :key="row.id">
@@ -170,17 +121,143 @@ const rows = [
     </tbody>
   </DadsTable>
 </div>
+
+```vue
+<DadsTable dense cell-border="bottom"> … </DadsTable>
+```
+
+## Striped（縞模様）
+
+`striped` を有効にすると偶数行に淡い背景色（`--color-neutral-solid-gray-50`）が付く。
+
+<div class="demo">
+  <DadsTable striped cell-border="bottom">
+    <thead>
+      <tr>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="row in rows" :key="row.id">
+        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
+      </tr>
+    </tbody>
+  </DadsTable>
+</div>
+
+```vue
+<DadsTable striped cell-border="bottom"> … </DadsTable>
+```
+
+## Hover ハイライト
+
+`hoverable` を有効にすると、`@media (hover: hover)` 環境でホバー中の行が `--color-primitive-blue-50` でハイライトされる。
+
+<div class="demo">
+  <DadsTable hoverable cell-border="bottom">
+    <thead>
+      <tr>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="row in rows" :key="row.id">
+        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
+      </tr>
+    </tbody>
+  </DadsTable>
+</div>
+
+```vue
+<DadsTable hoverable cell-border="bottom"> … </DadsTable>
+```
+
+## Selectable（選択行ハイライト）
+
+`selectable` を有効にすると、チェック済みのチェックボックス／ラジオを含む行が `--color-primitive-blue-100` でハイライトされる（公式 `tr:has(:checked)`）。チェックボックス自体は呼び出し側で `<td>` 内に配置する。
+
+```vue
+<DadsTable selectable cell-border="bottom">
+  <thead>
+    <tr>
+      <th class="dads-table__col-header" scope="col">
+        <!-- 全選択チェックボックス -->
+      </th>
+      <th class="dads-table__col-header" scope="col">タイトル</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="item in items" :key="item.id">
+      <td><input type="checkbox" v-model="item.selected" /></td>
+      <td>{{ item.title }}</td>
+    </tr>
+  </tbody>
+</DadsTable>
+```
+
+## ボーダー API（`cellBorder` / `border`）
+
+公式の `data-cell-border` / `data-border` 文字列 API をそのまま prop で受け取る。
+
+- `cellBorder` … 各セルの辺。`true`（全辺）/ `'bottom'` / `'top bottom'` / `'right'` など空白区切りの辺キーワード。
+- `border` … テーブル外周の辺。`true`（全辺）/ `'hidden'`（外枠を隠す）/ `'bottom-hidden'` など。
+
+行・列の両方に罫線を引く公式構成（`border-on-row-and-column`）は次のとおり:
+
+```vue
+<DadsTable border="hidden" cell-border>
+  <thead> … </thead>
+  <tbody> … </tbody>
+</DadsTable>
+```
+
+## Caption
+
+`caption` プロップ（または `caption` スロット）を指定すると、ルート要素が `<figure>` になり上部に `<figcaption>` が描画される（公式 `with-caption.html` 構造）。スロットはプロップより優先され、リッチなマークアップを含められる。
+
+<div class="demo">
+  <DadsTable caption="表1: 申請一覧" cell-border="bottom">
+    <thead>
+      <tr>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="row in rows" :key="row.id">
+        <td>{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.submittedAt }}</td>
+      </tr>
+    </tbody>
+  </DadsTable>
+</div>
+
+```vue
+<DadsTable caption="表1: 申請一覧" cell-border="bottom"> … </DadsTable>
+```
 
 ## Props
 
-| Prop           | 型                           | デフォルト      | 説明                                                                              |
-| -------------- | ---------------------------- | --------------- | --------------------------------------------------------------------------------- |
-| `stickyHeader` | `boolean`                    | `false`         | `thead th` を `position: sticky` で上端に固定する                                 |
-| `density`      | `'comfortable' \| 'compact'` | `'comfortable'` | セルの縦方向密度                                                                  |
-| `bordered`     | `boolean`                    | `false`         | テーブル外周に 1px の枠線を追加（セル罫線は常時表示）                             |
-| `striped`      | `boolean`                    | `false`         | 偶数行に淡い背景色を付与                                                          |
-| `caption`      | `string`                     | -               | `<caption>` のテキスト（`caption` スロット指定時は無視される）                    |
-| `loadingLabel` | `string`                     | `'読み込み中'`  | スケルトン表示中にスクリーンリーダーへ読み上げる隠しテキスト。i18n 用に上書き可能 |
+| Prop         | 型                  | デフォルト | 説明                                                                       |
+| ------------ | ------------------- | ---------- | -------------------------------------------------------------------------- |
+| `caption`    | `string`            | -          | キャプションテキスト。指定時はルートが `<figure>` になる（スロットが優先） |
+| `dense`      | `boolean`           | `false`    | 公式 `data-size="dense"`（padding 12px・行高 1.3）                          |
+| `striped`    | `boolean`           | `false`    | 公式 `data-row-stripe`。偶数行に `--color-neutral-solid-gray-50`           |
+| `hoverable`  | `boolean`           | `false`    | 公式 `data-row-hover-highlight`。hover 行を `--color-primitive-blue-50`     |
+| `selectable` | `boolean`           | `false`    | 公式 `data-selectable`。チェック済み行を `--color-primitive-blue-100`       |
+| `cellBorder` | `boolean \| string` | `false`    | 公式 `data-cell-border`。セルの辺別ボーダー（`true` / `'bottom'` 等）       |
+| `border`     | `boolean \| string` | `false`    | 公式 `data-border`。外周ボーダー（`true` / `'hidden'` / `'*-hidden'` 等）   |
+
+## Slot
+
+| Slot      | 用途                                                                            |
+| --------- | ------------------------------------------------------------------------------- |
+| `default` | `<thead>` / `<tbody>` 等のテーブル本体。ヘッダセルに公式クラス + `scope` を付与 |
+| `caption` | `<figcaption>` の中身（指定時は `caption` プロップより優先される）              |
 
 ## Events
 
@@ -188,8 +265,9 @@ const rows = [
 
 ## アクセシビリティ
 
-- 各ヘッダセルには **必ず** `scope="col"`（行ヘッダの場合は `scope="row"`）を付け、スクリーンリーダーがヘッダ／データの関連付けを行えるようにする
-- `caption` を指定するとテーブル冒頭に `<caption>` が描画され、テーブル全体の目的を視覚・支援技術の双方に提示できる
-- 並び替えを実装する際は、現在ソート中の列の `<th>` に `aria-sort="ascending" | "descending" | "none"` を付与し、ソート状態を支援技術に伝える
-- `stickyHeader` 利用時もネイティブ `<table>` 構造を保つため、テーブルセマンティクスは損なわれない
-- 強制カラーモード（Windows ハイコントラスト等）では枠線色が `CanvasText` に切り替わり、視認性が確保される
+- ヘッダセルには **必ず** `scope="col"`（行ヘッダは `scope="row"`）を付け、スクリーンリーダーがヘッダ／データの関連付けを行えるようにする
+- 列ヘッダには `dads-table__col-header`、行ヘッダには `dads-table__row-header` を付与すると、公式の黒強調ボーダーが正しく描画される
+- `caption` を指定するとルートが `<figure>` + `<figcaption>` になり、テーブル全体の目的を視覚・支援技術の双方に提示できる
+- 並び替えを実装する際は、現在ソート中の列の `<th>` に `aria-sort="ascending" | "descending" | "none"` を付与する
+- 行 hover ハイライト（`hoverable`）は `@media (hover: hover)` でガードされ、タッチデバイスでは発火しない
+- 強制カラーモード（Windows ハイコントラスト等）では枠線色が `CanvasText`、ヘッダ背景が `Canvas` に切り替わり、視認性が確保される

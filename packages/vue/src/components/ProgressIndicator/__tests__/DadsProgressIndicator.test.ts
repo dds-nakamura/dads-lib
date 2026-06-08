@@ -9,9 +9,6 @@ enableAutoUnmount(afterEach)
 const createWrapper = (props: DadsProgressIndicatorProps = {}) =>
   mount(DadsProgressIndicator, { props, attachTo: document.body })
 
-// SVG geometry constants must stay in sync with DadsProgressIndicator.vue.
-const CIRCUMFERENCE = 2 * Math.PI * 16
-
 describe('DadsProgressIndicator', () => {
   describe('rendering', () => {
     it('renders a root element with the dads-progress-indicator class', () => {
@@ -19,148 +16,151 @@ describe('DadsProgressIndicator', () => {
       expect(wrapper.classes()).toContain('dads-progress-indicator')
     })
 
-    it('defaults to the linear variant when none is provided', () => {
+    it('defaults to the linear indicator (SVG line) when none is provided', () => {
       const wrapper = createWrapper({ value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--linear')
-      expect(wrapper.find('.dads-progress-indicator__bar').exists()).toBe(true)
-      expect(wrapper.find('.dads-progress-indicator__circle-svg').exists()).toBe(false)
+      expect(wrapper.find('svg.dads-progress-indicator__linear').exists()).toBe(true)
+      expect(wrapper.find('svg.dads-progress-indicator__spinner').exists()).toBe(false)
     })
 
-    it('renders the linear DOM (bar + bar-fill) when variant=linear', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 50 })
-      expect(wrapper.find('.dads-progress-indicator__bar').exists()).toBe(true)
-      expect(wrapper.find('.dads-progress-indicator__bar-fill').exists()).toBe(true)
+    it('renders the linear SVG with track / bar / border lines', () => {
+      const wrapper = createWrapper({ indicator: 'linear', value: 50 })
+      const svg = wrapper.find('svg.dads-progress-indicator__linear')
+      expect(svg.exists()).toBe(true)
+      expect(svg.findAll('line.dads-progress-indicator__track')).toHaveLength(1)
+      expect(svg.findAll('line.dads-progress-indicator__bar')).toHaveLength(1)
+      expect(svg.findAll('line.dads-progress-indicator__border')).toHaveLength(1)
     })
 
-    it('renders the circular DOM (svg + track + fill) when variant=circular', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 50 })
-      expect(wrapper.find('.dads-progress-indicator__circle-svg').exists()).toBe(true)
-      expect(wrapper.find('.dads-progress-indicator__circle-track').exists()).toBe(true)
-      expect(wrapper.find('.dads-progress-indicator__circle-fill').exists()).toBe(true)
-      expect(wrapper.find('.dads-progress-indicator__bar').exists()).toBe(false)
+    it('renders the linear bar as a rectangular <line> (no rounded caps, no radius)', () => {
+      const wrapper = createWrapper({ indicator: 'linear', value: 50 })
+      const bar = wrapper.find('line.dads-progress-indicator__bar')
+      expect(bar.element.tagName.toLowerCase()).toBe('line')
+      // No SVG markup should declare round line caps.
+      expect(wrapper.html()).not.toContain('stroke-linecap')
     })
 
-    it('applies the --linear class for the linear variant', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--linear')
-      expect(wrapper.classes()).not.toContain('dads-progress-indicator--circular')
+    it('renders the spinner SVG with nested <g><g> ring structure', () => {
+      const wrapper = createWrapper({ indicator: 'spinner', value: 50 })
+      const svg = wrapper.find('svg.dads-progress-indicator__spinner')
+      expect(svg.exists()).toBe(true)
+      expect(svg.find('g > g > circle.dads-progress-indicator__bar').exists()).toBe(true)
+      expect(svg.find('circle.dads-progress-indicator__track').exists()).toBe(true)
+      expect(svg.find('circle.dads-progress-indicator__border').exists()).toBe(true)
+      expect(wrapper.find('svg.dads-progress-indicator__linear').exists()).toBe(false)
     })
 
-    it('applies the --circular class for the circular variant', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--circular')
-      expect(wrapper.classes()).not.toContain('dads-progress-indicator--linear')
-    })
-  })
-
-  describe('determinate value mapping', () => {
-    it('maps value=0 to 0% width on the linear fill', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 0 })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      expect((fill.element as HTMLElement).style.width).toBe('0%')
-    })
-
-    it('maps value=50 to 50% width on the linear fill', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 50 })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      expect((fill.element as HTMLElement).style.width).toBe('50%')
-    })
-
-    it('maps value=100 to 100% width on the linear fill', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 100 })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      expect((fill.element as HTMLElement).style.width).toBe('100%')
-    })
-
-    it('sets stroke-dasharray to the circle circumference on circular variant', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 50 })
-      const fillCircle = wrapper.find('.dads-progress-indicator__circle-fill')
-      expect(fillCircle.attributes('stroke-dasharray')).toBe(String(CIRCUMFERENCE))
-    })
-
-    it('maps value=0 to a full-circumference dashoffset (empty ring)', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 0 })
-      const fillCircle = wrapper.find('.dads-progress-indicator__circle-fill')
-      expect(fillCircle.attributes('stroke-dashoffset')).toBe(String(CIRCUMFERENCE))
-    })
-
-    it('maps value=50 to half-circumference dashoffset', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 50 })
-      const fillCircle = wrapper.find('.dads-progress-indicator__circle-fill')
-      const expected = CIRCUMFERENCE * (1 - 50 / 100)
-      expect(fillCircle.attributes('stroke-dashoffset')).toBe(String(expected))
-    })
-
-    it('maps value=100 to dashoffset 0 (full ring)', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 100 })
-      const fillCircle = wrapper.find('.dads-progress-indicator__circle-fill')
-      expect(fillCircle.attributes('stroke-dashoffset')).toBe('0')
+    it('marks the indicator SVG as aria-hidden', () => {
+      const linear = createWrapper({ value: 50 })
+      expect(
+        linear.find('svg.dads-progress-indicator__linear').attributes('aria-hidden'),
+      ).toBe('true')
+      const spinner = createWrapper({ indicator: 'spinner', value: 50 })
+      expect(
+        spinner.find('svg.dads-progress-indicator__spinner').attributes('aria-hidden'),
+      ).toBe('true')
     })
   })
 
-  describe('value clamping', () => {
-    it('clamps negative values to 0 on the linear variant', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: -25 })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      expect((fill.element as HTMLElement).style.width).toBe('0%')
+  describe('type taxonomy', () => {
+    it('defaults to data-type="stacked"', () => {
+      const wrapper = createWrapper({ value: 50 })
+      expect(wrapper.attributes('data-type')).toBe('stacked')
     })
 
-    it('clamps values above 100 to 100 on the linear variant', () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 250 })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      expect((fill.element as HTMLElement).style.width).toBe('100%')
+    it.each(['stacked', 'inlined', 'stacked-underlay'] as const)(
+      'applies data-type="%s"',
+      (type) => {
+        const wrapper = createWrapper({ type, value: 50 })
+        expect(wrapper.attributes('data-type')).toBe(type)
+      },
+    )
+
+    it('uses the compact linear width (80) for the inlined type', () => {
+      const wrapper = createWrapper({ type: 'inlined', value: 50 })
+      const svg = wrapper.find('svg.dads-progress-indicator__linear')
+      expect(svg.attributes('width')).toBe('80')
+      expect(svg.attributes('viewBox')).toBe('0 0 80 4')
     })
 
-    it('clamps values for aria-valuenow as well', () => {
-      const wrapper = createWrapper({ value: 250 })
-      expect(wrapper.attributes('aria-valuenow')).toBe('100')
+    it('uses the large linear width (240) for stacked / stacked-underlay', () => {
+      for (const type of ['stacked', 'stacked-underlay'] as const) {
+        const wrapper = createWrapper({ type, value: 50 })
+        expect(wrapper.find('svg.dads-progress-indicator__linear').attributes('width')).toBe(
+          '240',
+        )
+      }
+    })
+
+    it('uses the compact spinner size (24) for the inlined type', () => {
+      const wrapper = createWrapper({ type: 'inlined', indicator: 'spinner', value: 50 })
+      const svg = wrapper.find('svg.dads-progress-indicator__spinner')
+      expect(svg.attributes('width')).toBe('24')
+      expect(svg.attributes('height')).toBe('24')
+    })
+
+    it('uses the large spinner size (48) for stacked', () => {
+      const wrapper = createWrapper({ type: 'stacked', indicator: 'spinner', value: 50 })
+      expect(wrapper.find('svg.dads-progress-indicator__spinner').attributes('width')).toBe('48')
     })
   })
 
-  describe('indeterminate mode', () => {
-    it('applies the --indeterminate class when value is omitted', () => {
+  describe('determinate vs. indeterminate', () => {
+    it('sets the --value custom property from the value (determinate)', () => {
+      const wrapper = createWrapper({ value: 70 })
+      expect((wrapper.element as HTMLElement).style.getPropertyValue('--value')).toBe('70')
+    })
+
+    it('clamps the --value property into [0, 100]', () => {
+      const high = createWrapper({ value: 250 })
+      expect((high.element as HTMLElement).style.getPropertyValue('--value')).toBe('100')
+      const low = createWrapper({ value: -25 })
+      expect((low.element as HTMLElement).style.getPropertyValue('--value')).toBe('0')
+    })
+
+    it('does not set data-indeterminate when a value is supplied', () => {
+      const wrapper = createWrapper({ value: 50 })
+      expect(wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate')).toBe(
+        undefined,
+      )
+    })
+
+    it('sets data-indeterminate on the indicator when value is omitted', () => {
       const wrapper = createWrapper()
-      expect(wrapper.classes()).toContain('dads-progress-indicator--indeterminate')
+      expect(
+        wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate'),
+      ).toBe('')
     })
 
-    it('omits style width on linear bar-fill in indeterminate mode', () => {
-      const wrapper = createWrapper({ variant: 'linear' })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      // No inline width set — the keyframe animation sweeps a CSS-controlled fill.
-      expect((fill.element as HTMLElement).style.width).toBe('')
+    it('omits the --value property in indeterminate mode', () => {
+      const wrapper = createWrapper()
+      expect((wrapper.element as HTMLElement).style.getPropertyValue('--value')).toBe('')
     })
 
-    it('omits stroke-dashoffset on circular fill in indeterminate mode', () => {
-      const wrapper = createWrapper({ variant: 'circular' })
-      const fillCircle = wrapper.find('.dads-progress-indicator__circle-fill')
-      expect(fillCircle.attributes('stroke-dashoffset')).toBeUndefined()
-    })
-
-    it('does not set --indeterminate when value is 0 (still determinate)', () => {
+    it('treats value=0 as determinate (not indeterminate)', () => {
       const wrapper = createWrapper({ value: 0 })
-      expect(wrapper.classes()).not.toContain('dads-progress-indicator--indeterminate')
+      expect(
+        wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate'),
+      ).toBe(undefined)
+      expect(wrapper.attributes('aria-valuenow')).toBe('0')
     })
   })
 
-  describe('size variants', () => {
-    it('defaults to size=md when not specified', () => {
+  describe('active display control', () => {
+    it('is active (no --inactive modifier) by default', () => {
       const wrapper = createWrapper({ value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--md')
+      expect(wrapper.classes()).not.toContain('dads-progress-indicator--inactive')
     })
 
-    it('applies --lg modifier', () => {
-      const wrapper = createWrapper({ size: 'lg', value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--lg')
+    it('applies the --inactive modifier when active=false', () => {
+      const wrapper = createWrapper({ value: 50, active: false })
+      expect(wrapper.classes()).toContain('dads-progress-indicator--inactive')
     })
 
-    it('applies --md modifier', () => {
-      const wrapper = createWrapper({ size: 'md', value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--md')
-    })
-
-    it('applies --sm modifier', () => {
-      const wrapper = createWrapper({ size: 'sm', value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--sm')
+    it('toggles the --inactive modifier reactively', async () => {
+      const wrapper = createWrapper({ value: 50, active: true })
+      expect(wrapper.classes()).not.toContain('dads-progress-indicator--inactive')
+      await wrapper.setProps({ active: false })
+      expect(wrapper.classes()).toContain('dads-progress-indicator--inactive')
     })
   })
 
@@ -177,88 +177,99 @@ describe('DadsProgressIndicator', () => {
       expect(wrapper.attributes('aria-valuenow')).toBe('42')
     })
 
-    it('omits aria-valuenow / valuemin / valuemax when indeterminate', () => {
+    it('rounds aria-valuenow to an integer', () => {
+      const wrapper = createWrapper({ value: 42.7 })
+      expect(wrapper.attributes('aria-valuenow')).toBe('43')
+    })
+
+    it('clamps aria-valuenow into [0, 100]', () => {
+      expect(createWrapper({ value: 250 }).attributes('aria-valuenow')).toBe('100')
+      expect(createWrapper({ value: -25 }).attributes('aria-valuenow')).toBe('0')
+    })
+
+    it('omits aria-valuenow when indeterminate (keeps min/max)', () => {
       const wrapper = createWrapper()
       expect(wrapper.attributes('aria-valuenow')).toBeUndefined()
-      expect(wrapper.attributes('aria-valuemin')).toBeUndefined()
-      expect(wrapper.attributes('aria-valuemax')).toBeUndefined()
+      expect(wrapper.attributes('aria-valuemin')).toBe('0')
+      expect(wrapper.attributes('aria-valuemax')).toBe('100')
     })
 
-    it('passes aria-label through when provided', () => {
-      const wrapper = createWrapper({ value: 50, ariaLabel: 'アップロード進捗' })
-      expect(wrapper.attributes('aria-label')).toBe('アップロード進捗')
-    })
-
-    it('omits aria-label when not provided', () => {
-      const wrapper = createWrapper({ value: 50 })
+    it('uses aria-labelledby pointing at the visible label when label is set', () => {
+      const wrapper = createWrapper({ value: 50, label: '読み込み中' })
+      const labelledBy = wrapper.attributes('aria-labelledby')
+      expect(labelledBy).toBeTruthy()
+      expect(wrapper.find('.dads-progress-indicator__label').attributes('id')).toBe(labelledBy)
       expect(wrapper.attributes('aria-label')).toBeUndefined()
     })
 
-    it('marks the circular svg as aria-hidden so screen readers ignore the geometry', () => {
-      const wrapper = createWrapper({ variant: 'circular', value: 50 })
-      expect(wrapper.find('.dads-progress-indicator__circle-svg').attributes('aria-hidden')).toBe(
-        'true',
-      )
+    it('falls back to aria-label when no visible label is provided', () => {
+      const wrapper = createWrapper({ value: 50, ariaLabel: 'アップロード進捗' })
+      expect(wrapper.attributes('aria-label')).toBe('アップロード進捗')
+      expect(wrapper.attributes('aria-labelledby')).toBeUndefined()
     })
   })
 
-  describe('label rendering', () => {
-    it('does not render the label by default', () => {
+  describe('label & percentage', () => {
+    it('does not render a label when none is provided', () => {
       const wrapper = createWrapper({ value: 50 })
       expect(wrapper.find('.dads-progress-indicator__label').exists()).toBe(false)
     })
 
-    it('renders the default percentage label when showLabel=true', () => {
-      const wrapper = createWrapper({ value: 75, showLabel: true })
-      const label = wrapper.find('.dads-progress-indicator__label')
-      expect(label.exists()).toBe(true)
-      expect(label.text()).toBe('75%')
+    it('renders the visible label text', () => {
+      const wrapper = createWrapper({ value: 50, label: 'ラベル' })
+      expect(wrapper.find('.dads-progress-indicator__label').text()).toContain('ラベル')
     })
 
-    it('renders a custom label when provided', () => {
-      const wrapper = createWrapper({ value: 50, showLabel: true, label: 'アップロード中…' })
-      const label = wrapper.find('.dads-progress-indicator__label')
-      expect(label.text()).toBe('アップロード中…')
+    it('renders the percentage readout when showPercentage=true (determinate)', () => {
+      const wrapper = createWrapper({ value: 70, label: 'ラベル', showPercentage: true })
+      const pct = wrapper.find('.dads-progress-indicator__percentage')
+      expect(pct.exists()).toBe(true)
+      expect(pct.text().replace(/\s/g, '')).toBe('(70%)')
     })
 
-    it('uses the clamped value when computing the default label', () => {
-      const wrapper = createWrapper({ value: 250, showLabel: true })
-      expect(wrapper.find('.dads-progress-indicator__label').text()).toBe('100%')
+    it('rounds the percentage readout', () => {
+      const wrapper = createWrapper({ value: 69.6, label: 'ラベル', showPercentage: true })
+      expect(wrapper.find('.dads-progress-indicator__percentage').text().replace(/\s/g, '')).toBe(
+        '(70%)',
+      )
     })
 
-    it('does not render a label in indeterminate mode without an explicit label', () => {
-      const wrapper = createWrapper({ showLabel: true })
-      expect(wrapper.find('.dads-progress-indicator__label').exists()).toBe(false)
+    it('omits the percentage readout in indeterminate mode', () => {
+      const wrapper = createWrapper({ label: 'ラベル', showPercentage: true })
+      expect(wrapper.find('.dads-progress-indicator__percentage').exists()).toBe(false)
     })
 
-    it('renders the explicit label even in indeterminate mode', () => {
-      const wrapper = createWrapper({ showLabel: true, label: '読み込み中' })
-      expect(wrapper.find('.dads-progress-indicator__label').text()).toBe('読み込み中')
+    it('omits the percentage readout when showPercentage is false', () => {
+      const wrapper = createWrapper({ value: 70, label: 'ラベル' })
+      expect(wrapper.find('.dads-progress-indicator__percentage').exists()).toBe(false)
     })
   })
 
   describe('reactivity', () => {
-    it('updates the linear fill width when value changes', async () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 25 })
-      const fill = wrapper.find('.dads-progress-indicator__bar-fill')
-      expect((fill.element as HTMLElement).style.width).toBe('25%')
+    it('updates the --value property when value changes', async () => {
+      const wrapper = createWrapper({ value: 25 })
+      expect((wrapper.element as HTMLElement).style.getPropertyValue('--value')).toBe('25')
       await wrapper.setProps({ value: 80 })
-      expect((fill.element as HTMLElement).style.width).toBe('80%')
+      expect((wrapper.element as HTMLElement).style.getPropertyValue('--value')).toBe('80')
     })
 
     it('switches between determinate and indeterminate when value is unset', async () => {
       const wrapper = createWrapper({ value: 50 })
-      expect(wrapper.classes()).not.toContain('dads-progress-indicator--indeterminate')
+      expect(
+        wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate'),
+      ).toBe(undefined)
       await wrapper.setProps({ value: undefined })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--indeterminate')
+      expect(
+        wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate'),
+      ).toBe('')
     })
 
-    it('switches DOM shape when variant changes', async () => {
-      const wrapper = createWrapper({ variant: 'linear', value: 50 })
-      expect(wrapper.find('.dads-progress-indicator__bar').exists()).toBe(true)
-      await wrapper.setProps({ variant: 'circular' })
-      expect(wrapper.find('.dads-progress-indicator__bar').exists()).toBe(false)
-      expect(wrapper.find('.dads-progress-indicator__circle-svg').exists()).toBe(true)
+    it('switches indicator form when the indicator prop changes', async () => {
+      const wrapper = createWrapper({ indicator: 'linear', value: 50 })
+      expect(wrapper.find('svg.dads-progress-indicator__linear').exists()).toBe(true)
+      await wrapper.setProps({ indicator: 'spinner' })
+      expect(wrapper.find('svg.dads-progress-indicator__linear').exists()).toBe(false)
+      expect(wrapper.find('svg.dads-progress-indicator__spinner').exists()).toBe(true)
     })
   })
 
@@ -276,44 +287,29 @@ describe('DadsProgressIndicator', () => {
         },
         { attachTo: document.body },
       )
-      const fills = wrapper.findAll('.dads-progress-indicator__bar-fill')
-      expect((fills[0].element as HTMLElement).style.width).toBe('20%')
-      expect((fills[1].element as HTMLElement).style.width).toBe('80%')
+      const roots = wrapper.findAll('.dads-progress-indicator')
+      expect((roots[0].element as HTMLElement).style.getPropertyValue('--value')).toBe('20')
+      expect((roots[1].element as HTMLElement).style.getPropertyValue('--value')).toBe('80')
     })
-  })
-
-  describe('color variant', () => {
-    it('applies the primary color modifier by default', () => {
-      const wrapper = createWrapper({ value: 50 })
-      expect(wrapper.classes()).toContain('dads-progress-indicator--color-primary')
-    })
-
-    it.each(['primary', 'secondary', 'success', 'error', 'warning'] as const)(
-      'applies dads-progress-indicator--color-%s',
-      (c) => {
-        const wrapper = createWrapper({ value: 50, color: c })
-        expect(wrapper.classes()).toContain(`dads-progress-indicator--color-${c}`)
-      },
-    )
   })
 
   describe('a11y (vitest-axe)', () => {
-    it('has no violations for determinate linear progress', async () => {
+    it('has no violations for determinate linear progress (aria-label)', async () => {
       const wrapper = createWrapper({ value: 42, ariaLabel: '読み込み進捗' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations for indeterminate linear progress', async () => {
+    it('has no violations for indeterminate linear progress (aria-label)', async () => {
       const wrapper = createWrapper({ ariaLabel: '処理中' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations for determinate circular progress with label', async () => {
+    it('has no violations for determinate spinner with visible label', async () => {
       const wrapper = createWrapper({
-        variant: 'circular',
+        indicator: 'spinner',
         value: 75,
-        showLabel: true,
-        ariaLabel: 'アップロード進捗',
+        label: 'アップロード進捗',
+        showPercentage: true,
       })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })

@@ -71,3 +71,20 @@
 - **修正要 / 優先度 high**。配色（gray→青）・タイポ（20/18px→14px）・サイズ variant 欠落・状態モデル相違・独自クラス体系と、ほぼ全観点でドリフト。公式 CSS の流用が皆無で Select 同様の独自再実装ドリフト事例。
 - 想定 changeset レベル: **major**。状態名(`done/pending`→`reached/completed/skipped/editing`)・size prop 追加・クラス名変更は API/DOM 破壊的。CSS のみ是正でも見た目が大きく変わるため最低 minor。
 - API / aria 不変は**保てない**: 公式準拠には状態 enum とサイズ prop の追加・クラス名変更が必要で破壊的変更不可避。
+
+## T4 解消 (案X フル / MAJOR 破壊的変更)
+
+Issue #18 / T4 で公式正準構造へ全面再実装し、上記 13 差異を解消した。実装は `design-system-example-components-html/src/components/step-navigation/{step-navigation.css,playground-full.html,playground-single.html}` のマークアップ・クラス・CSS を逐語移植している。
+
+- **クラス体系**: `__item`/`__button`/`__indicator`/`__title`/`__connector(<span>)` → 公式 `__step`/`__header`/`__number`/`__title`/`__description`。ルートも `<nav>` 1 個 + `<ul>`/`<li>` 構造へ。(差異 #2)
+- **コネクタ**: `<span>` 要素 → `.dads-step-navigation__step::before`/`::after` 疑似要素。先頭/末尾は `data-first`/`data-last` で抑止。(差異 #11)
+- **サイズ**: `size` public prop を追加し公式 `data-size="normal|small"` にマップ (number 44/32px, title 18/16px, outline 2/1px, border 2/1px)。(差異 #3)
+- **タイポ**: number 20px/bold、title 18px/bold、本体 16px・line-height 1.7・letter-spacing 0.02em を公式値で再現。(差異 #4, #12)
+- **配色**: 独自ブランド青 `#0017c1` を撤廃し公式 neutral gray ベースへ (reached=gray-800 塗り / completed=gray-50 / error=semantic-error-1)。誤トークン (`--color-text-*`, `--color-brand-primary` 等) を `--color-neutral-*`/`--color-semantic-error-1` へ是正。(差異 #1, #6)
+- **状態モデル**: enum を `pending`/`current`/`done`/`error` → 公式 `reached`/`completed`/`error`/`skipped`/`editing` (`data-state`) へ置換。現在地は `current` prop で指定し `aria-current="step"` を付与 (旧 `current` 状態を分離)。マイグレーション表は docs に記載。(差異 #5)
+- **state-icon / state-label / description**: 公式 SVG (completed=チェック / editing=編集 / error=警告) と視覚/非視覚ラベル、`__description` サブ要素を実装。(差異 #10)
+- **focus / current リング**: focus-visible を `__number` に移し公式値 (4px black outline + 2px offset + 2px yellow-300 shadow)、aria-current リングを公式値 (outline gray-800 + offset + white shadow) に修正。(差異 #8, #9)
+- **forced-colors**: Highlight/HighlightText → 公式 CanvasText/Canvas + state-icon の fill 制御へ。(差異 #13)
+- **border**: number を normal 2px / small 1px / skipped dashed に対応。(差異 #7)
+
+判定: ❌ 要修正 → ✅ 解消 (公式 CSS 逐語移植)。changeset: **major** (status enum・size prop・クラス名/DOM 変更で API/DOM 破壊的)。

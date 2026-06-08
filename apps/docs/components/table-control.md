@@ -62,12 +62,12 @@ const i18nRange = (start, end, total) =>
     @update:page="currentPage = $event"
     @update:pageSize="pageSize = $event"
   />
-  <DadsTable bordered>
+  <DadsTable cell-border="bottom">
     <thead>
       <tr>
-        <th scope="col">申請ID</th>
-        <th scope="col">氏名</th>
-        <th scope="col">提出日</th>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
       </tr>
     </thead>
     <tbody>
@@ -118,12 +118,12 @@ const onSearchUpdate = (v) => {
     @update:page="currentPage = $event"
     @update:pageSize="pageSize = $event"
   />
-  <DadsTable bordered>
+  <DadsTable cell-border="bottom">
     <thead>
       <tr>
-        <th scope="col">申請ID</th>
-        <th scope="col">氏名</th>
-        <th scope="col">提出日</th>
+        <th class="dads-table__col-header" scope="col">申請ID</th>
+        <th class="dads-table__col-header" scope="col">氏名</th>
+        <th class="dads-table__col-header" scope="col">提出日</th>
       </tr>
     </thead>
     <tbody>

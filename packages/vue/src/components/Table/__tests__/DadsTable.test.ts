@@ -6,9 +6,13 @@ import type { DadsTableProps } from '../DadsTable.types'
 
 enableAutoUnmount(afterEach)
 
-const TABLE_BODY = `
+// Body authored by the consumer using the official header-cell classes.
+const COL_HEADER_BODY = `
   <thead>
-    <tr><th>Name</th><th>Age</th></tr>
+    <tr>
+      <th class="dads-table__col-header" scope="col">Name</th>
+      <th class="dads-table__col-header" scope="col">Age</th>
+    </tr>
   </thead>
   <tbody>
     <tr><td>Alice</td><td>30</td></tr>
@@ -18,9 +22,22 @@ const TABLE_BODY = `
   </tbody>
 `
 
+const ROW_HEADER_BODY = `
+  <tbody>
+    <tr>
+      <th class="dads-table__row-header" scope="row">Alice</th>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th class="dads-table__row-header" scope="row">Bob</th>
+      <td>25</td>
+    </tr>
+  </tbody>
+`
+
 const createWrapper = (
   props: DadsTableProps = {},
-  slots: Record<string, string> = { default: TABLE_BODY },
+  slots: Record<string, string> = { default: COL_HEADER_BODY },
 ) =>
   mount(DadsTable, {
     props,
@@ -29,197 +46,233 @@ const createWrapper = (
   })
 
 describe('DadsTable', () => {
-  describe('rendering', () => {
-    it('renders a wrapper div with the dads-table-wrapper class', () => {
+  describe('canonical structure', () => {
+    it('renders a <div class="dads-table"> container by default (no caption)', () => {
       const wrapper = createWrapper()
       expect(wrapper.element.tagName).toBe('DIV')
-      expect(wrapper.classes()).toContain('dads-table-wrapper')
+      expect(wrapper.classes()).toContain('dads-table')
     })
 
-    it('renders a <table> inside the wrapper with the dads-table class', () => {
+    it('renders the <table class="dads-table__table"> inside the container', () => {
       const wrapper = createWrapper()
       const table = wrapper.find('table')
       expect(table.exists()).toBe(true)
-      expect(table.classes()).toContain('dads-table')
+      expect(table.classes()).toContain('dads-table__table')
+      // The table is a direct child of the .dads-table container.
+      expect(wrapper.element.querySelector(':scope > table.dads-table__table')).not.toBeNull()
     })
 
-    it('renders the default slot content (thead/tbody) inside the table', () => {
+    it('renders the default slot (thead/tbody) inside the table', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('thead').exists()).toBe(true)
-      expect(wrapper.find('tbody').exists()).toBe(true)
+      const table = wrapper.find('table')
+      expect(table.find('thead').exists()).toBe(true)
+      expect(table.find('tbody').exists()).toBe(true)
       expect(wrapper.findAll('tbody tr')).toHaveLength(4)
-      expect(wrapper.find('thead th').text()).toBe('Name')
+    })
+  })
+
+  describe('header cells', () => {
+    it('preserves consumer column headers with class + scope="col"', () => {
+      const wrapper = createWrapper()
+      const headers = wrapper.findAll('th.dads-table__col-header')
+      expect(headers).toHaveLength(2)
+      headers.forEach((h) => expect(h.attributes('scope')).toBe('col'))
+      expect(headers[0].text()).toBe('Name')
     })
 
-    it('preserves the native <table> semantics (root div > table > thead/tbody)', () => {
-      const wrapper = createWrapper()
-      expect(wrapper.element.tagName).toBe('DIV')
-      const table = wrapper.element.querySelector('table')
-      expect(table).not.toBeNull()
-      expect(table?.querySelector('thead')).not.toBeNull()
-      expect(table?.querySelector('tbody')).not.toBeNull()
+    it('preserves consumer row headers with class + scope="row"', () => {
+      const wrapper = createWrapper({}, { default: ROW_HEADER_BODY })
+      const headers = wrapper.findAll('th.dads-table__row-header')
+      expect(headers).toHaveLength(2)
+      headers.forEach((h) => expect(h.attributes('scope')).toBe('row'))
     })
   })
 
   describe('default props', () => {
-    it('defaults density to comfortable', () => {
+    it('emits no container/table state attributes by default', () => {
       const wrapper = createWrapper()
-      const table = wrapper.find('table')
-      expect(table.classes()).toContain('dads-table--comfortable')
-      expect(table.classes()).not.toContain('dads-table--compact')
+      const root = wrapper.element
+      const table = wrapper.find('table').element
+      expect(root.hasAttribute('data-size')).toBe(false)
+      expect(root.hasAttribute('data-row-stripe')).toBe(false)
+      expect(root.hasAttribute('data-row-hover-highlight')).toBe(false)
+      expect(root.hasAttribute('data-selectable')).toBe(false)
+      expect(table.hasAttribute('data-cell-border')).toBe(false)
+      expect(table.hasAttribute('data-border')).toBe(false)
     })
 
-    it('does not apply --sticky-header by default', () => {
+    it('does not render a caption when neither prop nor slot is provided', () => {
       const wrapper = createWrapper()
-      expect(wrapper.classes()).not.toContain('dads-table-wrapper--sticky-header')
-      expect(wrapper.find('table').classes()).not.toContain('dads-table--sticky-header')
-    })
-
-    it('does not apply --bordered or --striped by default', () => {
-      const wrapper = createWrapper()
-      const table = wrapper.find('table')
-      expect(table.classes()).not.toContain('dads-table--bordered')
-      expect(table.classes()).not.toContain('dads-table--striped')
-    })
-
-    it('does not render a <caption> when neither prop nor slot is provided', () => {
-      const wrapper = createWrapper()
-      expect(wrapper.find('caption').exists()).toBe(false)
+      expect(wrapper.find('figcaption').exists()).toBe(false)
     })
   })
 
-  describe('sticky-header', () => {
-    it('adds the wrapper modifier when stickyHeader=true', () => {
-      const wrapper = createWrapper({ stickyHeader: true })
-      expect(wrapper.classes()).toContain('dads-table-wrapper--sticky-header')
+  describe('dense', () => {
+    it('sets data-size="dense" on the container when dense=true', () => {
+      const wrapper = createWrapper({ dense: true })
+      expect(wrapper.element.getAttribute('data-size')).toBe('dense')
     })
 
-    it('adds the table modifier when stickyHeader=true', () => {
-      const wrapper = createWrapper({ stickyHeader: true })
-      expect(wrapper.find('table').classes()).toContain('dads-table--sticky-header')
-    })
-  })
-
-  describe('density', () => {
-    it('applies --comfortable class when density="comfortable"', () => {
-      const wrapper = createWrapper({ density: 'comfortable' })
-      expect(wrapper.find('table').classes()).toContain('dads-table--comfortable')
-    })
-
-    it('applies --compact class when density="compact"', () => {
-      const wrapper = createWrapper({ density: 'compact' })
-      const table = wrapper.find('table')
-      expect(table.classes()).toContain('dads-table--compact')
-      expect(table.classes()).not.toContain('dads-table--comfortable')
-    })
-  })
-
-  describe('bordered', () => {
-    it('applies the --bordered modifier when bordered=true', () => {
-      const wrapper = createWrapper({ bordered: true })
-      expect(wrapper.find('table').classes()).toContain('dads-table--bordered')
+    it('omits data-size when dense=false', () => {
+      const wrapper = createWrapper({ dense: false })
+      expect(wrapper.element.hasAttribute('data-size')).toBe(false)
     })
   })
 
   describe('striped', () => {
-    it('applies the --striped modifier when striped=true', () => {
+    it('sets the data-row-stripe attribute when striped=true', () => {
       const wrapper = createWrapper({ striped: true })
-      expect(wrapper.find('table').classes()).toContain('dads-table--striped')
+      expect(wrapper.element.hasAttribute('data-row-stripe')).toBe(true)
+    })
+  })
+
+  describe('hoverable', () => {
+    it('sets the data-row-hover-highlight attribute when hoverable=true', () => {
+      const wrapper = createWrapper({ hoverable: true })
+      expect(wrapper.element.hasAttribute('data-row-hover-highlight')).toBe(true)
+    })
+  })
+
+  describe('selectable', () => {
+    it('sets the data-selectable attribute when selectable=true', () => {
+      const wrapper = createWrapper({ selectable: true })
+      expect(wrapper.element.hasAttribute('data-selectable')).toBe(true)
+    })
+  })
+
+  describe('cellBorder', () => {
+    it('emits data-cell-border="bottom" for a string value', () => {
+      const wrapper = createWrapper({ cellBorder: 'bottom' })
+      expect(wrapper.find('table').attributes('data-cell-border')).toBe('bottom')
+    })
+
+    it('emits an empty data-cell-border for the boolean true (all edges)', () => {
+      const wrapper = createWrapper({ cellBorder: true })
+      expect(wrapper.find('table').attributes('data-cell-border')).toBe('')
+    })
+
+    it('omits data-cell-border when false', () => {
+      const wrapper = createWrapper({ cellBorder: false })
+      expect(wrapper.find('table').element.hasAttribute('data-cell-border')).toBe(false)
+    })
+
+    it('passes through a multi-edge string verbatim', () => {
+      const wrapper = createWrapper({ cellBorder: 'top bottom' })
+      expect(wrapper.find('table').attributes('data-cell-border')).toBe('top bottom')
+    })
+  })
+
+  describe('border', () => {
+    it('emits data-border for a string value', () => {
+      const wrapper = createWrapper({ border: 'hidden' })
+      expect(wrapper.find('table').attributes('data-border')).toBe('hidden')
+    })
+
+    it('emits an empty data-border for the boolean true (full outer border)', () => {
+      const wrapper = createWrapper({ border: true })
+      expect(wrapper.find('table').attributes('data-border')).toBe('')
+    })
+
+    it('omits data-border when false', () => {
+      const wrapper = createWrapper({ border: false })
+      expect(wrapper.find('table').element.hasAttribute('data-border')).toBe(false)
     })
   })
 
   describe('caption', () => {
-    it('renders a <caption> with the prop text when caption is provided', () => {
+    it('promotes the root to <figure> and renders a <figcaption> from the prop', () => {
       const wrapper = createWrapper({ caption: '社員一覧' })
-      const caption = wrapper.find('caption')
+      expect(wrapper.element.tagName).toBe('FIGURE')
+      const caption = wrapper.find('figcaption')
       expect(caption.exists()).toBe(true)
       expect(caption.text()).toBe('社員一覧')
       expect(caption.classes()).toContain('dads-table__caption')
     })
 
-    it('renders a <caption> from the caption slot when provided', () => {
+    it('renders the caption slot (rich markup) and promotes to <figure>', () => {
       const wrapper = createWrapper(
         {},
         {
-          default: TABLE_BODY,
-          caption: '<strong>カスタムキャプション</strong>',
+          default: COL_HEADER_BODY,
+          caption: '<strong>カスタム</strong>',
         },
       )
-      const caption = wrapper.find('caption')
-      expect(caption.exists()).toBe(true)
+      expect(wrapper.element.tagName).toBe('FIGURE')
+      const caption = wrapper.find('figcaption')
       expect(caption.find('strong').exists()).toBe(true)
-      expect(caption.text()).toBe('カスタムキャプション')
+      expect(caption.text()).toBe('カスタム')
     })
 
     it('lets the caption slot override the caption prop', () => {
       const wrapper = createWrapper(
         { caption: 'プロップから' },
         {
-          default: TABLE_BODY,
+          default: COL_HEADER_BODY,
           caption: 'スロットから',
         },
       )
-      expect(wrapper.find('caption').text()).toBe('スロットから')
+      expect(wrapper.find('figcaption').text()).toBe('スロットから')
     })
   })
 
   describe('combined props', () => {
-    it('applies every modifier when all flags are enabled together', () => {
+    it('applies every container + table attribute when enabled together', () => {
       const wrapper = createWrapper({
-        stickyHeader: true,
-        density: 'compact',
-        bordered: true,
+        dense: true,
         striped: true,
+        hoverable: true,
+        selectable: true,
+        cellBorder: 'bottom',
+        border: true,
+        caption: '統計',
       })
+      const root = wrapper.element
       const table = wrapper.find('table')
-      expect(wrapper.classes()).toContain('dads-table-wrapper--sticky-header')
-      expect(table.classes()).toContain('dads-table--sticky-header')
-      expect(table.classes()).toContain('dads-table--compact')
-      expect(table.classes()).toContain('dads-table--bordered')
-      expect(table.classes()).toContain('dads-table--striped')
+      expect(root.tagName).toBe('FIGURE')
+      expect(root.getAttribute('data-size')).toBe('dense')
+      expect(root.hasAttribute('data-row-stripe')).toBe(true)
+      expect(root.hasAttribute('data-row-hover-highlight')).toBe(true)
+      expect(root.hasAttribute('data-selectable')).toBe(true)
+      expect(table.attributes('data-cell-border')).toBe('bottom')
+      expect(table.attributes('data-border')).toBe('')
     })
   })
 
   describe('reactivity', () => {
-    it('updates the density class when density prop changes', async () => {
-      const wrapper = createWrapper({ density: 'comfortable' })
-      expect(wrapper.find('table').classes()).toContain('dads-table--comfortable')
-      await wrapper.setProps({ density: 'compact' })
-      const table = wrapper.find('table')
-      expect(table.classes()).toContain('dads-table--compact')
-      expect(table.classes()).not.toContain('dads-table--comfortable')
+    it('toggles data-size when dense changes', async () => {
+      const wrapper = createWrapper({ dense: false })
+      expect(wrapper.element.hasAttribute('data-size')).toBe(false)
+      await wrapper.setProps({ dense: true })
+      expect(wrapper.element.getAttribute('data-size')).toBe('dense')
     })
 
-    it('toggles the sticky-header modifiers when the prop changes', async () => {
-      const wrapper = createWrapper({ stickyHeader: false })
-      expect(wrapper.classes()).not.toContain('dads-table-wrapper--sticky-header')
-      await wrapper.setProps({ stickyHeader: true })
-      expect(wrapper.classes()).toContain('dads-table-wrapper--sticky-header')
-      expect(wrapper.find('table').classes()).toContain('dads-table--sticky-header')
-    })
-
-    it('starts/stops rendering the caption as the prop changes', async () => {
+    it('switches the root tag between div and figure as caption changes', async () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('caption').exists()).toBe(false)
+      expect(wrapper.element.tagName).toBe('DIV')
       await wrapper.setProps({ caption: '後から指定' })
-      expect(wrapper.find('caption').exists()).toBe(true)
-      expect(wrapper.find('caption').text()).toBe('後から指定')
+      expect(wrapper.element.tagName).toBe('FIGURE')
+      expect(wrapper.find('figcaption').text()).toBe('後から指定')
+    })
+
+    it('updates data-cell-border as the prop changes', async () => {
+      const wrapper = createWrapper({ cellBorder: 'bottom' })
+      expect(wrapper.find('table').attributes('data-cell-border')).toBe('bottom')
+      await wrapper.setProps({ cellBorder: true })
+      expect(wrapper.find('table').attributes('data-cell-border')).toBe('')
     })
   })
 
   describe('multiple instances', () => {
-    it('renders independent class state for two tables', () => {
+    it('keeps independent attribute state for two tables', () => {
       const wrapper = mount(
         {
           components: { DadsTable },
           template: `
             <div>
-              <DadsTable density="compact" sticky-header>
-                <thead><tr><th>A</th></tr></thead>
+              <DadsTable dense cell-border="bottom">
                 <tbody><tr><td>1</td></tr></tbody>
               </DadsTable>
-              <DadsTable bordered>
-                <thead><tr><th>B</th></tr></thead>
+              <DadsTable striped>
                 <tbody><tr><td>2</td></tr></tbody>
               </DadsTable>
             </div>
@@ -227,101 +280,43 @@ describe('DadsTable', () => {
         },
         { attachTo: document.body },
       )
-      const tables = wrapper.findAll('table')
-      expect(tables).toHaveLength(2)
-      expect(tables[0].classes()).toContain('dads-table--compact')
-      expect(tables[0].classes()).toContain('dads-table--sticky-header')
-      expect(tables[1].classes()).toContain('dads-table--bordered')
-      expect(tables[1].classes()).not.toContain('dads-table--sticky-header')
-    })
-  })
-
-  describe('loading skeleton', () => {
-    it('does not render the skeleton body by default', () => {
-      const wrapper = mount(DadsTable)
-      expect(wrapper.find('.dads-table__skeleton-body').exists()).toBe(false)
-    })
-
-    it('replaces the default slot with skeleton rows when loading=true', () => {
-      const wrapper = mount(DadsTable, {
-        props: { loading: true },
-        slots: { default: '<tbody class="real-rows"><tr><td>data</td></tr></tbody>' },
-      })
-      expect(wrapper.find('.dads-table__skeleton-body').exists()).toBe(true)
-      expect(wrapper.find('.real-rows').exists()).toBe(false)
-    })
-
-    it('renders the configured number of skeleton rows and columns', () => {
-      const wrapper = mount(DadsTable, {
-        props: { loading: true, skeletonRowCount: 5, skeletonColumnCount: 3 },
-      })
-      const rows = wrapper.findAll('.dads-table__skeleton-row')
-      expect(rows).toHaveLength(5)
-      expect(rows[0].findAll('.dads-table__skeleton-cell')).toHaveLength(3)
-    })
-
-    it('marks the skeleton body as aria-busy="true" + aria-live="polite"', () => {
-      const wrapper = mount(DadsTable, { props: { loading: true } })
-      const body = wrapper.find('.dads-table__skeleton-body')
-      expect(body.attributes('aria-busy')).toBe('true')
-      expect(body.attributes('aria-live')).toBe('polite')
-    })
-
-    it('renders the default Japanese loadingLabel inside each skeleton cell', () => {
-      const wrapper = mount(DadsTable, {
-        props: { loading: true, skeletonRowCount: 1, skeletonColumnCount: 1 },
-      })
-      const srOnly = wrapper.find('.dads-table__sr-only')
-      expect(srOnly.exists()).toBe(true)
-      expect(srOnly.text()).toBe('読み込み中')
-    })
-
-    it('honors a custom English loadingLabel prop', () => {
-      const wrapper = mount(DadsTable, {
-        props: {
-          loading: true,
-          skeletonRowCount: 1,
-          skeletonColumnCount: 1,
-          loadingLabel: 'Loading',
-        },
-      })
-      const labels = wrapper.findAll('.dads-table__sr-only')
-      expect(labels.length).toBeGreaterThan(0)
-      labels.forEach((el) => expect(el.text()).toBe('Loading'))
+      const roots = wrapper.findAll('.dads-table')
+      expect(roots).toHaveLength(2)
+      expect(roots[0].attributes('data-size')).toBe('dense')
+      expect(roots[0].find('table').attributes('data-cell-border')).toBe('bottom')
+      expect(roots[1].element.hasAttribute('data-size')).toBe(false)
+      expect(roots[1].element.hasAttribute('data-row-stripe')).toBe(true)
     })
   })
 
   describe('a11y (vitest-axe)', () => {
-    const mountInBody = (props: DadsTableProps = {}, slots = { default: TABLE_BODY }) =>
+    const mountInBody = (props: DadsTableProps = {}, slots = { default: COL_HEADER_BODY }) =>
       mount(DadsTable, { props, slots, attachTo: document.body })
 
-    it('has no violations with a basic table', async () => {
+    it('has no violations with column headers', async () => {
       const wrapper = mountInBody()
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations with a caption', async () => {
+    it('has no violations with a caption (figure/figcaption)', async () => {
       const wrapper = mountInBody({ caption: '従業員一覧' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations with sticky header', async () => {
-      const wrapper = mountInBody({ stickyHeader: true, caption: 'スコア' })
-      expect(await axe(wrapper.element)).toHaveNoViolations()
-    })
-
-    it('has no violations in compact density (bordered + striped)', async () => {
-      const wrapper = mountInBody({
-        caption: '統計',
-        density: 'compact',
-        bordered: true,
-        striped: true,
+    it('has no violations with row headers', async () => {
+      const wrapper = mountInBody({ caption: '従業員', cellBorder: 'right' }, {
+        default: ROW_HEADER_BODY,
       })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations in loading state', async () => {
-      const wrapper = mountInBody({ caption: '読み込み中', loading: true })
+    it('has no violations in dense + striped + bordered', async () => {
+      const wrapper = mountInBody({
+        caption: '統計',
+        dense: true,
+        striped: true,
+        cellBorder: 'bottom',
+      })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })
