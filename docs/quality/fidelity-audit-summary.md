@@ -4,22 +4,22 @@
 
 - 親 Issue: #18（**CLOSED** / 全テーマ完了）
 - 引き継ぎ: #29（**T9** = Image / PageNavigation / Tab / TableControl・Figma 公開待ち）
-- 基準ポリシー: [`a3-breaking-change-policy.md`](./a3-breaking-change-policy.md)
-- 残課題台帳: [`a3-deferred.md`](./a3-deferred.md)（本監査で消し込み済み）
-- コンポーネント別監査: [`gap-reports/`](./gap-reports/)
+- 移行情報の正本: `.changeset/*.md`（テーマ別 major/minor/patch と breaking 詳細）
+
+> 本サマリは #18 の作業文書（柱A-3 破壊的変更ポリシー / a3-deferred 残課題台帳 / コンポーネント別 gap-reports）を集約した完了記録。作業ログ各文書は本サマリへ統合のうえ削除済み。各テーマの一次情報は対応 PR（#19–#28）と changeset を参照。
 
 ---
 
 ## 1. 目的と結論
 
 - **目的**: 本ライブラリは「DADS 参照実装」であり、公式（`design-system-example-components-html` の正準 CSS / `dads-document-md` / WAI-ARIA）との**ビジュアル・構造・アクセシビリティの忠実度**が最優先。実装で生じていた独自拡張・構造ドリフトを公式へ寄せる。
-- **結論**: 49 コンポーネントを監査（[gap-reports](./gap-reports/)）し、低リスク是正（柱A-2）から破壊的な構造作り直し（柱A-3）まで段階的に実施。**ほぼ全テーマが破壊的変更**のため、`@dads/vue` の**次 major** としてまとめて公開する。
+- **結論**: 49 コンポーネントを監査（コンポーネント別 gap-report）し、低リスク是正（柱A-2）から破壊的な構造作り直し（柱A-3）まで段階的に実施。**ほぼ全テーマが破壊的変更**のため、`@dads/vue` の**次 major** としてまとめて公開する。
 
 ---
 
 ## 2. 基準となった意思決定（案X ポリシー）
 
-Issue #18 の全変更が従う基準。詳細は [`a3-breaking-change-policy.md`](./a3-breaking-change-policy.md) §2/§5。
+Issue #18 の全変更が従う基準（2026-06-06 確定）。
 
 | # | 決定 | 内容 |
 |---|---|---|
@@ -108,13 +108,12 @@ Issue #18 の全変更が従う基準。詳細は [`a3-breaking-change-policy.md
 
 | ドキュメント | 役割 |
 |---|---|
-| [`a3-breaking-change-policy.md`](./a3-breaking-change-policy.md) | **基準**: 案X ポリシー・テーマ別破壊サーフェス・要決定チェックリスト・T1 詳細設計 |
-| [`a3-deferred.md`](./a3-deferred.md) | 柱A-2 で扱えなかった破壊的項目の台帳（本監査で消し込み済み・各項目に解消テーマを記載） |
-| [`gap-reports/`](./gap-reports/) | 49 コンポーネント別の差異監査（各レポートに "T◯ 解消" 追記） |
-| [`token-replacement-map.md`](./token-replacement-map.md) | 不在トークン → 公式トークン 置換マップ（S-1） |
-| [`icon-mapping.md`](./icon-mapping.md) | MDI → DadsIcon(inline SVG) 移行マップ（柱B） |
-| [`naming-and-gap.md`](./naming-and-gap.md) | 命名規約と公式仕様との Gap 分析 |
+| 本サマリ（このファイル） | **#18 の完了記録 / 基準**: 案X ポリシー・テーマ別の新ベースライン・keep-list（旧 a3-breaking-change-policy / a3-deferred / gap-reports を集約） |
 | `.changeset/*.md` | **移行情報の正本**（テーマ別 major/minor/patch と breaking 詳細） |
+| [`token-replacement-map.md`](./token-replacement-map.md) | 不在トークン → 公式トークン 置換マップ（S-1）。恒久リファレンス |
+| [`icon-mapping.md`](./icon-mapping.md) | MDI → DadsIcon(inline SVG) 移行マップ（柱B）。恒久リファレンス |
+| [`naming-and-gap.md`](./naming-and-gap.md) | 命名規約と公式仕様との Gap 分析 |
+| 各 PR #19–#28 / コミット履歴 | テーマ別の差分・監査根拠（gap-report は各 PR の差分に保存） |
 
 ---
 
