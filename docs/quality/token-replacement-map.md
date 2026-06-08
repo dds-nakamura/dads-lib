@@ -1,6 +1,6 @@
 # 不在トークン → 公式トークン 置換マップ (Issue #18 / 横断課題 S-1)
 
-`@dads/vue` の多くが参照する「セマンティック風トークン名」は DADS design-tokens（`@digital-go-jp/design-tokens`）に**存在しない**。`var(--invented, #fallback)` の形で常にフォールバック直値へ落ち、`design-tokens` 更新が反映されない＝実質ハードコード（[gap-reports/README.md](./gap-reports/README.md) S-1 参照）。
+`@dads/vue` の多くが参照する「セマンティック風トークン名」は DADS design-tokens（`@digital-go-jp/design-tokens`）に**存在しない**。`var(--invented, #fallback)` の形で常にフォールバック直値へ落ち、`design-tokens` 更新が反映されない＝実質ハードコード（横断課題 S-1。経緯は [fidelity-audit-summary](./fidelity-audit-summary.md) 参照）。
 
 本表は不在トークンを **実在する公式トークン**へ置換するための正本。値は `design-tokens/examples/tokens.css` と `design-system-example-components-html/**/*.css` の実使用で裏取り済み。
 
