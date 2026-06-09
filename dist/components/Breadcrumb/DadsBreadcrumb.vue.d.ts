@@ -5,7 +5,6 @@ declare const __VLS_export: import("vue").DefineComponent<DadsBreadcrumbProps, {
     "onClick:item"?: ((item: DadsBreadcrumbItem, index: number, event: MouseEvent) => any) | undefined;
 }>, {
     ariaLabel: string;
-    separator: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

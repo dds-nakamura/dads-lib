@@ -14,9 +14,6 @@ export interface DadsCheckboxProps {
     /** Forces the error visual state when no message is available. */
     error?: boolean;
     disabled?: boolean;
-    /** Native checkboxes do not support readonly. The component blocks
-     *  modelValue updates while keeping the input focusable. */
-    readonly?: boolean;
     name?: string;
     /** Native `id`. When omitted, an id is generated so the label `for` and
      *  ARIA `aria-describedby` references stay in sync. */
@@ -25,8 +22,9 @@ export interface DadsCheckboxProps {
      *  group (e.g. DadsCheckboxGroup) to identify the selected option. */
     value?: string | number | boolean;
     /**
-     * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-     * Default: `'必須'`.
+     * 必須マーカーに表示するテキスト。公式の `※必須` 表現に統一。i18n 用に
+     * プロップで上書き可能。
+     * Default: `'※必須'`.
      */
     requiredLabel?: string;
 }

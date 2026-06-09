@@ -7,7 +7,7 @@
  * `persistent` escape hatch so callers can opt out of dismissal on Esc /
  * overlay-click for irreversible flows.
  *
- * 公式 slug は `dialog`。旧名 `DadsModal` は deprecated alias として併存する。
+ * 公式 slug は `dialog`。
  */
 /** Width preset. `fullscreen` covers the viewport. */
 export type DadsDialogSize = 'sm' | 'md' | 'lg' | 'fullscreen';

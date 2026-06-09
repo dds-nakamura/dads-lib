@@ -1,13 +1,13 @@
 import type { DadsHeaderContainerProps } from './DadsHeaderContainer.types';
-declare var __VLS_1: {}, __VLS_9: {}, __VLS_11: {}, __VLS_13: {};
+declare var __VLS_6: {}, __VLS_14: {}, __VLS_16: {}, __VLS_18: {};
 type __VLS_Slots = {} & {
-    logo?: (props: typeof __VLS_1) => any;
+    logo?: (props: typeof __VLS_6) => any;
 } & {
-    nav?: (props: typeof __VLS_9) => any;
+    nav?: (props: typeof __VLS_14) => any;
 } & {
-    utility?: (props: typeof __VLS_11) => any;
+    utility?: (props: typeof __VLS_16) => any;
 } & {
-    actions?: (props: typeof __VLS_13) => any;
+    actions?: (props: typeof __VLS_18) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsHeaderContainerProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {} & {
     "click:menu": (event: MouseEvent) => any;
@@ -18,6 +18,7 @@ declare const __VLS_base: import("vue").DefineComponent<DadsHeaderContainerProps
     sticky: boolean;
     showMenuToggle: boolean;
     menuToggleLabel: string;
+    menuExpanded: boolean;
     navAriaLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;

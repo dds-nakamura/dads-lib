@@ -13,11 +13,10 @@ declare const __VLS_export: import("vue").DefineComponent<DadsFileUploadProps, {
     onRemove?: ((file: File) => any) | undefined;
 }>, {
     error: boolean;
-    size: import("./DadsFileUpload.types").DadsFileUploadSize;
-    disabled: boolean;
     required: boolean;
-    readonly: boolean;
+    disabled: boolean;
     requiredLabel: string;
+    readonly: boolean;
     multiple: boolean;
     buttonText: string;
     dropzoneText: string;

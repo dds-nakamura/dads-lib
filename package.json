@@ -1,6 +1,6 @@
 {
   "name": "@dads/vue",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "private": false,
   "type": "module",
   "description": "DADS (デジタル庁デザインシステム) Vue 3 コンポーネントライブラリ",
@@ -34,8 +34,8 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "vue": "^3.4.0",
-    "@digital-go-jp/design-tokens": "^1.1.0"
+    "@digital-go-jp/design-tokens": "^1.1.0",
+    "vue": "^3.4.0"
   },
   "peerDependenciesMeta": {
     "@digital-go-jp/design-tokens": {
@@ -43,6 +43,7 @@
     }
   },
   "devDependencies": {
+    "@material-symbols/svg-400": "^0.44.12",
     "@types/node": "^24.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vitest/coverage-v8": "^4.0.0",

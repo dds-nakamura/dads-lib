@@ -1,21 +1,21 @@
 import type { DadsNotificationBannerColor, DadsNotificationBannerProps } from './DadsNotificationBanner.types';
-declare var __VLS_7: {}, __VLS_9: {}, __VLS_11: {};
+declare var __VLS_7: {}, __VLS_14: {}, __VLS_16: {};
 type __VLS_Slots = {} & {
     icon?: (props: typeof __VLS_7) => any;
 } & {
-    default?: (props: typeof __VLS_9) => any;
+    default?: (props: typeof __VLS_14) => any;
 } & {
-    action?: (props: typeof __VLS_11) => any;
+    action?: (props: typeof __VLS_16) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsNotificationBannerProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {} & {
-    "update:modelValue": (value: boolean) => any;
     close: () => any;
+    "update:modelValue": (value: boolean) => any;
 }, string, import("vue").PublicProps, Readonly<DadsNotificationBannerProps> & Readonly<{
-    "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
     onClose?: (() => any) | undefined;
+    "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
 }>, {
-    color: DadsNotificationBannerColor;
     style: import("./DadsNotificationBanner.types").DadsNotificationBannerStyle;
+    color: DadsNotificationBannerColor;
     modelValue: boolean;
     closable: boolean;
     closeLabel: string;

@@ -16,7 +16,10 @@ export interface DadsBreadcrumbItem {
 export interface DadsBreadcrumbProps {
     /** パンくずリスト項目。先頭から末尾の順で渡す。 */
     items: DadsBreadcrumbItem[];
-    /** 項目間の区切り文字。デフォルト `'》'`。 */
+    /**
+     * 項目間の区切り。**未指定時は公式の inline SVG chevron** を描画する。
+     * 文字列を渡した場合のみ、その文字で上書きする（テキスト区切りのエスケープハッチ）。
+     */
     separator?: string;
     /** nav 要素の `aria-label`。デフォルト `'パンくずリスト'`。 */
     ariaLabel?: string;

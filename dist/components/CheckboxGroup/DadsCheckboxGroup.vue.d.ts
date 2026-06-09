@@ -8,8 +8,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsCheckboxGroupProps
 }>, {
     error: boolean;
     size: import("../Checkbox/DadsCheckbox.types.js").DadsCheckboxSize;
-    disabled: boolean;
     required: boolean;
+    disabled: boolean;
     requiredLabel: string;
     direction: import("./DadsCheckboxGroup.types").DadsCheckboxGroupDirection;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;

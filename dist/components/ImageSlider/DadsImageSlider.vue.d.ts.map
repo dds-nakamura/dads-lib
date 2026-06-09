@@ -1,1 +1,1 @@
-{"version":3,"file":"DadsImageSlider.vue.d.ts","sourceRoot":"","sources":["../../../src/components/ImageSlider/DadsImageSlider.vue"],"names":[],"mappings":"AAiZA,OAAO,KAAK,EAEV,oBAAoB,EAErB,MAAM,yBAAyB,CAAA;AAkVhC,QAAA,MAAM,YAAY;;;;;;;;;;;;;;;;;;;;6EAIhB,CAAC;wBACkB,OAAO,YAAY;AAAxC,wBAAyC"}
+{"version":3,"file":"DadsImageSlider.vue.d.ts","sourceRoot":"","sources":["../../../src/components/ImageSlider/DadsImageSlider.vue"],"names":[],"mappings":"AAsCA,OAAO,KAAK,EAAwB,oBAAoB,EAAE,MAAM,yBAAyB,CAAA;AA+FzF,QAAA,MAAM,YAAY;;;;;;;;;6EAIhB,CAAC;wBACkB,OAAO,YAAY;AAAxC,wBAAyC"}

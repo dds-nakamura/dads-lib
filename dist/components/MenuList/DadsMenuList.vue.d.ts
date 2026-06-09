@@ -4,8 +4,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsMenuListProps, {},
 }, string, import("vue").PublicProps, Readonly<DadsMenuListProps> & Readonly<{
     "onClick:item"?: ((item: DadsMenuListItem, event: MouseEvent) => any) | undefined;
 }>, {
-    type: import("./DadsMenuList.types").DadsMenuListType;
     size: import("./DadsMenuList.types").DadsMenuListSize;
+    type: import("./DadsMenuList.types").DadsMenuListType;
     ariaLabel: string;
     indentation: number;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;

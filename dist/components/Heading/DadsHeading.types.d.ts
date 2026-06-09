@@ -11,17 +11,19 @@
  *
  * - `shoulder`: small label rendered above the heading inside `<hgroup>`
  * - `subtitle`: descriptive line rendered below the heading inside `<hgroup>`
- * - `icon`: leading icon (string class name for `<i class>` glyph fonts)
+ * - `icon`: leading icon (Material Symbols name rendered via DadsIcon SVG)
  * - `chip`: inline chip badge — `#chip` slot for full DadsChipLabel control
  */
 export type DadsHeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 export type DadsHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 /**
- * Font-size token matching the DADS Figma `data-size` scale (`14` ... `36`
- * px). Independent from `level` and `as` so callers can produce e.g. an
- * `<h1>` with size `'20'` for a narrow sidebar heading.
+ * Font-size step matching the official DADS `data-size` scale in px
+ * (`64` / `57` / `45` / `36` / `32` / `28` / `24` / `20` / `18` / `16`).
+ * Independent from `level` and `as` so callers can produce e.g. an `<h1>`
+ * with size `'20'` for a narrow sidebar heading. Each step carries the
+ * official per-size `line-height` and `letter-spacing` (see DadsHeading.vue).
  */
-export type DadsHeadingSize = '14' | '16' | '18' | '20' | '24' | '28' | '32' | '36';
+export type DadsHeadingSize = '64' | '57' | '45' | '36' | '32' | '28' | '24' | '20' | '18' | '16';
 export interface DadsHeadingProps {
     /**
      * HTML element to render — controls the semantic outline. Defaults to 'h2'.
@@ -50,9 +52,9 @@ export interface DadsHeadingProps {
      */
     subtitle?: string;
     /**
-     * Material Design Icon class name rendered before the heading text.
-     * The `#prepend-icon` slot takes precedence when provided (use the slot
-     * for custom SVG, the prop for MDI classes).
+     * Material Symbols name rendered before the heading text via DadsIcon
+     * (inline SVG). The `#prepend-icon` slot takes precedence when provided
+     * (use the slot for custom SVG, the prop for a registry icon name).
      */
     icon?: string;
 }

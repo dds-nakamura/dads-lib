@@ -11,13 +11,13 @@ declare const __VLS_export: import("vue").DefineComponent<DadsInputTextProps, {}
     onBlur?: ((event: FocusEvent) => any) | undefined;
 }>, {
     error: boolean;
-    type: import("./DadsInputText.types").DadsInputTextType;
     size: import("./DadsInputText.types").DadsInputTextSize;
-    disabled: boolean;
+    type: import("./DadsInputText.types").DadsInputTextType;
     required: boolean;
+    disabled: boolean;
+    requiredLabel: string;
     readonly: boolean;
     align: import("./DadsInputText.types").DadsInputTextAlign;
-    requiredLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

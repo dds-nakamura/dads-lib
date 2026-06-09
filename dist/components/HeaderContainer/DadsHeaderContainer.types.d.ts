@@ -4,8 +4,7 @@
  * Layout components do not take a `size` prop — sizing is determined by the
  * inner content and the surrounding application chrome.
  *
- * 公式 slug は `header-container`。旧名 `DadsHeader` は deprecated alias と
- * して併存する。
+ * 公式 slug は `header-container`。
  */
 /**
  * Header の幅・高さ・密度バリアント (公式 DADS 4 パターン)。
@@ -26,6 +25,17 @@ export interface DadsHeaderContainerProps {
     showMenuToggle?: boolean;
     /** aria-label for the hamburger button. Defaults to 'メニューを開く'. */
     menuToggleLabel?: string;
+    /**
+     * Whether the menu the toggle controls is currently open. Drives the button's
+     * `aria-expanded`. Drawer/menu state is owned by the parent, so pass it in.
+     * Defaults to `false`.
+     */
+    menuExpanded?: boolean;
+    /**
+     * `id` of the element the toggle controls (e.g. the mobile drawer / menu),
+     * rendered as the button's `aria-controls`. Omit if not applicable.
+     */
+    menuControls?: string;
     /**
      * `aria-label` for the main `<nav>` element. Defaults to 'メインナビゲーション'.
      * i18n を行いたい場合に上書きする。

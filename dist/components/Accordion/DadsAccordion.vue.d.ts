@@ -1,16 +1,21 @@
 import type { DadsAccordionProps } from './DadsAccordion.types';
-declare var __VLS_2: `panel-${string}`, __VLS_3: {};
+declare var __VLS_7: {};
 type __VLS_Slots = {} & {
-    [K in NonNullable<typeof __VLS_2>]?: (props: typeof __VLS_3) => any;
+    default?: (props: typeof __VLS_7) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsAccordionProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {} & {
-    "update:modelValue": (value: string | string[]) => any;
+    "update:modelValue": (value: boolean) => any;
+    toggle: (value: boolean) => any;
 }, string, import("vue").PublicProps, Readonly<DadsAccordionProps> & Readonly<{
-    "onUpdate:modelValue"?: ((value: string | string[]) => any) | undefined;
+    "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
+    onToggle?: ((value: boolean) => any) | undefined;
 }>, {
-    type: import("./DadsAccordion.types").DadsAccordionType;
-    size: import("./DadsAccordion.types").DadsAccordionSize;
-    modelValue: string | string[];
+    disabled: boolean;
+    modelValue: boolean;
+    defaultOpen: boolean;
+    headingLevel: import("./DadsAccordion.types").DadsAccordionHeadingLevel;
+    backLink: boolean;
+    backLinkLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
 declare const _default: typeof __VLS_export;

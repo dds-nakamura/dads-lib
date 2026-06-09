@@ -1,59 +1,82 @@
 /**
  * Type definitions for DadsTable.
  *
- * DadsTable is a presentation-only wrapper around the native `<table>` element.
- * Sorting, pagination, and row selection are intentionally left to consumers —
- * the component contributes layout, density, sticky-header, and theming only.
+ * DadsTable is a presentation-only wrapper that reproduces the official DADS
+ * canonical table structure verbatim:
+ *
+ *   <div class="dads-table" [data-size] [data-row-stripe] …>
+ *     <table class="dads-table__table" [data-cell-border] [data-border]>
+ *       … consumer-authored thead / tbody …
+ *     </table>
+ *   </div>
+ *
+ * Header cells are authored by the consumer in the default slot using the
+ * official classes `dads-table__col-header` (`<th scope="col">`) and
+ * `dads-table__row-header` (`<th scope="row">`). The component ships the scoped
+ * CSS for those classes so the symbolic black emphasis border under column
+ * headers / at the right edge of row headers is rendered automatically.
+ *
+ * Sorting, pagination and row selection logic are intentionally left to
+ * consumers — the component contributes structure, density, edge borders and
+ * theming only.
+ *
+ * @see design-system-example-components-html/src/components/table/table.css
  */
 /**
- * Vertical density of the table cells.
- * - `comfortable`: 12px padding (default reading density)
- * - `compact`:     8px padding + 14px font (denser data tables)
+ * Edge-border specification, mirroring the official `data-cell-border` /
+ * `data-border` string API.
+ *
+ * - `true` / `''` → all four edges (`1px solid` on every `td`/`th`).
+ * - A space-separated subset of `'top' | 'right' | 'bottom' | 'left'` →
+ *   only those edges (e.g. `'bottom'`, `'top bottom'`).
+ * - `false` / `undefined` → no attribute emitted.
+ *
+ * For `border` (the outer table edge) the additional value `'hidden'` and the
+ * `*-hidden` keywords are accepted to suppress specific outer edges.
  */
-export type DadsTableDensity = 'comfortable' | 'compact';
+export type DadsTableBorder = boolean | string;
 export interface DadsTableProps {
     /**
-     * When true, `thead th` is pinned via `position: sticky` and the wrapper
-     * gains `overflow-y: auto` so the header stays visible while the body
-     * scrolls. Defaults to `false`.
-     */
-    stickyHeader?: boolean;
-    /** Cell density. Defaults to `'comfortable'`. */
-    density?: DadsTableDensity;
-    /**
-     * Adds a 1px outer border around the table. Cell separators are always
-     * shown regardless of this flag. Defaults to `false`.
-     */
-    bordered?: boolean;
-    /**
-     * Tints every other body row with the subtle hover background for easier
-     * visual row tracking. Defaults to `false`.
-     */
-    striped?: boolean;
-    /**
-     * Optional `<caption>` text. Ignored when the `caption` slot is used —
-     * the slot takes precedence so callers can compose richer markup.
+     * Optional caption text. When provided (or when the `caption` slot is used)
+     * the root element becomes a `<figure>` and a `<figcaption>` is rendered
+     * above the table, per the official `with-caption.html` example. The slot
+     * takes precedence over this prop.
      */
     caption?: string;
     /**
-     * Render a loading state covering the table body with skeleton rows.
-     * When `true`, the default slot is hidden and `skeletonRowCount`
-     * skeleton rows are shown. Caller still owns the `<tbody>` markup in
-     * the default slot — the skeleton replaces it visually.
+     * Compact (dense) row density. Maps to the official `data-size="dense"`
+     * container attribute (12px vertical padding + line-height 1.3). Defaults to
+     * `false` (the comfortable 20px padding + line-height 1.7).
      */
-    loading?: boolean;
-    /** Number of skeleton rows to render when `loading=true`. Default `3`. */
-    skeletonRowCount?: number;
+    dense?: boolean;
     /**
-     * Number of skeleton columns to render per loading row. Default `4`.
-     * Adjust to match the caller's actual column count for a smoother
-     * visual transition when loading completes.
+     * Tints every even row with `--color-neutral-solid-gray-50`. Maps to the
+     * official `data-row-stripe` container attribute. Defaults to `false`.
      */
-    skeletonColumnCount?: number;
+    striped?: boolean;
     /**
-     * Screen-reader-only text announced while the loading skeleton is shown.
-     * Default `'読み込み中'`.
+     * Highlights the hovered row with `--color-primitive-blue-50` (guarded by
+     * `@media (hover: hover)`). Maps to the official `data-row-hover-highlight`
+     * container attribute. Defaults to `false`.
      */
-    loadingLabel?: string;
+    hoverable?: boolean;
+    /**
+     * Highlights rows that contain a checked checkbox/radio with
+     * `--color-primitive-blue-100`. Maps to the official `data-selectable`
+     * container attribute. Defaults to `false`.
+     */
+    selectable?: boolean;
+    /**
+     * Per-cell edge borders, applied to the `<table>` as the official
+     * `data-cell-border` attribute. See {@link DadsTableBorder}.
+     * The most common value is `'bottom'` (header underline + row separators).
+     */
+    cellBorder?: DadsTableBorder;
+    /**
+     * Outer table-edge border, applied to the `<table>` as the official
+     * `data-border` attribute. See {@link DadsTableBorder}; also accepts
+     * `'hidden'` / `'*-hidden'` to suppress edges.
+     */
+    border?: DadsTableBorder;
 }
 //# sourceMappingURL=DadsTable.types.d.ts.map

@@ -1,48 +1,48 @@
 /**
  * Type definitions for DadsAccordion.
+ *
+ * A single collapsible region rendered as a native `<details>` / `<summary>`
+ * pair, 1:1 faithful to the official DADS accordion (bordered-circle chevron
+ * icon + heading-wrapped summary title + optional back-link). Mirrors the
+ * sibling DadsDisclosure API: stack multiple `<DadsAccordion>` elements in
+ * sequence to build a multi-item accordion.
  */
-/** Accordion behavior. `single` keeps at most one panel open at a time. */
-export type DadsAccordionType = 'single' | 'multiple';
-/**
- * Accordion size token (icon + padding). Mirrors the DADS 4-step scale.
- */
-export type DadsAccordionSize = 'l' | 'm' | 's' | 'xs';
-/**
- * Optional "return link" rendered at the bottom of an open panel — a
- * back-to-top affordance for long accordion content per the DADS spec.
- */
-export interface DadsAccordionReturnLink {
-    label: string;
-    href: string;
-}
-export interface DadsAccordionItem {
-    /** Unique identifier used for v-model and slot names (`panel-{id}`). */
-    id: string;
-    /** Visible label rendered inside the header button. */
-    title: string;
-    /** Disable interaction; the header is skipped by keyboard navigation. */
-    disabled?: boolean;
-}
+/** Heading level used to wrap the summary title (official uses `<h3>`). */
+export type DadsAccordionHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export interface DadsAccordionProps {
     /**
-     * Currently open panel id(s).
-     * - `type='single'`: a single id, or `''` when nothing is open.
-     * - `type='multiple'`: an array of ids.
+     * Controlled open state. When provided, the component is controlled — the
+     * consumer is expected to react to `update:modelValue` and pass the new
+     * value back via `v-model`.
      */
-    modelValue?: string | string[];
-    /** Accordion item definitions. */
-    items: DadsAccordionItem[];
-    /** Open behavior. Defaults to `'single'`. */
-    type?: DadsAccordionType;
-    /** Size token. Defaults to `'m'`. Drives header icon size + vertical padding. */
-    size?: DadsAccordionSize;
+    modelValue?: boolean;
     /**
-     * When provided, renders a "return link" at the bottom of every open panel
-     * (e.g. "ページのトップへ戻る"). Pass as a `{ label, href }` object.
+     * Initial open state for uncontrolled usage (when `modelValue` is not
+     * provided). Defaults to `false`.
      */
-    returnLink?: DadsAccordionReturnLink;
+    defaultOpen?: boolean;
+    /** Visible label rendered inside the `<summary>` heading. */
+    title: string;
+    /**
+     * Heading level for the title inside `<summary>`. Defaults to `3`, matching
+     * the official `<h3>`.
+     */
+    headingLevel?: DadsAccordionHeadingLevel;
+    /** Disable interaction; click and keyboard activation are ignored. */
+    disabled?: boolean;
+    /**
+     * When `true`, renders the official back-link anchor at the end of the
+     * content, pointing to the summary id. Defaults to `false`.
+     */
+    backLink?: boolean;
+    /**
+     * Override the back-link label text. Defaults to `「${title}」の先頭に戻る`.
+     */
+    backLinkLabel?: string;
 }
 export interface DadsAccordionEmits {
-    (e: 'update:modelValue', value: string | string[]): void;
+    (e: 'update:modelValue', value: boolean): void;
+    /** Fired whenever the open state changes (controlled or uncontrolled). */
+    (e: 'toggle', value: boolean): void;
 }
 //# sourceMappingURL=DadsAccordion.types.d.ts.map

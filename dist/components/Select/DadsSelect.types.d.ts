@@ -35,8 +35,8 @@ export interface DadsSelectProps {
     disabled?: boolean;
     readonly?: boolean;
     /**
-     * Material Design Icons class shown at the start of the trigger
-     * (e.g. `'mdi-magnify'`). Optional decorative icon.
+     * Material Symbols icon name shown at the start of the trigger
+     * (e.g. `'search'`). Optional decorative icon rendered via DadsIcon.
      */
     prefixIcon?: string;
     /**

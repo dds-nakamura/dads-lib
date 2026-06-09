@@ -16,11 +16,11 @@ declare const __VLS_export: import("vue").DefineComponent<DadsSearchBoxProps, {}
 }>, {
     error: boolean;
     size: import("./DadsSearchBox.types").DadsSearchBoxSize;
-    disabled: boolean;
-    modelValue: string;
     required: boolean;
-    readonly: boolean;
+    disabled: boolean;
     requiredLabel: string;
+    modelValue: string;
+    readonly: boolean;
     buttonLabel: string;
     clearable: boolean;
     clearLabel: string;

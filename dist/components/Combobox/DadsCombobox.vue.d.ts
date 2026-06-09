@@ -12,10 +12,10 @@ declare const __VLS_export: import("vue").DefineComponent<DadsComboboxProps, {},
 }>, {
     error: boolean;
     size: import("./DadsCombobox.types").DadsComboboxSize;
-    disabled: boolean;
     required: boolean;
-    readonly: boolean;
+    disabled: boolean;
     requiredLabel: string;
+    readonly: boolean;
     items: DadsComboboxItem[];
     itemValue: string;
     itemTitle: string;

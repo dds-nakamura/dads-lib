@@ -45,13 +45,13 @@ export interface DadsMenuListItem {
     active?: boolean;
     /** 操作不可化。リンクの場合は `aria-disabled="true"`、ボタンの場合は `disabled` 属性。 */
     disabled?: boolean;
-    /** 項目先頭に並べるアイコン (MDI クラス名。例: `mdi-home`)。 */
+    /** 項目先頭に並べるアイコン (Material Symbols 名。例: `home`)。 */
     frontIcon?: string;
-    /** ラベル末尾の補助アイコン (MDI クラス名。例: `mdi-open-in-new`)。 */
+    /** ラベル末尾の補助アイコン (Material Symbols 名。例: `open_in_new`)。 */
     tailIcon?: string;
     /** ラベル末尾アイコンのアクセシブル名 (`role="img"` 付きで読み上げ対象)。 */
     tailIconLabel?: string;
-    /** 項目末尾アイコン (MDI クラス名。`expanded` 中は 180 度回転する)。 */
+    /** 項目末尾アイコン (Material Symbols 名。`expanded` 中は 180 度回転する)。 */
     endIcon?: string;
     /** 子メニューが展開中であることを示す (`data-expanded` を付与)。 */
     expanded?: boolean;

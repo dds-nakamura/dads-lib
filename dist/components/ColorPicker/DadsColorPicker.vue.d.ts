@@ -5,8 +5,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsColorPickerProps, 
     "onUpdate:modelValue"?: ((value: string) => any) | undefined;
 }>, {
     disabled: boolean;
-    defaultAriaLabel: string;
     swatches: string[];
+    defaultAriaLabel: string;
     hexInputAriaLabel: string;
     formatSwatchAriaLabel: (swatch: string) => string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;

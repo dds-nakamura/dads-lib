@@ -7,7 +7,13 @@
  * (e.g. "OR" between alternative actions).
  */
 export type DadsDividerOrientation = 'horizontal' | 'vertical';
-export type DadsDividerColor = 'default' | 'strong';
+/**
+ * 線の色。公式 DADS example の `data-color` に対応する 3 段階。
+ * - `gray-420`: `--color-neutral-solid-gray-420` (#949494) — 標準・既定
+ * - `gray-536`: `--color-neutral-solid-gray-536` (#767676) — やや強い
+ * - `black`: `--color-neutral-black` — 最も強い
+ */
+export type DadsDividerColor = 'gray-420' | 'gray-536' | 'black';
 /**
  * 公式 DADS の幅バリアント。
  * - `full-width`: 親要素全幅に伸びる (デフォルト)
@@ -21,7 +27,7 @@ export type DadsDividerStyle = 'solid' | 'dashed';
 export interface DadsDividerProps {
     /** Layout direction. Defaults to `'horizontal'`. */
     orientation?: DadsDividerOrientation;
-    /** Visual emphasis of the line. Defaults to `'default'`. */
+    /** 線の色。公式 example の `data-color` 3 段階。デフォルト `'gray-420'`。 */
     color?: DadsDividerColor;
     /** 幅バリアント。`'inset'` は左右に余白を付けた短い線。 */
     variant?: DadsDividerVariant;

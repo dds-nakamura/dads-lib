@@ -5,8 +5,8 @@ type __VLS_Slots = {} & {
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsDescriptionListProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<DadsDescriptionListProps> & Readonly<{}>, {
     marker: import("./DadsDescriptionList.types").DadsDescriptionListMarker;
-    bordered: boolean;
     layout: import("./DadsDescriptionList.types").DadsDescriptionListLayout;
+    bordered: boolean;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
 declare const _default: typeof __VLS_export;

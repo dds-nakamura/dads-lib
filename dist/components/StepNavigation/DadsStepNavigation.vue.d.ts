@@ -4,6 +4,7 @@ declare const __VLS_export: import("vue").DefineComponent<DadsStepNavigationProp
 }, string, import("vue").PublicProps, Readonly<DadsStepNavigationProps> & Readonly<{
     "onClick:step"?: ((step: DadsStepNavigationStep, index: number, event: MouseEvent) => any) | undefined;
 }>, {
+    size: import("./DadsStepNavigation.types").DadsStepNavigationSize;
     ariaLabel: string;
     clickable: boolean;
     orientation: import("./DadsStepNavigation.types").DadsStepNavigationOrientation;

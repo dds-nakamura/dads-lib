@@ -1,19 +1,17 @@
-import type { DadsTableProps } from './DadsTable.types';
-declare var __VLS_1: {}, __VLS_3: {};
+import type { DadsTableBorder, DadsTableProps } from './DadsTable.types';
+declare var __VLS_8: {}, __VLS_10: {};
 type __VLS_Slots = {} & {
-    caption?: (props: typeof __VLS_1) => any;
+    caption?: (props: typeof __VLS_8) => any;
 } & {
-    default?: (props: typeof __VLS_3) => any;
+    default?: (props: typeof __VLS_10) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsTableProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<DadsTableProps> & Readonly<{}>, {
-    loading: boolean;
-    stickyHeader: boolean;
-    density: import("./DadsTable.types").DadsTableDensity;
-    bordered: boolean;
+    dense: boolean;
     striped: boolean;
-    skeletonRowCount: number;
-    skeletonColumnCount: number;
-    loadingLabel: string;
+    hoverable: boolean;
+    selectable: boolean;
+    cellBorder: DadsTableBorder;
+    border: DadsTableBorder;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
 declare const _default: typeof __VLS_export;

@@ -1,5 +1,3 @@
-import type { DadsSize } from '../../types/common';
-export type DadsFileUploadSize = Exclude<DadsSize, 'xs'>;
 export interface DadsFileUploadProps {
     /** v-model. multiple=false → File | null, multiple=true → File[]. */
     modelValue?: File | File[] | null;
@@ -11,7 +9,6 @@ export interface DadsFileUploadProps {
     /** Max bytes per file. Files exceeding this size are rejected and surface
      *  the rejection through the internal error message. */
     maxSize?: number;
-    size?: DadsFileUploadSize;
     label?: string;
     hint?: string;
     /** Caller-provided error message. The component-internal validation message

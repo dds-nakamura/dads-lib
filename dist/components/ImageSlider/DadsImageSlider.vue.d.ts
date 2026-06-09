@@ -6,19 +6,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsImageSliderProps, 
     "onUpdate:modelValue"?: ((value: number) => any) | undefined;
     onChange?: ((value: number) => any) | undefined;
 }>, {
-    ariaLabel: string;
     modelValue: number;
-    autoPlay: boolean;
-    interval: number;
-    pauseOnHover: boolean;
-    showArrows: boolean;
-    showIndicators: boolean;
-    loop: boolean;
-    headingLevel: 1 | 2 | 3 | 4 | 5 | 6;
-    prevSlideAriaLabel: string;
-    nextSlideAriaLabel: string;
-    slidePositionAriaLabel: string;
-    formatSlideAriaLabel: (idx: number) => string;
+    headingLevel: import("../Carousel/DadsCarousel.types.js").DadsCarouselHeadingLevel;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

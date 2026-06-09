@@ -1,15 +1,15 @@
 import type { DadsHeadingProps } from './DadsHeading.types';
-declare var __VLS_8: {}, __VLS_16: {}, __VLS_18: {}, __VLS_20: {}, __VLS_22: {};
+declare var __VLS_8: {}, __VLS_16: {}, __VLS_23: {}, __VLS_25: {}, __VLS_27: {};
 type __VLS_Slots = {} & {
     shoulder?: (props: typeof __VLS_8) => any;
 } & {
     'prepend-icon'?: (props: typeof __VLS_16) => any;
 } & {
-    default?: (props: typeof __VLS_18) => any;
+    default?: (props: typeof __VLS_23) => any;
 } & {
-    chip?: (props: typeof __VLS_20) => any;
+    chip?: (props: typeof __VLS_25) => any;
 } & {
-    subtitle?: (props: typeof __VLS_22) => any;
+    subtitle?: (props: typeof __VLS_27) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsHeadingProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<DadsHeadingProps> & Readonly<{}>, {
     as: import("./DadsHeading.types").DadsHeadingTag;

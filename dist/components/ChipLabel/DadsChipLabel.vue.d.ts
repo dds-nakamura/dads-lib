@@ -8,7 +8,6 @@ type __VLS_Slots = {} & {
     append?: (props: typeof __VLS_5) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsChipLabelProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<DadsChipLabelProps> & Readonly<{}>, {
-    size: import("./DadsChipLabel.types").DadsChipLabelSize;
     color: import("./DadsChipLabel.types").DadsChipLabelColor;
     appearance: import("./DadsChipLabel.types").DadsChipLabelAppearance;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;

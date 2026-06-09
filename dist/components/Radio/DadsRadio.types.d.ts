@@ -8,33 +8,26 @@ export interface DadsRadioProps {
     /** Required. Emitted as `update:modelValue` when this radio is selected. */
     value: DadsRadioValue;
     size?: DadsRadioSize;
+    /** Visible label rendered next to the control (official `dads-radio__label`).
+     *  Group-level label / required marker / support / error are owned by
+     *  DadsFormControlLabel (via DadsRadioGroup), matching the official system. */
     label?: string;
-    /** Secondary descriptive text rendered below the label. Distinct from `hint`
-     *  (which sits under the whole control in the footer), `description` belongs
-     *  to the option itself and is exposed via `aria-describedby` so screen
-     *  readers announce it when the radio gains focus. Use for selection list
-     *  items where each option carries its own explanatory paragraph (e.g. plan
-     *  picker, settings list). */
-    description?: string;
-    hint?: string;
-    errorMessage?: string;
-    required?: boolean;
-    /** Forces the error visual state when no message is available — for example,
-     *  when the form-level error is shown elsewhere. Pair with an external label
-     *  so screen readers still announce the failure. */
+    /** Forces the error visual state. Sets `aria-invalid="true"` on the input and
+     *  switches the control to the error palette. Driven by DadsRadioGroup when the
+     *  group is in error. Group-level error text is rendered by DadsFormControlLabel. */
     error?: boolean;
     disabled?: boolean;
     /** Group identifier. Same `name` across radios makes the browser enforce
-     *  single-selection. DadsRadioGroup (next task) will inject this. */
+     *  single-selection. DadsRadioGroup injects this. */
     name?: string;
-    /** Native `id`. When omitted, an id is generated so the label `for` and
-     *  ARIA `aria-describedby` references stay in sync. */
+    /** Native `id`. When omitted, an id is generated so the label association and
+     *  any external `aria-*` references stay in sync. */
     id?: string;
-    /**
-     * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-     * Default: `'必須'`.
-     */
-    requiredLabel?: string;
+    /** Space-separated ids forwarded to the input's `aria-describedby`. Used by
+     *  DadsRadioGroup to point a per-item description / hint paragraph at this
+     *  radio (the paragraph markup lives in the group, matching the official
+     *  form-control-label delegation). */
+    ariaDescribedby?: string;
 }
 export interface DadsRadioEmits {
     (e: 'update:modelValue', value: DadsRadioValue): void;

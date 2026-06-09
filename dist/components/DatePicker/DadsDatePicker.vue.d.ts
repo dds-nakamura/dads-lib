@@ -11,13 +11,13 @@ declare const __VLS_export: import("vue").DefineComponent<DadsDatePickerProps, {
     onBlur?: ((event: FocusEvent) => any) | undefined;
 }>, {
     error: boolean;
-    variant: import("./DadsDatePicker.types").DadsDatePickerVariant;
     size: import("./DadsDatePicker.types").DadsDatePickerSize;
-    disabled: boolean;
-    modelValue: string;
     required: boolean;
-    readonly: boolean;
+    variant: import("./DadsDatePicker.types").DadsDatePickerVariant;
+    disabled: boolean;
     requiredLabel: string;
+    modelValue: string;
+    readonly: boolean;
     locale: import("./DadsDatePicker.types").DadsDatePickerLocale;
     yearLabel: string;
     monthLabel: string;

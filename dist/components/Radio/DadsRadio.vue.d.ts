@@ -13,8 +13,6 @@ declare const __VLS_export: import("vue").DefineComponent<DadsRadioProps, {}, {}
     error: boolean;
     size: import("./DadsRadio.types").DadsRadioSize;
     disabled: boolean;
-    required: boolean;
-    requiredLabel: string;
 }, {}, {}, {}, string, import("vue").ComponentProvideOptions, false, {}, any>;
 declare const _default: typeof __VLS_export;
 export default _default;

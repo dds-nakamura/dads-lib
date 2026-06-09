@@ -8,11 +8,11 @@ type __VLS_Slots = {} & {
     append?: (props: typeof __VLS_15) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsChipTagProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {} & {
-    click: (event: MouseEvent | KeyboardEvent) => any;
     close: (event: MouseEvent) => any;
+    click: (event: MouseEvent | KeyboardEvent) => any;
 }, string, import("vue").PublicProps, Readonly<DadsChipTagProps> & Readonly<{
-    onClick?: ((event: MouseEvent | KeyboardEvent) => any) | undefined;
     onClose?: ((event: MouseEvent) => any) | undefined;
+    onClick?: ((event: MouseEvent | KeyboardEvent) => any) | undefined;
 }>, {
     size: import("./DadsChipTag.types").DadsChipTagSize;
     color: import("./DadsChipTag.types").DadsChipTagColor;

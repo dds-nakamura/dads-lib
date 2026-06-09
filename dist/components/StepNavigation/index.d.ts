@@ -1,3 +1,3 @@
 export { default as DadsStepNavigation } from './DadsStepNavigation.vue';
-export type { DadsStepNavigationProps, DadsStepNavigationEmits, DadsStepNavigationStep, DadsStepNavigationStatus, DadsStepNavigationOrientation, } from './DadsStepNavigation.types';
+export type { DadsStepNavigationProps, DadsStepNavigationEmits, DadsStepNavigationStep, DadsStepNavigationStatus, DadsStepNavigationSize, DadsStepNavigationOrientation, } from './DadsStepNavigation.types';
 //# sourceMappingURL=index.d.ts.map

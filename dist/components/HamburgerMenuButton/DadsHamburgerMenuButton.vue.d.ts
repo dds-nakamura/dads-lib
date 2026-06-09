@@ -6,8 +6,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsHamburgerMenuButto
     onClick?: ((event: MouseEvent) => any) | undefined;
     "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
 }>, {
-    variant: import("./DadsHamburgerMenuButton.types").DadsHamburgerMenuButtonVariant;
     size: import("./DadsHamburgerMenuButton.types").DadsHamburgerMenuButtonSize;
+    variant: import("./DadsHamburgerMenuButton.types").DadsHamburgerMenuButtonVariant;
     disabled: boolean;
     modelValue: boolean;
     closeLabel: string;

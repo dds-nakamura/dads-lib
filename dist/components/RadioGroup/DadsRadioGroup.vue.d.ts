@@ -8,8 +8,8 @@ declare const __VLS_export: import("vue").DefineComponent<DadsRadioGroupProps, {
 }>, {
     error: boolean;
     size: import("../Radio/DadsRadio.types.js").DadsRadioSize;
-    disabled: boolean;
     required: boolean;
+    disabled: boolean;
     requiredLabel: string;
     direction: import("./DadsRadioGroup.types").DadsRadioGroupDirection;
     legendVisuallyHidden: boolean;

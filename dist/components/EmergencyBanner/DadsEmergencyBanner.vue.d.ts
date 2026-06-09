@@ -1,16 +1,16 @@
 import type { DadsEmergencyBannerProps } from './DadsEmergencyBanner.types';
-declare var __VLS_7: {}, __VLS_9: {};
+declare var __VLS_12: {}, __VLS_14: {};
 type __VLS_Slots = {} & {
-    title?: (props: typeof __VLS_7) => any;
+    title?: (props: typeof __VLS_12) => any;
 } & {
-    default?: (props: typeof __VLS_9) => any;
+    default?: (props: typeof __VLS_14) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsEmergencyBannerProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {} & {
-    "update:modelValue": (value: boolean) => any;
     close: () => any;
+    "update:modelValue": (value: boolean) => any;
 }, string, import("vue").PublicProps, Readonly<DadsEmergencyBannerProps> & Readonly<{
-    "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
     onClose?: (() => any) | undefined;
+    "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
 }>, {
     ariaLabel: string;
     modelValue: boolean;

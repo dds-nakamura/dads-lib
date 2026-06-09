@@ -1,23 +1,23 @@
 import type { DadsDialogProps } from './DadsDialog.types';
-declare var __VLS_13: {}, __VLS_15: {}, __VLS_17: {};
+declare var __VLS_13: {}, __VLS_20: {}, __VLS_22: {};
 type __VLS_Slots = {} & {
     header?: (props: typeof __VLS_13) => any;
 } & {
-    default?: (props: typeof __VLS_15) => any;
+    default?: (props: typeof __VLS_20) => any;
 } & {
-    footer?: (props: typeof __VLS_17) => any;
+    footer?: (props: typeof __VLS_22) => any;
 };
 declare const __VLS_base: import("vue").DefineComponent<DadsDialogProps, {}, {}, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {} & {
+    close: () => any;
     "update:modelValue": (value: boolean) => any;
     open: () => any;
-    close: () => any;
 }, string, import("vue").PublicProps, Readonly<DadsDialogProps> & Readonly<{
+    onClose?: (() => any) | undefined;
     "onUpdate:modelValue"?: ((value: boolean) => any) | undefined;
     onOpen?: (() => any) | undefined;
-    onClose?: (() => any) | undefined;
 }>, {
-    variant: import("./DadsDialog.types").DadsDialogVariant;
     size: import("./DadsDialog.types").DadsDialogSize;
+    variant: import("./DadsDialog.types").DadsDialogVariant;
     modelValue: boolean;
     closable: boolean;
     closeLabel: string;

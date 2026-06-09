@@ -26,8 +26,8 @@ export interface DadsRadioGroupProps {
     hint?: string;
     errorMessage?: string;
     required?: boolean;
-    /** Forces the error visual state on the legend / footer and on every child
-     *  radio. Pair with errorMessage to also announce the failure to SR. */
+    /** Forces the error visual state and propagates it to every child radio.
+     *  Pair with errorMessage to render the form-control-label error text. */
     error?: boolean;
     /** Disables every child radio via the native fieldset behavior. */
     disabled?: boolean;
@@ -36,8 +36,9 @@ export interface DadsRadioGroupProps {
     name?: string;
     id?: string;
     /**
-     * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-     * Default: `'必須'`.
+     * 必須マーカー (`※必須`) に表示するテキスト。i18n 用にプロップで上書き可能。
+     * 公式 `dads-form-control-label` の `__requirement` として描画される。
+     * Default: `'※必須'`.
      */
     requiredLabel?: string;
 }
