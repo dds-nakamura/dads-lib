@@ -38,6 +38,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Build the workspace libraries first so their declaration files exist
+      # before typecheck. `@dads/vue` の `types` は `dist/index.d.ts` を指すため、
+      # これを先に生成しないと依存パッケージ（sample-app/frontend など）の
+      # `vue-tsc --noEmit` が `Cannot find module '@dads/vue'` で失敗する。
+      - name: Build libraries (@dads/tokens, @dads/vue)
+        run: |
+          pnpm --filter @dads/tokens build
+          pnpm --filter @dads/vue build
+
       - name: Typecheck
         run: pnpm -w run typecheck
 
@@ -49,12 +58,6 @@ jobs:
 
       - name: Test (@dads/vue) — Vitest + vitest-axe
         run: pnpm --filter @dads/vue test
-
-      - name: Build (@dads/tokens)
-        run: pnpm --filter @dads/tokens build
-
-      - name: Build (@dads/vue)
-        run: pnpm --filter @dads/vue build
 
       - name: Build (@dads/docs) — VitePress static
         run: pnpm --filter @dads/docs build
