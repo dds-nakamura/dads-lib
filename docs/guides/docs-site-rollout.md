@@ -50,9 +50,9 @@ apps/docs/                              @dads/docs (private VitePress package)
 
 ```ts
 import DefaultTheme from 'vitepress/theme'
-import '@dads/tokens/css'      // 1. CSS 変数 (--ds-*) を :root に注入
-import '@dads/vue/styles'      // 2. 全コンポーネントの CSS
-import './custom.css'          // 3. デモ専用クラス (.demo / .demo-row / .demo-label)
+import '@dads/tokens/css' // 1. CSS 変数 (--ds-*) を :root に注入
+import '@dads/vue/styles' // 2. 全コンポーネントの CSS
+import './custom.css' // 3. デモ専用クラス (.demo / .demo-row / .demo-label)
 export default DefaultTheme
 ```
 
@@ -169,13 +169,13 @@ pnpm --filter @dads/docs build     # 27 HTML (index + 26 components)
 
 ### よくあるトラブル
 
-| 症状                                          | 対処                                                            |
-| --------------------------------------------- | --------------------------------------------------------------- |
-| sub-agent が 250 行を大幅超過                 | 冗長セクションの削除を再依頼                                    |
-| `<style>` ブロックを使ってしまった            | brief 違反 → custom.css 既存クラスのみ許可で再依頼              |
-| docs build で Vue compile error               | エラーログから該当ファイル特定 → 該当行を提示して再依頼         |
-| button.md を上書きしてしまった                | `git checkout apps/docs/components/button.md` で即復元          |
-| `packages/vue/` を改変してしまった            | `git checkout packages/vue/` で即復元                           |
+| 症状                               | 対処                                                    |
+| ---------------------------------- | ------------------------------------------------------- |
+| sub-agent が 250 行を大幅超過      | 冗長セクションの削除を再依頼                            |
+| `<style>` ブロックを使ってしまった | brief 違反 → custom.css 既存クラスのみ許可で再依頼      |
+| docs build で Vue compile error    | エラーログから該当ファイル特定 → 該当行を提示して再依頼 |
+| button.md を上書きしてしまった     | `git checkout apps/docs/components/button.md` で即復元  |
+| `packages/vue/` を改変してしまった | `git checkout packages/vue/` で即復元                   |
 
 ## a11y 連携
 

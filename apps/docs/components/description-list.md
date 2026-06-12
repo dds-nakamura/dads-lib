@@ -129,12 +129,12 @@ const profile = [
 
 ## Props
 
-| Prop       | 型                               | デフォルト     | 説明                                                                        |
-| ---------- | -------------------------------- | -------------- | --------------------------------------------------------------------------- |
-| `items`    | `DadsDescriptionListItem[]`      | -              | `{ term, description }` の配列。指定時は内部で `<dt>`/`<dd>` を自動生成する |
-| `layout`   | `'vertical'`                     | `'vertical'`   | 用語と説明の並び方。公式の唯一のレイアウト（`<dd>` を 32px インデント）     |
-| `marker`   | `'none' \| 'bullet' \| 'custom'` | `'none'`       | `<dt>` の先頭に付くマーカー。DADS 公式の `data-marker` と対応               |
-| `bordered` | `boolean`                        | `false`        | 項目間に 1px の区切り線を入れる                                             |
+| Prop       | 型                               | デフォルト   | 説明                                                                        |
+| ---------- | -------------------------------- | ------------ | --------------------------------------------------------------------------- |
+| `items`    | `DadsDescriptionListItem[]`      | -            | `{ term, description }` の配列。指定時は内部で `<dt>`/`<dd>` を自動生成する |
+| `layout`   | `'vertical'`                     | `'vertical'` | 用語と説明の並び方。公式の唯一のレイアウト（`<dd>` を 32px インデント）     |
+| `marker`   | `'none' \| 'bullet' \| 'custom'` | `'none'`     | `<dt>` の先頭に付くマーカー。DADS 公式の `data-marker` と対応               |
+| `bordered` | `boolean`                        | `false`      | 項目間に 1px の区切り線を入れる                                             |
 
 ## アクセシビリティ
 

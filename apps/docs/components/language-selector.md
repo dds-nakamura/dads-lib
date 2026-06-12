@@ -104,14 +104,14 @@ const selected = ref('ja')
 
 ## Props
 
-| Prop          | 型                                              | デフォルト     | 説明                                                                      |
-| ------------- | ----------------------------------------------- | -------------- | ------------------------------------------------------------------------- |
-| `modelValue`  | `string`                                        | -              | 選択中の言語コード（`v-model`）                                           |
-| `options`     | `DadsLanguageSelectorOption[]`                  | `[]`           | 選択可能な言語の配列。`value` / `label`（任意で `href`）                  |
-| `size`        | `'sm' \| 'md'`                                  | `'sm'`         | オープナーのサイズ（公式 `menu-list-box` 準拠）                          |
-| `disabled`    | `boolean`                                       | `false`        | 操作不可化（オープナー無効・メニュー開閉抑止）                            |
-| `ariaLabel`   | `string`                                        | `'言語を選択'` | オープナーボタンのアクセシブル名                                          |
-| `openerLabel` | `string`                                        | `'Language'`   | オープナーに表示するテキスト（DADS 規約では常に英語の `Language` を推奨） |
+| Prop          | 型                             | デフォルト     | 説明                                                                      |
+| ------------- | ------------------------------ | -------------- | ------------------------------------------------------------------------- |
+| `modelValue`  | `string`                       | -              | 選択中の言語コード（`v-model`）                                           |
+| `options`     | `DadsLanguageSelectorOption[]` | `[]`           | 選択可能な言語の配列。`value` / `label`（任意で `href`）                  |
+| `size`        | `'sm' \| 'md'`                 | `'sm'`         | オープナーのサイズ（公式 `menu-list-box` 準拠）                           |
+| `disabled`    | `boolean`                      | `false`        | 操作不可化（オープナー無効・メニュー開閉抑止）                            |
+| `ariaLabel`   | `string`                       | `'言語を選択'` | オープナーボタンのアクセシブル名                                          |
+| `openerLabel` | `string`                       | `'Language'`   | オープナーに表示するテキスト（DADS 規約では常に英語の `Language` を推奨） |
 
 ### DadsLanguageSelectorOption
 

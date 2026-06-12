@@ -82,16 +82,16 @@ import { DadsCarouselSingle } from '@dads/vue'
 
 ## Props
 
-| Prop      | 型       | デフォルト  | 説明                                                                       |
-| --------- | -------- | ----------- | -------------------------------------------------------------------------- |
-| `src`     | `string` | -（必須）   | 画像の `src`。                                                              |
-| `alt`     | `string` | -（必須）   | 画像の代替テキスト。                                                        |
-| `srcset`  | `string` | `undefined` | 画像の `srcset`（例: `"image@2x.webp 2x"`）。                               |
-| `href`    | `string` | `undefined` | 指定するとラッパが `<a href>` になる。未指定なら `<span>`。                 |
-| `target`  | `string` | `undefined` | リンク時の `target`。`href` 指定時のみ意味を持つ。                         |
-| `rel`     | `string` | `undefined` | リンク時の `rel`。`href` 指定時のみ意味を持つ。                            |
-| `width`   | `number` | `undefined` | 画像の固有幅（px）。CLS 抑止のため指定推奨。                               |
-| `height`  | `number` | `undefined` | 画像の固有高さ（px）。CLS 抑止のため指定推奨。                             |
+| Prop     | 型       | デフォルト  | 説明                                                        |
+| -------- | -------- | ----------- | ----------------------------------------------------------- |
+| `src`    | `string` | -（必須）   | 画像の `src`。                                              |
+| `alt`    | `string` | -（必須）   | 画像の代替テキスト。                                        |
+| `srcset` | `string` | `undefined` | 画像の `srcset`（例: `"image@2x.webp 2x"`）。               |
+| `href`   | `string` | `undefined` | 指定するとラッパが `<a href>` になる。未指定なら `<span>`。 |
+| `target` | `string` | `undefined` | リンク時の `target`。`href` 指定時のみ意味を持つ。          |
+| `rel`    | `string` | `undefined` | リンク時の `rel`。`href` 指定時のみ意味を持つ。             |
+| `width`  | `number` | `undefined` | 画像の固有幅（px）。CLS 抑止のため指定推奨。                |
+| `height` | `number` | `undefined` | 画像の固有高さ（px）。CLS 抑止のため指定推奨。              |
 
 ## アクセシビリティ
 

@@ -37,9 +37,7 @@ const currentIndex = computed(() => {
   return raw
 })
 
-const nextIndex = computed(() =>
-  total.value === 0 ? 0 : (currentIndex.value + 1) % total.value,
-)
+const nextIndex = computed(() => (total.value === 0 ? 0 : (currentIndex.value + 1) % total.value))
 
 const current = computed(() => props.slides[currentIndex.value])
 const nextSlide = computed(() => props.slides[nextIndex.value])
@@ -248,7 +246,8 @@ const otherSlides = computed(() => {
                 :tabindex="index === currentIndex ? 0 : -1"
                 @click="goTo(index)"
               >
-                <span class="dads-u-visually-hidden">{{ unit }}</span>{{ index + 1 }}
+                <span class="dads-u-visually-hidden">{{ unit }}</span
+                >{{ index + 1 }}
               </button>
             </li>
           </ul>
@@ -286,18 +285,24 @@ const otherSlides = computed(() => {
               aria-hidden="true"
             >
               <circle cx="12" cy="12" r="11" fill="currentcolor" />
-              <circle class="dads-disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor" />
-              <path class="dads-disclosure__icon-triangle" d="M17 10H7L12 15L17 10Z" fill="Canvas" />
+              <circle
+                class="dads-disclosure__icon-circle"
+                cx="12"
+                cy="12"
+                r="8"
+                fill="currentcolor"
+              />
+              <path
+                class="dads-disclosure__icon-triangle"
+                d="M17 10H7L12 15L17 10Z"
+                fill="Canvas"
+              />
             </svg>
             {{ showAllLabel }}
           </summary>
           <div class="dads-carousel__others-content dads-disclosure__content">
             <ul>
-              <li
-                v-for="entry in otherSlides"
-                :key="entry.index"
-                class="dads-carousel__panel-set"
-              >
+              <li v-for="entry in otherSlides" :key="entry.index" class="dads-carousel__panel-set">
                 <p class="dads-carousel__number dads-carousel__panel-number" aria-hidden="true">
                   {{ entry.number }}
                 </p>

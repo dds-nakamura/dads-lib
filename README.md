@@ -12,12 +12,12 @@ DADS の公式参照資産（仕様 MD / HTML サンプル / design-tokens / tai
 
 ## パッケージ一覧
 
-| パッケージ                                            | 役割                                                                                                                                   | 公開    |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| [`@dads/vue`](./packages/vue)                         | 49 個の Vue 3 コンポーネント実装 (公式 44 + 独自 5: CheckboxGroup / RadioGroup / ColorPicker / TableOfContents / Tooltip)              | private |
-| [`@dads/tokens`](./packages/tokens)                   | `@digital-go-jp/design-tokens` の再 export                                                                                             | private |
-| [`@dads/tailwind-plugin`](./packages/tailwind-plugin) | Tailwind v3 用プラグインラッパ                                                                                                         | private |
-| [`@dads/docs`](./apps/docs)                           | VitePress カタログ (デモ + API doc)                                                                                                    | private |
+| パッケージ                                            | 役割                                                                                                                      | 公開    |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| [`@dads/vue`](./packages/vue)                         | 49 個の Vue 3 コンポーネント実装 (公式 44 + 独自 5: CheckboxGroup / RadioGroup / ColorPicker / TableOfContents / Tooltip) | private |
+| [`@dads/tokens`](./packages/tokens)                   | `@digital-go-jp/design-tokens` の再 export                                                                                | private |
+| [`@dads/tailwind-plugin`](./packages/tailwind-plugin) | Tailwind v3 用プラグインラッパ                                                                                            | private |
+| [`@dads/docs`](./apps/docs)                           | VitePress カタログ (デモ + API doc)                                                                                       | private |
 
 `private: true` でロックされており、npm 公開は無効化されている。初期リリースは workspace 内利用と `file:` / GitHub Packages 経由を想定。
 
@@ -38,15 +38,15 @@ pnpm install
 
 ### 一括スクリプト (ルートから)
 
-| コマンド            | 内容                                                     |
-| ------------------- | -------------------------------------------------------- |
-| `pnpm build`        | `pnpm -r run build` — 全パッケージビルド                 |
-| `pnpm test`         | `@dads/vue` の Vitest を実行                             |
-| `pnpm typecheck`    | 全パッケージで `tsc --noEmit` / `vue-tsc --noEmit`       |
-| `pnpm lint`         | `eslint .` (ESLint 9 flat config / L3 strictness)        |
-| `pnpm format`       | `prettier --write .`                                     |
-| `pnpm format:check` | `prettier --check .`                                     |
-| `pnpm changeset`    | リリース用の changeset を対話的に追加                    |
+| コマンド            | 内容                                               |
+| ------------------- | -------------------------------------------------- |
+| `pnpm build`        | `pnpm -r run build` — 全パッケージビルド           |
+| `pnpm test`         | `@dads/vue` の Vitest を実行                       |
+| `pnpm typecheck`    | 全パッケージで `tsc --noEmit` / `vue-tsc --noEmit` |
+| `pnpm lint`         | `eslint .` (ESLint 9 flat config / L3 strictness)  |
+| `pnpm format`       | `prettier --write .`                               |
+| `pnpm format:check` | `prettier --check .`                               |
+| `pnpm changeset`    | リリース用の changeset を対話的に追加              |
 
 ### ワークスペース個別実行
 

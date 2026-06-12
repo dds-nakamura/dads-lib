@@ -26,17 +26,7 @@ export type DadsHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
  * with size `'20'` for a narrow sidebar heading. Each step carries the
  * official per-size `line-height` and `letter-spacing` (see DadsHeading.vue).
  */
-export type DadsHeadingSize =
-  | '64'
-  | '57'
-  | '45'
-  | '36'
-  | '32'
-  | '28'
-  | '24'
-  | '20'
-  | '18'
-  | '16'
+export type DadsHeadingSize = '64' | '57' | '45' | '36' | '32' | '28' | '24' | '20' | '18' | '16'
 
 export interface DadsHeadingProps {
   /**

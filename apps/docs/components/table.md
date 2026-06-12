@@ -245,12 +245,12 @@ const rows = [
 | Prop         | 型                  | デフォルト | 説明                                                                       |
 | ------------ | ------------------- | ---------- | -------------------------------------------------------------------------- |
 | `caption`    | `string`            | -          | キャプションテキスト。指定時はルートが `<figure>` になる（スロットが優先） |
-| `dense`      | `boolean`           | `false`    | 公式 `data-size="dense"`（padding 12px・行高 1.3）                          |
+| `dense`      | `boolean`           | `false`    | 公式 `data-size="dense"`（padding 12px・行高 1.3）                         |
 | `striped`    | `boolean`           | `false`    | 公式 `data-row-stripe`。偶数行に `--color-neutral-solid-gray-50`           |
-| `hoverable`  | `boolean`           | `false`    | 公式 `data-row-hover-highlight`。hover 行を `--color-primitive-blue-50`     |
-| `selectable` | `boolean`           | `false`    | 公式 `data-selectable`。チェック済み行を `--color-primitive-blue-100`       |
-| `cellBorder` | `boolean \| string` | `false`    | 公式 `data-cell-border`。セルの辺別ボーダー（`true` / `'bottom'` 等）       |
-| `border`     | `boolean \| string` | `false`    | 公式 `data-border`。外周ボーダー（`true` / `'hidden'` / `'*-hidden'` 等）   |
+| `hoverable`  | `boolean`           | `false`    | 公式 `data-row-hover-highlight`。hover 行を `--color-primitive-blue-50`    |
+| `selectable` | `boolean`           | `false`    | 公式 `data-selectable`。チェック済み行を `--color-primitive-blue-100`      |
+| `cellBorder` | `boolean \| string` | `false`    | 公式 `data-cell-border`。セルの辺別ボーダー（`true` / `'bottom'` 等）      |
+| `border`     | `boolean \| string` | `false`    | 公式 `data-border`。外周ボーダー（`true` / `'hidden'` / `'*-hidden'` 等）  |
 
 ## Slot
 

@@ -41,7 +41,8 @@ const createWrapper = (props: Partial<DadsDrawerProps> = {}) =>
     attachTo: document.body,
   })
 
-const queryDrawer = () => document.body.querySelector('dialog.dads-drawer') as HTMLDialogElement | null
+const queryDrawer = () =>
+  document.body.querySelector('dialog.dads-drawer') as HTMLDialogElement | null
 
 describe('DadsDrawer', () => {
   describe('rendering', () => {
@@ -129,9 +130,7 @@ describe('DadsDrawer', () => {
 
     it('emits update:modelValue=false when the close button is clicked', async () => {
       const wrapper = createWrapper()
-      const button = document.body.querySelector(
-        '.dads-drawer__header button',
-      ) as HTMLButtonElement
+      const button = document.body.querySelector('.dads-drawer__header button') as HTMLButtonElement
       button.click()
       await nextTick()
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(false)

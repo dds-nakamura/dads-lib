@@ -105,19 +105,19 @@ import { DadsButton } from '@dads/vue'
 
 ## Props
 
-| Prop          | 型                                                              | デフォルト     | 説明                                          |
-| ------------- | --------------------------------------------------------------- | -------------- | --------------------------------------------- |
-| `variant`     | `'solid-fill' \| 'outline' \| 'text'`                           | `'solid-fill'` | 視覚バリアント                                |
-| `size`        | `'lg' \| 'md' \| 'sm' \| 'xs'`                                  | `'md'`         | サイズ                                        |
-| `color`       | `'primary'`                                                    | `'primary'`    | カラー軸（公式は blue 単色）                   |
-| `disabled`    | `boolean`                                                       | `false`        | 操作不可化                                    |
-| `loading`     | `boolean`                                                       | `false`        | ロード中（スピナー表示、クリック抑止）        |
-| `prependIcon` | `string`                                                        | -              | 前置アイコンの Material Symbols 名            |
-| `appendIcon`  | `string`                                                        | -              | 後置アイコンの Material Symbols 名            |
-| `block`       | `boolean`                                                       | `false`        | コンテナ幅にストレッチ                        |
-| `type`        | `'button' \| 'submit' \| 'reset'`                               | `'button'`     | ネイティブ button type (`href` 指定時は無視)  |
-| `href`        | `string`                                                        | -              | 指定時は `<a>` でレンダリング                 |
-| `ariaLabel`   | `string`                                                        | -              | アクセシブル名 (アイコンのみのボタンでは必須) |
+| Prop          | 型                                    | デフォルト     | 説明                                          |
+| ------------- | ------------------------------------- | -------------- | --------------------------------------------- |
+| `variant`     | `'solid-fill' \| 'outline' \| 'text'` | `'solid-fill'` | 視覚バリアント                                |
+| `size`        | `'lg' \| 'md' \| 'sm' \| 'xs'`        | `'md'`         | サイズ                                        |
+| `color`       | `'primary'`                           | `'primary'`    | カラー軸（公式は blue 単色）                  |
+| `disabled`    | `boolean`                             | `false`        | 操作不可化                                    |
+| `loading`     | `boolean`                             | `false`        | ロード中（スピナー表示、クリック抑止）        |
+| `prependIcon` | `string`                              | -              | 前置アイコンの Material Symbols 名            |
+| `appendIcon`  | `string`                              | -              | 後置アイコンの Material Symbols 名            |
+| `block`       | `boolean`                             | `false`        | コンテナ幅にストレッチ                        |
+| `type`        | `'button' \| 'submit' \| 'reset'`     | `'button'`     | ネイティブ button type (`href` 指定時は無視)  |
+| `href`        | `string`                              | -              | 指定時は `<a>` でレンダリング                 |
+| `ariaLabel`   | `string`                              | -              | アクセシブル名 (アイコンのみのボタンでは必須) |
 
 ## Events
 

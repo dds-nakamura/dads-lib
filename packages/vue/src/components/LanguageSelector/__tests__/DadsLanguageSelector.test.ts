@@ -56,9 +56,9 @@ describe('DadsLanguageSelector', () => {
       expect(items).toHaveLength(defaultOptions.length)
       expect(items[0].attributes('data-type')).toBe('box')
       expect(items[0].attributes('data-size')).toBe('regular')
-      expect(items[0].find('svg.dads-menu-list__front-icon.dads-language-selector__check').exists()).toBe(
-        true,
-      )
+      expect(
+        items[0].find('svg.dads-menu-list__front-icon.dads-language-selector__check').exists(),
+      ).toBe(true)
       expect(items[0].find('span.dads-menu-list__label').text()).toContain('日本語')
       expect(items[1].text()).toContain('English')
     })
@@ -220,7 +220,9 @@ describe('DadsLanguageSelector', () => {
 
     it('applies the disabled modifier class on the menu-list-box', () => {
       const wrapper = createWrapper({ disabled: true })
-      expect(wrapper.find('.dads-menu-list-box').classes()).toContain('dads-menu-list-box--disabled')
+      expect(wrapper.find('.dads-menu-list-box').classes()).toContain(
+        'dads-menu-list-box--disabled',
+      )
     })
 
     it('does not open the menu on click when disabled', async () => {

@@ -72,16 +72,16 @@ const fruit = ref('apple')
 
 ## Props
 
-| Prop              | 型                                    | デフォルト | 説明                                                                            |
-| ----------------- | ------------------------------------- | ---------- | ------------------------------------------------------------------------------- |
-| `modelValue`      | `string \| number \| boolean \| null` | -          | 現在選択中の値。`value` と一致すると checked になる (`v-model`)                  |
-| `value`           | `string \| number \| boolean`         | -          | このラジオを表す値 (必須)。選択時に emit される                                 |
-| `size`            | `'lg' \| 'md' \| 'sm'`                | `'md'`     | サイズ。`data-size` 属性として出力される                                        |
-| `label`           | `string`                              | -          | ラベルテキスト (`dads-radio__label`)。省略時はコントロールのみ                  |
-| `error`           | `boolean`                             | `false`    | エラー視覚状態を強制し、input に `aria-invalid="true"` を付与                    |
-| `disabled`        | `boolean`                             | `false`    | 操作不可化                                                                      |
-| `name`            | `string`                              | -          | グループ識別子。同じ `name` で単一選択がブラウザに強制される                    |
-| `id`              | `string`                              | -          | input の `id`。省略時は自動生成される                                           |
+| Prop              | 型                                    | デフォルト | 説明                                                                              |
+| ----------------- | ------------------------------------- | ---------- | --------------------------------------------------------------------------------- |
+| `modelValue`      | `string \| number \| boolean \| null` | -          | 現在選択中の値。`value` と一致すると checked になる (`v-model`)                   |
+| `value`           | `string \| number \| boolean`         | -          | このラジオを表す値 (必須)。選択時に emit される                                   |
+| `size`            | `'lg' \| 'md' \| 'sm'`                | `'md'`     | サイズ。`data-size` 属性として出力される                                          |
+| `label`           | `string`                              | -          | ラベルテキスト (`dads-radio__label`)。省略時はコントロールのみ                    |
+| `error`           | `boolean`                             | `false`    | エラー視覚状態を強制し、input に `aria-invalid="true"` を付与                     |
+| `disabled`        | `boolean`                             | `false`    | 操作不可化                                                                        |
+| `name`            | `string`                              | -          | グループ識別子。同じ `name` で単一選択がブラウザに強制される                      |
+| `id`              | `string`                              | -          | input の `id`。省略時は自動生成される                                             |
 | `ariaDescribedby` | `string`                              | -          | input の `aria-describedby` に配線する id 群。`DadsRadioGroup` が説明文と紐付ける |
 
 ::: tip 旧 API からの移行 (破壊的変更)

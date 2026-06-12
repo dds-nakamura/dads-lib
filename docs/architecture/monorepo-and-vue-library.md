@@ -150,8 +150,8 @@ apps/docs (@dads/docs)
 
 ```ts
 // main.ts
-import '@dads/tokens/css'   // CSS 変数を :root に注入
-import '@dads/vue/styles'   // 全コンポーネントの CSS
+import '@dads/tokens/css' // CSS 変数を :root に注入
+import '@dads/vue/styles' // 全コンポーネントの CSS
 ```
 
 ```vue
@@ -308,17 +308,17 @@ jobs:
 
 ローカル実行所要時間（参考値）:
 
-| ステップ            | 所要 |
-| ------------------- | ---- |
-| install (cached)    | 1 s  |
-| typecheck           | 12 s |
-| lint                | 13 s |
-| format:check        | 6 s  |
-| test (899 tests)    | 34 s |
-| tokens build        | 1 s  |
-| vue build           | 12 s |
-| docs build          | 9 s  |
-| **TOTAL**           | 88 s |
+| ステップ         | 所要 |
+| ---------------- | ---- |
+| install (cached) | 1 s  |
+| typecheck        | 12 s |
+| lint             | 13 s |
+| format:check     | 6 s  |
+| test (899 tests) | 34 s |
+| tokens build     | 1 s  |
+| vue build        | 12 s |
+| docs build       | 9 s  |
+| **TOTAL**        | 88 s |
 
 ### ESLint flat config（ルート単一）
 
@@ -366,7 +366,7 @@ export default tseslint.config(
     },
   },
 
-  prettierConfig,  // 最後に置く
+  prettierConfig, // 最後に置く
 )
 ```
 
@@ -444,7 +444,9 @@ export default defineConfig({
   lang: 'ja',
   themeConfig: {
     nav: [{ text: 'Components', link: '/components/button' }],
-    sidebar: { /* Form / Navigation / Feedback / Display の 4 カテゴリ */ },
+    sidebar: {
+      /* Form / Navigation / Feedback / Display の 4 カテゴリ */
+    },
   },
 })
 ```
@@ -473,7 +475,7 @@ export default DefaultTheme
     "@dads/vue": "workspace:*",
     "@dads/tokens": "workspace:*",
   },
-  "devDependencies": { "vitepress": "^1.5.x", "vue": "^3.5.0" }
+  "devDependencies": { "vitepress": "^1.5.x", "vue": "^3.5.0" },
 }
 ```
 
@@ -564,54 +566,54 @@ export default DefaultTheme
 
 ## 既存資産との関係
 
-| 既存パス                                          | 役割                          | 本設計での扱い                                      |
-| ------------------------------------------------- | ----------------------------- | --------------------------------------------------- |
-| `dads-document-md/`                               | 仕様 MD                       | 変更なし。Claude Code の参照用（第一候補）          |
-| `dads-document-html/`                             | HTML レンダー版               | 変更なし                                            |
-| `design-system-example-components-html/`          | HTML/CSS 正準サンプル         | vendor。実装時の参照用                              |
-| `design-tokens/`                                  | 公式 design-tokens の clone   | vendor。`@dads/tokens` は npm 経由参照に統一        |
-| `tailwind-theme-plugin/`                          | 公式 tailwind-plugin の clone | vendor                                              |
-| `CLAUDE.md`                                       | プロジェクト指示              | monorepo 構造を反映して更新済                       |
+| 既存パス                                 | 役割                          | 本設計での扱い                               |
+| ---------------------------------------- | ----------------------------- | -------------------------------------------- |
+| `dads-document-md/`                      | 仕様 MD                       | 変更なし。Claude Code の参照用（第一候補）   |
+| `dads-document-html/`                    | HTML レンダー版               | 変更なし                                     |
+| `design-system-example-components-html/` | HTML/CSS 正準サンプル         | vendor。実装時の参照用                       |
+| `design-tokens/`                         | 公式 design-tokens の clone   | vendor。`@dads/tokens` は npm 経由参照に統一 |
+| `tailwind-theme-plugin/`                 | 公式 tailwind-plugin の clone | vendor                                       |
+| `CLAUDE.md`                              | プロジェクト指示              | monorepo 構造を反映して更新済                |
 
 ---
 
 ## リスクと対策
 
-| リスク                                                          | 対策                                                                    |
-| --------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| SCSS の `@use` パスがビルドで解決できない                       | `vite.config.ts` の `css.preprocessorOptions.scss.loadPaths` に追加     |
-| `exports['./css']` の `node_modules` パス露出が pnpm hoisting で壊れる | `scripts/copy-css.mjs` で `dist/` にコピー出力                       |
-| vue-tsc の d.ts 生成が遅い（全 27 SFC）                         | `vue-tsc --incremental` を有効化                                        |
-| vitest-axe のバージョン依存                                     | 動かない場合は `jest-axe` + 軽い adapter にフォールバック               |
-| `mdi-*` クラスを Button 等が参照（Material Design Icons 非配布）| アプリ側で `@mdi/font` を入れる前提。README に明記。フォントは配布しない |
-| `var(--color-...)` 形式の CSS 変数がアプリ側に未注入で見た目崩れ | `@dads/tokens` の `tokens.css` を import する手順を README に明記        |
-| Vue 3.4 未満との互換性問題                                      | `peerDependencies.vue` を `^3.4` に固定 / engines で明示                |
+| リスク                                                                 | 対策                                                                     |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| SCSS の `@use` パスがビルドで解決できない                              | `vite.config.ts` の `css.preprocessorOptions.scss.loadPaths` に追加      |
+| `exports['./css']` の `node_modules` パス露出が pnpm hoisting で壊れる | `scripts/copy-css.mjs` で `dist/` にコピー出力                           |
+| vue-tsc の d.ts 生成が遅い（全 27 SFC）                                | `vue-tsc --incremental` を有効化                                         |
+| vitest-axe のバージョン依存                                            | 動かない場合は `jest-axe` + 軽い adapter にフォールバック                |
+| `mdi-*` クラスを Button 等が参照（Material Design Icons 非配布）       | アプリ側で `@mdi/font` を入れる前提。README に明記。フォントは配布しない |
+| `var(--color-...)` 形式の CSS 変数がアプリ側に未注入で見た目崩れ       | `@dads/tokens` の `tokens.css` を import する手順を README に明記        |
+| Vue 3.4 未満との互換性問題                                             | `peerDependencies.vue` を `^3.4` に固定 / engines で明示                 |
 
 ---
 
 ## 受入基準（達成状況）
 
-| AC    | 内容                                                                | 状況 |
-| ----- | ------------------------------------------------------------------- | ---- |
-| AC-1  | `pnpm-workspace.yaml` が `packages/*` と `apps/*` を含む            | OK   |
-| AC-2  | `pnpm install` がルートで成功                                       | OK   |
-| AC-3  | `pnpm --filter @dads/vue build` で `dist/index.{js,d.ts}` 生成      | OK   |
-| AC-4  | 既存 26 テストファイル全 pass（883 + 16 a11y = 899）                | OK   |
-| AC-5  | `pnpm typecheck` / `pnpm lint` / `pnpm format:check` 全 0 件        | OK   |
-| AC-6  | `apps/docs` で最低 1 コンポーネント描画                             | OK   |
-| AC-7  | Vuetify / pinia / vue-router / vue-i18n / `@/` aliased import 0 件  | OK   |
-| AC-8  | Changesets 初期化済（`.changeset/config.json` 存在）                | OK   |
-| AC-9  | GitHub Actions CI が pass                                           | 部分 |
-| AC-10 | 全パッケージ `private: true` で npm 公開無効化                      | OK   |
+| AC    | 内容                                                               | 状況 |
+| ----- | ------------------------------------------------------------------ | ---- |
+| AC-1  | `pnpm-workspace.yaml` が `packages/*` と `apps/*` を含む           | OK   |
+| AC-2  | `pnpm install` がルートで成功                                      | OK   |
+| AC-3  | `pnpm --filter @dads/vue build` で `dist/index.{js,d.ts}` 生成     | OK   |
+| AC-4  | 既存 26 テストファイル全 pass（883 + 16 a11y = 899）               | OK   |
+| AC-5  | `pnpm typecheck` / `pnpm lint` / `pnpm format:check` 全 0 件       | OK   |
+| AC-6  | `apps/docs` で最低 1 コンポーネント描画                            | OK   |
+| AC-7  | Vuetify / pinia / vue-router / vue-i18n / `@/` aliased import 0 件 | OK   |
+| AC-8  | Changesets 初期化済（`.changeset/config.json` 存在）               | OK   |
+| AC-9  | GitHub Actions CI が pass                                          | 部分 |
+| AC-10 | 全パッケージ `private: true` で npm 公開無効化                     | OK   |
 
 ### NFR-6 クリーンステート計測
 
-| ステップ                            | 時間                  |
-| ----------------------------------- | --------------------- |
-| `pnpm install --frozen-lockfile`    | 1 s                   |
-| `pnpm -w run build`（全 4 パッケージ） | 23 s                  |
-| `pnpm -w run test`（899 tests）     | 36 s                  |
-| **TOTAL**                           | **60 s**（目標 300 s） |
+| ステップ                               | 時間                   |
+| -------------------------------------- | ---------------------- |
+| `pnpm install --frozen-lockfile`       | 1 s                    |
+| `pnpm -w run build`（全 4 パッケージ） | 23 s                   |
+| `pnpm -w run test`（899 tests）        | 36 s                   |
+| **TOTAL**                              | **60 s**（目標 300 s） |
 
 ---
 

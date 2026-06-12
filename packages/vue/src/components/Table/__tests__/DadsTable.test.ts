@@ -304,9 +304,12 @@ describe('DadsTable', () => {
     })
 
     it('has no violations with row headers', async () => {
-      const wrapper = mountInBody({ caption: '従業員', cellBorder: 'right' }, {
-        default: ROW_HEADER_BODY,
-      })
+      const wrapper = mountInBody(
+        { caption: '従業員', cellBorder: 'right' },
+        {
+          default: ROW_HEADER_BODY,
+        },
+      )
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 

@@ -184,26 +184,26 @@ const open = ref(false)
 
 ## Props
 
-| Prop           | 型                      | デフォルト | 説明                                                          |
-| -------------- | ----------------------- | ---------- | ------------------------------------------------------------- |
-| `items`        | `DadsMenuListBoxItem[]` | -          | 必須。メニュー項目の配列                                      |
-| `ariaLabel`    | `string`                | -          | `<ul role="menu">` に適用されるアクセシブルラベル             |
-| `modelValue`   | `boolean`               | `false`    | 開閉状態 (Opener mode のみ。v-model)。standalone では常時表示 |
-| `triggerLabel` | `string`                | -          | 指定時、オープナーボタンが描画され Opener mode になる         |
-| `triggerIcon`  | `string`                | -          | オープナーボタンの Material Symbols 名 (`'menu'` 等)          |
-| `triggerSize`  | `'sm' \| 'md'`          | `'md'`     | オープナーボタンのサイズ (公式 `data-size`)                   |
-| `triggerStyle` | `'text' \| 'outlined' \| 'filled'` | `'text'` | オープナーの見た目 (公式 `data-style`)             |
-| `placement`    | `'start' \| 'end'`      | `'start'`  | popup の整列位置 (Opener mode のみ有効)                       |
+| Prop           | 型                                 | デフォルト | 説明                                                          |
+| -------------- | ---------------------------------- | ---------- | ------------------------------------------------------------- |
+| `items`        | `DadsMenuListBoxItem[]`            | -          | 必須。メニュー項目の配列                                      |
+| `ariaLabel`    | `string`                           | -          | `<ul role="menu">` に適用されるアクセシブルラベル             |
+| `modelValue`   | `boolean`                          | `false`    | 開閉状態 (Opener mode のみ。v-model)。standalone では常時表示 |
+| `triggerLabel` | `string`                           | -          | 指定時、オープナーボタンが描画され Opener mode になる         |
+| `triggerIcon`  | `string`                           | -          | オープナーボタンの Material Symbols 名 (`'menu'` 等)          |
+| `triggerSize`  | `'sm' \| 'md'`                     | `'md'`     | オープナーボタンのサイズ (公式 `data-size`)                   |
+| `triggerStyle` | `'text' \| 'outlined' \| 'filled'` | `'text'`   | オープナーの見た目 (公式 `data-style`)                        |
+| `placement`    | `'start' \| 'end'`                 | `'start'`  | popup の整列位置 (Opener mode のみ有効)                       |
 
 ### `DadsMenuListBoxItem` の型
 
-| キー          | 型        | 説明                                                                     |
-| ------------- | --------- | ------------------------------------------------------------------------ |
-| `label`       | `string`  | 必須。表示テキスト                                                       |
-| `href`        | `string`  | 指定時は `<a>` としてレンダリング。`disabled` 時は無視され `<button>` 化 |
-| `iconName`    | `string`  | Material Symbols 名 (例: `"home"`)。`dads-menu-list__front-icon` で描画 |
-| `active`      | `boolean` | 現在地として強調表示し `aria-current="page"` を付与                      |
-| `disabled`    | `boolean` | 操作不可化（クリックと遷移を抑止し `aria-disabled="true"` を付与）       |
+| キー       | 型        | 説明                                                                     |
+| ---------- | --------- | ------------------------------------------------------------------------ |
+| `label`    | `string`  | 必須。表示テキスト                                                       |
+| `href`     | `string`  | 指定時は `<a>` としてレンダリング。`disabled` 時は無視され `<button>` 化 |
+| `iconName` | `string`  | Material Symbols 名 (例: `"home"`)。`dads-menu-list__front-icon` で描画  |
+| `active`   | `boolean` | 現在地として強調表示し `aria-current="page"` を付与                      |
+| `disabled` | `boolean` | 操作不可化（クリックと遷移を抑止し `aria-disabled="true"` を付与）       |
 
 ## Events
 

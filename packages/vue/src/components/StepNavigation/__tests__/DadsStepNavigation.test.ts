@@ -108,17 +108,14 @@ describe('DadsStepNavigation', () => {
   })
 
   describe('status (data-state)', () => {
-    it.each([
-      ['reached'],
-      ['completed'],
-      ['error'],
-      ['skipped'],
-      ['editing'],
-    ] as const)('sets data-state="%s" on the step', (status) => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status }], current: undefined })
-      const step = wrapper.find('.dads-step-navigation__step')
-      expect(step.attributes('data-state')).toBe(status)
-    })
+    it.each([['reached'], ['completed'], ['error'], ['skipped'], ['editing']] as const)(
+      'sets data-state="%s" on the step',
+      (status) => {
+        const wrapper = createWrapper({ steps: [{ title: 'A', status }], current: undefined })
+        const step = wrapper.find('.dads-step-navigation__step')
+        expect(step.attributes('data-state')).toBe(status)
+      },
+    )
 
     it('omits data-state for an upcoming step (no status)', () => {
       const wrapper = createWrapper({ steps: [{ title: 'A' }], current: undefined })
@@ -127,21 +124,30 @@ describe('DadsStepNavigation', () => {
     })
 
     it('renders the completed check state-icon', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'completed' }], current: undefined })
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', status: 'completed' }],
+        current: undefined,
+      })
       const icon = wrapper.find('.dads-step-navigation__state-icon')
       expect(icon.exists()).toBe(true)
       expect(icon.find('svg circle').exists()).toBe(true)
     })
 
     it('renders a visually-hidden "完了" label for completed', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'completed' }], current: undefined })
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', status: 'completed' }],
+        current: undefined,
+      })
       const number = wrapper.find('.dads-step-navigation__number')
       expect(number.find('.dads-u-visually-hidden').text()).toBe('完了')
       expect(number.find('.dads-step-navigation__state-label').exists()).toBe(false)
     })
 
     it('renders a visible state-label "編集中" for editing', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'editing' }], current: undefined })
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', status: 'editing' }],
+        current: undefined,
+      })
       const label = wrapper.find('.dads-step-navigation__state-label')
       expect(label.exists()).toBe(true)
       expect(label.text()).toBe('編集中')
@@ -149,7 +155,10 @@ describe('DadsStepNavigation', () => {
     })
 
     it('renders a visible state-label "エラー" for error', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'error' }], current: undefined })
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', status: 'error' }],
+        current: undefined,
+      })
       const label = wrapper.find('.dads-step-navigation__state-label')
       expect(label.exists()).toBe(true)
       expect(label.text()).toBe('エラー')
@@ -157,7 +166,10 @@ describe('DadsStepNavigation', () => {
     })
 
     it('renders a visually-hidden "スキップされました" label for skipped without a state-icon', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'skipped' }], current: undefined })
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', status: 'skipped' }],
+        current: undefined,
+      })
       const number = wrapper.find('.dads-step-navigation__number')
       expect(number.find('.dads-u-visually-hidden').text()).toBe('スキップされました')
       expect(number.find('.dads-step-navigation__state-icon').exists()).toBe(false)
@@ -165,7 +177,10 @@ describe('DadsStepNavigation', () => {
     })
 
     it('renders no state-icon/label for a plain reached step', () => {
-      const wrapper = createWrapper({ steps: [{ title: 'A', status: 'reached' }], current: undefined })
+      const wrapper = createWrapper({
+        steps: [{ title: 'A', status: 'reached' }],
+        current: undefined,
+      })
       const number = wrapper.find('.dads-step-navigation__number')
       expect(number.find('.dads-step-navigation__state-icon').exists()).toBe(false)
       expect(number.find('.dads-step-navigation__state-label').exists()).toBe(false)

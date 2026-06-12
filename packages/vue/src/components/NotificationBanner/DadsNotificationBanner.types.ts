@@ -10,12 +10,7 @@
  * primitive because the banner's `info-1` / `info-2` values are specific to
  * this component and must not leak into the Button / form-input palette.
  */
-export type DadsNotificationBannerColor =
-  | 'success'
-  | 'error'
-  | 'warning'
-  | 'info-1'
-  | 'info-2'
+export type DadsNotificationBannerColor = 'success' | 'error' | 'warning' | 'info-1' | 'info-2'
 
 /**
  * 公式 DADS が定義する 2 つのデザインスタイル。

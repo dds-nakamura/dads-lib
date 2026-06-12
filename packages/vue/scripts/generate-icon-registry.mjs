@@ -55,7 +55,10 @@ const symbols = [...new Set([...Object.values(MDI_TO_SYMBOL), ...EXTRA_SYMBOLS])
 const extract = (svg) => {
   const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1] ?? '0 -960 960 960'
   // inner content between the opening <svg ...> and closing </svg>
-  const body = svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '').trim()
+  const body = svg
+    .replace(/^[\s\S]*?<svg[^>]*>/, '')
+    .replace(/<\/svg>\s*$/, '')
+    .trim()
   return { viewBox, body }
 }
 
@@ -90,7 +93,9 @@ export interface DadsIconDef {
 export const iconRegistry: Record<string, DadsIconDef> = {
 `
 const rows = entries
-  .map((e) => `  ${JSON.stringify(e.name)}: ${JSON.stringify({ viewBox: e.viewBox, body: e.body })},`)
+  .map(
+    (e) => `  ${JSON.stringify(e.name)}: ${JSON.stringify({ viewBox: e.viewBox, body: e.body })},`,
+  )
   .join('\n')
 const footer = `
 }

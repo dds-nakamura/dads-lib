@@ -93,11 +93,7 @@ const rootClasses = computed(() => [
         :size="20"
       />
       {{ triggerLabel }}
-      <DadsIcon
-        name="keyboard_arrow_down"
-        class="dads-menu-list-box__opener-arrow"
-        :size="16"
-      />
+      <DadsIcon name="keyboard_arrow_down" class="dads-menu-list-box__opener-arrow" :size="16" />
     </button>
     <div v-show="isOpen" class="dads-menu-list-box__popup">
       <ul
@@ -107,11 +103,7 @@ const rootClasses = computed(() => [
         :aria-label="ariaLabel || undefined"
         :aria-labelledby="!ariaLabel && hasOpener ? openerId : undefined"
       >
-        <li
-          v-for="entry in renderedItems"
-          :key="entry.index"
-          role="presentation"
-        >
+        <li v-for="entry in renderedItems" :key="entry.index" role="presentation">
           <a
             v-if="entry.isLink"
             :href="entry.item.href"
