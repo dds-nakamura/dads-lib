@@ -1,1 +1,1 @@
-{"version":3,"file":"DadsCarousel.vue.d.ts","sourceRoot":"","sources":["../../../src/components/Carousel/DadsCarousel.vue"],"names":[],"mappings":"AAq6BA,OAAO,KAAK,EAAqB,iBAAiB,EAAE,MAAM,sBAAsB,CAAA;AAgoBhF,QAAA,MAAM,YAAY;;;;;;;;;;;;;;;;;6EAIhB,CAAC;wBACkB,OAAO,YAAY;AAAxC,wBAAyC"}
+{"version":3,"file":"DadsCarousel.vue.d.ts","sourceRoot":"","sources":["../../../src/components/Carousel/DadsCarousel.vue"],"names":[],"mappings":"AA06BA,OAAO,KAAK,EAAqB,iBAAiB,EAAE,MAAM,sBAAsB,CAAA;AA8nBhF,QAAA,MAAM,YAAY;;;;;;;;;;;;;;;;;6EAIhB,CAAC;wBACkB,OAAO,YAAY;AAAxC,wBAAyC"}

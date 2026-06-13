@@ -145,7 +145,7 @@ var I = {
 	"aria-label",
 	"aria-hidden",
 	"innerHTML"
-], R = /* @__PURE__ */ d({
+], R = /*@__PURE__*/ d({
 	__name: "DadsIcon",
 	props: {
 		name: {},
@@ -181,11 +181,11 @@ var I = {
 	let n = e.__vccOpts || e;
 	for (let [e, r] of t) n[e] = r;
 	return n;
-}, B = /* @__PURE__ */ z(R, [["__scopeId", "data-v-161f10e2"]]), V = {
+}, B = /*#__PURE__*/ z(R, [["__scopeId", "data-v-161f10e2"]]), V = {
 	key: 0,
 	class: "dads-button__spinner",
 	"aria-hidden": "true"
-}, ee = { class: "dads-button__label" }, H = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, ee = { class: "dads-button__label" }, H = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsButton",
 	props: {
 		variant: { default: "solid-fill" },
@@ -269,7 +269,7 @@ var I = {
 }, ne = {
 	key: 2,
 	class: "dads-form-control-label__status"
-}, W = ["id"], G = { class: "dads-form-control-label__control" }, K = ["id"], q = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, W = ["id"], G = { class: "dads-form-control-label__control" }, K = ["id"], q = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsFormControlLabel",
 	props: {
 		as: { default: "div" },
@@ -327,11 +327,11 @@ var I = {
 			_: 3
 		}, 8, ["data-size", "data-disabled"]));
 	}
-}), [["__scopeId", "data-v-ad2b8044"]]), J = { class: "dads-input-text__control" }, Y = [
+}), [["__scopeId", "data-v-c067ddfe"]]), J = { class: "dads-input-text__control" }, Y = [
 	"id",
 	"type",
 	"value"
-], re = ["id"], ie = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], re = ["id"], ie = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsInputText",
 	props: {
 		modelValue: {},
@@ -471,7 +471,7 @@ var I = {
 	"id",
 	"value",
 	"rows"
-], ae = ["id"], Q = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], ae = ["id"], Q = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsTextarea",
 	props: {
 		modelValue: {},
@@ -646,7 +646,7 @@ var I = {
 }, be = {
 	key: 1,
 	class: "dads-select__footer"
-}, xe = ["id"], Se = ["id"], Ce = 500, we = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, xe = ["id"], Se = ["id"], Ce = 500, we = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsSelect",
 	props: {
 		modelValue: { type: [
@@ -914,7 +914,7 @@ var I = {
 }, Ae = {
 	key: 0,
 	class: "dads-checkbox-field__footer"
-}, je = ["id"], Me = ["id"], Ne = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, je = ["id"], Me = ["id"], Ne = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	inheritAttrs: !1,
 	__name: "DadsCheckbox",
 	props: {
@@ -1014,7 +1014,7 @@ var I = {
 			class: "dads-checkbox-field__support-text"
 		}, w(e.hint), 9, Me)) : a("", !0)])) : a("", !0)], 16));
 	}
-}), [["__scopeId", "data-v-4845056e"]]), Pe = { class: "dads-checkbox-group__items" }, Fe = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}), [["__scopeId", "data-v-4845056e"]]), Pe = { class: "dads-checkbox-group__items" }, Fe = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsCheckboxGroup",
 	props: {
 		modelValue: {},
@@ -1122,7 +1122,7 @@ var I = {
 ], ze = {
 	key: 0,
 	class: "dads-radio__label"
-}, Be = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Be = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsRadio",
 	props: {
 		modelValue: { type: [
@@ -1178,7 +1178,7 @@ var I = {
 			onBlur: p
 		}, null, 40, Re)]), e.label ? (v(), o("span", ze, w(e.label), 1)) : a("", !0)], 8, Ie));
 	}
-}), [["__scopeId", "data-v-e5814c88"]]), Ve = { class: "dads-radio-group__legend-visually-hidden" }, He = { class: "dads-radio-group__items" }, Ue = ["id"], We = ["id"], Ge = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}), [["__scopeId", "data-v-e5814c88"]]), Ve = { class: "dads-radio-group__legend-visually-hidden" }, He = { class: "dads-radio-group__items" }, Ue = ["id"], We = ["id"], Ge = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsRadioGroup",
 	props: {
 		modelValue: { type: [
@@ -1303,7 +1303,7 @@ var I = {
 			"aria-describedby"
 		]));
 	}
-}), [["__scopeId", "data-v-51b58cc1"]]), Ke = ["for"], qe = {
+}), [["__scopeId", "data-v-0e8bdff0"]]), Ke = ["for"], qe = {
 	key: 0,
 	class: "dads-file-upload__required",
 	"aria-hidden": "true"
@@ -1320,7 +1320,7 @@ var I = {
 ], tt = ["aria-valuenow"], nt = {
 	key: 3,
 	class: "dads-file-upload__footer"
-}, rt = ["id"], it = ["id"], at = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, rt = ["id"], it = ["id"], at = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsFileUpload",
 	props: {
 		modelValue: {},
@@ -1511,7 +1511,7 @@ var I = {
 	key: 1,
 	class: "dads-chip-tag__append",
 	"aria-hidden": "true"
-}, lt = ["aria-label", "disabled"], ut = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, lt = ["aria-label", "disabled"], ut = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsChipTag",
 	props: {
 		size: { default: "md" },
@@ -1614,7 +1614,7 @@ var I = {
 ], _t = {
 	key: 1,
 	class: "dads-combobox__footer"
-}, vt = ["id"], yt = ["id"], bt = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, vt = ["id"], yt = ["id"], bt = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsCombobox",
 	props: {
 		modelValue: {},
@@ -1849,7 +1849,7 @@ var I = {
 			}, w(t.hint), 9, yt)) : a("", !0)])) : a("", !0)
 		], 2));
 	}
-}), [["__scopeId", "data-v-254fc9b8"]]), xt = { class: "dads-header-container__inner" }, St = [
+}), [["__scopeId", "data-v-39974ddd"]]), xt = { class: "dads-header-container__inner" }, St = [
 	"aria-label",
 	"aria-expanded",
 	"aria-controls"
@@ -1862,7 +1862,7 @@ var I = {
 }, Et = {
 	key: 4,
 	class: "dads-header-container__actions"
-}, Dt = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Dt = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsHeaderContainer",
 	props: {
 		sticky: {
@@ -1942,7 +1942,7 @@ var I = {
 }, jt = {
 	key: 2,
 	class: "dads-hamburger-menu-button__label"
-}, Mt = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Mt = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsHamburgerMenuButton",
 	props: {
 		modelValue: {
@@ -1989,7 +1989,7 @@ var I = {
 			fill: "currentcolor"
 		}, null, -1)]])), u.value ? a("", !0) : (v(), o("span", jt, w(f.value), 1))], 10, Ot));
 	}
-}), [["__scopeId", "data-v-1f9c43e9"]]), Nt = ["data-placement"], Pt = { class: "dads-drawer__header" }, Ft = { class: "dads-drawer__body" }, It = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}), [["__scopeId", "data-v-ea96bbc8"]]), Nt = ["data-placement"], Pt = { class: "dads-drawer__header" }, Ft = { class: "dads-drawer__body" }, It = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsDrawer",
 	props: {
 		modelValue: {
@@ -2048,7 +2048,7 @@ var I = {
 	height: "12",
 	viewBox: "0 0 12 12",
 	"aria-hidden": "true"
-}, Wt = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Wt = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsBreadcrumb",
 	props: {
 		items: {},
@@ -2120,7 +2120,7 @@ var I = {
 }, en = { class: "dads-step-navigation__title" }, tn = {
 	key: 0,
 	class: "dads-step-navigation__description"
-}, nn = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, nn = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsStepNavigation",
 	props: {
 		steps: {},
@@ -2209,7 +2209,7 @@ var I = {
 			"onClick"
 		])), e.description ? (v(), o("p", tn, w(e.description), 1)) : a("", !0)], 8, qt))), 128))])], 8, Gt));
 	}
-}), [["__scopeId", "data-v-b240db08"]]), rn = ["aria-label", "aria-orientation"], an = [
+}), [["__scopeId", "data-v-b98f37a3"]]), rn = ["aria-label", "aria-orientation"], an = [
 	"id",
 	"aria-selected",
 	"aria-controls",
@@ -2220,7 +2220,7 @@ var I = {
 	"id",
 	"aria-labelledby",
 	"hidden"
-], ln = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], ln = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsTab",
 	props: {
 		modelValue: {},
@@ -2319,7 +2319,7 @@ var I = {
 }, gn = ["datetime"], _n = {
 	key: 0,
 	class: "dads-notification-banner__action"
-}, vn = ["aria-label"], yn = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, vn = ["aria-label"], yn = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsNotificationBanner",
 	props: {
 		modelValue: {
@@ -2404,7 +2404,7 @@ var I = {
 }, Sn = ["id"], Cn = ["aria-label"], wn = { class: "dads-dialog__body" }, Tn = {
 	key: 1,
 	class: "dads-dialog__footer"
-}, En = "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", Dn = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, En = "a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", Dn = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsDialog",
 	props: {
 		modelValue: {
@@ -2493,7 +2493,7 @@ var I = {
 			_: 3
 		})]));
 	}
-}), [["__scopeId", "data-v-43bf465f"]]), On = ["aria-describedby"], kn = ["id"], An = { class: "dads-tooltip__content" }, $ = 8, jn = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}), [["__scopeId", "data-v-39eac1ad"]]), On = ["aria-describedby"], kn = ["id"], An = { class: "dads-tooltip__content" }, $ = 8, jn = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsTooltip",
 	props: {
 		text: {},
@@ -2621,7 +2621,7 @@ var I = {
 ], Vn = ["id"], Hn = {
 	key: 0,
 	class: "dads-progress-indicator__percentage"
-}, Un = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Un = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsProgressIndicator",
 	props: {
 		type: { default: "stacked" },
@@ -2743,7 +2743,7 @@ var I = {
 			r[1] ||= l("%) ", -1)
 		])) : a("", !0)], 8, Vn)) : a("", !0)], 14, Mn));
 	}
-}), [["__scopeId", "data-v-2ee09982"]]), Wn = {
+}), [["__scopeId", "data-v-7db1cc11"]]), Wn = {
 	key: 0,
 	class: "dads-card__image"
 }, Gn = {
@@ -2755,7 +2755,7 @@ var I = {
 }, Jn = {
 	key: 3,
 	class: "dads-card__footer"
-}, Yn = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Yn = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsCard",
 	props: {
 		variant: { default: "outlined" },
@@ -2812,7 +2812,7 @@ var I = {
 }, er = {
 	key: 1,
 	class: "dads-heading__subtitle"
-}, tr = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, tr = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsHeading",
 	props: {
 		as: { default: "h2" },
@@ -2851,7 +2851,7 @@ var I = {
 	key: 1,
 	class: "dads-divider__line",
 	"aria-hidden": "true"
-}, ar = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, ar = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsDivider",
 	props: {
 		orientation: { default: "horizontal" },
@@ -2890,7 +2890,7 @@ var I = {
 }), [["__scopeId", "data-v-69c91b07"]]), or = {
 	key: 0,
 	class: "dads-table__caption"
-}, sr = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, sr = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsTable",
 	props: {
 		caption: {},
@@ -2941,7 +2941,7 @@ var I = {
 	"aria-expanded",
 	"aria-disabled",
 	"tabindex"
-], ur = { class: "dads-accordion__content" }, dr = ["href"], fr = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], ur = { class: "dads-accordion__content" }, dr = ["href"], fr = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsAccordion",
 	props: {
 		modelValue: {
@@ -3029,7 +3029,7 @@ var I = {
 	key: 1,
 	class: "dads-chip-label__append",
 	"aria-hidden": "true"
-}, _r = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, _r = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsChipLabel",
 	props: {
 		color: { default: "gray" },
@@ -3075,7 +3075,7 @@ var I = {
 	"aria-label",
 	"aria-pressed",
 	"onClick"
-], wr = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], wr = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsColorPicker",
 	props: {
 		modelValue: {},
@@ -3202,7 +3202,7 @@ var I = {
 }, Jr = {
 	key: 1,
 	class: "dads-date-picker__footer"
-}, Yr = ["id"], Xr = ["id"], Zr = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Yr = ["id"], Xr = ["id"], Zr = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsDatePicker",
 	props: {
 		modelValue: { default: "" },
@@ -3592,7 +3592,7 @@ var I = {
 			}, w(t.hint), 9, Xr)) : a("", !0)])) : a("", !0)
 		], 2));
 	}
-}), [["__scopeId", "data-v-23ada84f"]]), Qr = ["for"], $r = {
+}), [["__scopeId", "data-v-fab32132"]]), Qr = ["for"], $r = {
 	key: 0,
 	class: "dads-search-box__required",
 	"aria-hidden": "true"
@@ -3624,7 +3624,7 @@ var I = {
 }, ui = ["onMousedown"], di = {
 	key: 1,
 	class: "dads-search-box__footer"
-}, fi = ["id"], pi = ["id"], mi = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, fi = ["id"], pi = ["id"], mi = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsSearchBox",
 	props: {
 		modelValue: { default: "" },
@@ -3790,7 +3790,7 @@ var I = {
 	"aria-controls",
 	"aria-disabled",
 	"tabindex"
-], _i = { class: "dads-disclosure__title" }, vi = ["id", "aria-labelledby"], yi = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], _i = { class: "dads-disclosure__title" }, vi = ["id", "aria-labelledby"], yi = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsDisclosure",
 	props: {
 		modelValue: {
@@ -3870,7 +3870,7 @@ var I = {
 			"aria-labelledby": l.value
 		}, [x(t.$slots, "default", {}, void 0, !0)], 8, vi)], 10, hi));
 	}
-}), [["__scopeId", "data-v-2a71530d"]]), bi = ["data-marker"], xi = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}), [["__scopeId", "data-v-2a71530d"]]), bi = ["data-marker"], xi = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsDescriptionList",
 	props: {
 		items: {},
@@ -3910,7 +3910,7 @@ var I = {
 	"data-current",
 	"aria-current",
 	"onClick"
-], Ei = { class: "dads-menu-list__label" }, Di = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], Ei = { class: "dads-menu-list__label" }, Di = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsLanguageSelector",
 	props: {
 		modelValue: {},
@@ -4107,7 +4107,7 @@ var I = {
 	"aria-current",
 	"aria-expanded",
 	"onClick"
-], Vi = { class: "dads-menu-list__label" }, Hi = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], Vi = { class: "dads-menu-list__label" }, Hi = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsMenuList",
 	props: {
 		items: {},
@@ -4307,7 +4307,7 @@ var I = {
 	"aria-disabled",
 	"data-current",
 	"onClick"
-], Yi = { class: "dads-menu-list__label" }, Xi = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], Yi = { class: "dads-menu-list__label" }, Xi = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsMenuListBox",
 	props: {
 		items: {},
@@ -4416,7 +4416,7 @@ var I = {
 			size: 24
 		}, null, 8, ["name"])) : a("", !0), s("span", Yi, w(e.item.label), 1)], 8, Ji))]))), 128))], 8, Gi)], 512), [[k, p.value]])], 2));
 	}
-}), [["__scopeId", "data-v-d2ab54b5"]]), Zi = ["aria-label"], Qi = [
+}), [["__scopeId", "data-v-9150c02b"]]), Zi = ["aria-label"], Qi = [
 	"href",
 	"target",
 	"rel",
@@ -4425,7 +4425,7 @@ var I = {
 	"href",
 	"target",
 	"rel"
-], na = { class: "dads-utility-link__label" }, ra = ["aria-label"], ia = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], na = { class: "dads-utility-link__label" }, ra = ["aria-label"], ia = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsUtilityLink",
 	props: {
 		href: {},
@@ -4516,7 +4516,7 @@ var I = {
 	"aria-haspopup",
 	"aria-expanded",
 	"onClick"
-], ua = { class: "dads-global-menu__label" }, da = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], ua = { class: "dads-global-menu__label" }, da = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsGlobalMenu",
 	props: {
 		items: {},
@@ -4586,7 +4586,7 @@ var I = {
 ], ha = { class: "dads-mega-menu__columns" }, ga = {
 	key: 0,
 	class: "dads-mega-menu__heading"
-}, _a = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, _a = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsMegaMenu",
 	props: {
 		modelValue: {
@@ -4671,7 +4671,7 @@ var I = {
 			"onClick:item": M
 		}, null, 8, ["items"])]))), 128))])], 40, ma), [[k, x.value]])], 2));
 	}
-}), [["__scopeId", "data-v-703200a8"]]), va = ["aria-label"], ya = { class: "dads-page-navigation__list" }, ba = {
+}), [["__scopeId", "data-v-a2de431b"]]), va = ["aria-label"], ya = { class: "dads-page-navigation__list" }, ba = {
 	key: 0,
 	class: "dads-page-navigation__item"
 }, xa = ["disabled", "aria-label"], Sa = {
@@ -4693,7 +4693,7 @@ var I = {
 }, ka = ["disabled"], Aa = { class: "dads-page-navigation__label" }, ja = {
 	key: 3,
 	class: "dads-page-navigation__item"
-}, Ma = ["disabled", "aria-label"], Na = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Ma = ["disabled", "aria-label"], Na = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsPageNavigation",
 	props: {
 		modelValue: {},
@@ -4799,7 +4799,7 @@ var I = {
 	"href",
 	"aria-current",
 	"onClick"
-], za = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], za = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsTableOfContents",
 	props: {
 		items: {},
@@ -4844,7 +4844,7 @@ var I = {
 }, qa = ["href", "onClick"], Ja = { class: "dads-mobile-menu__slide-item-label" }, Ya = ["onClick"], Xa = { class: "dads-mobile-menu__slide-item-label" }, Za = {
 	key: 1,
 	class: "dads-mobile-menu__utility"
-}, Qa = "a[href], button:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", $a = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Qa = "a[href], button:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", $a = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsMobileMenu",
 	props: {
 		modelValue: {
@@ -4979,7 +4979,7 @@ var I = {
 			_: 1
 		})]));
 	}
-}), [["__scopeId", "data-v-1638542a"]]), eo = [
+}), [["__scopeId", "data-v-08566e29"]]), eo = [
 	"src",
 	"alt",
 	"width",
@@ -4991,7 +4991,7 @@ var I = {
 	"width",
 	"height",
 	"loading"
-], ro = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], ro = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsImage",
 	props: {
 		src: {},
@@ -5092,7 +5092,7 @@ var I = {
 	"srcset",
 	"width",
 	"height"
-], Vo = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], Vo = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsCarousel",
 	props: {
 		slides: {},
@@ -5328,7 +5328,7 @@ var I = {
 			])
 		])], 8, io));
 	}
-}), [["__scopeId", "data-v-bf717355"]]), Ho = /* @__PURE__ */ d({
+}), [["__scopeId", "data-v-c04d27d8"]]), Ho = /* @__PURE__ */ d({
 	__name: "DadsImageSlider",
 	props: {
 		slides: {},
@@ -5381,7 +5381,7 @@ var I = {
 	"alt",
 	"width",
 	"height"
-], Go = /* @__PURE__ */ z(/* @__PURE__ */ d({
+], Go = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsCarouselSingle",
 	props: {
 		src: {},
@@ -5416,7 +5416,7 @@ var I = {
 			"rel"
 		]))]));
 	}
-}), [["__scopeId", "data-v-cdb35b25"]]), Ko = ["data-marker", "data-spacing"], qo = { class: "dads-list__marker" }, Jo = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}), [["__scopeId", "data-v-cdb35b25"]]), Ko = ["data-marker", "data-spacing"], qo = { class: "dads-list__marker" }, Jo = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsList",
 	props: {
 		type: { default: "unordered" },
@@ -5459,7 +5459,7 @@ var I = {
 }), [["__scopeId", "data-v-2b48949a"]]), Yo = { class: "dads-blockquote-wrapper" }, Xo = ["cite"], Zo = { key: 1 }, Qo = {
 	key: 0,
 	class: "dads-blockquote__cite"
-}, $o = ["href"], es = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, $o = ["href"], es = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsBlockquote",
 	props: {
 		quote: {},
@@ -5486,7 +5486,7 @@ var I = {
 }, cs = {
 	key: 2,
 	class: "dads-resource-list__sub"
-}, ls = { key: 1 }, us = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, ls = { key: 1 }, us = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsResourceList",
 	props: {
 		items: {},
@@ -5607,7 +5607,7 @@ var I = {
 ], bs = {
 	key: 1,
 	class: "dads-emergency-banner__sr-only"
-}, xs = ["aria-label"], Ss = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, xs = ["aria-label"], Ss = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsEmergencyBanner",
 	props: {
 		modelValue: {
@@ -5708,7 +5708,7 @@ var I = {
 }, Ns = ["for"], Ps = ["id", "value"], Fs = ["value"], Is = {
 	key: 1,
 	class: "dads-table-control__pagination"
-}, Ls = ["id"], Rs = ["aria-label"], zs = ["disabled", "aria-label"], Bs = ["aria-label"], Vs = ["disabled", "aria-label"], Hs = /* @__PURE__ */ z(/* @__PURE__ */ d({
+}, Ls = ["id"], Rs = ["aria-label"], zs = ["disabled", "aria-label"], Bs = ["aria-label"], Vs = ["disabled", "aria-label"], Hs = /*#__PURE__*/ z(/* @__PURE__ */ d({
 	__name: "DadsTableControl",
 	props: {
 		searchQuery: { default: "" },

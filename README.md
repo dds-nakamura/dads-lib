@@ -15,12 +15,12 @@ DADS (デジタル庁デザインシステム) の Vue 3 コンポーネント�
 
 VitePress カタログの sidebar 分類 (4 カテゴリ) に揃えます。公式 46 中、ScrollTopButton / BottomNavigation は DADS が非推奨指定のため未収録。
 
-| カテゴリ   | 件数 | コンポーネント                                                                                                                                                       |
-| ---------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Form       | 13   | Button, InputText, Textarea, Select, Checkbox, CheckboxGroup\*, Radio, RadioGroup\*, FileUpload, Combobox, ColorPicker\*, DatePicker, SearchBox                      |
+| カテゴリ   | 件数 | コンポーネント                                                                                                                                                                                           |
+| ---------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Form       | 13   | Button, InputText, Textarea, Select, Checkbox, CheckboxGroup\*, Radio, RadioGroup\*, FileUpload, Combobox, ColorPicker\*, DatePicker, SearchBox                                                          |
 | Navigation | 15   | HeaderContainer, Drawer, Breadcrumb, StepNavigation, Tab, LanguageSelector, MenuList, MenuListBox, HamburgerMenuButton, UtilityLink, GlobalMenu, MegaMenu, PageNavigation, TableOfContents\*, MobileMenu |
-| Feedback   | 5    | NotificationBanner, Dialog, Tooltip\*, ProgressIndicator, EmergencyBanner                                                                                            |
-| Display    | 16   | Card, Heading, Divider, Table, Accordion, ChipLabel, ChipTag, Disclosure, DescriptionList, Image, ImageSlider, Carousel, List, Blockquote, ResourceList, TableControl |
+| Feedback   | 5    | NotificationBanner, Dialog, Tooltip\*, ProgressIndicator, EmergencyBanner                                                                                                                                |
+| Display    | 16   | Card, Heading, Divider, Table, Accordion, ChipLabel, ChipTag, Disclosure, DescriptionList, Image, ImageSlider, Carousel, List, Blockquote, ResourceList, TableControl                                    |
 
 \* CheckboxGroup / RadioGroup / ColorPicker / Tooltip / TableOfContents は DADS 公式仕様にはない独自拡張 (5 件)。
 
