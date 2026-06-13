@@ -24,7 +24,7 @@
 
 ## 関連コンポーネント
 
-- [グローバルメニュー](https://design.digital.go.jp/dads/components/global-menu/)
+- [水平メニュー](https://design.digital.go.jp/dads/components/horizontal-menu/)
 - [コンボボックス](https://design.digital.go.jp/dads/components/combobox/)
 
 ---

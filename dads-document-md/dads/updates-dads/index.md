@@ -1,7 +1,7 @@
 # お知らせ（ドキュメント）｜デジタル庁デザインシステムβ版
 
 > **Source**: https://design.digital.go.jp/dads/updates-dads/
-> **Scraped**: 2026-05-12
+> **Scraped**: 2026-06-13
 > **Description**: デジタル庁デザインシステムβ版のドキュメント更新履歴
 
 ---
@@ -14,6 +14,14 @@
 - [その他](/dads/updates-misc/)
 
 ---
+
+## 2026年5月27日
+
+- **[コンポーネント：水平メニュー](/dads/components/horizontal-menu/)（Rev 001）**
+  - グローバルメニューを水平メニューに名称変更
+
+- **[コンポーネント：ヘッダーコンテナ](/dads/components/header-container/)（Rev 002）**
+  - グローバルメニューを水平メニューに名称変更
 
 ## 2026年2月26日
 

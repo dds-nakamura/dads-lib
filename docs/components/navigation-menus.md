@@ -23,12 +23,14 @@
 
 基礎部品を内部で組み合わせて構成する、画面レベルのナビゲーション。
 
-| 公式 slug         | 実装名               | 用途                       | 依存（基礎部品）            | HTML 実装例 |
-| ----------------- | -------------------- | -------------------------- | --------------------------- | ----------- |
-| `global-menu`     | `DadsGlobalMenu`     | グローバルナビ             | MenuList（任意）            | あり        |
-| `mega-menu`       | `DadsMegaMenu`       | メガメニュー（グローバル） | MenuList                    | なし        |
-| `page-navigation` | `DadsPageNavigation` | ページ内ナビ（TOC）        | -                           | なし        |
-| `mobile-menu`     | `DadsMobileMenu`     | モバイル用メニュー         | HamburgerMenuButton（任意） | なし        |
+| 公式 slug                             | 実装名               | 用途                       | 依存（基礎部品）            | HTML 実装例 |
+| ------------------------------------- | -------------------- | -------------------------- | --------------------------- | ----------- |
+| `horizontal-menu`（旧 `global-menu`） | `DadsGlobalMenu`     | グローバルナビ             | MenuList（任意）            | あり        |
+| `mega-menu`                           | `DadsMegaMenu`       | メガメニュー（グローバル） | MenuList                    | なし        |
+| `page-navigation`                     | `DadsPageNavigation` | ページ内ナビ（TOC）        | -                           | なし        |
+| `mobile-menu`                         | `DadsMobileMenu`     | モバイル用メニュー         | HamburgerMenuButton（任意） | なし        |
+
+> **DADS v2.14.0 命名ギャップ**: 公式は `global-menu` を **`horizontal-menu`（水平メニュー）** に名称変更した（2026-05-27）。`@dads/vue` は依然 `DadsGlobalMenu` を公開しており未追随。rename は公開 API の破壊的変更（次 major）かつ水平メニューのガイドラインが**準備中**のため、正式仕様公開を待って判断する（[fidelity-audit-summary §7](../quality/fidelity-audit-summary.md) 参照）。
 
 ### スコープ外
 

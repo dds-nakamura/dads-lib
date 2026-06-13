@@ -1,7 +1,7 @@
 # ヘッダーコンテナ（概要・使い方）｜デジタル庁デザインシステムβ版
 
 > **Source**: https://design.digital.go.jp/dads/components/header-container/
-> **Scraped**: 2026-05-12
+> **Scraped**: 2026-06-13
 > **Note**: ヘッダーコンテナコンポーネントは「使い方」タブが存在せず、概要ページに使い方の内容が含まれています。/usage/ URLは403のため、概要ページから取得。
 
 [2025年1月9日更新](https://design.digital.go.jp/dads/components/header-container/changelog/)
@@ -32,11 +32,11 @@
 
 #### フル
 
-![スクリーンショット：フル幅のヘッダーコンテナの例。①ロゴが左上部にある。②ヘッダーコンテナアイテムがロゴの右側を右端まで埋めている。③グローバルメニューがその下部にあり、ロゴとヘッダーコンテナアイテムを跨ぐように配置されている。](https://design.digital.go.jp/dads/images/components/header-container/header_container_wide_full.png)
+![スクリーンショット：フル幅のヘッダーコンテナの例。①ロゴが左上部にある。②ヘッダーコンテナアイテムがロゴの右側を右端まで埋めている。③水平メニューがその下部にあり、ロゴとヘッダーコンテナアイテムを跨ぐように配置されている。](https://design.digital.go.jp/dads/images/components/header-container/header_container_wide_full.png)
 
 #### スリム
 
-![スクリーンショット：フル幅のヘッダーコンテナの例。①ロゴが左部にある。②ヘッダーコンテナアイテムが右部にある。③グローバルメニューがロゴのヘッダーコンテナアイテムの間を埋めるように配置されている。](https://design.digital.go.jp/dads/images/components/header-container/header_container_wide_slim.png)
+![スクリーンショット：フル幅のヘッダーコンテナの例。①ロゴが左部にある。②ヘッダーコンテナアイテムが右部にある。③水平メニューがロゴのヘッダーコンテナアイテムの間を埋めるように配置されている。](https://design.digital.go.jp/dads/images/components/header-container/header_container_wide_slim.png)
 
 ### ミディアム
 
@@ -59,9 +59,9 @@
   - ランゲージセレクター
   - 検索ボックス
   - 新規登録/ログイン/ログアウトボタン【今後、提供予定】
-- **③グローバルメニュー**
+- **③水平メニュー**
 - **④ハンバーガーメニューボタン**  
-  画面幅の狭いデバイスでヘッダーコンテナアイテムやグローバルメニューを内包するための、メニューパネル開閉ボタンです。
+  画面幅の狭いデバイスでヘッダーコンテナアイテムや水平メニューを内包するための、メニューパネル開閉ボタンです。
 
 ---
 
@@ -81,4 +81,4 @@
 
 - **Original URL**: https://design.digital.go.jp/dads/components/header-container/
 - **Note**: /usage/ URL returned 403; content scraped from main overview page via Playwright
-- **Scraped**: 2026-05-12
+- **Scraped**: 2026-06-13
