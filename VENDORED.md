@@ -8,9 +8,9 @@
 
 | サブディレクトリ                         | 上流リポジトリ                                                           | 上流バージョン (タグ等)   | 取り込み時の HEAD コミット                 | 取り込み日 |
 | ---------------------------------------- | ------------------------------------------------------------------------ | ------------------------- | ------------------------------------------ | ---------- |
-| `design-tokens/`                         | <https://github.com/digital-go-jp/design-tokens>                         | v1.1.9 (develop ブランチ) | `797dee988d8a0dab5310ad206436d20190678713` | 2026-05-13 |
-| `tailwind-theme-plugin/`                 | <https://github.com/digital-go-jp/tailwind-theme-plugin>                 | v0.3.4 (develop ブランチ) | `37e88973f7dbdb24b151fd2d2b864c6f46be6c68` | 2026-05-13 |
-| `design-system-example-components-html/` | <https://github.com/digital-go-jp/design-system-example-components-html> | main ブランチ HEAD        | `b0acbeed91aebc1509295974ab7444cf99e422e6` | 2026-05-13 |
+| `design-tokens/`                         | <https://github.com/digital-go-jp/design-tokens>                         | v2.0.1 (tag)              | `cde7dfe58d53341bba5ebae565406992fbe1218b` | 2026-06-13 |
+| `tailwind-theme-plugin/`                 | <https://github.com/digital-go-jp/tailwind-theme-plugin>                 | v1.0.0 (tag)              | `a21b2355ef541febb90ddbb287012f40665e2fb9` | 2026-06-13 |
+| `design-system-example-components-html/` | <https://github.com/digital-go-jp/design-system-example-components-html> | main ブランチ HEAD        | `7899f7ab0acf6b7fead0d3a5d3fd7869c2beaaf7` | 2026-06-13 |
 
 ## サイト / Figma 抽出物 (Snapshot)
 
@@ -23,6 +23,8 @@
 | `dads-document-html/`  | <https://design.digital.go.jp/dads/>                                        | DADS **v2.13.0** (md と同時取得) / 958 ファイル (HTML 148 + PNG 669 + フォント/assets) / 51 MB           | 2026-05-12 | （README 未配置。md と同一抽出に由来）         |
 | `dads-document-figma/` | Figma Community: <https://www.figma.com/community/file/1255349027535859598> | (frame モード) `fileKey=SZ2T652pyb3nz4Mrh06ALt` / "v2.13.0 (Community)" / lastModified 2026-05-14T06:48Z | 2026-05-14 | `dads-document-figma/manifest.json`            |
 | `dads-document-figma/` | 〃                                                                          | (playwright モード) `fileKey=71GUnpF30YjVBRuWCPgKaC` / 42 pages / scale 2 / exportedAt 2026-05-16T14:54Z | 2026-05-16 | `dads-document-figma/playwright-manifest.json` |
+
+> 注: 上記サイト / Figma 行は依然 **v2.13.0** スナップショット。DADS v2.14.0 への追随は GitHub vendor 3 件（design-tokens v2.0.1 / tailwind-theme-plugin v1.0.0 / example-components-html）を本 PR で先行実施済みで、Figma 再エクスポートとサイト md/html 再クロールは後続作業で更新する。
 
 `dads-document-figma/` は `.gitignore` 対象（各環境で再生成）。再取得手順は [scripts/README.md](./scripts/README.md) (`pnpm figma:pw-export`) を参照。
 

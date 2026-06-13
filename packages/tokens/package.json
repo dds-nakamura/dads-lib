@@ -22,7 +22,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@digital-go-jp/design-tokens": "^1.1.9"
+    "@digital-go-jp/design-tokens": "^2.0.1"
   },
   "devDependencies": {
     "typescript": "^5.7.2"
