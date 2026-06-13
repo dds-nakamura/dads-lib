@@ -89,25 +89,25 @@ packages/vue/src/components/<Name>/
 
 #### Props
 
-| Prop          | Type                       | Default | 説明                                       |
-| ------------- | -------------------------- | ------- | ------------------------------------------ |
-| `modelValue`  | `Date \| string \| null`   | `null`  | 選択中の日付 (v-model)                     |
-| `label`       | `string`                   | -       | ラベル                                     |
-| `hint`        | `string`                   | -       | 補助テキスト                               |
-| `error`       | `string \| boolean`        | `false` | エラー状態 / メッセージ                    |
-| `disabled`    | `boolean`                  | `false` | 無効化                                     |
-| `readonly`    | `boolean`                  | `false` | 読み取り専用                               |
-| `required`    | `boolean`                  | `false` | 必須                                       |
-| `size`        | `'lg' \| 'md' \| 'sm'`     | `'md'`  | サイズ                                     |
-| `min` / `max` | `Date \| string`           | -       | 選択可能範囲                               |
-| `format`      | `string`                   | -       | 表示フォーマット (例: `YYYY/MM/DD`)        |
+| Prop          | Type                     | Default | 説明                                |
+| ------------- | ------------------------ | ------- | ----------------------------------- |
+| `modelValue`  | `Date \| string \| null` | `null`  | 選択中の日付 (v-model)              |
+| `label`       | `string`                 | -       | ラベル                              |
+| `hint`        | `string`                 | -       | 補助テキスト                        |
+| `error`       | `string \| boolean`      | `false` | エラー状態 / メッセージ             |
+| `disabled`    | `boolean`                | `false` | 無効化                              |
+| `readonly`    | `boolean`                | `false` | 読み取り専用                        |
+| `required`    | `boolean`                | `false` | 必須                                |
+| `size`        | `'lg' \| 'md' \| 'sm'`   | `'md'`  | サイズ                              |
+| `min` / `max` | `Date \| string`         | -       | 選択可能範囲                        |
+| `format`      | `string`                 | -       | 表示フォーマット (例: `YYYY/MM/DD`) |
 
 #### Emits
 
-| Event                | Payload                  | 説明                |
-| -------------------- | ------------------------ | ------------------- |
-| `update:modelValue`  | `Date \| string \| null` | 値の更新            |
-| `open` / `close`     | `void`                   | カレンダー開閉      |
+| Event               | Payload                  | 説明           |
+| ------------------- | ------------------------ | -------------- |
+| `update:modelValue` | `Date \| string \| null` | 値の更新       |
+| `open` / `close`    | `void`                   | カレンダー開閉 |
 
 #### 実装メモ
 
@@ -120,22 +120,22 @@ packages/vue/src/components/<Name>/
 
 #### Props
 
-| Prop          | Type                   | Default | 説明                          |
-| ------------- | ---------------------- | ------- | ----------------------------- |
-| `modelValue`  | `string`               | `''`    | 入力値 (v-model)              |
-| `placeholder` | `string`               | -       | プレースホルダー              |
-| `label`       | `string`               | -       | ラベル (visually-hidden 可)   |
-| `disabled`    | `boolean`              | `false` | 無効化                        |
-| `size`        | `'lg' \| 'md' \| 'sm'` | `'md'`  | サイズ                        |
-| `clearable`   | `boolean`              | `false` | クリアボタン表示              |
+| Prop          | Type                   | Default | 説明                        |
+| ------------- | ---------------------- | ------- | --------------------------- |
+| `modelValue`  | `string`               | `''`    | 入力値 (v-model)            |
+| `placeholder` | `string`               | -       | プレースホルダー            |
+| `label`       | `string`               | -       | ラベル (visually-hidden 可) |
+| `disabled`    | `boolean`              | `false` | 無効化                      |
+| `size`        | `'lg' \| 'md' \| 'sm'` | `'md'`  | サイズ                      |
+| `clearable`   | `boolean`              | `false` | クリアボタン表示            |
 
 #### Emits
 
-| Event               | Payload  | 説明                       |
-| ------------------- | -------- | -------------------------- |
-| `update:modelValue` | `string` | 値の更新                   |
-| `search`            | `string` | 検索実行 (Enter / クリック)|
-| `clear`             | `void`   | クリアボタン押下           |
+| Event               | Payload  | 説明                        |
+| ------------------- | -------- | --------------------------- |
+| `update:modelValue` | `string` | 値の更新                    |
+| `search`            | `string` | 検索実行 (Enter / クリック) |
+| `clear`             | `void`   | クリアボタン押下            |
 
 ### DadsDisclosure
 
@@ -143,25 +143,25 @@ packages/vue/src/components/<Name>/
 
 #### Props
 
-| Prop         | Type                   | Default | 説明                            |
-| ------------ | ---------------------- | ------- | ------------------------------- |
-| `modelValue` | `boolean`              | `false` | 開閉状態 (v-model)              |
-| `summary`    | `string`               | -       | トリガーボタンのテキスト        |
-| `disabled`   | `boolean`              | `false` | 無効化                          |
-| `size`       | `'lg' \| 'md' \| 'sm'` | `'md'`  | サイズ                          |
+| Prop         | Type                   | Default | 説明                     |
+| ------------ | ---------------------- | ------- | ------------------------ |
+| `modelValue` | `boolean`              | `false` | 開閉状態 (v-model)       |
+| `summary`    | `string`               | -       | トリガーボタンのテキスト |
+| `disabled`   | `boolean`              | `false` | 無効化                   |
+| `size`       | `'lg' \| 'md' \| 'sm'` | `'md'`  | サイズ                   |
 
 #### Slots
 
-| Slot       | 説明                              |
-| ---------- | --------------------------------- |
-| `summary`  | トリガーボタンのカスタムコンテンツ|
-| `default`  | 展開時に表示されるパネル本体      |
+| Slot      | 説明                               |
+| --------- | ---------------------------------- |
+| `summary` | トリガーボタンのカスタムコンテンツ |
+| `default` | 展開時に表示されるパネル本体       |
 
 #### Emits
 
-| Event                | Payload   | 説明        |
-| -------------------- | --------- | ----------- |
-| `update:modelValue`  | `boolean` | 開閉切替    |
+| Event               | Payload   | 説明     |
+| ------------------- | --------- | -------- |
+| `update:modelValue` | `boolean` | 開閉切替 |
 
 #### 実装メモ
 
@@ -174,18 +174,18 @@ packages/vue/src/components/<Name>/
 
 #### Props
 
-| Prop          | Type                                          | Default        | 説明                          |
-| ------------- | --------------------------------------------- | -------------- | ----------------------------- |
-| `items`       | `Array<{ term: string; description: string }>` | `[]`           | 項目配列                      |
-| `orientation` | `'horizontal' \| 'vertical'`                  | `'vertical'`   | 用語と説明の配置              |
+| Prop          | Type                                           | Default      | 説明             |
+| ------------- | ---------------------------------------------- | ------------ | ---------------- |
+| `items`       | `Array<{ term: string; description: string }>` | `[]`         | 項目配列         |
+| `orientation` | `'horizontal' \| 'vertical'`                   | `'vertical'` | 用語と説明の配置 |
 
 #### Slots
 
-| Slot                  | 説明                                |
-| --------------------- | ----------------------------------- |
-| `default`             | カスタム `<dt>`/`<dd>` を直接挿入   |
-| `term` (scoped)       | 各項目の term 部分のカスタマイズ    |
-| `description` (scoped)| 各項目の description 部分のカスタマイズ |
+| Slot                   | 説明                                    |
+| ---------------------- | --------------------------------------- |
+| `default`              | カスタム `<dt>`/`<dd>` を直接挿入       |
+| `term` (scoped)        | 各項目の term 部分のカスタマイズ        |
+| `description` (scoped) | 各項目の description 部分のカスタマイズ |
 
 #### 実装メモ
 
@@ -198,20 +198,20 @@ packages/vue/src/components/<Name>/
 
 #### Props
 
-| Prop          | Type                                       | Default | 説明                                |
-| ------------- | ------------------------------------------ | ------- | ----------------------------------- |
-| `modelValue`  | `string`                                   | -       | 選択中の言語コード (v-model)         |
-| `options`     | `Array<{ value: string; label: string }>`  | `[]`    | 選択肢                              |
-| `label`       | `string`                                   | -       | ラベル (visually-hidden 可)         |
-| `disabled`    | `boolean`                                  | `false` | 無効化                              |
-| `size`        | `'lg' \| 'md' \| 'sm'`                     | `'md'`  | サイズ                              |
+| Prop         | Type                                      | Default | 説明                         |
+| ------------ | ----------------------------------------- | ------- | ---------------------------- |
+| `modelValue` | `string`                                  | -       | 選択中の言語コード (v-model) |
+| `options`    | `Array<{ value: string; label: string }>` | `[]`    | 選択肢                       |
+| `label`      | `string`                                  | -       | ラベル (visually-hidden 可)  |
+| `disabled`   | `boolean`                                 | `false` | 無効化                       |
+| `size`       | `'lg' \| 'md' \| 'sm'`                    | `'md'`  | サイズ                       |
 
 #### Emits
 
-| Event               | Payload  | 説明      |
-| ------------------- | -------- | --------- |
-| `update:modelValue` | `string` | 言語切替  |
-| `change`            | `string` | 切替確定  |
+| Event               | Payload  | 説明     |
+| ------------------- | -------- | -------- |
+| `update:modelValue` | `string` | 言語切替 |
+| `change`            | `string` | 切替確定 |
 
 #### 実装メモ
 
@@ -233,13 +233,13 @@ packages/vue/src/components/<Name>/
 
 ## DADS 公式仕様との対応
 
-| 実装名                 | 公式仕様パス                                                    |
-| ---------------------- | --------------------------------------------------------------- |
-| `DadsDatePicker`       | `dads-document-md/dads/components/date-picker/index.md`         |
-| `DadsSearchBox`        | `dads-document-md/dads/components/search-box/index.md`          |
-| `DadsDisclosure`       | `dads-document-md/dads/components/disclosure/index.md`          |
-| `DadsDescriptionList`  | `dads-document-md/dads/components/description-list/index.md`    |
-| `DadsLanguageSelector` | `dads-document-md/dads/components/language-selector/index.md`   |
+| 実装名                 | 公式仕様パス                                                  |
+| ---------------------- | ------------------------------------------------------------- |
+| `DadsDatePicker`       | `dads-document-md/dads/components/date-picker/index.md`       |
+| `DadsSearchBox`        | `dads-document-md/dads/components/search-box/index.md`        |
+| `DadsDisclosure`       | `dads-document-md/dads/components/disclosure/index.md`        |
+| `DadsDescriptionList`  | `dads-document-md/dads/components/description-list/index.md`  |
+| `DadsLanguageSelector` | `dads-document-md/dads/components/language-selector/index.md` |
 
 各実装は公式 MD の **使用ガイドライン** をすべて満たし、`design-system-example-components-html/src/components/<slug>/` の DOM / class / aria 属性を保持する。公式仕様に無い prop の独自追加は禁止する。
 

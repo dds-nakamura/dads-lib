@@ -51,13 +51,13 @@ describe('DadsProgressIndicator', () => {
 
     it('marks the indicator SVG as aria-hidden', () => {
       const linear = createWrapper({ value: 50 })
-      expect(
-        linear.find('svg.dads-progress-indicator__linear').attributes('aria-hidden'),
-      ).toBe('true')
+      expect(linear.find('svg.dads-progress-indicator__linear').attributes('aria-hidden')).toBe(
+        'true',
+      )
       const spinner = createWrapper({ indicator: 'spinner', value: 50 })
-      expect(
-        spinner.find('svg.dads-progress-indicator__spinner').attributes('aria-hidden'),
-      ).toBe('true')
+      expect(spinner.find('svg.dads-progress-indicator__spinner').attributes('aria-hidden')).toBe(
+        'true',
+      )
     })
   })
 
@@ -85,9 +85,7 @@ describe('DadsProgressIndicator', () => {
     it('uses the large linear width (240) for stacked / stacked-underlay', () => {
       for (const type of ['stacked', 'stacked-underlay'] as const) {
         const wrapper = createWrapper({ type, value: 50 })
-        expect(wrapper.find('svg.dads-progress-indicator__linear').attributes('width')).toBe(
-          '240',
-        )
+        expect(wrapper.find('svg.dads-progress-indicator__linear').attributes('width')).toBe('240')
       }
     })
 
@@ -119,9 +117,9 @@ describe('DadsProgressIndicator', () => {
 
     it('does not set data-indeterminate when a value is supplied', () => {
       const wrapper = createWrapper({ value: 50 })
-      expect(wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate')).toBe(
-        undefined,
-      )
+      expect(
+        wrapper.find('svg.dads-progress-indicator__linear').attributes('data-indeterminate'),
+      ).toBe(undefined)
     })
 
     it('sets data-indeterminate on the indicator when value is omitted', () => {

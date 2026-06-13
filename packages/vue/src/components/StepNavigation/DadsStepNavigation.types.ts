@@ -23,12 +23,7 @@
  * - `done` → `completed`
  * - `error` → `error` (unchanged)
  */
-export type DadsStepNavigationStatus =
-  | 'reached'
-  | 'completed'
-  | 'error'
-  | 'skipped'
-  | 'editing'
+export type DadsStepNavigationStatus = 'reached' | 'completed' | 'error' | 'skipped' | 'editing'
 
 /** Size variant, mapped to the official `data-size` attribute. */
 export type DadsStepNavigationSize = 'normal' | 'small'

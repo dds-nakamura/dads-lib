@@ -32,11 +32,11 @@ dads-document-figma/
 
 `scripts/` 配下の 3 種類のスクリプトを目的別に使い分ける。
 
-| スクリプト                       | 役割                                         | 使い所                                              |
-| -------------------------------- | -------------------------------------------- | --------------------------------------------------- |
-| `figma-login.mjs`                | Playwright 用認証状態を初回取得 / 永続化     | 環境セットアップ時 1 回のみ                         |
-| `figma-export.mjs`               | Figma REST API 経由でエクスポート            | 認証トークンを持つ少数ページの精密取得              |
-| `figma-playwright-export.mjs`    | Playwright 経由で UI からエクスポート (推奨) | 42 ページ一括取得 / rate limit 回避が必要なとき     |
+| スクリプト                    | 役割                                         | 使い所                                          |
+| ----------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| `figma-login.mjs`             | Playwright 用認証状態を初回取得 / 永続化     | 環境セットアップ時 1 回のみ                     |
+| `figma-export.mjs`            | Figma REST API 経由でエクスポート            | 認証トークンを持つ少数ページの精密取得          |
+| `figma-playwright-export.mjs` | Playwright 経由で UI からエクスポート (推奨) | 42 ページ一括取得 / rate limit 回避が必要なとき |
 
 実行コマンド:
 
@@ -64,7 +64,7 @@ pnpm figma:pw-export
 公式 MD (`dads-document-md/dads/components/<name>/index.md`) に **「ガイドラインは準備中です」** とだけ記載されているコンポーネントは、以下の優先順位でビジュアル仕様を確定させる。
 
 1. **`dads-document-figma/<name>/<name>.png` を `Read`** — ビジュアル仕様の一次資料。
-2. **WAI-ARIA Authoring Practices** で動作要件 (キーボード / role / aria-*) を確定。
+2. **WAI-ARIA Authoring Practices** で動作要件 (キーボード / role / aria-\*) を確定。
 3. **`design-system-example-components-html/src/components/<name>/`** に該当 HTML/CSS/JS があれば DOM 構造の参考に。
 4. PNG が環境にない場合は `dads-document-md/` + WAI-ARIA Authoring Practices を真実の源とする (過去方針どおり)。
 
@@ -76,13 +76,13 @@ pnpm figma:pw-export
 
 実装が Figma に準拠しているかは以下を基準に判定する。
 
-| 観点                  | 判定基準                                                                          |
-| --------------------- | --------------------------------------------------------------------------------- |
-| API の意味論          | Figma の用途と実装の API が同じ概念を指している (例: pagination vs in-page TOC)  |
-| DOM 構造 / role       | `role` / `aria-*` / 階層構造が Figma の状態を表現できる                           |
-| バリエーション網羅    | Figma に存在する向き (horizontal/vertical) / 状態 (active/disabled) を表現可能    |
-| デザイントークン      | 色・spacing・タイポを `design-tokens/` 経由で参照 (ハードコード禁止)              |
-| アクセシビリティ      | axe 違反なし / WAI-ARIA Authoring Practices を満たす                              |
+| 観点               | 判定基準                                                                        |
+| ------------------ | ------------------------------------------------------------------------------- |
+| API の意味論       | Figma の用途と実装の API が同じ概念を指している (例: pagination vs in-page TOC) |
+| DOM 構造 / role    | `role` / `aria-*` / 階層構造が Figma の状態を表現できる                         |
+| バリエーション網羅 | Figma に存在する向き (horizontal/vertical) / 状態 (active/disabled) を表現可能  |
+| デザイントークン   | 色・spacing・タイポを `design-tokens/` 経由で参照 (ハードコード禁止)            |
+| アクセシビリティ   | axe 違反なし / WAI-ARIA Authoring Practices を満たす                            |
 
 API の意味論ギャップ (例: `DadsPageNavigation` が in-page TOC として実装されていたが Figma は pagination だった) が見つかった場合、プライベートライブラリのためメジャー breaking 変更を許容し、`renaming` で API を整合させる。移行期 alias は維持しない。
 

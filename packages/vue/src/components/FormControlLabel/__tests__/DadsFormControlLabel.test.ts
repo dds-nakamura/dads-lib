@@ -97,10 +97,7 @@ describe('DadsFormControlLabel', () => {
 
   describe('slots', () => {
     it('renders default slot as the control', () => {
-      const wrapper = createWrapper(
-        { label: 'L' },
-        { default: '<input class="my-control" />' },
-      )
+      const wrapper = createWrapper({ label: 'L' }, { default: '<input class="my-control" />' })
       expect(wrapper.find('.dads-form-control-label__control .my-control').exists()).toBe(true)
     })
   })

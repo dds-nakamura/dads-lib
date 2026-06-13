@@ -134,15 +134,15 @@ const value = ref(50)
 
 ## Props
 
-| Prop             | 型                                              | デフォルト   | 説明                                                              |
-| ---------------- | ----------------------------------------------- | ------------ | --------------------------------------------------------------- |
-| `type`           | `'stacked' \| 'inlined' \| 'stacked-underlay'`  | `'stacked'`  | レイアウト (公式 `data-type`)                                    |
-| `indicator`      | `'linear' \| 'spinner'`                         | `'linear'`   | 表示形態 (SVG ライン / 回転リング)                              |
-| `value`          | `number`                                        | -            | 進捗値 (0–100)。省略時は indeterminate モード。範囲外は clamp    |
-| `active`         | `boolean`                                       | `true`       | 表示制御。`false` で非表示 + アニメ停止                          |
-| `label`          | `string`                                        | -            | 可視ラベル。指定時は `aria-labelledby` のアクセシブル名にもなる |
-| `showPercentage` | `boolean`                                       | `false`      | determinate 時に `(NN%)` を表示                                  |
-| `ariaLabel`      | `string`                                        | -            | `label` がない場合のアクセシブル名 (`aria-label`)              |
+| Prop             | 型                                             | デフォルト  | 説明                                                            |
+| ---------------- | ---------------------------------------------- | ----------- | --------------------------------------------------------------- |
+| `type`           | `'stacked' \| 'inlined' \| 'stacked-underlay'` | `'stacked'` | レイアウト (公式 `data-type`)                                   |
+| `indicator`      | `'linear' \| 'spinner'`                        | `'linear'`  | 表示形態 (SVG ライン / 回転リング)                              |
+| `value`          | `number`                                       | -           | 進捗値 (0–100)。省略時は indeterminate モード。範囲外は clamp   |
+| `active`         | `boolean`                                      | `true`      | 表示制御。`false` で非表示 + アニメ停止                         |
+| `label`          | `string`                                       | -           | 可視ラベル。指定時は `aria-labelledby` のアクセシブル名にもなる |
+| `showPercentage` | `boolean`                                      | `false`     | determinate 時に `(NN%)` を表示                                 |
+| `ariaLabel`      | `string`                                       | -           | `label` がない場合のアクセシブル名 (`aria-label`)               |
 
 ## Events
 

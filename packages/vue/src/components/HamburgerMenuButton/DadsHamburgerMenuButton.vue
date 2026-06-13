@@ -110,14 +110,12 @@ const onClick = (event: MouseEvent) => {
 
   // -------------------- size ----------------------------------------------
   &--lg {
-    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem)
-      calc(calc(8 / 16 * 1rem) + 0.125rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem) calc(calc(8 / 16 * 1rem) + 0.125rem);
     font-size: var(--font-size-18, 1.125rem);
   }
 
   &--md {
-    padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem)
-      calc(calc(4 / 16 * 1rem) + 0.125rem);
+    padding: calc(4 / 16 * 1rem) calc(12 / 16 * 1rem) calc(calc(4 / 16 * 1rem) + 0.125rem);
     font-size: var(--font-size-16, 1rem);
   }
 

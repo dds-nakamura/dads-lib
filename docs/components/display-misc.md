@@ -6,15 +6,15 @@
 
 ## 対象コンポーネント
 
-| #   | 実装名                | 公式 slug          | 用途                                 | HTML 実装例 |
-| --- | --------------------- | ------------------ | ------------------------------------ | ----------- |
-| 1   | `DadsImage`           | `image`            | 画像 (lazy / fallback / alt 必須)    | なし        |
-| 2   | `DadsImageSlider`     | `image-slider`     | 画像スライダー (自動再生付き)        | なし        |
-| 3   | `DadsCarousel`        | `carousel`         | 汎用カルーセル (default slot 連結)   | あり        |
-| 4   | `DadsList`            | `list`             | `<ul>` / `<ol>` ラッパ               | あり        |
-| 5   | `DadsBlockquote`      | `blockquote`       | 引用 + 引用元                        | あり        |
-| 6   | `DadsResourceList`    | `resource-list`    | リソースカード集合                   | あり        |
-| 7   | `DadsEmergencyBanner` | `emergency-banner` | 緊急バナー (`position: fixed; top`)  | あり        |
+| #   | 実装名                | 公式 slug          | 用途                                    | HTML 実装例 |
+| --- | --------------------- | ------------------ | --------------------------------------- | ----------- |
+| 1   | `DadsImage`           | `image`            | 画像 (lazy / fallback / alt 必須)       | なし        |
+| 2   | `DadsImageSlider`     | `image-slider`     | 画像スライダー (自動再生付き)           | なし        |
+| 3   | `DadsCarousel`        | `carousel`         | 汎用カルーセル (default slot 連結)      | あり        |
+| 4   | `DadsList`            | `list`             | `<ul>` / `<ol>` ラッパ                  | あり        |
+| 5   | `DadsBlockquote`      | `blockquote`       | 引用 + 引用元                           | あり        |
+| 6   | `DadsResourceList`    | `resource-list`    | リソースカード集合                      | あり        |
+| 7   | `DadsEmergencyBanner` | `emergency-banner` | 緊急バナー (`position: fixed; top`)     | あり        |
 | 8   | `DadsTableControl`    | `table-control`    | テーブル制御 (検索 / ソート / ページャ) | なし        |
 
 カテゴリ振り分け（`apps/docs/.vitepress/config.ts` sidebar）:
@@ -62,13 +62,13 @@
 
 #### Props
 
-| Prop          | 型       | 必須 | 既定値 | 説明                                         |
-| ------------- | -------- | ---- | ------ | -------------------------------------------- |
-| `src`         | `string` | ✅   | —      | 画像 URL                                     |
-| `alt`         | `string` | ✅   | —      | 代替テキスト（必須）                         |
-| `width`       | `number \| string` | — | — | 表示幅                                       |
-| `height`      | `number \| string` | — | — | 表示高                                       |
-| `placeholder` | `string` | —    | —      | 読み込み失敗時 / ロード前の代替画像 URL      |
+| Prop          | 型                 | 必須 | 既定値 | 説明                                    |
+| ------------- | ------------------ | ---- | ------ | --------------------------------------- |
+| `src`         | `string`           | ✅   | —      | 画像 URL                                |
+| `alt`         | `string`           | ✅   | —      | 代替テキスト（必須）                    |
+| `width`       | `number \| string` | —    | —      | 表示幅                                  |
+| `height`      | `number \| string` | —    | —      | 表示高                                  |
+| `placeholder` | `string`           | —    | —      | 読み込み失敗時 / ロード前の代替画像 URL |
 
 #### 実装方針
 
@@ -87,14 +87,14 @@
 
 #### Props
 
-| Prop           | 型                                          | 既定値    | 説明                       |
-| -------------- | ------------------------------------------- | --------- | -------------------------- |
-| `images`       | `Array<{ src: string; alt: string }>`       | `[]`      | 画像配列                   |
-| `autoPlay`     | `boolean`                                   | `true`    | 自動再生                   |
-| `interval`     | `number`                                    | `5000`    | 切替間隔 (ms)              |
-| `pauseOnHover` | `boolean`                                   | `true`    | ホバーで一時停止           |
-| `showArrows`   | `boolean`                                   | `true`    | 左右矢印を表示             |
-| `showIndicators` | `boolean`                                 | `true`    | 下部 indicator を表示      |
+| Prop             | 型                                    | 既定値 | 説明                  |
+| ---------------- | ------------------------------------- | ------ | --------------------- |
+| `images`         | `Array<{ src: string; alt: string }>` | `[]`   | 画像配列              |
+| `autoPlay`       | `boolean`                             | `true` | 自動再生              |
+| `interval`       | `number`                              | `5000` | 切替間隔 (ms)         |
+| `pauseOnHover`   | `boolean`                             | `true` | ホバーで一時停止      |
+| `showArrows`     | `boolean`                             | `true` | 左右矢印を表示        |
+| `showIndicators` | `boolean`                             | `true` | 下部 indicator を表示 |
 
 #### Emits
 
@@ -117,9 +117,9 @@ ImageSlider と同等（`autoPlay`, `interval`, `pauseOnHover`, `showArrows`, `s
 
 #### Slots
 
-| Slot      | 説明                                          |
-| --------- | --------------------------------------------- |
-| `default` | 各スライドのコンテンツ（複数要素を連結）      |
+| Slot      | 説明                                     |
+| --------- | ---------------------------------------- |
+| `default` | 各スライドのコンテンツ（複数要素を連結） |
 
 #### Emits
 
@@ -138,17 +138,17 @@ ImageSlider と同等（`autoPlay`, `interval`, `pauseOnHover`, `showArrows`, `s
 
 #### Props
 
-| Prop      | 型                              | 既定値        | 説明                       |
-| --------- | ------------------------------- | ------------- | -------------------------- |
-| `type`    | `'ordered' \| 'unordered'`      | `'unordered'` | リスト種別                 |
-| `items`   | `Array<string \| VNode>`        | `[]`          | アイテム配列（slot 代替）  |
+| Prop    | 型                         | 既定値        | 説明                      |
+| ------- | -------------------------- | ------------- | ------------------------- |
+| `type`  | `'ordered' \| 'unordered'` | `'unordered'` | リスト種別                |
+| `items` | `Array<string \| VNode>`   | `[]`          | アイテム配列（slot 代替） |
 
 `type` の TypeScript narrowing は union を `as const` で固定する。
 
 #### Slots
 
-| Slot      | 説明                          |
-| --------- | ----------------------------- |
+| Slot      | 説明                             |
+| --------- | -------------------------------- |
 | `default` | `<li>` を直接記述する場合の slot |
 
 #### アクセシビリティ
@@ -170,10 +170,10 @@ ImageSlider と同等（`autoPlay`, `interval`, `pauseOnHover`, `showArrows`, `s
 
 #### Slots
 
-| Slot       | 説明                       |
-| ---------- | -------------------------- |
-| `default`  | 引用本文                   |
-| `citation` | 引用元の任意 HTML（優先）  |
+| Slot       | 説明                      |
+| ---------- | ------------------------- |
+| `default`  | 引用本文                  |
+| `citation` | 引用元の任意 HTML（優先） |
 
 #### アクセシビリティ
 
@@ -187,10 +187,10 @@ ImageSlider と同等（`autoPlay`, `interval`, `pauseOnHover`, `showArrows`, `s
 
 #### Props
 
-| Prop        | 型                     | 既定値    | 説明                          |
-| ----------- | ---------------------- | --------- | ----------------------------- |
-| `resources` | `Array<DadsResource>`  | `[]`      | リソース配列                  |
-| `columns`   | `1 \| 2 \| 3`          | `1`       | グリッド列数                  |
+| Prop        | 型                    | 既定値 | 説明         |
+| ----------- | --------------------- | ------ | ------------ |
+| `resources` | `Array<DadsResource>` | `[]`   | リソース配列 |
+| `columns`   | `1 \| 2 \| 3`         | `1`    | グリッド列数 |
 
 `DadsResource` 型:
 
@@ -206,9 +206,9 @@ interface DadsResource {
 
 #### Slots
 
-| Slot      | 説明                                       |
-| --------- | ------------------------------------------ |
-| `item`    | リソース単位のカスタムレンダリング         |
+| Slot   | 説明                               |
+| ------ | ---------------------------------- |
+| `item` | リソース単位のカスタムレンダリング |
 
 #### アクセシビリティ
 
@@ -222,11 +222,11 @@ interface DadsResource {
 
 #### Props
 
-| Prop       | 型                                | 既定値        | 説明                                |
-| ---------- | --------------------------------- | ------------- | ----------------------------------- |
-| `message`  | `string`                          | —             | 表示テキスト                        |
-| `severity` | `'critical' \| 'warning' \| 'info'` | `'critical'` | 重要度（色・アイコン切替）          |
-| `closable` | `boolean`                         | `false`       | 閉じるボタンを表示                  |
+| Prop       | 型                                  | 既定値       | 説明                       |
+| ---------- | ----------------------------------- | ------------ | -------------------------- |
+| `message`  | `string`                            | —            | 表示テキスト               |
+| `severity` | `'critical' \| 'warning' \| 'info'` | `'critical'` | 重要度（色・アイコン切替） |
+| `closable` | `boolean`                           | `false`      | 閉じるボタンを表示         |
 
 #### Emits
 
@@ -257,13 +257,13 @@ teleport は不要（ページ最上段にレンダ）。`scoped` SCSS のみで
 
 #### Props
 
-| Prop          | 型                                  | 既定値 | 説明                       |
-| ------------- | ----------------------------------- | ------ | -------------------------- |
-| `pageSize`    | `number`                            | `10`   | 1 ページあたりの件数       |
-| `currentPage` | `number`                            | `1`    | 現在のページ番号           |
-| `totalItems`  | `number`                            | `0`    | 総件数                     |
-| `search`      | `string`                            | `''`   | 検索文字列                 |
-| `sort`        | `{ key: string; order: 'asc' \| 'desc' } \| null` | `null` | 現在のソート状態 |
+| Prop          | 型                                                | 既定値 | 説明                 |
+| ------------- | ------------------------------------------------- | ------ | -------------------- |
+| `pageSize`    | `number`                                          | `10`   | 1 ページあたりの件数 |
+| `currentPage` | `number`                                          | `1`    | 現在のページ番号     |
+| `totalItems`  | `number`                                          | `0`    | 総件数               |
+| `search`      | `string`                                          | `''`   | 検索文字列           |
+| `sort`        | `{ key: string; order: 'asc' \| 'desc' } \| null` | `null` | 現在のソート状態     |
 
 #### Emits
 
@@ -308,15 +308,15 @@ teleport は不要（ページ最上段にレンダ）。`scoped` SCSS のみで
 
 ## DADS 公式仕様との対応
 
-| 実装名                | 公式 slug          | 仕様 MD                                                       |
-| --------------------- | ------------------ | ------------------------------------------------------------- |
-| `DadsImage`           | `image`            | `dads-document-md/dads/components/image/index.md`             |
-| `DadsImageSlider`     | `image-slider`     | `dads-document-md/dads/components/image-slider/index.md`      |
-| `DadsCarousel`        | `carousel`         | `dads-document-md/dads/components/carousel/index.md`          |
-| `DadsList`            | `list`             | `dads-document-md/dads/components/list/index.md`              |
-| `DadsBlockquote`      | `blockquote`       | `dads-document-md/dads/components/blockquote/index.md`        |
-| `DadsResourceList`    | `resource-list`    | `dads-document-md/dads/components/resource-list/index.md`     |
-| `DadsEmergencyBanner` | `emergency-banner` | `dads-document-md/dads/components/emergency-banner/index.md`  |
-| `DadsTableControl`    | `table-control`    | `dads-document-md/dads/components/table-control/index.md`     |
+| 実装名                | 公式 slug          | 仕様 MD                                                      |
+| --------------------- | ------------------ | ------------------------------------------------------------ |
+| `DadsImage`           | `image`            | `dads-document-md/dads/components/image/index.md`            |
+| `DadsImageSlider`     | `image-slider`     | `dads-document-md/dads/components/image-slider/index.md`     |
+| `DadsCarousel`        | `carousel`         | `dads-document-md/dads/components/carousel/index.md`         |
+| `DadsList`            | `list`             | `dads-document-md/dads/components/list/index.md`             |
+| `DadsBlockquote`      | `blockquote`       | `dads-document-md/dads/components/blockquote/index.md`       |
+| `DadsResourceList`    | `resource-list`    | `dads-document-md/dads/components/resource-list/index.md`    |
+| `DadsEmergencyBanner` | `emergency-banner` | `dads-document-md/dads/components/emergency-banner/index.md` |
+| `DadsTableControl`    | `table-control`    | `dads-document-md/dads/components/table-control/index.md`    |
 
 ビジュアル仕様で不足がある場合は `dads-document-figma/<ページ名>/<ページ名>.png` を補完情報として参照する（環境に存在する場合）。

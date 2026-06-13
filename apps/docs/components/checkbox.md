@@ -127,21 +127,21 @@ const toggleAll = (v) => {
 
 ## Props
 
-| Prop            | 型                            | デフォルト | 説明                                                  |
-| --------------- | ----------------------------- | ---------- | ----------------------------------------------------- |
-| `modelValue`    | `boolean`                     | `false`    | 選択状態 (`v-model` バインド対象)                     |
-| `indeterminate` | `boolean`                     | `false`    | 第三の混在状態 (DOM `indeterminate` を立てる)         |
-| `size`          | `'lg' \| 'md' \| 'sm'`        | `'md'`     | サイズ (`xs` は非対応)                                |
-| `label`         | `string`                      | -          | チェックボックスのラベルテキスト                      |
-| `hint`          | `string`                      | -          | 補助テキスト (`aria-describedby` で参照)              |
-| `errorMessage`  | `string`                      | -          | エラーメッセージ (`aria-describedby` で参照)          |
-| `required`      | `boolean`                     | `false`    | 必須マーカー表示 + `aria-required`                    |
-| `error`         | `boolean`                     | `false`    | メッセージなしでもエラー視覚状態を強制                |
-| `disabled`      | `boolean`                     | `false`    | 操作不可化                                            |
-| `name`          | `string`                      | -          | ネイティブ `name` 属性                                |
-| `id`            | `string`                      | -          | ネイティブ `id` (未指定なら自動生成)                  |
-| `value`         | `string \| number \| boolean` | -          | ネイティブ `value` 属性 (グループ利用時の識別子)      |
-| `requiredLabel` | `string`                      | `'※必須'`  | 必須マーカーに表示するテキスト。i18n 用に上書き可能   |
+| Prop            | 型                            | デフォルト | 説明                                                |
+| --------------- | ----------------------------- | ---------- | --------------------------------------------------- |
+| `modelValue`    | `boolean`                     | `false`    | 選択状態 (`v-model` バインド対象)                   |
+| `indeterminate` | `boolean`                     | `false`    | 第三の混在状態 (DOM `indeterminate` を立てる)       |
+| `size`          | `'lg' \| 'md' \| 'sm'`        | `'md'`     | サイズ (`xs` は非対応)                              |
+| `label`         | `string`                      | -          | チェックボックスのラベルテキスト                    |
+| `hint`          | `string`                      | -          | 補助テキスト (`aria-describedby` で参照)            |
+| `errorMessage`  | `string`                      | -          | エラーメッセージ (`aria-describedby` で参照)        |
+| `required`      | `boolean`                     | `false`    | 必須マーカー表示 + `aria-required`                  |
+| `error`         | `boolean`                     | `false`    | メッセージなしでもエラー視覚状態を強制              |
+| `disabled`      | `boolean`                     | `false`    | 操作不可化                                          |
+| `name`          | `string`                      | -          | ネイティブ `name` 属性                              |
+| `id`            | `string`                      | -          | ネイティブ `id` (未指定なら自動生成)                |
+| `value`         | `string \| number \| boolean` | -          | ネイティブ `value` 属性 (グループ利用時の識別子)    |
+| `requiredLabel` | `string`                      | `'※必須'`  | 必須マーカーに表示するテキスト。i18n 用に上書き可能 |
 
 ## Events
 

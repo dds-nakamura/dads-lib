@@ -66,7 +66,11 @@ const itemDescriptionId = (value: DadsRadioGroupValue) =>
   `${rootId.value}-item-${String(value)}-description`
 const itemHintId = (value: DadsRadioGroupValue) => `${rootId.value}-item-${String(value)}-hint`
 
-const itemDescribedBy = (item: { value: DadsRadioGroupValue; hint?: string; description?: string }) => {
+const itemDescribedBy = (item: {
+  value: DadsRadioGroupValue
+  hint?: string
+  description?: string
+}) => {
   const ids: string[] = []
   if (item.description) ids.push(itemDescriptionId(item.value))
   if (item.hint) ids.push(itemHintId(item.value))

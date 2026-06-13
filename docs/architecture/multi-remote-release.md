@@ -11,10 +11,10 @@
 
 ## 対象リモート / ブランチ構成
 
-| Remote 名 | URL 形式 | 用途 |
-| --------- | -------- | ---- |
-| `origin` (GitHub) | `git@github.com:dds-nakamura/dads-lib.git` | OSS 公開・主要配布チャネル |
-| `backlog` | `git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git` | 社内利用者向け配布（任意設定） |
+| Remote 名         | URL 形式                                                         | 用途                           |
+| ----------------- | ---------------------------------------------------------------- | ------------------------------ |
+| `origin` (GitHub) | `git@github.com:dds-nakamura/dads-lib.git`                       | OSS 公開・主要配布チャネル     |
+| `backlog`         | `git+ssh://<space>@<space>.git.backlog.com:/<PROJ>/dads-lib.git` | 社内利用者向け配布（任意設定） |
 
 両 remote とも以下を共有する。
 
@@ -83,20 +83,20 @@ Usage: release-vue.sh <version> [remote1,remote2,...]
 
 ## 失敗時のリカバリ
 
-| 状況 | 対応 |
-| ---- | ---- |
-| Pre-flight で tag 既存検出 | 新しい semver を採番し直して再実行。既存 tag を上書きしない。 |
-| 一部 remote のみ push 成功 | 失敗 remote に対し `git push <remote> vue-pkg vue-v<semver>` を手動再実行。 |
+| 状況                                        | 対応                                                                                                                                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pre-flight で tag 既存検出                  | 新しい semver を採番し直して再実行。既存 tag を上書きしない。                                                                                                                               |
+| 一部 remote のみ push 成功                  | 失敗 remote に対し `git push <remote> vue-pkg vue-v<semver>` を手動再実行。                                                                                                                 |
 | 誤った内容で `vue-pkg` を push してしまった | 各 remote 上で当該 tag を削除し (`git push <remote> :refs/tags/vue-v<semver>`)、新 semver で再リリースする。orphan ブランチの force-push は最終手段で、社内外の影響範囲を確認してから実施。 |
-| Build 失敗で release 中断 | local clone・隔離 clone のいずれにも push 前に止まる。`main` 側の修正後、同じ semver で再実行可能。 |
-| Backlog remote 未設定環境 | GitHub のみで release を実行し、後日 `git remote add backlog ...` → `git push backlog vue-pkg vue-v<semver>` で後追い配布。 |
+| Build 失敗で release 中断                   | local clone・隔離 clone のいずれにも push 前に止まる。`main` 側の修正後、同じ semver で再実行可能。                                                                                         |
+| Backlog remote 未設定環境                   | GitHub のみで release を実行し、後日 `git remote add backlog ...` → `git push backlog vue-pkg vue-v<semver>` で後追い配布。                                                                 |
 
 ## 関連保護ブランチ
 
 以下のブランチは削除・force-push 禁止。`vue-pkg` は本配布フローの中核。
 
-| ブランチ | 種類 | 役割 |
-| -------- | ---- | ---- |
-| `main` | 長期ブランチ | リリース本流。`packages/vue/` の source / build 設定の正本。 |
-| `development` | 長期ブランチ | 開発統合ブランチ。PR のデフォルト base。 |
-| `vue-pkg` | orphan ブランチ | `@dads/vue` の配布スナップショット。`vue-v<semver>` tag を打つ先。`main` と履歴が独立しているため `git branch -r --merged` には現れないが、これは設計通り。 |
+| ブランチ      | 種類            | 役割                                                                                                                                                        |
+| ------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `main`        | 長期ブランチ    | リリース本流。`packages/vue/` の source / build 設定の正本。                                                                                                |
+| `development` | 長期ブランチ    | 開発統合ブランチ。PR のデフォルト base。                                                                                                                    |
+| `vue-pkg`     | orphan ブランチ | `@dads/vue` の配布スナップショット。`vue-v<semver>` tag を打つ先。`main` と履歴が独立しているため `git branch -r --merged` には現れないが、これは設計通り。 |

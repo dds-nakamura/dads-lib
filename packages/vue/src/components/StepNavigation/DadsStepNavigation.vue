@@ -50,11 +50,12 @@ const isVisibleStateLabel = (status?: DadsStepNavigationStatus) =>
 
 const reachedCount = computed(() => {
   if (props.reached != null) return props.reached
-  return props.steps.filter((s) =>
-    s.status === 'reached' ||
-    s.status === 'completed' ||
-    s.status === 'editing' ||
-    s.status === 'error',
+  return props.steps.filter(
+    (s) =>
+      s.status === 'reached' ||
+      s.status === 'completed' ||
+      s.status === 'editing' ||
+      s.status === 'error',
   ).length
 })
 
@@ -98,19 +99,13 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
           <span class="dads-u-visually-hidden">ステップ</span>
           <span class="dads-step-navigation__number">
             {{ idx + 1 }}
-            <span
-              v-if="step.status === 'completed'"
-              class="dads-step-navigation__state-icon"
-            >
+            <span v-if="step.status === 'completed'" class="dads-step-navigation__state-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="12" cy="12" r="12" fill="#666" />
                 <path d="M10 17.5 19.8 8l-1.5-1.5-8.1 8-4.1-4L4.5 12l5.6 5.5Z" fill="#fff" />
               </svg>
             </span>
-            <span
-              v-else-if="step.status === 'editing'"
-              class="dads-step-navigation__state-icon"
-            >
+            <span v-else-if="step.status === 'editing'" class="dads-step-navigation__state-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                 <path
                   d="M5.8 20c-.5 0-1-.2-1.3-.5-.3-.4-.5-.8-.5-1.3V5.6c0-.5.2-.9.5-1.3.4-.3.8-.5 1.3-.5h8L12 5.6H5.8v12.6h12.6V12l1.8-1.8v8c0 .5-.2 1-.5 1.3-.4.3-.8.5-1.3.5H5.8Zm3.6-5.4v-3.8l8.3-8.3a1.8 1.8 0 0 1 2.5 0l1.3 1.3.4.6a1.7 1.7 0 0 1 0 1.3c-.1.3-.2.5-.4.6l-8.3 8.3H9.4Zm1.8-1.8h1.3l5.2-5.2L17 7l-.7-.7-5.2 5.2v1.3Z"
@@ -118,10 +113,7 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
                 />
               </svg>
             </span>
-            <span
-              v-else-if="step.status === 'error'"
-              class="dads-step-navigation__state-icon"
-            >
+            <span v-else-if="step.status === 'error'" class="dads-step-navigation__state-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
                 <path
                   d="M1 21 12 2l11 19H1Zm3.5-2h15L12 6 4.5 19Zm7.5-1c.3 0 .5-.1.7-.3.2-.2.3-.4.3-.7a1 1 0 0 0-.3-.7 1 1 0 0 0-.7-.3 1 1 0 0 0-.7.3 1 1 0 0 0-.3.7c0 .3.1.5.3.7.2.2.4.3.7.3Zm-1-3h2v-5h-2v5Z"
@@ -314,27 +306,19 @@ const onStepClick = (step: DadsStepNavigationStep, index: number, event: MouseEv
     forced-color-adjust: none;
   }
 
-  .dads-step-navigation__step[data-state='completed']
-    .dads-step-navigation__state-icon
-    circle {
+  .dads-step-navigation__step[data-state='completed'] .dads-step-navigation__state-icon circle {
     fill: CanvasText;
   }
 
-  .dads-step-navigation__step[data-state='completed']
-    .dads-step-navigation__state-icon
-    path {
+  .dads-step-navigation__step[data-state='completed'] .dads-step-navigation__state-icon path {
     fill: Canvas;
   }
 
-  .dads-step-navigation__step[data-state='editing']
-    .dads-step-navigation__state-icon
-    path {
+  .dads-step-navigation__step[data-state='editing'] .dads-step-navigation__state-icon path {
     fill: CanvasText;
   }
 
-  .dads-step-navigation__step[data-state='error']
-    .dads-step-navigation__state-icon
-    path {
+  .dads-step-navigation__step[data-state='error'] .dads-step-navigation__state-icon path {
     fill: CanvasText;
   }
 }

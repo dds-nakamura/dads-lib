@@ -15,13 +15,13 @@
 
 公式 slug と一致させた最終命名 (旧名 alias は major リリースで削除済み):
 
-| 公式 slug          | 新名 (公式準拠)                | 旧名 (削除済み)               |
-| ------------------ | ------------------------------ | ----------------------------- |
-| `dialog`           | `DadsDialog`                   | `DadsModal`                   |
-| `header-container` | `DadsHeaderContainer`          | `DadsHeader`                  |
-| `input-text`       | `DadsInputText`                | `DadsTextField`               |
-| `chip-label`       | `DadsChipLabel`                | `DadsChip` (兼用)             |
-| `chip-tag`         | `DadsChipTag`                  | `DadsChip` (兼用)             |
+| 公式 slug          | 新名 (公式準拠)       | 旧名 (削除済み)   |
+| ------------------ | --------------------- | ----------------- |
+| `dialog`           | `DadsDialog`          | `DadsModal`       |
+| `header-container` | `DadsHeaderContainer` | `DadsHeader`      |
+| `input-text`       | `DadsInputText`       | `DadsTextField`   |
+| `chip-label`       | `DadsChipLabel`       | `DadsChip` (兼用) |
+| `chip-tag`         | `DadsChipTag`         | `DadsChip` (兼用) |
 
 ### Props
 
@@ -64,11 +64,11 @@
 
 ### サマリ
 
-| 重要度 | 件数 | 内訳 |
-| ------ | ---- | ---- |
-| High   | 9    | carousel, dialog, drawer, header-container, heading, menu-list-box, mobile-menu, notification-banner, breadcrumb (条件付) |
+| 重要度 | 件数 | 内訳                                                                                                                                                                                                                                   |
+| ------ | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| High   | 9    | carousel, dialog, drawer, header-container, heading, menu-list-box, mobile-menu, notification-banner, breadcrumb (条件付)                                                                                                              |
 | Medium | 17   | accordion, card, chip-label, chip-tag, date-picker, divider, emergency-banner, file-upload, hamburger-menu-button, image-slider, input-text (a11y warn), list, menu-list, progress-indicator, resource-list, search-box, select, table |
-| Low    | 11   | blockquote, button (xs 確認), checkbox, description-list, disclosure, language-selector, radio, textarea, utility-link, mega-menu (仕様乏), heading (略) |
+| Low    | 11   | blockquote, button (xs 確認), checkbox, description-list, disclosure, language-selector, radio, textarea, utility-link, mega-menu (仕様乏), heading (略)                                                                               |
 
 ### 未実装コンポーネント
 
@@ -151,7 +151,7 @@
 - **chip-label / chip-tag**: 分離後の `appearance: 'filled' | 'outlined'`、icon prop
 - **date-picker**: `variant: 'consolidated' | 'separated'` / `locale` (和暦表示)
 - **divider**: `variant: 'full-width' | 'inset'` / `thickness` (1〜4px) / `lineStyle: 'solid' | 'dashed'`
-- **emergency-banner**: `timestamp` / `linkExternal` (target=_blank + 新規タブアイコン)
+- **emergency-banner**: `timestamp` / `linkExternal` (target=\_blank + 新規タブアイコン)
 - **file-upload**: `expandDropArea` (ビューポート全体をドロップ対象) / `fileMeta` `formatBytes` (メタ情報整形)
 - **hamburger-menu-button**: `variant: 'default' | 'icon-only' | 'mobile-conditional'`
 - **image-slider**: `heading` / `showAllLabel` `showAllHref`
@@ -168,13 +168,13 @@
 
 公式 slug と実装名の不一致 (Option B で deprecated alias 併存 → 次の major リリースで削除済み):
 
-| 公式 slug          | 旧名 (削除済み)                | 新名 (公式準拠)             |
-| ------------------ | ------------------------------ | --------------------------- |
+| 公式 slug          | 旧名 (削除済み)                | 新名 (公式準拠)                  |
+| ------------------ | ------------------------------ | -------------------------------- |
 | `dialog`           | `DadsModal` / `DadsModalProps` | `DadsDialog` / `DadsDialogProps` |
-| `header-container` | `DadsHeader`                   | `DadsHeaderContainer`       |
-| `input-text`       | `DadsTextField`                | `DadsInputText`             |
-| `chip-label`       | `DadsChip` (兼用)              | `DadsChipLabel` (分離)      |
-| `chip-tag`         | `DadsChip` (兼用)              | `DadsChipTag` (分離)        |
+| `header-container` | `DadsHeader`                   | `DadsHeaderContainer`            |
+| `input-text`       | `DadsTextField`                | `DadsInputText`                  |
+| `chip-label`       | `DadsChip` (兼用)              | `DadsChipLabel` (分離)           |
+| `chip-tag`         | `DadsChip` (兼用)              | `DadsChipTag` (分離)             |
 
 CSS class も同様: `.dads-modal__*` → `.dads-dialog__*` 等。旧 class alias も major リリースと同時に削除済み。
 
@@ -207,12 +207,12 @@ CSS class も同様: `.dads-modal__*` → `.dads-dialog__*` 等。旧 class alia
 
 完了済みカテゴリ:
 
-| カテゴリ              | 対象数 | 状態 |
-| --------------------- | ------ | ---- |
-| 命名整合              | 4 件   | Done (DadsDialog / DadsHeaderContainer / DadsInputText / DadsChipLabel + DadsChipTag) |
-| High 重要度実装       | 9 件   | Done (Phase 3) |
-| Medium 重要度実装     | 17 件  | Done (Phase 4) |
-| Low 重要度評価        | 13 件  | Done (Phase 5) |
+| カテゴリ          | 対象数 | 状態                                                                                  |
+| ----------------- | ------ | ------------------------------------------------------------------------------------- |
+| 命名整合          | 4 件   | Done (DadsDialog / DadsHeaderContainer / DadsInputText / DadsChipLabel + DadsChipTag) |
+| High 重要度実装   | 9 件   | Done (Phase 3)                                                                        |
+| Medium 重要度実装 | 17 件  | Done (Phase 4)                                                                        |
+| Low 重要度評価    | 13 件  | Done (Phase 5)                                                                        |
 
 major リリース完了済み対応 (Issue #14):
 

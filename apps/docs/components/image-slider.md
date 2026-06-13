@@ -80,13 +80,13 @@ const slides = [
 | `heading`            | `string`                     | (必須)               | セクション見出し。`role="region"` に `aria-labelledby` で紐付け |
 | `modelValue`         | `number`                     | `0`                  | 現在表示中のスライドインデックス (v-model 対象)                 |
 | `headingLevel`       | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `2`                  | 見出しの HTML レベル                                            |
-| `breakpointRem`      | `number`                     | `64`                 | ワイド / ナローを切り替えるブレークポイント (rem)              |
-| `unit`               | `string`                     | `'スライド'`         | SR ラベルで使うスライドの単位語                                |
-| `showAllLabel`       | `string`                     | `'すべてのスライド'` | 「すべてのスライド」disclosure の summary ラベル               |
-| `prevSlideAriaLabel` | `string`                     | `'前のスライド'`     | ナロー page-nav「前へ」ボタンの aria-label                     |
-| `nextSlideAriaLabel` | `string`                     | `'次のスライド'`     | ナロー page-nav「次へ」ボタンの aria-label                     |
-| `nextPreviewLabel`   | `string`                     | `'次のスライド'`     | ネクストプレビューボタンの可視ラベル                          |
-| `stepNavAriaLabel`   | `string`                     | `'スライド選択'`     | ステップナビ (tablist) の aria-label                           |
+| `breakpointRem`      | `number`                     | `64`                 | ワイド / ナローを切り替えるブレークポイント (rem)               |
+| `unit`               | `string`                     | `'スライド'`         | SR ラベルで使うスライドの単位語                                 |
+| `showAllLabel`       | `string`                     | `'すべてのスライド'` | 「すべてのスライド」disclosure の summary ラベル                |
+| `prevSlideAriaLabel` | `string`                     | `'前のスライド'`     | ナロー page-nav「前へ」ボタンの aria-label                      |
+| `nextSlideAriaLabel` | `string`                     | `'次のスライド'`     | ナロー page-nav「次へ」ボタンの aria-label                      |
+| `nextPreviewLabel`   | `string`                     | `'次のスライド'`     | ネクストプレビューボタンの可視ラベル                            |
+| `stepNavAriaLabel`   | `string`                     | `'スライド選択'`     | ステップナビ (tablist) の aria-label                            |
 
 `DadsImageSliderSlide` は [`DadsCarouselSlide`](./carousel#dadscarouselslide) と同一です (`src` / `alt` 必須、`srcset` / `href` / `target` / `rel` / `width` / `height` 任意)。
 

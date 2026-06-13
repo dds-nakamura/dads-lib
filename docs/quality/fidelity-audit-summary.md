@@ -21,14 +21,14 @@
 
 Issue #18 の全変更が従う基準（2026-06-06 確定）。
 
-| # | 決定 | 内容 |
-|---|---|---|
-| **案X** | 公式準拠で major 統一 | 非公式バリアント/prop は**原則削除**し公式軸へ統一（案Y=deprecation 併存は不採用）。公式忠実度を最優先。 |
-| 版管理 | 次 major | テーマ単位で複数 PR に分割し、最後に major をまとめて公開。 |
-| 真実の源 | example > md > wai-aria | 正準 CSS（`design-system-example-components-html`）を最優先。Figma PNG は補完。 |
-| トークン | 上流のみ | 不在の「セマンティック風」トークンを実在の公式トークンへ置換（[token-replacement-map](./token-replacement-map.md)）。色・余白の直書き禁止。 |
-| アイコン | inline SVG 統一 | MDI webfont → `DadsIcon`（Material Symbols inline SVG, 案B-2）。[icon-mapping](./icon-mapping.md)。 |
-| 実装順 | T1→柱B→T5→T2→T3→T4→T6→T7→T8 | 柱B(DadsIcon) を T5 の前に先行。T9 は保留。 |
+| #        | 決定                        | 内容                                                                                                                                        |
+| -------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **案X**  | 公式準拠で major 統一       | 非公式バリアント/prop は**原則削除**し公式軸へ統一（案Y=deprecation 併存は不採用）。公式忠実度を最優先。                                    |
+| 版管理   | 次 major                    | テーマ単位で複数 PR に分割し、最後に major をまとめて公開。                                                                                 |
+| 真実の源 | example > md > wai-aria     | 正準 CSS（`design-system-example-components-html`）を最優先。Figma PNG は補完。                                                             |
+| トークン | 上流のみ                    | 不在の「セマンティック風」トークンを実在の公式トークンへ置換（[token-replacement-map](./token-replacement-map.md)）。色・余白の直書き禁止。 |
+| アイコン | inline SVG 統一             | MDI webfont → `DadsIcon`（Material Symbols inline SVG, 案B-2）。[icon-mapping](./icon-mapping.md)。                                         |
+| 実装順   | T1→柱B→T5→T2→T3→T4→T6→T7→T8 | 柱B(DadsIcon) を T5 の前に先行。T9 は保留。                                                                                                 |
 
 ### 存続させた非公式機能（keep-list）
 
@@ -47,45 +47,54 @@ Issue #18 の全変更が従う基準（2026-06-06 確定）。
 
 ### 基盤（柱A-2 / 柱B）
 
-| テーマ | 変更 | 破壊度 |
-|---|---|---|
-| 柱A-2 ファウンデーション / コンポーネント是正 | 不在トークン → 公式トークン置換、API/aria 不変の見た目是正 | patch |
-| 柱B **DadsIcon** | MDI webfont → inline SVG（Material Symbols, weight 400）。`icon-registry` に使用アイコンのみ同梱（tree-shaking） | major |
+| テーマ                                        | 変更                                                                                                             | 破壊度 |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| 柱A-2 ファウンデーション / コンポーネント是正 | 不在トークン → 公式トークン置換、API/aria 不変の見た目是正                                                       | patch  |
+| 柱B **DadsIcon**                              | MDI webfont → inline SVG（Material Symbols, weight 400）。`icon-registry` に使用アイコンのみ同梱（tree-shaking） | major  |
 
 ### T1 — 共有 `DadsFormControlLabel`
+
 - Checkbox / Radio / CheckboxGroup / RadioGroup / InputText / Textarea の独自 `__legend/__required/__hint/__error` を公式 `dads-form-control-label`（`__label` / `__requirement[data-required]`=**※必須** / `__support-text` / `data-size`）へ委譲。
 - **移行**: 必須表現が「塗りバッジ」→「※必須」。`__legend` 等のクラスに依存した CSS は要修正。
 
 ### T5 — アイコン presentation（柱B 依存・patch）
+
 - Breadcrumb / Accordion / NotificationBanner / UtilityLink / Drawer(close) / HeaderContainer(menu) / ResourceList などのアイコンを inline SVG（DadsIcon / 公式 SVG path）へ。
 
 ### T2 — menu-list 系の公式整合（PR #25）
+
 - **MenuListBox** / **LanguageSelector** の独自 popup を公式 menu-list-box の markup/class/ARIA へ。opener `__opener`（data-size/data-style）、popup `ul.dads-menu-list[role=menu]`。
 - **移行**: MenuListBox `triggerSize='lg'` 削除（sm/md）、`triggerStyle` 追加、非公式 `description` 削除。LanguageSelector の colorScheme/cornerShape/size lg 削除。
 
 ### T3 — ネイティブ要素化（PR #26）
+
 - **Accordion**: 管理型 multi-item(`<button aria-expanded>`) → 単一 native `<details>/<summary>`（DadsDisclosure 同型）。`items[]`/`type`/`size`/矢印キーナビ/`returnLink` 廃止。
 - **Drawer**: Teleport+手書き focus-trap → native `<dialog>`+`showModal()`+`::backdrop`。本文は default slot。`items[]`/`DadsDrawerItem`/`placement="full"` 廃止、閉じるは `DadsHamburgerMenuButton`。
 - ※ **Select** は keep-list によりネイティブ化せず現状維持（対象外）。
 
 ### T6 — 非公式バリアント整理（PR #24・8 コンポーネント）
+
 - ChipLabel（color→11 primitive 色相 / appearance 4 / size 削除）、Heading（公式 10 段階）、Divider（3 段階）、Button（color success/error/warning/secondary 削除・loading 維持）、FileUpload（size 削除）、List（ordered の `<ol>`→`<ul>` 採番）、NotificationBanner（`<p>`→`<h2>` / type info-1/info-2）、DescriptionList（既定 vertical / horizontal 削除・bordered 維持）。
 
 ### T8 — 小さな a11y/挙動（PR #23・minor）
+
 - Tooltip: Esc で閉じる。HeaderContainer: menu-toggle に `aria-expanded`/`aria-controls`。Breadcrumb: `aria-label` → `aria-labelledby` + visually-hidden ラベル。
 
 ### T7 — carousel 系移植（PR #27）
+
 - **Carousel**: 汎用 translateX スライダー → 公式 `dads-carousel`（番号 tablist / next preview / 全表示 disclosure / blur 背景 / `@container`+ResizeObserver）。`slides[]` データ駆動。`autoPlay` 系・`type`/`mode`/`size` 削除。
 - **ImageSlider**: 公式 MD 定義（= carousel コンテナ型・マルチ・幅狭）に従い **DadsCarousel の薄ラッパ**化。
 - **DadsCarouselSingle**（新規）: 公式 `dads-carousel-single`（静的 1 枚絵・任意リンク）。
 
 ### T4 — 正準構造作り直し（PR #28・最難）
+
 - **Checkbox / Radio**: input 隠蔽+疑似要素 → `input` 自身を `appearance:none` の可視コントロール（寸法 24/32/44・border 2/2/3px、チェックは `::before` clip-path SVG）。Checkbox `readonly` 削除、Radio の Vue 独自サブ要素は FCL/Group へ委譲。
 - **Table**: 独自 BEM → `.dads-table`>`.dads-table__table`+`__col-header`/`__row-header`、辺別 border（`data-cell-border`/`data-border`）、行 hover/選択、caption/dense/striped。
 - **StepNavigation**: クラス改名（`__step/__header/__number/__description`+`::before/::after`）、status enum を `reached/completed/error/skipped/editing`+`aria-current`、`data-size`。
 - **ProgressIndicator**: div-fill+circle → 公式 SVG `<line>`+spinner、`type`(stacked/inlined/stacked-underlay)、circular/size 軸削除。
 
 ### T9 — Figma 待ち（保留 → #29）
+
 - Image / PageNavigation / Tab / TableControl。公式 HTML/Figma 公開後に再監査。
 
 ---
@@ -106,14 +115,14 @@ Issue #18 の全変更が従う基準（2026-06-06 確定）。
 
 ## 5. 成果物・参照ドキュメント（artifact map）
 
-| ドキュメント | 役割 |
-|---|---|
-| 本サマリ（このファイル） | **#18 の完了記録 / 基準**: 案X ポリシー・テーマ別の新ベースライン・keep-list（旧 a3-breaking-change-policy / a3-deferred / gap-reports を集約） |
-| `.changeset/*.md` | **移行情報の正本**（テーマ別 major/minor/patch と breaking 詳細） |
-| [`token-replacement-map.md`](./token-replacement-map.md) | 不在トークン → 公式トークン 置換マップ（S-1）。恒久リファレンス |
-| [`icon-mapping.md`](./icon-mapping.md) | MDI → DadsIcon(inline SVG) 移行マップ（柱B）。恒久リファレンス |
-| [`naming-and-gap.md`](./naming-and-gap.md) | 命名規約と公式仕様との Gap 分析 |
-| 各 PR #19–#28 / コミット履歴 | テーマ別の差分・監査根拠（gap-report は各 PR の差分に保存） |
+| ドキュメント                                             | 役割                                                                                                                                            |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 本サマリ（このファイル）                                 | **#18 の完了記録 / 基準**: 案X ポリシー・テーマ別の新ベースライン・keep-list（旧 a3-breaking-change-policy / a3-deferred / gap-reports を集約） |
+| `.changeset/*.md`                                        | **移行情報の正本**（テーマ別 major/minor/patch と breaking 詳細）                                                                               |
+| [`token-replacement-map.md`](./token-replacement-map.md) | 不在トークン → 公式トークン 置換マップ（S-1）。恒久リファレンス                                                                                 |
+| [`icon-mapping.md`](./icon-mapping.md)                   | MDI → DadsIcon(inline SVG) 移行マップ（柱B）。恒久リファレンス                                                                                  |
+| [`naming-and-gap.md`](./naming-and-gap.md)               | 命名規約と公式仕様との Gap 分析                                                                                                                 |
+| 各 PR #19–#28 / コミット履歴                             | テーマ別の差分・監査根拠（gap-report は各 PR の差分に保存）                                                                                     |
 
 ---
 

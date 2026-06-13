@@ -23,12 +23,12 @@
 
 基礎部品を内部で組み合わせて構成する、画面レベルのナビゲーション。
 
-| 公式 slug           | 実装名                 | 用途                      | 依存（基礎部品）           | HTML 実装例 |
-| ------------------- | ---------------------- | ------------------------- | -------------------------- | ----------- |
-| `global-menu`       | `DadsGlobalMenu`       | グローバルナビ            | MenuList（任意）           | あり        |
-| `mega-menu`         | `DadsMegaMenu`         | メガメニュー（グローバル）| MenuList                   | なし        |
-| `page-navigation`   | `DadsPageNavigation`   | ページ内ナビ（TOC）       | -                          | なし        |
-| `mobile-menu`       | `DadsMobileMenu`       | モバイル用メニュー        | HamburgerMenuButton（任意）| なし        |
+| 公式 slug         | 実装名               | 用途                       | 依存（基礎部品）            | HTML 実装例 |
+| ----------------- | -------------------- | -------------------------- | --------------------------- | ----------- |
+| `global-menu`     | `DadsGlobalMenu`     | グローバルナビ             | MenuList（任意）            | あり        |
+| `mega-menu`       | `DadsMegaMenu`       | メガメニュー（グローバル） | MenuList                    | なし        |
+| `page-navigation` | `DadsPageNavigation` | ページ内ナビ（TOC）        | -                           | なし        |
+| `mobile-menu`     | `DadsMobileMenu`     | モバイル用メニュー         | HamburgerMenuButton（任意） | なし        |
 
 ### スコープ外
 

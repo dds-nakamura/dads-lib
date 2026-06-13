@@ -146,7 +146,7 @@ const visible = ref(true)
 | `linkHref`       | `string`         | -                      | CTA リンクの遷移先。`linkLabel` とセットで指定                                                         |
 | `closable`       | `boolean`        | `false`                | 閉じるボタンを表示するか。DADS 仕様では本番では推奨されない                                            |
 | `closeLabel`     | `string`         | `'閉じる'`             | 閉じるボタンの `aria-label`                                                                            |
-| `iconName`       | `string`         | `'warning'`            | 見出し横の Material Symbols アイコン。空文字でアイコン非表示                                            |
+| `iconName`       | `string`         | `'warning'`            | 見出し横の Material Symbols アイコン。空文字でアイコン非表示                                           |
 | `ariaLabel`      | `string`         | `'緊急情報'`           | バナールートの `aria-label`                                                                            |
 | `linkExternal`   | `boolean`        | `false`                | `true` で CTA リンクを新規タブ (`target=_blank` + 安全な `rel`) で開く。可視ラベルに外部アイコンも付与 |
 | `newTabHintText` | `string`         | `'（新規タブで開く）'` | `linkExternal=true` のとき CTA ラベル後に追加するスクリーンリーダ専用ヒント。i18n 用に上書き可能       |

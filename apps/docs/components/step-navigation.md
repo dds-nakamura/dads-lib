@@ -170,43 +170,43 @@ const steps = [
 
 このコンポーネントは公式正準構造への移行のため **MAJOR 破壊的変更** を含む。旧 API からの移行:
 
-| 旧 (〜v?) | 新 (案X) |
-| --------- | -------- |
-| `status: 'pending'` | `status` を省略 (未到達) |
-| `status: 'current'` | `status` を省略し `current` prop で指定 (`aria-current="step"` 自動付与) |
-| `status: 'done'` | `status: 'completed'` |
-| `status: 'error'` | `status: 'error'` (変更なし) |
+| 旧 (〜v?)                                                    | 新 (案X)                                                                          |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| `status: 'pending'`                                          | `status` を省略 (未到達)                                                          |
+| `status: 'current'`                                          | `status` を省略し `current` prop で指定 (`aria-current="step"` 自動付与)          |
+| `status: 'done'`                                             | `status: 'completed'`                                                             |
+| `status: 'error'`                                            | `status: 'error'` (変更なし)                                                      |
 | クラス `__item` / `__button` / `__indicator` / `__connector` | `__step` / `__header` / `__number` (connector は `::before` / `::after` 疑似要素) |
-| `--horizontal` / `--vertical` 修飾クラス | `data-orientation` 属性 |
-| (なし) | `size` prop → `data-size="normal\|small"` |
+| `--horizontal` / `--vertical` 修飾クラス                     | `data-orientation` 属性                                                           |
+| (なし)                                                       | `size` prop → `data-size="normal\|small"`                                         |
 
 ## Props
 
-| Prop          | 型                                | デフォルト     | 説明                                                                          |
-| ------------- | --------------------------------- | -------------- | ----------------------------------------------------------------------------- |
-| `steps`       | `DadsStepNavigationStep[]`        | -              | ステップ定義の配列 (必須)                                                     |
-| `current`     | `number`                          | -              | 現在のステップの 0 始まりインデックス。`aria-current="step"` が付与される     |
-| `size`        | `'normal' \| 'small'`             | `'normal'`     | サイズバリアント → `data-size`                                                |
-| `orientation` | `'horizontal' \| 'vertical'`      | `'horizontal'` | レイアウト方向 → `data-orientation`                                           |
-| `clickable`   | `boolean`                         | `true`         | `true` で操作可能なステップを `<button>` 化 & `click:step` 発火、`false` で `<span>` |
-| `ariaLabel`   | `string`                          | `'ステップ'`   | 包含する `<nav>` 要素のアクセシブル名                                         |
-| `reached`     | `number`                          | (自動算出)     | 視覚的に非表示の進捗サマリ用の到達ステップ数。省略時は状態から算出           |
+| Prop          | 型                           | デフォルト     | 説明                                                                                 |
+| ------------- | ---------------------------- | -------------- | ------------------------------------------------------------------------------------ |
+| `steps`       | `DadsStepNavigationStep[]`   | -              | ステップ定義の配列 (必須)                                                            |
+| `current`     | `number`                     | -              | 現在のステップの 0 始まりインデックス。`aria-current="step"` が付与される            |
+| `size`        | `'normal' \| 'small'`        | `'normal'`     | サイズバリアント → `data-size`                                                       |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | レイアウト方向 → `data-orientation`                                                  |
+| `clickable`   | `boolean`                    | `true`         | `true` で操作可能なステップを `<button>` 化 & `click:step` 発火、`false` で `<span>` |
+| `ariaLabel`   | `string`                     | `'ステップ'`   | 包含する `<nav>` 要素のアクセシブル名                                                |
+| `reached`     | `number`                     | (自動算出)     | 視覚的に非表示の進捗サマリ用の到達ステップ数。省略時は状態から算出                   |
 
 ### `DadsStepNavigationStep`
 
-| フィールド    | 型                                                              | デフォルト | 説明                                              |
-| ------------- | -------------------------------------------------------------- | ---------- | ------------------------------------------------- |
-| `title`       | `string`                                                       | -          | ステップのラベル (必須)                           |
-| `description` | `string`                                                       | -          | 補足説明 (`__description` に表示)                 |
-| `status`      | `'reached' \| 'completed' \| 'error' \| 'skipped' \| 'editing'` | -          | 状態 → `data-state`。省略時は未到達               |
-| `href`        | `string`                                                       | -          | 指定すると header が `<a href>` になる             |
-| `disabled`    | `boolean`                                                      | `false`    | `<button>` header を無効化 (`href` 指定時は無視)  |
+| フィールド    | 型                                                              | デフォルト | 説明                                             |
+| ------------- | --------------------------------------------------------------- | ---------- | ------------------------------------------------ |
+| `title`       | `string`                                                        | -          | ステップのラベル (必須)                          |
+| `description` | `string`                                                        | -          | 補足説明 (`__description` に表示)                |
+| `status`      | `'reached' \| 'completed' \| 'error' \| 'skipped' \| 'editing'` | -          | 状態 → `data-state`。省略時は未到達              |
+| `href`        | `string`                                                        | -          | 指定すると header が `<a href>` になる           |
+| `disabled`    | `boolean`                                                       | `false`    | `<button>` header を無効化 (`href` 指定時は無視) |
 
 ## Events
 
-| Event        | Payload                                                            | 説明                                                                        |
-| ------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| `click:step` | `(step: DadsStepNavigationStep, index: number, event: MouseEvent)` | 操作可能なステップ (button / link) が押されたとき発火                       |
+| Event        | Payload                                                            | 説明                                                  |
+| ------------ | ------------------------------------------------------------------ | ----------------------------------------------------- |
+| `click:step` | `(step: DadsStepNavigationStep, index: number, event: MouseEvent)` | 操作可能なステップ (button / link) が押されたとき発火 |
 
 ## アクセシビリティ
 

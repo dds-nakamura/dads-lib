@@ -323,9 +323,7 @@ describe('DadsList', () => {
 
     it('propagates spacing + data-spacing to nested lists', () => {
       const wrapper = createWrapper({ items: NESTED_ITEMS, spacing: '12' })
-      const nested = wrapper.element
-        .querySelectorAll(':scope > li')[1]
-        .querySelector(':scope > ul')
+      const nested = wrapper.element.querySelectorAll(':scope > li')[1].querySelector(':scope > ul')
       expect(nested).not.toBeNull()
       expect(nested!.getAttribute('data-spacing')).toBe('12')
       expect(nested!.classList.contains('dads-list--spacing-12')).toBe(true)

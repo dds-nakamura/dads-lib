@@ -265,7 +265,11 @@ watch(
     max-height: 100vh;
     background-color: var(--color-neutral-white, #fff);
     // Tokenized elevation, aligned with DadsDrawer's panel (--elevation-2).
-    box-shadow: var(--elevation-2, 0 2px 12px 2px rgba(0, 0, 0, 0.1), 0 1px 6px 0 rgba(0, 0, 0, 0.3));
+    box-shadow: var(
+      --elevation-2,
+      0 2px 12px 2px rgba(0, 0, 0, 0.1),
+      0 1px 6px 0 rgba(0, 0, 0, 0.3)
+    );
     overflow-y: auto;
 
     &:focus {

@@ -37,12 +37,9 @@ const hasStatus = computed(() => !!props.status || !!slots.status)
       :for="labelForAttr"
     >
       <slot name="label">{{ label }}</slot>
-      <span
-        v-if="required"
-        class="dads-form-control-label__requirement"
-        data-required="true"
-        >{{ requiredLabel }}</span
-      >
+      <span v-if="required" class="dads-form-control-label__requirement" data-required="true">{{
+        requiredLabel
+      }}</span>
       <span v-else-if="optionalLabel" class="dads-form-control-label__requirement">{{
         optionalLabel
       }}</span>
@@ -51,11 +48,7 @@ const hasStatus = computed(() => !!props.status || !!slots.status)
       </span>
     </component>
 
-    <p
-      v-if="hasSupportText"
-      :id="supportTextId"
-      class="dads-form-control-label__support-text"
-    >
+    <p v-if="hasSupportText" :id="supportTextId" class="dads-form-control-label__support-text">
       <slot name="support-text">{{ supportText }}</slot>
     </p>
 

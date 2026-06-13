@@ -18,9 +18,27 @@ class ResizeObserverStub {
 enableAutoUnmount(afterEach)
 
 const slides: DadsImageSliderSlide[] = [
-  { src: '/carousel/image-1.webp', alt: 'スライド1の画像', href: '#link1', width: 696, height: 392 },
-  { src: '/carousel/image-2.webp', alt: 'スライド2の画像', href: '#link2', width: 696, height: 392 },
-  { src: '/carousel/image-3.webp', alt: 'スライド3の画像', href: '#link3', width: 696, height: 392 },
+  {
+    src: '/carousel/image-1.webp',
+    alt: 'スライド1の画像',
+    href: '#link1',
+    width: 696,
+    height: 392,
+  },
+  {
+    src: '/carousel/image-2.webp',
+    alt: 'スライド2の画像',
+    href: '#link2',
+    width: 696,
+    height: 392,
+  },
+  {
+    src: '/carousel/image-3.webp',
+    alt: 'スライド3の画像',
+    href: '#link3',
+    width: 696,
+    height: 392,
+  },
 ]
 
 const createWrapper = (props: Partial<DadsImageSliderProps> = {}) =>

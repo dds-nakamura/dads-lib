@@ -843,7 +843,11 @@ const warekiHint = computed(() => {
     border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #808080);
     background-color: var(--color-neutral-white, #fff);
-    box-shadow: var(--elevation-1, 0 2px 8px 1px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.3));
+    box-shadow: var(
+      --elevation-1,
+      0 2px 8px 1px rgba(0, 0, 0, 0.1),
+      0 1px 5px 0 rgba(0, 0, 0, 0.3)
+    );
     padding: 0.5rem;
   }
 

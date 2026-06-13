@@ -143,10 +143,7 @@ const useLabelledBy = computed(() => Boolean(props.label))
 
     <span v-if="label" :id="labelId" class="dads-progress-indicator__label">
       {{ label }}
-      <span
-        v-if="showPercentage && !isIndeterminate"
-        class="dads-progress-indicator__percentage"
-      >
+      <span v-if="showPercentage && !isIndeterminate" class="dads-progress-indicator__percentage">
         (<span>{{ roundedValue }}</span
         >%)
       </span>

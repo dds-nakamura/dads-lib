@@ -47,7 +47,13 @@ import { DadsCarousel } from '@dads/vue'
 const current = ref(0)
 const slides = [
   { src: '/carousel/image-1.webp', alt: '学ぼうSDGs', href: '#link1', width: 696, height: 392 },
-  { src: '/carousel/image-2.webp', alt: '地産地消キャンペーン', href: '#link2', width: 696, height: 392 },
+  {
+    src: '/carousel/image-2.webp',
+    alt: '地産地消キャンペーン',
+    href: '#link2',
+    width: 696,
+    height: 392,
+  },
   { src: '/carousel/image-3.webp', alt: 'スタンプラリー', href: '#link3', width: 696, height: 392 },
   { src: '/carousel/image-4.webp', alt: '合同健康診断', href: '#link4', width: 696, height: 392 },
 ]
@@ -120,20 +126,20 @@ const slides = [
 
 ## Props
 
-| Prop                 | 型                           | デフォルト         | 説明                                                                |
-| -------------------- | ---------------------------- | ------------------ | ------------------------------------------------------------------- |
-| `slides`             | `DadsCarouselSlide[]`        | (必須)             | 表示するスライド配列                                                 |
-| `modelValue`         | `number`                     | `0`                | 現在表示中のスライドインデックス (v-model 対象)                      |
-| `heading`            | `string`                     | -                  | コンテナ型の見出し。指定時 `role="region"` を `aria-labelledby` で紐付け |
-| `headingLevel`       | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `2`                | 見出しの HTML レベル                                                 |
-| `ariaLabel`          | `string`                     | `'スライドショー'` | 見出し未指定時の `role="region"` のアクセシブル名                    |
-| `breakpointRem`      | `number`                     | `64`               | ワイド / ナローを切り替えるブレークポイント (rem)                    |
-| `unit`               | `string`                     | `'スライド'`       | SR ラベルで使うスライドの単位語                                      |
-| `showAllLabel`       | `string`                     | `'すべてのスライド'` | 「すべてのスライド」disclosure の summary ラベル                   |
-| `prevSlideAriaLabel` | `string`                     | `'前のスライド'`   | ナロー page-nav「前へ」ボタンの aria-label                           |
-| `nextSlideAriaLabel` | `string`                     | `'次のスライド'`   | ナロー page-nav「次へ」ボタンの aria-label                           |
-| `nextPreviewLabel`   | `string`                     | `'次のスライド'`   | ネクストプレビューボタンの可視ラベル                                 |
-| `stepNavAriaLabel`   | `string`                     | `'スライド選択'`   | ステップナビ (tablist) の aria-label                                |
+| Prop                 | 型                           | デフォルト           | 説明                                                                     |
+| -------------------- | ---------------------------- | -------------------- | ------------------------------------------------------------------------ |
+| `slides`             | `DadsCarouselSlide[]`        | (必須)               | 表示するスライド配列                                                     |
+| `modelValue`         | `number`                     | `0`                  | 現在表示中のスライドインデックス (v-model 対象)                          |
+| `heading`            | `string`                     | -                    | コンテナ型の見出し。指定時 `role="region"` を `aria-labelledby` で紐付け |
+| `headingLevel`       | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `2`                  | 見出しの HTML レベル                                                     |
+| `ariaLabel`          | `string`                     | `'スライドショー'`   | 見出し未指定時の `role="region"` のアクセシブル名                        |
+| `breakpointRem`      | `number`                     | `64`                 | ワイド / ナローを切り替えるブレークポイント (rem)                        |
+| `unit`               | `string`                     | `'スライド'`         | SR ラベルで使うスライドの単位語                                          |
+| `showAllLabel`       | `string`                     | `'すべてのスライド'` | 「すべてのスライド」disclosure の summary ラベル                         |
+| `prevSlideAriaLabel` | `string`                     | `'前のスライド'`     | ナロー page-nav「前へ」ボタンの aria-label                               |
+| `nextSlideAriaLabel` | `string`                     | `'次のスライド'`     | ナロー page-nav「次へ」ボタンの aria-label                               |
+| `nextPreviewLabel`   | `string`                     | `'次のスライド'`     | ネクストプレビューボタンの可視ラベル                                     |
+| `stepNavAriaLabel`   | `string`                     | `'スライド選択'`     | ステップナビ (tablist) の aria-label                                     |
 
 ### `DadsCarouselSlide`
 
@@ -142,7 +148,7 @@ const slides = [
 | `src`      | `string` | ✓    | 画像 URL                                        |
 | `alt`      | `string` | ✓    | メイン画像の代替テキスト (装飾なら空文字を明示) |
 | `srcset`   | `string` | -    | レスポンシブ画像の `srcset`                     |
-| `href`     | `string` | -    | 指定すると画像が `<a href>` でラップされる       |
+| `href`     | `string` | -    | 指定すると画像が `<a href>` でラップされる      |
 | `target`   | `string` | -    | リンクの `target` (`href` 指定時のみ)           |
 | `rel`      | `string` | -    | リンクの `rel` (`href` 指定時のみ)              |
 | `width`    | `number` | -    | 画像の固有幅 (CLS 回避用に推奨)                 |

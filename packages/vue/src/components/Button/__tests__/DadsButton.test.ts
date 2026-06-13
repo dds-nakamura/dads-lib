@@ -211,10 +211,7 @@ describe('DadsButton', () => {
     })
 
     it('has no violations when icon-only with aria-label', async () => {
-      const wrapper = mountInBody(
-        { ariaLabel: '保存', prependIcon: 'save' },
-        { default: '' },
-      )
+      const wrapper = mountInBody({ ariaLabel: '保存', prependIcon: 'save' }, { default: '' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 

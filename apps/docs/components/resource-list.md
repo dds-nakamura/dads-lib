@@ -204,15 +204,15 @@ const items = [
 
 ### `DadsResourceListItem` の型
 
-| キー          | 型         | 説明                                                                 |
-| ------------- | ---------- | -------------------------------------------------------------------- |
-| `title`       | `string`   | 必須。表示タイトル（`<h3>` で描画）                                  |
-| `description` | `string`   | タイトル下の補足説明                                                 |
-| `href`        | `string`   | 指定時は行全体を `<a>` 化（行全体がリンクになる）                    |
-| `thumbnail`   | `string`   | サムネイル画像 URL（装飾画像扱いで `alt=""`）                        |
-| `date`        | `string`   | 行右端 (`__sub`) に表示する日付文字列                                |
-| `tags`        | `string[]` | 説明行の下に表示するタグチップ                                       |
-| `iconName`    | `string`   | Material Symbols 名。`thumbnail` 未指定時のみ描画される              |
+| キー          | 型         | 説明                                                    |
+| ------------- | ---------- | ------------------------------------------------------- |
+| `title`       | `string`   | 必須。表示タイトル（`<h3>` で描画）                     |
+| `description` | `string`   | タイトル下の補足説明                                    |
+| `href`        | `string`   | 指定時は行全体を `<a>` 化（行全体がリンクになる）       |
+| `thumbnail`   | `string`   | サムネイル画像 URL（装飾画像扱いで `alt=""`）           |
+| `date`        | `string`   | 行右端 (`__sub`) に表示する日付文字列                   |
+| `tags`        | `string[]` | 説明行の下に表示するタグチップ                          |
+| `iconName`    | `string`   | Material Symbols 名。`thumbnail` 未指定時のみ描画される |
 
 ## アクセシビリティ
 
