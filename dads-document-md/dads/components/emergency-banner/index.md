@@ -88,7 +88,7 @@
 ## 関連コンポーネント
 
 - [カルーセル](https://design.digital.go.jp/dads/components/carousel/)
-- [グローバルメニュー](https://design.digital.go.jp/dads/components/global-menu/)
+- [水平メニュー](https://design.digital.go.jp/dads/components/horizontal-menu/)
 - [ノティフィケーションバナー](https://design.digital.go.jp/dads/components/notification-banner/)
 
 ---

@@ -1,8 +1,8 @@
 # ヘッダーコンテナ
 
 > **Source**: https://design.digital.go.jp/dads/components/header-container/
-> **Scraped**: 2026-05-12
-> **Description**: ヘッダーに含まれるアイテムとして使う、さまざまなコンポーネントが内包されるコンテナコンポーネント。
+> **Scraped**: 2026-06-13
+> **Description**: ヘッダーに含まれるアイテムとして使う、さまざまなコンポーネントが内包されるコンテナコンポーネント。（Rev 002 / v2.14.0：グローバルメニューを水平メニューに名称変更）
 
 ## 目次
 
@@ -59,5 +59,5 @@
 ## メタデータ
 
 - **Original URL**: https://design.digital.go.jp/dads/components/header-container/
-- **システムバージョン**: v2.13.0
+- **システムバージョン**: v2.14.0
 - **Published by**: デジタル庁（Digital Agency, Government of Japan）
