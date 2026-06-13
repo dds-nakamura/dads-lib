@@ -1,6 +1,7 @@
 // Generates src/components/Icon/icon-registry.ts from @material-symbols/svg-400
-// (outlined / weight 400). Only the icons actually used by @dads/vue are bundled
-// (tree-shaking friendly). Re-run after changing MDI_TO_SYMBOL:
+// (outlined / weight 400). Bundles the icons used by @dads/vue components plus a
+// set of common consumer-facing icons (tree-shaking friendly). Re-run after
+// changing MDI_TO_SYMBOL / EXTRA_SYMBOLS / COMMON_SYMBOLS:
 //   node scripts/generate-icon-registry.mjs
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -50,7 +51,55 @@ export const MDI_TO_SYMBOL = {
 // directly inside @dads/vue components.
 export const EXTRA_SYMBOLS = ['apps', 'logout', 'dashboard', 'account_circle']
 
-const symbols = [...new Set([...Object.values(MDI_TO_SYMBOL), ...EXTRA_SYMBOLS])].sort()
+// Common consumer-facing icons bundled so apps using @dads/vue can render basic
+// Material Symbols (delete / edit / add / print / refresh ...) without
+// re-generating their own registry. No mdi origin — pure additive set (Issue #45).
+// See docs/quality/icon-mapping.md ("汎用追加アイコン").
+export const COMMON_SYMBOLS = [
+  'add',
+  'add_circle',
+  'arrow_back',
+  'aspect_ratio',
+  'bolt',
+  'border_all',
+  'checklist',
+  'content_copy',
+  'delete',
+  'delete_forever',
+  'delete_sweep',
+  'edit',
+  'edit_document',
+  'format_color_fill',
+  'format_indent_increase',
+  'format_size',
+  'grid_off',
+  'grid_view',
+  'inbox',
+  'lock',
+  'new_label',
+  'notes',
+  'open_with',
+  'palette',
+  'pending',
+  'picture_as_pdf',
+  'print',
+  'print_disabled',
+  'qr_code_2',
+  'refresh',
+  'rotate_right',
+  'schedule',
+  'star',
+  'straighten',
+  'table_chart',
+  'table_rows',
+  'tune',
+  'view_column',
+  'visibility',
+]
+
+const symbols = [
+  ...new Set([...Object.values(MDI_TO_SYMBOL), ...EXTRA_SYMBOLS, ...COMMON_SYMBOLS]),
+].sort()
 
 const extract = (svg) => {
   const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1] ?? '0 -960 960 960'
