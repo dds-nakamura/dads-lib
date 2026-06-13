@@ -76,9 +76,9 @@ apps/docs (@dads/docs)
 @dads/vue ◀────── peer:vue@^3.4 ────── 利用側アプリ
     │ (optional dep)
     ▼
-@dads/tokens ──→ @digital-go-jp/design-tokens@^1.1.9
+@dads/tokens ──→ @digital-go-jp/design-tokens@^2.0.1
 
-@dads/tailwind-plugin ──→ @digital-go-jp/tailwind-theme-plugin@^0.3.4
+@dads/tailwind-plugin ──→ @digital-go-jp/tailwind-theme-plugin@^1.0.0
                           peer: tailwindcss ^3 || ^4
 ```
 
@@ -170,7 +170,7 @@ import { DadsButton, DadsInputText } from '@dads/vue'
     "./css-simple": "./dist/tokens-simple.css",
     "./tokens.json": "./dist/tokens.json",
   },
-  "dependencies": { "@digital-go-jp/design-tokens": "^1.1.9" },
+  "dependencies": { "@digital-go-jp/design-tokens": "^2.0.1" },
 }
 ```
 
@@ -188,11 +188,11 @@ import { DadsButton, DadsInputText } from '@dads/vue'
     },
   },
   "peerDependencies": { "tailwindcss": "^3.4.17 || ^4.0.0" },
-  "dependencies": { "@digital-go-jp/tailwind-theme-plugin": "^0.3.4" },
+  "dependencies": { "@digital-go-jp/tailwind-theme-plugin": "^1.0.0" },
 }
 ```
 
-`./v4` エクスポートは **撤回**（上流 v0.3.4 の `dist/` に `v4.css` が含まれず、`exports` にも `./v4` がないため）。上流の修正待ち or 自前ビルドは後段で判断。
+`./v4` エクスポートは現状 **撤回のまま**（v0.3.4 時点で `dist/v4.css` 不在のため一旦撤回した経緯）。ただし上流 **v1.0.0 で Tailwind CSS v4 サポートが追加**された（DADS v2.14.0 追随で bump 済み）ため、`./v4` 再導入は再評価可能（本ラッパは現状 v3 構成のまま据え置き。対応は後段で判断）。
 
 `src/shims.d.ts` で上流の不完全な `types` condition を補完する。
 
@@ -487,8 +487,8 @@ export default DefaultTheme
 
 | ディレクトリ                             | 上流                                                | バージョン |
 | ---------------------------------------- | --------------------------------------------------- | ---------- |
-| `design-tokens/`                         | digital-go-jp/design-tokens                         | v1.1.9     |
-| `tailwind-theme-plugin/`                 | digital-go-jp/tailwind-theme-plugin                 | v0.3.4     |
+| `design-tokens/`                         | digital-go-jp/design-tokens                         | v2.0.1     |
+| `tailwind-theme-plugin/`                 | digital-go-jp/tailwind-theme-plugin                 | v1.0.0     |
 | `design-system-example-components-html/` | digital-go-jp/design-system-example-components-html | main HEAD  |
 
 - ソース実体（合計約 5MB）は dads-lib の git 履歴に含める
@@ -558,9 +558,9 @@ export default DefaultTheme
 
 移行元（@vue/tsconfig）の strictness に合わせるため緩和。NFR-1（挙動忠実度）への適合のため。
 
-### Tailwind v4 サポートの一時撤回
+### Tailwind v4 サポートの一時撤回（→ 再評価可能）
 
-上流 v0.3.4 の `dist/` に `v4.css` が含まれず、`exports` にも `./v4` がないため一時撤回。上流の修正待ち or 自前ビルドのいずれかで対応する。
+当初、上流 v0.3.4 の `dist/` に `v4.css` が含まれず `exports` にも `./v4` がないため一時撤回した。**上流 v1.0.0（DADS v2.14.0 追随で bump 済み）で Tailwind CSS v4 サポートが正式に追加された**ため、`./v4` の再導入を再評価できる。現状は本ラッパを v3 構成のまま据え置いており、`./v4` 対応は後段の判断とする（フォローアップ）。
 
 ---
 

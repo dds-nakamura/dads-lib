@@ -135,3 +135,26 @@ Issue #18 の全変更が従う基準（2026-06-06 確定）。
 3. T9（#29）は Figma 公開後に着手。
 
 > 注: `vue-pkg` は保護ブランチ（削除禁止）。リリース手順とリカバリは [multi-remote-release](../architecture/multi-remote-release.md) を参照。
+
+---
+
+## 7. DADS v2.14.0 追随（#18 後 / 2026-06-13）
+
+`@dads/vue` v1.0.0 リリース後、DADS 公式が **v2.13.0 → v2.14.0** に更新されたため、参照資産を追随させた。v2.14.0 の実変更は **「グローバルメニュー → 水平メニュー」名称変更**（水平メニュー Rev 001 / ヘッダーコンテナ Rev 002）のみ。
+
+### 実施内容（4 PR）
+
+| PR  | 対象                | 内容                                                                                                                                                                                                                                                                                                      |
+| --- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #35 | GitHub vendor 3 件  | `@digital-go-jp/design-tokens` ^1.1.9 → **^2.0.1**（削除/値変更ゼロ・`--color-key-*` 13 個追加のみ＝非破壊）、`@digital-go-jp/tailwind-theme-plugin` ^0.3.4 → **^1.0.0**（Tailwind v4 対応追加）、example-components-html を main HEAD へ。`@dads/vue` の optional peerDep を `^1.1.0 \|\| ^2.0.0` に拡張 |
+| #36 | Figma snapshot      | `dads-document-figma/` を v2.14.0 で再エクスポート（42 → **43 ページ**・新規「スタイルガイド」追加 / `fileKey=k37j9LDb…`）                                                                                                                                                                                |
+| #37 | `dads-document-md/` | v2.14.0 **差分更新**（horizontal-menu 新規 / global-menu 名称変更告知 / header-container Rev 002 / index・updates・索引・関連リンク）。html は準備中・ビジュアル変更なしのため未更新                                                                                                                      |
+| #38 | CI                  | `development` 向け PR/push でも CI を実行（テーマ PR の品質ゲート未検証＝format/typecheck ドリフト蓄積の再発防止）                                                                                                                                                                                        |
+
+> 上流メジャー bump 2 件は**いずれも additive で `@dads/vue` 非破壊**（v1.1.9→v2.0.1 の `tokens.css` を全 diff し removed 0 / value-changed 0 を確認）。pin の正本は `VENDORED.md`。
+
+### 残ギャップ（フォローアップ候補）
+
+- **`DadsGlobalMenu` 命名ギャップ**: DADS は v2.14.0 で公式名を「グローバルメニュー」→「水平メニュー（horizontal-menu）」に変更したが、`@dads/vue` は依然 `DadsGlobalMenu` を公開している。案X（公式準拠）に従えば `DadsHorizontalMenu` への rename が望ましいが、公開 API の破壊的変更（次 major）かつ水平メニューのガイドラインが**準備中**のため、正式仕様の公開を待って判断する（[naming-and-gap](./naming-and-gap.md) 参照）。
+- **`dads-document-html/`**: v2.13.0 のまま（今回ビジュアル変更なし）。html 実体に変更が出た時点で再クロール。
+- **`@dads/tailwind-plugin` の `./v4`**: 上流 v1.0.0 で Tailwind v4 サポートが入ったため再導入を再評価可能（[monorepo-and-vue-library](../architecture/monorepo-and-vue-library.md) 参照）。
