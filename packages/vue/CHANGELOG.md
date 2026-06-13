@@ -1,5 +1,11 @@
 # @dads/vue
 
+## 1.0.1
+
+### Patch Changes
+
+- DADS v2.14.0 追随: optional peerDependency `@digital-go-jp/design-tokens` の範囲を `^1.1.0` → `^1.1.0 || ^2.0.0` に拡張。design-tokens v2（additive・`--color-key-*` 追加のみ・非破壊）を利用する consumer での peer 警告を解消する。コンポーネント実装・配布 CSS/JS に変更はない。
+
 ## 1.0.0
 
 ### Major Changes
