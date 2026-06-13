@@ -1,12 +1,12 @@
 # コンポーネント | デジタル庁デザインシステムβ版
 
 > **Source**: https://design.digital.go.jp/dads/components/
-> **Scraped**: 2026-05-12
-> **Description**: デジタル庁デザインシステムβ版 v2.13.0 のコンポーネント一覧ページ
+> **Scraped**: 2026-06-13
+> **Description**: デジタル庁デザインシステムβ版 v2.14.0 のコンポーネント一覧ページ
 
 ## 概要
 
-本ページはUIデザインの基礎要素に関する包括的なリファレンスです。デジタル庁デザインシステムβ版 v2.13.0には、50個のコンポーネントが収録されています。
+本ページはUIデザインの基礎要素に関する包括的なリファレンスです。デジタル庁デザインシステムβ版 v2.14.0には、50個のコンポーネントが収録されています。
 
 ## コンポーネント一覧
 
@@ -21,7 +21,7 @@
 | 画像 | ページへの画像埋め込み機能 | https://design.digital.go.jp/dads/components/image/ |
 | カルーセル | 複数スライドの順序表示 | https://design.digital.go.jp/dads/components/carousel/ |
 | 緊急時バナー | ウェブサイト全体に関わる重要度の高い情報表示 | https://design.digital.go.jp/dads/components/emergency-banner/ |
-| グローバルメニュー | サイト内ナビゲーション構造 | https://design.digital.go.jp/dads/components/global-menu/ |
+| 水平メニュー（旧称：グローバルメニュー） | サイト内ナビゲーション構造 | https://design.digital.go.jp/dads/components/horizontal-menu/ |
 | 検索ボックス | サイト内検索機能、詳細検索パネル対応 | https://design.digital.go.jp/dads/components/search-box/ |
 | コンボボックス | 複合操作対応の選択/入力支援型フォーム | https://design.digital.go.jp/dads/components/combobox/ |
 | スクロールトップボタン | ページ先頭への遷移機能 | https://design.digital.go.jp/dads/components/scroll-top-button/ |

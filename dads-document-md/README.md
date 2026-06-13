@@ -3,8 +3,9 @@
 [デジタル庁デザインシステム（DADS, Digital Agency Design System）](https://design.digital.go.jp/dads/) のドキュメント全ページをMarkdownにアーカイブしたものです。
 
 - **取得元:** https://design.digital.go.jp/dads/
-- **取得日:** 2026-05-12
-- **取得時バージョン:** v2.13.0
+- **取得日:** 2026-05-12（全件）／ 2026-06-13（v2.14.0 差分更新）
+- **取得時バージョン:** v2.14.0（v2.13.0 全件アーカイブ + v2.14.0 差分反映）
+  - v2.14.0 差分: グローバルメニュー → [水平メニュー](./dads/components/horizontal-menu/index.md) 名称変更（水平メニュー Rev 001 / ヘッダーコンテナ Rev 002）
 
 URLパスをそのままフォルダ構造として保持しています（例: `https://design.digital.go.jp/dads/components/button/` → `dads/components/button/index.md`）。
 
@@ -56,7 +57,7 @@ URLパスをそのままフォルダ構造として保持しています（例: 
 - [スクロールトップボタン（Scroll Top Button）](./dads/components/scroll-top-button/index.md) *deprecated*
 
 #### ナビゲーション
-- [グローバルメニュー（Global Menu）](./dads/components/global-menu/index.md)
+- [水平メニュー（Horizontal Menu）](./dads/components/horizontal-menu/index.md)（旧称：グローバルメニュー / Global Menu）
 - [メガメニュー（Mega Menu）](./dads/components/mega-menu/index.md)
 - [モバイルメニュー（Mobile Menu）](./dads/components/mobile-menu/index.md)
 - [メニューリスト（Menu List）](./dads/components/menu-list/index.md)
