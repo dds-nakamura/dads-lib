@@ -199,6 +199,7 @@ webfont は読み込まず、**使用アイコンのみ同梱**する（`@mdi/fo
 
 - `prependIcon` / `appendIcon` / `iconName` / `triggerIcon` 等の icon 系 props は **Material Symbols 名**を受け取る (例: `search`, `keyboard_arrow_down`)。旧 `mdi-*` クラス名からの移行表は [`docs/quality/icon-mapping.md`](../../docs/quality/icon-mapping.md) を参照。
 - 利用可能なアイコンはレジストリ (`src/components/Icon/icon-registry.ts`) に同梱されたもの。追加は `scripts/generate-icon-registry.mjs` で再生成する。
+- 収録アイコンは **コンポーネントが内部で使う分** に加え、利用側アプリ向けの **汎用基本アイコン**（`delete` / `edit` / `add` / `print` / `refresh` / `qr_code_2` ほか、Issue #45 で追加した 39 個）も同梱する。一覧と用途は [`docs/quality/icon-mapping.md`](../../docs/quality/icon-mapping.md) の「汎用追加アイコン」を参照。
 - 利用側でのフォント読み込みは不要。
 
 ## 依存

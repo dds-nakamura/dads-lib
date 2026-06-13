@@ -1,6 +1,6 @@
 {
   "name": "@dads/sample-frontend",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "type": "module",
   "description": "DADS 準拠の新規フロントエンドアプリ用コピー元テンプレート (Vue 3 + TypeScript + Vite)",
