@@ -56,4 +56,61 @@ describe('DadsIcon', () => {
     expect(svg.exists()).toBe(true)
     expect(svg.find('path').exists()).toBe(false)
   })
+
+  describe('common consumer icons (Issue #45)', () => {
+    // Basic Material Symbols bundled for consuming apps (additive, no mdi origin).
+    const COMMON_ICONS = [
+      'add',
+      'add_circle',
+      'arrow_back',
+      'aspect_ratio',
+      'bolt',
+      'border_all',
+      'checklist',
+      'content_copy',
+      'delete',
+      'delete_forever',
+      'delete_sweep',
+      'edit',
+      'edit_document',
+      'format_color_fill',
+      'format_indent_increase',
+      'format_size',
+      'grid_off',
+      'grid_view',
+      'inbox',
+      'lock',
+      'new_label',
+      'notes',
+      'open_with',
+      'palette',
+      'pending',
+      'picture_as_pdf',
+      'print',
+      'print_disabled',
+      'qr_code_2',
+      'refresh',
+      'rotate_right',
+      'schedule',
+      'star',
+      'straighten',
+      'table_chart',
+      'table_rows',
+      'tune',
+      'view_column',
+      'visibility',
+    ]
+
+    it('bundles all 39 common icons in the registry', () => {
+      const missing = COMMON_ICONS.filter((name) => !(name in iconRegistry))
+      expect(missing).toEqual([])
+    })
+
+    it.each(COMMON_ICONS)('renders %s as an <svg> with a path', (name) => {
+      const svg = mount(DadsIcon, { props: { name } }).find('svg.dads-icon')
+      expect(svg.exists()).toBe(true)
+      expect(svg.find('path').exists()).toBe(true)
+      expect(iconRegistry[name].body).not.toBe('')
+    })
+  })
 })

@@ -1,5 +1,11 @@
 # @dads/vue
 
+## 1.0.2
+
+### Patch Changes
+
+- icon-registry に利用側アプリ向けの汎用 Material Symbols 39 個を追加（Issue #45）。`add` / `delete` / `edit` / `print` / `refresh` / `qr_code_2` ほか、デザインシステム利用アプリで頻出する基本アイコンを `generate-icon-registry.mjs` の新規 `COMMON_SYMBOLS` 経由で同梱（手書きせず再生成 / 34→73 個）。`DadsIconName` 型にも反映。既存アイコン・公開 API は不変の additive 変更（非破壊）。
+
 ## 1.0.1
 
 ### Patch Changes
