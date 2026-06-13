@@ -91,3 +91,41 @@ icon 系 props（`prependIcon` / `appendIcon` / `iconName` / `triggerIcon` / `it
 | `notes`                  | メモ・注記         |                         |                    |
 
 > 出典元: dds-nakamura/web-label-print#311（`@dads/vue` v0.2.0 → v1.x 移行。アプリ使用 66 アイコン中、現 registry に無かった 39 個）。`search` は既収録のため対象外。
+
+## アイコン追加の方針と手順（runbook）
+
+### 方針: キュレートされた registry を都度追加で運用する（方針 A）
+
+`DadsIcon` は **ビルド時に同梱された `iconRegistry` のみ**を描画する（`packages/vue/src/components/Icon/DadsIcon.vue`）。registry に無い名前を渡すと **何も描画されず**（空 `<svg>`）、開発時に `console.warn` が出るだけで webfont フォールバックは無い。利用側が外部から独自アイコンを登録したり raw SVG を渡す拡張ポイントは **現状用意していない**。
+
+これは「使うアイコンだけ同梱してバンドルを最小化する（tree-shaking）」ための意図的なトレードオフ。代償として、**未収録の Material Symbols が必要になるたびに registry へ追加 → `@dads/vue` を patch リリース → 利用側で依存更新**、という対応が必要になる。
+
+> 補足: アプリ固有のニッチなアイコンまで毎回ここへ追加する運用が重くなってきた場合は、`DadsIcon` に「登録 API / raw SVG prop」等の拡張ポイントを設ける案（方針 B）を別 Issue で検討する。共通性の高いアイコンは本体 registry（方針 A）、アプリ固有は利用側で登録、という住み分けが想定。現時点では方針 A のみ採用。
+
+### 利用側で「未収録アイコンが必要」と判明したら
+
+1. 必要な Material Symbols 名（outlined / weight 400）を確定する。名前は <https://fonts.google.com/icons> で検索（例: ゴミ箱 → `delete`）。複数アプリで共通利用されそうな**基本アイコンか**を確認する（基本アイコンであれば本体 registry に入れる価値がある）。
+2. dads-lib に Issue を立てる（`feat(vue): icon-registry に <name...> を追加` 等）。要求元アプリと用途を添える。
+
+### registry にアイコンを追加する手順（メンテナ向け）
+
+1. **追加先の定数を選ぶ**（`packages/vue/scripts/generate-icon-registry.mjs`）:
+   - 旧 `mdi-*` クラスからの移行を伴うもの → `MDI_TO_SYMBOL`（移行表も兼ねる）
+   - `@dads/vue` のコンポーネント内部でのみ使う / デモ用 → `EXTRA_SYMBOLS`
+   - **利用側アプリ向けの汎用基本アイコン** → `COMMON_SYMBOLS` ← 通常はここ
+2. 対象の Material Symbols 名を上記いずれかの配列に追記する（**`icon-registry.ts` を手書きしない**）。
+3. registry を再生成する:
+
+   ```sh
+   pnpm --filter @dads/vue exec node scripts/generate-icon-registry.mjs
+   # または packages/vue/ で: node scripts/generate-icon-registry.mjs
+   ```
+
+   - 名前が `@material-symbols/svg-400` に存在しなければ `missing` でエラー終了する（名前ミスや当バージョン未収録を検知できる）。
+   - 生成後は `pnpm --filter @dads/vue exec prettier --write src/components/Icon/icon-registry.ts` で整形。
+
+4. このファイル（`icon-mapping.md`）の該当表に追記する（汎用追加なら「汎用追加アイコン」表）。必要に応じて `packages/vue/README.md` のアイコン節も更新。
+5. 検証: `pnpm --filter @dads/vue typecheck`（`DadsIconName` 型反映）/ `test`（`DadsIcon` の同梱・描画検証）/ `build`。
+6. changeset を追加（**patch** 相当。additive で非破壊）し、PR（base `development`）→ マージ後 `./scripts/release-vue.sh <version>` で `vue-v<version>` をリリース。手順は [`../architecture/multi-remote-release.md`](../architecture/multi-remote-release.md) を参照。
+
+> ポイント: registry への追加は常に **additive（既存名・型・公開 API 不変）** なので patch リリースで足りる。`DadsIconName` が増えるだけで利用側に破壊的影響は無い。
