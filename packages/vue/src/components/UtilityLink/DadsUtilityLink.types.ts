@@ -13,7 +13,7 @@ export interface DadsUtilityLinkItem {
   /** リンク先 URL (必須)。 */
   href: string
   /**
-   * Material Design Icon クラス名 (例: `'mdi-help-circle-outline'`)。
+   * Material Symbols アイコン名 (例: `'help'`)。
    * 指定された場合、ラベルの前にリードアイコンとして描画される。
    */
   iconName?: string
@@ -40,7 +40,7 @@ export interface DadsUtilityLinkProps {
   href?: string
   /** 単一リンクモードの表示テキスト。 */
   label?: string
-  /** 単一リンクモード: リードアイコン (MDI クラス名)。 */
+  /** 単一リンクモード: リードアイコン (Material Symbols アイコン名)。 */
   iconName?: string
   /** 単一リンクモード: 外部リンクなら `true`。 */
   external?: boolean

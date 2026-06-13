@@ -53,32 +53,15 @@ import { DadsButton } from '@dads/vue'
 
 ## Color
 
-5 つの semantic color (`primary` / `success` / `error` / `warning` / `secondary`)。デフォルトは `primary`。
+公式 DADS のボタンは blue 単色です。`color` は `primary` のみで、デフォルトも `primary`。
+（旧 `success` / `error` / `warning` / `secondary` は公式に対応が無いため Issue #18 で撤廃しました。）
 
 <div class="demo">
-  <span class="demo-label">Solid fill</span>
+  <span class="demo-label">Solid fill / Outline / Text</span>
   <div class="demo-row">
-    <DadsButton color="primary">Primary</DadsButton>
-    <DadsButton color="success">Success</DadsButton>
-    <DadsButton color="error">Error</DadsButton>
-    <DadsButton color="warning">Warning</DadsButton>
-    <DadsButton color="secondary">Secondary</DadsButton>
-  </div>
-  <span class="demo-label" style="margin-top:1rem">Outline</span>
-  <div class="demo-row">
-    <DadsButton variant="outline" color="primary">Primary</DadsButton>
-    <DadsButton variant="outline" color="success">Success</DadsButton>
-    <DadsButton variant="outline" color="error">Error</DadsButton>
-    <DadsButton variant="outline" color="warning">Warning</DadsButton>
-    <DadsButton variant="outline" color="secondary">Secondary</DadsButton>
-  </div>
-  <span class="demo-label" style="margin-top:1rem">Text</span>
-  <div class="demo-row">
-    <DadsButton variant="text" color="primary">Primary</DadsButton>
-    <DadsButton variant="text" color="success">Success</DadsButton>
-    <DadsButton variant="text" color="error">Error</DadsButton>
-    <DadsButton variant="text" color="warning">Warning</DadsButton>
-    <DadsButton variant="text" color="secondary">Secondary</DadsButton>
+    <DadsButton color="primary">Solid fill</DadsButton>
+    <DadsButton variant="outline" color="primary">Outline</DadsButton>
+    <DadsButton variant="text" color="primary">Text</DadsButton>
   </div>
 </div>
 
@@ -102,12 +85,12 @@ import { DadsButton } from '@dads/vue'
 
 ## アイコン付き
 
-`prependIcon` / `appendIcon` に Material Design Icons のクラス名を渡す。
-利用側で `@mdi/font` の CSS を読み込むことが前提（カタログ側では未ロードのためここでは表示されない）。
+`prependIcon` / `appendIcon` に Material Symbols 名を渡す。
+アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 ```vue
-<DadsButton prepend-icon="mdi-download">Download</DadsButton>
-<DadsButton append-icon="mdi-arrow-right">Next</DadsButton>
+<DadsButton prepend-icon="download">Download</DadsButton>
+<DadsButton append-icon="arrow_forward">Next</DadsButton>
 ```
 
 ## リンクとして
@@ -122,19 +105,19 @@ import { DadsButton } from '@dads/vue'
 
 ## Props
 
-| Prop          | 型                                                              | デフォルト     | 説明                                          |
-| ------------- | --------------------------------------------------------------- | -------------- | --------------------------------------------- |
-| `variant`     | `'solid-fill' \| 'outline' \| 'text'`                           | `'solid-fill'` | 視覚バリアント                                |
-| `size`        | `'lg' \| 'md' \| 'sm' \| 'xs'`                                  | `'md'`         | サイズ                                        |
-| `color`       | `'primary' \| 'success' \| 'error' \| 'warning' \| 'secondary'` | `'primary'`    | セマンティックカラー                          |
-| `disabled`    | `boolean`                                                       | `false`        | 操作不可化                                    |
-| `loading`     | `boolean`                                                       | `false`        | ロード中（スピナー表示、クリック抑止）        |
-| `prependIcon` | `string`                                                        | -              | 前置アイコンの MDI クラス名                   |
-| `appendIcon`  | `string`                                                        | -              | 後置アイコンの MDI クラス名                   |
-| `block`       | `boolean`                                                       | `false`        | コンテナ幅にストレッチ                        |
-| `type`        | `'button' \| 'submit' \| 'reset'`                               | `'button'`     | ネイティブ button type (`href` 指定時は無視)  |
-| `href`        | `string`                                                        | -              | 指定時は `<a>` でレンダリング                 |
-| `ariaLabel`   | `string`                                                        | -              | アクセシブル名 (アイコンのみのボタンでは必須) |
+| Prop          | 型                                    | デフォルト     | 説明                                          |
+| ------------- | ------------------------------------- | -------------- | --------------------------------------------- |
+| `variant`     | `'solid-fill' \| 'outline' \| 'text'` | `'solid-fill'` | 視覚バリアント                                |
+| `size`        | `'lg' \| 'md' \| 'sm' \| 'xs'`        | `'md'`         | サイズ                                        |
+| `color`       | `'primary'`                           | `'primary'`    | カラー軸（公式は blue 単色）                  |
+| `disabled`    | `boolean`                             | `false`        | 操作不可化                                    |
+| `loading`     | `boolean`                             | `false`        | ロード中（スピナー表示、クリック抑止）        |
+| `prependIcon` | `string`                              | -              | 前置アイコンの Material Symbols 名            |
+| `appendIcon`  | `string`                              | -              | 後置アイコンの Material Symbols 名            |
+| `block`       | `boolean`                             | `false`        | コンテナ幅にストレッチ                        |
+| `type`        | `'button' \| 'submit' \| 'reset'`     | `'button'`     | ネイティブ button type (`href` 指定時は無視)  |
+| `href`        | `string`                              | -              | 指定時は `<a>` でレンダリング                 |
+| `ariaLabel`   | `string`                              | -              | アクセシブル名 (アイコンのみのボタンでは必須) |
 
 ## Events
 

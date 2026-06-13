@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsEmergencyBannerEmits,
   DadsEmergencyBannerProps,
@@ -9,7 +10,7 @@ const props = withDefaults(defineProps<DadsEmergencyBannerProps>(), {
   modelValue: true,
   closable: false,
   closeLabel: '閉じる',
-  iconName: 'mdi-alert',
+  iconName: 'warning',
   ariaLabel: '緊急情報',
   linkExternal: false,
   newTabHintText: '（新規タブで開く）',
@@ -53,10 +54,11 @@ const onClose = () => {
       </p>
       <header v-if="title || $slots.title" class="dads-emergency-banner__header">
         <h2 class="dads-emergency-banner__heading">
-          <i
+          <DadsIcon
             v-if="iconName"
-            :class="['mdi', iconName, 'dads-emergency-banner__icon']"
-            aria-hidden="true"
+            :name="iconName"
+            class="dads-emergency-banner__icon"
+            :size="24"
           />
           <slot name="title">{{ title }}</slot>
         </h2>
@@ -74,10 +76,11 @@ const onClose = () => {
           :rel="linkExternal ? 'noopener noreferrer' : undefined"
         >
           {{ linkLabel }}
-          <i
+          <DadsIcon
             v-if="linkExternal"
-            class="mdi mdi-open-in-new dads-emergency-banner__external-icon"
-            aria-hidden="true"
+            name="open_in_new"
+            class="dads-emergency-banner__external-icon"
+            :size="16"
           />
           <span v-if="linkExternal" class="dads-emergency-banner__sr-only">
             {{ newTabHintText }}
@@ -91,7 +94,7 @@ const onClose = () => {
         :aria-label="closeLabel"
         @click="onClose"
       >
-        <i class="mdi mdi-close" aria-hidden="true" />
+        <DadsIcon name="close" :size="20" />
       </button>
     </div>
   </Transition>
@@ -120,6 +123,7 @@ const onClose = () => {
   color: var(--color-neutral-solid-gray-800, #333);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: 1rem;
+  font-weight: normal;
   line-height: 1.7;
   letter-spacing: 0.02em;
 
@@ -236,6 +240,8 @@ const onClose = () => {
       &:hover {
         background-color: var(--color-semantic-error-2, #a30d24);
         text-decoration: underline;
+        text-decoration-thickness: 0.0625rem;
+        text-underline-offset: 0.1875rem;
       }
     }
 
@@ -273,7 +279,7 @@ const onClose = () => {
     font-size: 1.25rem;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.06);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
     }
   }
 

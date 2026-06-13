@@ -1,9 +1,6 @@
 export { default as DadsAccordion } from './DadsAccordion.vue'
 export type {
   DadsAccordionEmits,
-  DadsAccordionItem,
+  DadsAccordionHeadingLevel,
   DadsAccordionProps,
-  DadsAccordionType,
-  DadsAccordionSize,
-  DadsAccordionReturnLink,
 } from './DadsAccordion.types'

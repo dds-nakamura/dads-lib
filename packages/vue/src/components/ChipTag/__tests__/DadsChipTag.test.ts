@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import DadsChipTag from '../DadsChipTag.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsChipTagProps } from '../DadsChipTag.types'
 
 enableAutoUnmount(afterEach)
@@ -68,6 +69,14 @@ describe('DadsChipTag', () => {
       const close = wrapper.find('.dads-chip-tag__close')
       expect(close.exists()).toBe(true)
       expect(close.element.tagName).toBe('BUTTON')
+    })
+
+    it('renders the close glyph as an inline DadsIcon svg (name=close)', () => {
+      const wrapper = createWrapper({ closable: true })
+      const close = wrapper.find('.dads-chip-tag__close')
+      expect(close.find('svg.dads-icon').exists()).toBe(true)
+      const icon = wrapper.findComponent(DadsIcon)
+      expect(icon.props('name')).toBe('close')
     })
 
     it('uses the default closeLabel "削除"', () => {
@@ -175,17 +184,20 @@ describe('DadsChipTag', () => {
 
   describe('slots', () => {
     it('renders the prepend slot', () => {
-      const wrapper = createWrapper({}, { default: 'タグ', prepend: '<i class="mdi mdi-tag" />' })
+      const wrapper = createWrapper(
+        {},
+        { default: 'タグ', prepend: '<span class="custom-prepend-icon" />' },
+      )
       const prepend = wrapper.find('.dads-chip-tag__prepend')
       expect(prepend.exists()).toBe(true)
       expect(prepend.attributes('aria-hidden')).toBe('true')
-      expect(prepend.find('.mdi-tag').exists()).toBe(true)
+      expect(prepend.find('.custom-prepend-icon').exists()).toBe(true)
     })
 
     it('renders the append slot when not closable', () => {
       const wrapper = createWrapper(
         {},
-        { default: 'タグ', append: '<i class="mdi mdi-chevron-down" />' },
+        { default: 'タグ', append: '<span class="custom-append-icon" />' },
       )
       const append = wrapper.find('.dads-chip-tag__append')
       expect(append.exists()).toBe(true)
@@ -195,7 +207,7 @@ describe('DadsChipTag', () => {
     it('hides the append slot when closable=true', () => {
       const wrapper = createWrapper(
         { closable: true },
-        { default: 'タグ', append: '<i class="mdi mdi-chevron-down" />' },
+        { default: 'タグ', append: '<span class="custom-append-icon" />' },
       )
       // The close button replaces the append affordance to avoid two trailing
       // icons competing for focus / pointer.

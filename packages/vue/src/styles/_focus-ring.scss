@@ -1,21 +1,40 @@
 // =============================================================================
 // DADS focus ring mixins
 // -----------------------------------------------------------------------------
-// Black 2px outline + yellow 4px shadow, shown only on keyboard focus.
+// Official spec (design-system-example-components-html, e.g. button.css):
+//   outline:        calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+//   outline-offset: calc(2 / 16 * 1rem);
+//   box-shadow:     0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+// Some elements (text buttons, links, menu items) additionally fill the
+// background with yellow-300 and round the corners by 4px.
 // Reference: https://design.digital.go.jp/dads/foundations/
 // =============================================================================
 
-// Common visual rule.
-@mixin _dads-focus-ring-style {
-  outline: 2px solid var(--color-neutral-black, #000);
-  outline-offset: 0;
-  box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+// Common visual rule (outline + offset + shadow), matching official values.
+@mixin dads-focus-ring-style {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+  outline-offset: calc(2 / 16 * 1rem);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
 }
 
 // For elements that own the focus themselves (buttons, links, native inputs).
 @mixin dads-focus-ring {
   &:focus-visible {
-    @include _dads-focus-ring-style;
+    @include dads-focus-ring-style;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// Variant that also fills the background with yellow-300 and rounds the corner,
+// matching the official text-button / link / menu-item focus treatment.
+@mixin dads-focus-ring-fill {
+  &:focus-visible {
+    @include dads-focus-ring-style;
+    background-color: var(--color-primitive-yellow-300, #ffd43d);
+    border-radius: calc(4 / 16 * 1rem);
   }
 
   &:focus:not(:focus-visible) {
@@ -27,6 +46,6 @@
 // (e.g. an input wrapped by a control box with prepend / append icons).
 @mixin dads-focus-ring-within {
   &:focus-within {
-    @include _dads-focus-ring-style;
+    @include dads-focus-ring-style;
   }
 }

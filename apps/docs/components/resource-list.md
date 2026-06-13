@@ -52,9 +52,9 @@ const dateItems = [
 ]
 
 const iconItems = [
-  { title: '請求書ダウンロード', description: 'PDF 形式', iconName: 'mdi-file-document' },
-  { title: 'CSV エクスポート', description: 'CSV 形式', iconName: 'mdi-file-delimited' },
-  { title: '画像アーカイブ', description: 'ZIP 形式', iconName: 'mdi-folder-zip' },
+  { title: '請求書ダウンロード', description: 'PDF 形式', iconName: 'description' },
+  { title: 'CSV エクスポート', description: 'CSV 形式', iconName: 'description' },
+  { title: '画像アーカイブ', description: 'ZIP 形式', iconName: 'download' },
 ]
 
 const linkItems = [
@@ -146,7 +146,7 @@ const items = [
 
 ## アイコン付き (iconName)
 
-`iconName` に Material Design Icons のクラス名（例: `mdi-file-document`）を渡すと、サムネイル代わりにアイコンが表示される。`thumbnail` と同時指定された場合は **`thumbnail` が優先** される。利用側で `@mdi/font` の CSS を読み込むことが前提（カタログ側では未ロードのためここでは表示されない）。
+`iconName` に Material Symbols 名（例: `description`）を渡すと、サムネイル代わりにアイコンが表示される。`thumbnail` と同時指定された場合は **`thumbnail` が優先** される。アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 <div class="demo">
   <DadsResourceList :items="iconItems" aria-label="ダウンロード一覧" />
@@ -155,8 +155,8 @@ const items = [
 ```vue
 <DadsResourceList
   :items="[
-    { title: '請求書ダウンロード', description: 'PDF 形式', iconName: 'mdi-file-document' },
-    { title: 'CSV エクスポート', description: 'CSV 形式', iconName: 'mdi-file-delimited' },
+    { title: '請求書ダウンロード', description: 'PDF 形式', iconName: 'description' },
+    { title: 'CSV エクスポート', description: 'CSV 形式', iconName: 'description' },
   ]"
   aria-label="ダウンロード一覧"
 />
@@ -204,15 +204,15 @@ const items = [
 
 ### `DadsResourceListItem` の型
 
-| キー          | 型         | 説明                                                                 |
-| ------------- | ---------- | -------------------------------------------------------------------- |
-| `title`       | `string`   | 必須。表示タイトル（`<h3>` で描画）                                  |
-| `description` | `string`   | タイトル下の補足説明                                                 |
-| `href`        | `string`   | 指定時は行全体を `<a>` 化（行全体がリンクになる）                    |
-| `thumbnail`   | `string`   | サムネイル画像 URL（装飾画像扱いで `alt=""`）                        |
-| `date`        | `string`   | 行右端 (`__sub`) に表示する日付文字列                                |
-| `tags`        | `string[]` | 説明行の下に表示するタグチップ                                       |
-| `iconName`    | `string`   | Material Design Icons のクラス名。`thumbnail` 未指定時のみ描画される |
+| キー          | 型         | 説明                                                    |
+| ------------- | ---------- | ------------------------------------------------------- |
+| `title`       | `string`   | 必須。表示タイトル（`<h3>` で描画）                     |
+| `description` | `string`   | タイトル下の補足説明                                    |
+| `href`        | `string`   | 指定時は行全体を `<a>` 化（行全体がリンクになる）       |
+| `thumbnail`   | `string`   | サムネイル画像 URL（装飾画像扱いで `alt=""`）           |
+| `date`        | `string`   | 行右端 (`__sub`) に表示する日付文字列                   |
+| `tags`        | `string[]` | 説明行の下に表示するタグチップ                          |
+| `iconName`    | `string`   | Material Symbols 名。`thumbnail` 未指定時のみ描画される |
 
 ## アクセシビリティ
 

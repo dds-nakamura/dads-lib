@@ -307,26 +307,27 @@ describe('DadsHeading', () => {
   })
 
   // ----------------------------------------------------------------------
-  // icon prop — MDI class convenience matching the prepend-icon slot.
+  // icon prop — Material Symbols name rendered via DadsIcon, matching the
+  // prepend-icon slot.
   // ----------------------------------------------------------------------
   describe('icon prop', () => {
-    it('renders the icon prop as <i class="mdi {icon}"> inside the icon wrapper', () => {
-      const wrapper = createWrapper({ icon: 'mdi-information' })
+    it('renders the icon prop as a DadsIcon svg inside the icon wrapper', () => {
+      const wrapper = createWrapper({ icon: 'info' })
       const icon = wrapper.find('.dads-heading__icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.find('i.mdi.mdi-information').exists()).toBe(true)
+      expect(icon.find('svg.dads-icon').exists()).toBe(true)
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
 
     it('renders the prepend-icon slot in place of the icon prop when both provided', () => {
       const wrapper = createWrapper(
-        { icon: 'mdi-information' },
+        { icon: 'info' },
         { default: 'タイトル', 'prepend-icon': '<span class="custom-svg">★</span>' },
       )
       const icon = wrapper.find('.dads-heading__icon')
       expect(icon.find('.custom-svg').exists()).toBe(true)
-      // The MDI class wrapper should NOT appear when slot is used.
-      expect(icon.find('i.mdi').exists()).toBe(false)
+      // The DadsIcon svg should NOT appear when slot is used.
+      expect(icon.find('svg.dads-icon').exists()).toBe(false)
     })
   })
 
@@ -365,11 +366,12 @@ describe('DadsHeading', () => {
   })
 
   // ----------------------------------------------------------------------
-  // size prop — explicit font-size token from the DADS scale (14..36 px),
-  // independent of level and as.
+  // size prop — explicit font-size step from the official DADS `data-size`
+  // scale (64 / 57 / 45 / 36 / 32 / 28 / 24 / 20 / 18 / 16 px), independent
+  // of level and as.
   // ----------------------------------------------------------------------
   describe('size prop', () => {
-    it.each(['14', '16', '18', '20', '24', '28', '32', '36'] as const)(
+    it.each(['64', '57', '45', '36', '32', '28', '24', '20', '18', '16'] as const)(
       'applies the dads-heading--size-%s modifier when size=%s',
       (size) => {
         const wrapper = createWrapper({ size })
@@ -396,7 +398,7 @@ describe('DadsHeading', () => {
   describe('composition with all parts', () => {
     it('renders shoulder + heading (with icon + chip) + subtitle inside <hgroup>', () => {
       const wrapper = createWrapper(
-        { as: 'h1', shoulder: 'カテゴリA', subtitle: '補足説明', icon: 'mdi-bookmark' },
+        { as: 'h1', shoulder: 'カテゴリA', subtitle: '補足説明', icon: 'bookmark' },
         { default: 'メインタイトル', chip: '<span class="badge">NEW</span>' },
       )
       expect(wrapper.element.tagName).toBe('HGROUP')
@@ -406,7 +408,7 @@ describe('DadsHeading', () => {
       expect(children[2].classList.contains('dads-heading__subtitle')).toBe(true)
 
       const title = wrapper.find('.dads-heading__title')
-      expect(title.find('.dads-heading__icon i.mdi.mdi-bookmark').exists()).toBe(true)
+      expect(title.find('.dads-heading__icon svg.dads-icon').exists()).toBe(true)
       expect(title.find('.dads-heading__text').text()).toBe('メインタイトル')
       expect(title.find('.dads-heading__chip .badge').text()).toBe('NEW')
     })
@@ -430,7 +432,7 @@ describe('DadsHeading', () => {
     })
 
     it('has no violations with an icon glyph', async () => {
-      const wrapper = createWrapper({ as: 'h2', icon: 'mdi-bookmark' }, { default: 'タイトル' })
+      const wrapper = createWrapper({ as: 'h2', icon: 'bookmark' }, { default: 'タイトル' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
   })

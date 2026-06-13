@@ -1,10 +1,8 @@
-import { defineConfig, mergeConfig, type UserConfig } from 'vitest/config'
+import { defineConfig, mergeConfig } from 'vitest/config'
 import viteConfig from './vite.config'
 
-// vite 7 と vitest 3 で型定義が分岐するため、UserConfig として明示的にキャスト
-// した上で mergeConfig に渡す。ランタイムの merge 動作は同一。
 export default mergeConfig(
-  viteConfig as UserConfig,
+  viteConfig,
   defineConfig({
     test: {
       // 移行元 web-label-print と環境を合わせるため happy-dom を使う。

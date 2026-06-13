@@ -1,14 +1,16 @@
 /**
  * Type definitions for DadsNotificationBanner.
  *
- * The banner uses a richer color palette (`info` / `neutral`) than the shared
- * `DadsSemanticColor` primitive, so the color taxonomy is defined locally to
- * avoid leaking notification-only states (`info`, `neutral`) into the
- * Button / form-input semantic palette. Promoting these to the primitive type
- * is intentionally deferred to a follow-up PR once additional consumers
- * appear.
+ * The color taxonomy mirrors the official DADS notification-banner `data-type`
+ * axis exactly: `success` / `error` / `warning` / `info-1` / `info-2`.
+ * - `info-1`: primary blue accent (neutral informational notice)
+ * - `info-2`: neutral gray accent (general informational notice)
+ *
+ * It is defined locally rather than reusing the shared `DadsSemanticColor`
+ * primitive because the banner's `info-1` / `info-2` values are specific to
+ * this component and must not leak into the Button / form-input palette.
  */
-export type DadsNotificationBannerColor = 'success' | 'error' | 'warning' | 'info' | 'neutral'
+export type DadsNotificationBannerColor = 'success' | 'error' | 'warning' | 'info-1' | 'info-2'
 
 /**
  * 公式 DADS が定義する 2 つのデザインスタイル。
@@ -21,7 +23,7 @@ export type DadsNotificationBannerStyle = 'standard' | 'color-chip'
 export interface DadsNotificationBannerProps {
   /** Visibility state. v-model target. Default `true`. */
   modelValue?: boolean
-  /** Semantic color used for background / text / default icon. Default `'info'`. */
+  /** Semantic color used for accent / default icon. Default `'info-1'`. */
   color?: DadsNotificationBannerColor
   /**
    * Visual style. `standard` (default) uses tinted background + border;

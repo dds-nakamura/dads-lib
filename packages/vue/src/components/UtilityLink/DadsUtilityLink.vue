@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsUtilityLinkEmits,
   DadsUtilityLinkItem,
@@ -53,10 +54,11 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
         :rel="item.external ? 'noopener noreferrer' : undefined"
         @click="handleClick(item, index, $event)"
       >
-        <i
+        <DadsIcon
           v-if="item.iconName"
-          :class="['mdi', item.iconName, 'dads-utility-link__lead-icon']"
-          aria-hidden="true"
+          :name="item.iconName"
+          class="dads-utility-link__lead-icon"
+          :size="16"
         />
         <span class="dads-utility-link__label">{{ item.label }}</span>
         <svg
@@ -84,10 +86,11 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
     :rel="normalizedItems[0]!.external ? 'noopener noreferrer' : undefined"
     @click="handleClick(normalizedItems[0]!, 0, $event)"
   >
-    <i
+    <DadsIcon
       v-if="normalizedItems[0]!.iconName"
-      :class="['mdi', normalizedItems[0]!.iconName, 'dads-utility-link__lead-icon']"
-      aria-hidden="true"
+      :name="normalizedItems[0]!.iconName"
+      class="dads-utility-link__lead-icon"
+      :size="16"
     />
     <span class="dads-utility-link__label">{{ normalizedItems[0]!.label }}</span>
     <svg
@@ -121,7 +124,7 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--spacing-16, 1rem);
+  gap: calc(16 / 16 * 1rem);
 
   &__item {
     display: inline-flex;
@@ -136,11 +139,14 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
 // replaced by design tokens where available.
 // ----------------------------------------------------------------------------
 .dads-utility-link {
-  @include ring.dads-focus-ring;
+  // Official utility-link focus-visible fills the background with yellow-300 and
+  // rounds the corner by 4px (utility-link.css:13-19) — same treatment the shared
+  // `dads-focus-ring-fill` mixin provides for links / text buttons / menu items.
+  @include ring.dads-focus-ring-fill;
 
   display: inline-flex;
   align-items: baseline;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   width: fit-content;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-weight: normal;
@@ -149,7 +155,8 @@ const handleClick = (item: DadsUtilityLinkItem, index: number, event: MouseEvent
   letter-spacing: 0;
   text-decoration: none;
   text-wrap: pretty;
-  border-radius: var(--border-radius-4, 0.25rem);
+  // border-radius is applied only on focus-visible (via the fill mixin),
+  // matching the official CSS which rounds the corner only while focused.
 
   &__lead-icon {
     flex-shrink: 0;

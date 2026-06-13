@@ -5,54 +5,16 @@ import type { DadsRadioEmits, DadsRadioProps } from './DadsRadio.types'
 const props = withDefaults(defineProps<DadsRadioProps>(), {
   size: 'md',
   disabled: false,
-  required: false,
   error: false,
-  requiredLabel: '必須',
 })
 
 const emit = defineEmits<DadsRadioEmits>()
 
-// Generated once per instance so the label `for` and `aria-describedby` ids
-// stay stable across renders. Calling useId() inside a computed would re-run
-// on every dependency change.
+// Generated once per instance so the label `for` stays stable across renders.
 const generatedId = useId()
 const radioId = computed(() => props.id ?? `dads-radio-${generatedId}`)
-const hintId = computed(() => `${radioId.value}-hint`)
-const errorId = computed(() => `${radioId.value}-error`)
-const descriptionId = computed(() => `${radioId.value}-description`)
-
-const isError = computed(() => props.error || !!props.errorMessage)
 
 const isChecked = computed(() => props.modelValue === props.value)
-
-const describedBy = computed(() => {
-  // Compose every available descriptor so screen readers announce the option's
-  // own description plus the surrounding hint / error in source order.
-  const ids: string[] = []
-  if (props.description) ids.push(descriptionId.value)
-  if (isError.value && props.errorMessage) ids.push(errorId.value)
-  else if (props.hint) ids.push(hintId.value)
-  return ids.length > 0 ? ids.join(' ') : undefined
-})
-
-const rootClasses = computed(() => [
-  'dads-radio',
-  `dads-radio--${props.size}`,
-  {
-    'dads-radio--checked': isChecked.value,
-    'dads-radio--disabled': props.disabled,
-    'dads-radio--error': isError.value,
-  },
-])
-
-const inputAttrs = computed(() => ({
-  disabled: props.disabled || undefined,
-  'aria-invalid': isError.value || undefined,
-  'aria-required': props.required || undefined,
-  'aria-describedby': describedBy.value,
-}))
-
-const hasFooter = computed(() => (isError.value && !!props.errorMessage) || !!props.hint)
 
 const onChange = (event: Event) => {
   emit('update:modelValue', props.value)
@@ -64,8 +26,17 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 </script>
 
 <template>
-  <div :class="rootClasses">
-    <label class="dads-radio__label" :for="radioId">
+  <label class="dads-radio" :data-size="size">
+    <!--
+      Canonical DADS structure (radio.css / all-radios.html):
+        <label.dads-radio> > <span.dads-radio__radio> > <input.dads-radio__input>
+                                                       + <span.dads-radio__label>
+      The visible control IS the <input> styled via appearance:none — there is no
+      hidden input + pseudo indicator. The `__radio` wrapper only centers the input
+      and renders the hover background ring. Label / required / support / error are
+      delegated to DadsFormControlLabel (DadsRadioGroup), matching official.
+    -->
+    <span class="dads-radio__radio">
       <input
         :id="radioId"
         type="radio"
@@ -73,201 +44,185 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         :name="name"
         :value="value"
         :checked="isChecked"
-        v-bind="inputAttrs"
+        :disabled="disabled || undefined"
+        :aria-invalid="error || undefined"
+        :aria-describedby="ariaDescribedby"
         @change="onChange"
         @focus="onFocus"
         @blur="onBlur"
       />
-      <span class="dads-radio__indicator" aria-hidden="true" />
-      <span v-if="label || required || description" class="dads-radio__text">
-        <span class="dads-radio__title">
-          <template v-if="label">{{ label }}</template>
-          <span v-if="required" class="dads-radio__required" aria-hidden="true">{{
-            requiredLabel
-          }}</span>
-        </span>
-        <span v-if="description" :id="descriptionId" class="dads-radio__description">{{
-          description
-        }}</span>
-      </span>
-    </label>
-
-    <div v-if="hasFooter" class="dads-radio__footer">
-      <span v-if="isError && errorMessage" :id="errorId" class="dads-radio__error" role="alert">{{
-        errorMessage
-      }}</span>
-      <span v-else-if="hint" :id="hintId" class="dads-radio__hint">{{ hint }}</span>
-    </div>
-  </div>
+    </span>
+    <span v-if="label" class="dads-radio__label">{{ label }}</span>
+  </label>
 </template>
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
 
+// Faithful port of the official radio.css. The input itself is the visible
+// control (appearance:none); the `__radio` wrapper centers it and draws the
+// hover background ring.
 .dads-radio {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  display: flex;
+  align-items: start;
+  gap: var(--_gap);
+  width: fit-content;
+  cursor: pointer;
 
-  // -------------------- label wrapper ------------------------------------
-  // `position: relative` anchors the absolutely-positioned input so its focus
-  // ring lands on top of the visible indicator.
-  &__label {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    cursor: pointer;
-    line-height: var(--line-height-150, 1.5);
+  // Click target padding only when there is a visible label (radio.css:8-11).
+  &:has(.dads-radio__label:not(:empty)) {
+    padding-top: calc(8 / 16 * 1rem);
+    padding-bottom: calc(8 / 16 * 1rem);
   }
 
-  // -------------------- input element ------------------------------------
-  // Visually hidden but kept hit-testable so the native focus ring (a11y)
-  // sits over the visible __indicator below.
-  &__input {
-    @include base.dads-reset-input;
-    position: absolute;
-    width: var(--dads-radio-size, 1.25rem);
-    height: var(--dads-radio-size, 1.25rem);
-    margin: 0;
-    opacity: 0;
-    cursor: inherit;
-
-    @include ring.dads-focus-ring;
+  &[data-size='sm'] {
+    --_gap: calc(4 / 16 * 1rem);
+    --_radio-size: calc(24 / 16 * 1rem);
+    --_radio-outer-size: calc(20 / 16 * 1rem);
+    --_radio-inner-size: calc(10 / 16 * 1rem);
+    --_radio-border-width: calc(2 / 16 * 1rem);
+    --_label-padding-top: 1px;
+    --_label-font-size: calc(16 / 16 * 1rem);
   }
 
-  &__indicator {
-    position: relative;
-    display: inline-block;
-    width: var(--dads-radio-size, 1.25rem);
-    height: var(--dads-radio-size, 1.25rem);
-    flex-shrink: 0;
-    background-color: var(--color-bg-surface, #fff);
-    border: 2px solid var(--color-border-default, rgba(0, 0, 0, 0.5));
-    border-radius: 50%;
-    transition:
-      border-color 0.15s ease,
-      background-color 0.15s ease;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      margin: auto;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background-color: var(--color-primary, #0017c1);
-      transition:
-        width 0.15s ease,
-        height 0.15s ease;
-    }
+  &[data-size='md'] {
+    --_gap: calc(8 / 16 * 1rem);
+    --_radio-size: calc(32 / 16 * 1rem);
+    --_radio-outer-size: calc(26 / 16 * 1rem);
+    --_radio-inner-size: calc(12 / 16 * 1rem);
+    --_radio-border-width: calc(2 / 16 * 1rem);
+    --_label-padding-top: calc(4 / 16 * 1rem);
+    --_label-font-size: calc(16 / 16 * 1rem);
   }
 
-  // -------------------- text -------------------------------------------
-  // The label / required marker share a row; an optional description sits on
-  // the line below. Flex column so they stack neatly.
-  &__text {
-    display: inline-flex;
-    flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+  &[data-size='lg'] {
+    --_gap: calc(12 / 16 * 1rem);
+    --_radio-size: calc(44 / 16 * 1rem);
+    --_radio-outer-size: calc(36 / 16 * 1rem);
+    --_radio-inner-size: calc(16 / 16 * 1rem);
+    --_radio-border-width: calc(3 / 16 * 1rem);
+    --_label-padding-top: calc(10 / 16 * 1rem);
+    --_label-font-size: calc(17 / 16 * 1rem);
   }
 
-  &__title {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-  }
-
-  &__description {
-    color: var(--color-text-secondary, #4d4d4d);
-    font-size: var(--font-size-14, 0.875rem);
-    line-height: var(--line-height-150, 1.5);
-  }
-
-  &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
-  }
-
-  // -------------------- footer (hint / error) ---------------------------
-  &__footer {
+  // -------------------- centering wrapper -------------------------------
+  &__radio {
     display: flex;
-    gap: var(--spacing-8, 0.5rem);
-    font-size: var(--font-size-14, 0.875rem);
-    line-height: var(--line-height-150, 1.5);
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    width: var(--_radio-size);
+    height: var(--_radio-size);
+    border-radius: 50%;
   }
 
-  &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
-  }
-
-  &__error {
-    color: var(--color-error, #ec0000);
-    font-weight: 500;
-  }
-
-  // -------------------- size --------------------------------------------
-  &--lg {
-    --dads-radio-size: 1.5rem;
-    font-size: var(--font-size-18, 1.125rem);
-  }
-  &--md {
-    --dads-radio-size: 1.25rem;
-    font-size: var(--font-size-16, 1rem);
-  }
-  &--sm {
-    --dads-radio-size: 1rem;
-    font-size: var(--font-size-14, 0.875rem);
-  }
-
-  // -------------------- checked ----------------------------------------
-  &--checked &__indicator {
-    border-color: var(--color-primary, #0017c1);
-
-    &::after {
-      width: 50%;
-      height: 50%;
+  @media (hover: hover) {
+    &__radio:has(:not(:focus, :disabled, [aria-disabled='true']):hover) {
+      background-color: var(--color-neutral-solid-gray-420, #949494);
     }
   }
 
-  // -------------------- hover (interactive) ----------------------------
-  &:not(.dads-radio--disabled):not(.dads-radio--error) &__label:hover &__indicator {
-    border-color: var(--color-text-primary, #1a1a1a);
+  // -------------------- visible control (the input itself) -------------
+  &__input {
+    --_base-color: var(--color-neutral-white, #fff);
+    --_accent-color: var(--color-primitive-blue-900, #0017c1);
+    --_accent-hover-color: var(--color-primitive-blue-1100, #00118f);
+    --_border-color: var(--color-neutral-solid-gray-600, #666);
+    --_border-hover-color: var(--color-neutral-black, #000);
+
+    position: relative;
+    margin: 0;
+    appearance: none;
+    width: var(--_radio-outer-size);
+    height: var(--_radio-outer-size);
+    border-radius: 51%;
+    background-color: var(--_base-color);
+    border: var(--_radio-border-width) solid var(--_border-color);
+    cursor: inherit;
   }
 
-  // -------------------- disabled ---------------------------------------
-  &--disabled {
-    pointer-events: none;
-    opacity: 0.5;
+  &__input:focus {
+    outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+    outline-offset: calc(2 / 16 * 1rem);
+    box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
   }
 
-  // -------------------- error ------------------------------------------
-  &--error &__indicator {
-    border-color: var(--color-error, #ec0000);
-  }
-  &--error.dads-radio--checked &__indicator::after {
-    background-color: var(--color-error, #ec0000);
+  @media (hover: hover) {
+    &__input:not(:disabled, [aria-disabled='true']):hover {
+      border-color: var(--_border-hover-color);
+    }
   }
 
-  // -------------------- forced colors ----------------------------------
+  &__input:checked {
+    border-color: var(--_accent-color);
+  }
+
+  @media (hover: hover) {
+    &__input:checked:not(:disabled, [aria-disabled='true']):hover {
+      border-color: var(--_accent-hover-color);
+    }
+  }
+
+  &__input:checked::before {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: var(--_radio-inner-size);
+    height: var(--_radio-inner-size);
+    border-radius: 51%;
+    background-color: var(--_accent-color);
+    content: '';
+  }
+
+  @media (hover: hover) {
+    &__input:checked:not(:disabled, [aria-disabled='true']):hover::before {
+      background-color: var(--_accent-hover-color);
+    }
+  }
+
+  &__input[aria-invalid='true'] {
+    --_accent-color: var(--color-semantic-error-1, #ec0000);
+    --_accent-hover-color: var(--color-primitive-red-1000, #c00);
+    --_border-color: var(--color-semantic-error-1, #ec0000);
+    --_border-hover-color: var(--color-primitive-red-1000, #c00);
+  }
+
+  &__input:is(:disabled, [aria-disabled='true']) {
+    --_base-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    --_accent-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+    --_accent-hover-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+    --_border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+    --_border-hover-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+
+    cursor: not-allowed;
+  }
+
   @include base.dads-forced-colors {
-    &__indicator {
-      border: 2px solid CanvasText;
-      background-color: Canvas;
-
-      &::after {
-        background-color: CanvasText;
-      }
+    &__input,
+    &__input[aria-invalid='true'] {
+      --_accent-color: Highlight;
+      --_accent-hover-color: Highlight;
+      --_border-color: ButtonText;
+      --_border-hover-color: ButtonText;
     }
+
+    &__input:is(:disabled, [aria-disabled='true']) {
+      --_accent-color: GrayText;
+      --_accent-hover-color: GrayText;
+      --_border-color: GrayText;
+      --_border-hover-color: GrayText;
+    }
+  }
+
+  // -------------------- label ------------------------------------------
+  &__label {
+    padding-top: var(--_label-padding-top);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
+    font-weight: normal;
+    font-size: var(--_label-font-size);
+    line-height: 1.3;
+    font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
+    letter-spacing: 0;
   }
 }
 </style>

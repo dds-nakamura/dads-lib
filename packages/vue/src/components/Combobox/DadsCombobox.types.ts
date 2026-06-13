@@ -5,7 +5,7 @@ import type { DadsSize } from '../../types/common'
  *
  * A free-input combobox: the user can pick from a filtered list **or** confirm
  * an arbitrary string with `Enter`. Multi-select renders selected values as
- * `DadsChip` tags with individual remove buttons. The default filter is a
+ * `DadsChipTag` chips with individual remove buttons. The default filter is a
  * case-insensitive substring match against `item.title`; pass a custom
  * `filter` prop to override.
  */

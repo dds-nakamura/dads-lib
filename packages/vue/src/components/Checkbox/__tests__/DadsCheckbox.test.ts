@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
-import { nextTick } from 'vue'
 import DadsCheckbox from '../DadsCheckbox.vue'
 import type { DadsCheckboxProps } from '../DadsCheckbox.types'
 
@@ -12,35 +11,42 @@ const createWrapper = (props: DadsCheckboxProps = {}) =>
 
 describe('DadsCheckbox', () => {
   describe('rendering', () => {
-    it('renders a checkbox input', () => {
+    it('renders the canonical control: visible input inside __checkbox', () => {
       const wrapper = createWrapper()
-      const input = wrapper.find('input')
+      const control = wrapper.find('.dads-checkbox__checkbox')
+      expect(control.exists()).toBe(true)
+      const input = control.find('input.dads-checkbox__input')
       expect(input.exists()).toBe(true)
       expect(input.attributes('type')).toBe('checkbox')
     })
 
-    it('renders the indicator span', () => {
+    it('does not render the legacy indicator pseudo-control', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-checkbox__indicator').exists()).toBe(true)
+      expect(wrapper.find('.dads-checkbox__indicator').exists()).toBe(false)
     })
 
     it('renders the label text when provided', () => {
       const wrapper = createWrapper({ label: '同意する' })
-      const text = wrapper.find('.dads-checkbox__text')
+      const text = wrapper.find('.dads-checkbox__label')
       expect(text.exists()).toBe(true)
       expect(text.text()).toContain('同意する')
     })
 
+    it('omits the label span when no label is provided (standalone)', () => {
+      const wrapper = createWrapper()
+      expect(wrapper.find('.dads-checkbox__label').exists()).toBe(false)
+    })
+
     it('does not render footer without hint or error', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-checkbox__footer').exists()).toBe(false)
+      expect(wrapper.find('.dads-checkbox-field__footer').exists()).toBe(false)
     })
   })
 
   describe('size', () => {
-    it.each(['lg', 'md', 'sm'] as const)('applies dads-checkbox--%s class', (size) => {
+    it.each(['lg', 'md', 'sm'] as const)('applies data-size="%s" on the checkbox', (size) => {
       const wrapper = createWrapper({ size })
-      expect(wrapper.classes()).toContain(`dads-checkbox--${size}`)
+      expect(wrapper.find('.dads-checkbox').attributes('data-size')).toBe(size)
     })
   })
 
@@ -70,9 +76,10 @@ describe('DadsCheckbox', () => {
       expect(input.checked).toBe(true)
     })
 
-    it('applies the checked modifier class when modelValue is true', () => {
-      const wrapper = createWrapper({ modelValue: true })
-      expect(wrapper.classes()).toContain('dads-checkbox--checked')
+    it('reflects unchecked modelValue on the input', () => {
+      const wrapper = createWrapper({ modelValue: false })
+      const input = wrapper.find('input').element as HTMLInputElement
+      expect(input.checked).toBe(false)
     })
   })
 
@@ -88,11 +95,6 @@ describe('DadsCheckbox', () => {
       expect(wrapper.find('input').attributes('aria-checked')).toBe('mixed')
     })
 
-    it('applies the indeterminate modifier class', () => {
-      const wrapper = createWrapper({ indeterminate: true })
-      expect(wrapper.classes()).toContain('dads-checkbox--indeterminate')
-    })
-
     it('updates the DOM indeterminate property when prop changes', async () => {
       const wrapper = createWrapper({ indeterminate: false })
       const input = wrapper.find('input').element as HTMLInputElement
@@ -103,21 +105,21 @@ describe('DadsCheckbox', () => {
       expect(input.indeterminate).toBe(false)
     })
 
-    it('does not apply the checked class when both modelValue and indeterminate are true', () => {
+    it('keeps the DOM indeterminate property even when modelValue is also true', () => {
       const wrapper = createWrapper({ modelValue: true, indeterminate: true })
-      expect(wrapper.classes()).toContain('dads-checkbox--indeterminate')
-      expect(wrapper.classes()).not.toContain('dads-checkbox--checked')
+      const input = wrapper.find('input').element as HTMLInputElement
+      expect(input.indeterminate).toBe(true)
+      expect(wrapper.find('input').attributes('aria-checked')).toBe('mixed')
     })
   })
 
   describe('label and id wiring', () => {
-    it('uses the explicit id when provided', () => {
+    it('uses the explicit id on the input when provided', () => {
       const wrapper = createWrapper({ label: 'Agree', id: 'my-cb' })
       expect(wrapper.find('input').attributes('id')).toBe('my-cb')
-      expect(wrapper.find('label').attributes('for')).toBe('my-cb')
     })
 
-    it('auto-generates a unique id and links the label', () => {
+    it('auto-generates a unique id per instance', () => {
       const wrapper = mount({
         components: { DadsCheckbox },
         template: `
@@ -128,21 +130,18 @@ describe('DadsCheckbox', () => {
         `,
       })
       const inputs = wrapper.findAll('input')
-      const labels = wrapper.findAll('label')
       const idA = inputs[0].attributes('id')
       const idB = inputs[1].attributes('id')
       expect(idA).toBeTruthy()
       expect(idB).toBeTruthy()
       expect(idA).not.toBe(idB)
-      expect(labels[0].attributes('for')).toBe(idA)
-      expect(labels[1].attributes('for')).toBe(idB)
     })
   })
 
   describe('required', () => {
     it('renders a required marker', () => {
       const wrapper = createWrapper({ label: 'Agree', required: true })
-      expect(wrapper.find('.dads-checkbox__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-checkbox__requirement').exists()).toBe(true)
     })
 
     it('sets aria-required on the input', () => {
@@ -150,9 +149,9 @@ describe('DadsCheckbox', () => {
       expect(wrapper.find('input').attributes('aria-required')).toBe('true')
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 label when required is true', () => {
       const wrapper = createWrapper({ label: 'Agree', required: true })
-      expect(wrapper.find('.dads-checkbox__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-checkbox__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -161,7 +160,7 @@ describe('DadsCheckbox', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-checkbox__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-checkbox__requirement').text()).toBe('Required')
     })
   })
 
@@ -171,44 +170,19 @@ describe('DadsCheckbox', () => {
       expect(wrapper.find('input').attributes('disabled')).toBeDefined()
     })
 
-    it('applies the disabled modifier class', () => {
+    it('applies the disabled modifier class on the field wrapper', () => {
       const wrapper = createWrapper({ disabled: true })
-      expect(wrapper.classes()).toContain('dads-checkbox--disabled')
-    })
-  })
-
-  describe('readonly', () => {
-    it('applies the readonly modifier class', () => {
-      const wrapper = createWrapper({ readonly: true })
-      expect(wrapper.classes()).toContain('dads-checkbox--readonly')
-    })
-
-    it('does not emit update:modelValue when readonly', async () => {
-      const wrapper = createWrapper({ readonly: true, modelValue: false })
-      const input = wrapper.find('input')
-      ;(input.element as HTMLInputElement).checked = true
-      await input.trigger('change')
-      expect(wrapper.emitted('update:modelValue')).toBeUndefined()
-    })
-
-    it('restores the DOM checked state to modelValue when readonly toggled', async () => {
-      const wrapper = createWrapper({ readonly: true, modelValue: false })
-      const input = wrapper.find('input')
-      const inputEl = input.element as HTMLInputElement
-      inputEl.checked = true
-      await input.trigger('change')
-      await nextTick()
-      expect(inputEl.checked).toBe(false)
+      expect(wrapper.classes()).toContain('dads-checkbox-field--disabled')
     })
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message without role="alert" (official a11y guidance)', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-checkbox__error')
+      const error = wrapper.find('.dads-checkbox-field__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBe('alert')
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid when errorMessage is present', () => {
@@ -218,34 +192,34 @@ describe('DadsCheckbox', () => {
 
     it('honors the explicit error prop', () => {
       const wrapper = createWrapper({ error: true })
-      expect(wrapper.classes()).toContain('dads-checkbox--error')
+      expect(wrapper.classes()).toContain('dads-checkbox-field--error')
       expect(wrapper.find('input').attributes('aria-invalid')).toBe('true')
     })
 
     it('hides the hint when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-checkbox__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-checkbox__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-checkbox-field__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-checkbox-field__error-text').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
     it('renders the hint when provided', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hint = wrapper.find('.dads-checkbox__hint')
+      const hint = wrapper.find('.dads-checkbox-field__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('メモ')
     })
 
     it('points aria-describedby at the hint id', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hintId = wrapper.find('.dads-checkbox__hint').attributes('id')
+      const hintId = wrapper.find('.dads-checkbox-field__support-text').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(hintId)
     })
 
     it('points aria-describedby at the error id when error is present', () => {
       const wrapper = createWrapper({ hint: 'メモ', errorMessage: 'エラー' })
-      const errorId = wrapper.find('.dads-checkbox__error').attributes('id')
+      const errorId = wrapper.find('.dads-checkbox-field__error-text').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(errorId)
     })
   })
@@ -267,12 +241,6 @@ describe('DadsCheckbox', () => {
       const wrapper = createWrapper()
       await wrapper.find('input').trigger('blur')
       expect(wrapper.emitted('blur')).toHaveLength(1)
-    })
-
-    it('does not emit change when readonly', async () => {
-      const wrapper = createWrapper({ readonly: true })
-      await wrapper.find('input').trigger('change')
-      expect(wrapper.emitted('change')).toBeUndefined()
     })
   })
 
@@ -323,14 +291,15 @@ describe('DadsCheckbox', () => {
   })
 
   describe('label clickability', () => {
-    it('focuses the input when the label is clicked (label wraps input)', () => {
+    it('wraps the input in the label so clicking the label toggles it', () => {
       const wrapper = createWrapper({ label: 'Click me' })
-      // Native <label> click forwards focus to the contained <input>; verify
-      // structurally so the test is not coupled to jsdom focus behaviour.
-      const label = wrapper.find('label')
+      // The canonical structure wraps the <input> inside <label class="dads-checkbox">
+      // (no `for` needed). Native <label> click forwards to the contained input.
+      const label = wrapper.find('label.dads-checkbox')
       const input = wrapper.find('input')
+      expect(label.exists()).toBe(true)
       expect(label.element.contains(input.element)).toBe(true)
-      expect(label.attributes('for')).toBe(input.attributes('id'))
+      expect(label.attributes('for')).toBeUndefined()
     })
   })
 })

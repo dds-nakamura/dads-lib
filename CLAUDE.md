@@ -49,12 +49,12 @@
 
 | パッケージ              | パス                        | 用途                                                   |
 | ----------------------- | --------------------------- | ------------------------------------------------------ |
-| `@dads/vue`             | `packages/vue/`             | ★ 50 個の Vue 3 コンポーネント実装 (本体)              |
+| `@dads/vue`             | `packages/vue/`             | ★ 49 個の Vue 3 コンポーネント実装 (本体)              |
 | `@dads/tokens`          | `packages/tokens/`          | `@digital-go-jp/design-tokens` の薄ラッパ              |
 | `@dads/tailwind-plugin` | `packages/tailwind-plugin/` | `@digital-go-jp/tailwind-theme-plugin` の薄ラッパ (v3) |
 | `@dads/docs`            | `apps/docs/`                | VitePress カタログ (26 コンポーネントの demo + API)    |
 
-詳細仕様は `.steering/2026-05-12-dads-vue-library-init/{requirements,design,tasklist}.md` を参照。
+詳細仕様は [`docs/`](./docs/) 配下に集約済み（[`docs/README.md`](./docs/README.md) が索引）。
 
 ### 新規アプリで `@dads/vue` を使うときの最短手順
 
@@ -66,7 +66,7 @@ import '@dads/vue/styles' // 全コンポーネントの CSS
 
 ```vue
 <script setup lang="ts">
-import { DadsButton, DadsTextField } from '@dads/vue'
+import { DadsButton, DadsInputText } from '@dads/vue'
 </script>
 ```
 
@@ -103,7 +103,8 @@ dads-lib/
 │
 ├── .changeset/                            Changesets (linked: @dads/*, ignore: @dads/docs)
 ├── .github/workflows/ci.yml               CI (typecheck/lint/test/build × 3)
-├── .steering/                             仕様ドキュメント (requirements/design/tasklist)
+├── .steering/                             一時作業エリア (gitignore / 課題毎フォルダ)
+├── docs/                                  ★ 永続ドキュメント (architecture/components/quality/guides)
 │
 ├── dads-document-md/                      ★ 仕様参照の第一候補（90 ファイル / 596KB）
 │   └── dads/
@@ -169,7 +170,7 @@ dads-lib/
 `dads-document-md/dads/components/` 配下にすべての仕様が Markdown で揃っています。主要カテゴリ:
 
 - **入力系**: button, checkbox, radio, input-text, textarea, select, combobox, date-picker, file-upload, search-box
-- **ナビゲーション系**: breadcrumb, page-navigation, step-navigation, tab, global-menu, mega-menu, mobile-menu, drawer, hamburger-menu-button, header-container, bottom-navigation, scroll-top-button
+- **ナビゲーション系**: breadcrumb, page-navigation, step-navigation, tab, global-menu, mega-menu, mobile-menu, drawer, hamburger-menu-button, header-container
 - **表示系**: card, list, table, table-control, description-list, resource-list, heading, blockquote, divider, image, image-slider, carousel
 - **フィードバック系**: dialog, notification-banner, emergency-banner, progress-indicator
 - **その他**: accordion, disclosure, chip-label, chip-tag, language-selector, menu-list, menu-list-box, utility-link
@@ -215,3 +216,46 @@ dads-lib/
 - GitHub (Design Tokens): <https://github.com/digital-go-jp/design-tokens>
 - npm (Tailwind plugin): <https://www.npmjs.com/package/@digital-go-jp/tailwind-theme-plugin>
 - npm (Design Tokens): <https://www.npmjs.com/package/@digital-go-jp/design-tokens>
+
+## Spec / Steering Workflow
+
+- 課題ごとの仕様作業エリアは `.steering/` 配下に作成する。**`.steering/` は `.gitignore` 対象（永続化しない）**。
+- フォルダ名は `.steering/{ID}-{kebab-case タスク名}/` の形式とする。`{ID}` は **GitHub Issue 番号** または **Backlog 課題キーの数値部分** を使う（旧 `yyyymmdd` プレフィックス運用は廃止）。
+  - 例: GitHub Issue #42 → `.steering/42-dads-vue-figma-compliance/`
+  - 例: Backlog 課題キー `DDS-123` → `.steering/123-dads-vue-figma-compliance/`
+- 各フォルダの基本構成: `requirements.md` / `design.md` / `tasklist.md`（必要に応じ `phase-specs.yaml` / `gap-report-*.md` 等を追加）。
+- **永続化すべき仕様・設計・意思決定は [`docs/`](./docs/) に集約する**。`.steering/` は作業完了後に削除可能なエフェメラル領域。`docs/` の構成は [`docs/README.md`](./docs/README.md) を参照。
+- `/phase-plan` などの skill が自動生成するパス（`.steering/{YYYYMMDD}-{タスク名}/...`）を使う場合も、上書きでフォルダ名を `{ID}-{タスク名}` に揃えること。
+
+## PR Workflow
+
+- Default PR base branch is `development`, NOT `main` (only release PRs target main)
+- Always verify base branch before creating PRs with `gh pr create`
+- After merging, run post-merge cleanup: delete feature branch, close related issues, prune worktrees
+
+## Worktree & Branch Safety
+
+- Before spawning parallel agents in worktrees, ALWAYS fetch latest and rebase from origin/development to avoid base-drift
+- Never commit directly to `development` or `main` — always work on a feature/hotfix branch
+- Verify current branch with `git branch --show-current` before any commit
+
+## Protected Branches (削除禁止)
+
+以下のブランチは **絶対に削除してはならない**。マージ済み判定や branch cleanup の対象から常に除外すること。
+
+| ブランチ      | 種類            | 役割                                                                      |
+| ------------- | --------------- | ------------------------------------------------------------------------- |
+| `main`        | 長期ブランチ    | リリース本流                                                              |
+| `development` | 長期ブランチ    | 開発統合ブランチ（PR のデフォルト base）                                  |
+| `vue-pkg`     | orphan ブランチ | `@dads/vue` の npm 配布スナップショット（`vue-v<semver>` tag を打つ場所） |
+
+- `vue-pkg` は `main` と履歴が独立した orphan ブランチで、`./scripts/release-vue.sh` が `packages/vue/` の dist を含む配布物をコミットする先。`git branch -r --merged` には現れないが、これは設計通り（履歴が独立しているため）であって未マージ状態ではない。
+- マージ済みリモートブランチを削除する作業の際は、上記 3 つを **必ず allowlist として除外** してから `git push origin --delete` を実行する。
+- 上記以外でも `release/*`, `hotfix/*`, tag 付き orphan ブランチなど運用上重要なブランチを見つけたら、削除前に必ずユーザーに確認する。
+
+## Verification
+
+- Use Playwright MCP for visual verification of UI/CSS changes when available
+- If Playwright runtime is missing, fall back to build + unit tests + curl, and explicitly note the limitation
+- Run full test suite before opening PRs
+- Save visual verification screenshots to `screenshots/` (gitignored), never to the repo root

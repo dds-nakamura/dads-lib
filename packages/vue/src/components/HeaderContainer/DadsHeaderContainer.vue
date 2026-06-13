@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsHeaderContainerEmits,
   DadsHeaderContainerProps,
@@ -9,6 +10,7 @@ const props = withDefaults(defineProps<DadsHeaderContainerProps>(), {
   sticky: true,
   showMenuToggle: true,
   menuToggleLabel: 'メニューを開く',
+  menuExpanded: false,
   navAriaLabel: 'メインナビゲーション',
   variant: 'wide-full',
 })
@@ -38,9 +40,11 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
         type="button"
         class="dads-header-container__menu-toggle"
         :aria-label="menuToggleLabel"
+        :aria-expanded="menuExpanded"
+        :aria-controls="menuControls"
         @click="onMenuClick"
       >
-        <i class="mdi mdi-menu" aria-hidden="true" />
+        <DadsIcon name="menu" :size="24" />
       </button>
       <div v-if="hasLogo" class="dads-header-container__logo">
         <slot name="logo">
@@ -75,10 +79,10 @@ const onMenuClick = (event: MouseEvent) => emit('click:menu', event)
 $dads-header-container-breakpoint: 768px;
 
 .dads-header-container {
-  background-color: var(--color-bg-surface, #fff);
-  border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+  background-color: var(--color-neutral-white, #fff);
+  border-bottom: 1px solid var(--color-neutral-solid-gray-420, rgba(0, 0, 0, 0.1));
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- sticky -------------------------------------------
   &--sticky {
@@ -92,9 +96,9 @@ $dads-header-container-breakpoint: 768px;
   &__inner {
     display: flex;
     align-items: center;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
     min-height: 3.5rem; // 56px — comfortable touch target on mobile
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
     margin: 0 auto;
     // The actions slot is pushed by `margin-left: auto`, so flex-wrap on
     // the inner row lets the actions drop onto a second line at sub-768px
@@ -102,8 +106,8 @@ $dads-header-container-breakpoint: 768px;
     flex-wrap: wrap;
 
     @media (max-width: 767px) {
-      gap: var(--spacing-8, 0.5rem);
-      padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+      gap: calc(8 / 16 * 1rem);
+      padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
     }
   }
 
@@ -130,7 +134,7 @@ $dads-header-container-breakpoint: 768px;
   &--compact &__inner {
     max-width: none;
     min-height: 2.5rem; // 40px
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   // -------------------- hamburger menu toggle (mobile only) --------------
@@ -145,11 +149,11 @@ $dads-header-container-breakpoint: 768px;
     height: 2.5rem;
     border-radius: var(--border-radius-4, 0.25rem);
     font-size: 1.5rem;
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
 
     @media (min-width: #{$dads-header-container-breakpoint}) {
@@ -189,7 +193,7 @@ $dads-header-container-breakpoint: 768px;
   &__utility {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     flex-shrink: 0;
     flex-wrap: wrap;
     margin-left: auto;
@@ -203,7 +207,7 @@ $dads-header-container-breakpoint: 768px;
   &__actions {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     flex-shrink: 0;
     flex-wrap: wrap;
 
@@ -216,7 +220,7 @@ $dads-header-container-breakpoint: 768px;
     margin-left: auto;
 
     @media (max-width: 767px) {
-      gap: var(--spacing-4, 0.25rem);
+      gap: calc(4 / 16 * 1rem);
     }
   }
 

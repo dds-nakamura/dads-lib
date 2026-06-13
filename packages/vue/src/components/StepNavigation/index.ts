@@ -4,5 +4,6 @@ export type {
   DadsStepNavigationEmits,
   DadsStepNavigationStep,
   DadsStepNavigationStatus,
+  DadsStepNavigationSize,
   DadsStepNavigationOrientation,
 } from './DadsStepNavigation.types'

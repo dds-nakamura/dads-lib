@@ -1,46 +1,27 @@
 # Accordion
 
-ヘッダーをクリックして開閉できる折りたたみコンテナ。FAQ や設定セクションなど、情報を段階的に開示したい場面で利用する。
+ヘッダー（サマリ）をクリックして開閉できる折りたたみコンテナ。FAQ や設定セクションなど、情報を段階的に開示したい場面で利用する。ネイティブ `<details>` / `<summary>` をベースにした単一の開閉セクションで、複数項目をまとめたいときは `<DadsAccordion>` を縦に並べる。
+
+::: tip ✅ 公式仕様準拠
+公式 DADS の `<details>` / `<summary>` ベースのアコーディオン（円形ボーダー内の chevron アイコン + 見出しラップのサマリ + 任意の「先頭に戻る」リンク）を、クラス名・DOM 構造・インライン SVG・レスポンシブ挙動まで 1:1 で再現しています。
+:::
 
 ## 基本
 
-`items` プロパティで項目を定義し、各項目本文は `panel-{id}` という名前付きスロットで差し込む。デフォルトは `single` モード（同時に開けるのは 1 件まで、再クリックで閉じる）。
+`title` を渡し、本文はデフォルトスロットに記述する。`v-model` で開閉状態 (`boolean`) を双方向バインドできる。
 
 <script setup>
 import { ref } from 'vue'
 import { DadsAccordion } from '@dads/vue'
 
-const faqItems = [
-  { id: 'fee', title: '利用料金はかかりますか' },
-  { id: 'login', title: 'ログイン方法を教えてください' },
-  { id: 'contact', title: 'お問い合わせ窓口はどこですか' },
-]
-
-const singleValue = ref('fee')
-const multipleValue = ref(['fee'])
-const defaultClosed = ref('')
-const presetOpen = ref('login')
-const multiPreset = ref(['fee', 'contact'])
-
-const disabledItems = [
-  { id: 'a', title: '通常項目 A' },
-  { id: 'b', title: '無効化された項目 B', disabled: true },
-  { id: 'c', title: '通常項目 C' },
-]
-const disabledValue = ref('a')
+const open = ref(false)
+const controlled = ref(true)
 </script>
 
 <div class="demo">
-  <DadsAccordion v-model="singleValue" :items="faqItems">
-    <template #panel-fee>
-      <p>本サービスの基本機能は無料でご利用いただけます。一部の高度な機能については、別途有償プランをご用意しています。</p>
-    </template>
-    <template #panel-login>
-      <p>登録済みのメールアドレスとパスワードでログインしてください。パスワードを忘れた場合は「パスワード再設定」リンクから手続きできます。</p>
-    </template>
-    <template #panel-contact>
-      <p>平日 9 時から 17 時まで、専用フォームにてお問い合わせを受け付けています。回答までに 2 営業日ほどお時間をいただく場合があります。</p>
-    </template>
+  <DadsAccordion v-model="open" title="ダミーテキストとは何ですか？">
+    <p>これはダミーテキストです。</p>
+    <p>ダミーテキストは、デザインやレイアウトの作成時に使用される仮の文章です。デザインの全体像を評価したり、テキストの配置や長さを確認したりすることができます。</p>
   </DadsAccordion>
 </div>
 
@@ -49,123 +30,139 @@ const disabledValue = ref('a')
 import { ref } from 'vue'
 import { DadsAccordion } from '@dads/vue'
 
-const items = [
-  { id: 'fee', title: '利用料金はかかりますか' },
-  { id: 'login', title: 'ログイン方法を教えてください' },
-  { id: 'contact', title: 'お問い合わせ窓口はどこですか' },
-]
-const open = ref('fee')
+const open = ref(false)
 </script>
 
 <template>
-  <DadsAccordion v-model="open" :items="items">
-    <template #panel-fee>
-      <p>本サービスの基本機能は無料でご利用いただけます。</p>
-    </template>
-    <template #panel-login>
-      <p>登録済みのメールアドレスとパスワードでログインしてください。</p>
-    </template>
-    <template #panel-contact>
-      <p>平日 9 時から 17 時まで、専用フォームで受け付けています。</p>
-    </template>
+  <DadsAccordion v-model="open" title="ダミーテキストとは何ですか？">
+    <p>これはダミーテキストです。</p>
   </DadsAccordion>
 </template>
 ```
 
-## Single モード
+## defaultOpen（非制御）
 
-`type="single"`（デフォルト）では、開けるパネルは常に最大 1 件。`v-model` は `string`（空文字列のとき全閉）。開いているパネルを再クリックすると閉じる。
-
-<div class="demo">
-  <span class="demo-label">v-model: "{{ presetOpen || '(closed)' }}"</span>
-  <DadsAccordion v-model="presetOpen" :items="faqItems">
-    <template #panel-fee><p>料金は無料です。</p></template>
-    <template #panel-login><p>メールとパスワードでログインします。</p></template>
-    <template #panel-contact><p>専用フォームから受け付けています。</p></template>
-  </DadsAccordion>
-</div>
-
-## Multiple モード
-
-`type="multiple"` を渡すと、複数パネルを同時に開ける。`v-model` は `string[]`。
+`v-model` を使わず初期状態だけ指定したいときは `defaultOpen` を渡す。以降の開閉は内部状態で管理される。
 
 <div class="demo">
-  <span class="demo-label">v-model: {{ JSON.stringify(multiPreset) }}</span>
-  <DadsAccordion v-model="multiPreset" :items="faqItems" type="multiple">
-    <template #panel-fee><p>料金は無料です。</p></template>
-    <template #panel-login><p>メールとパスワードでログインします。</p></template>
-    <template #panel-contact><p>専用フォームから受け付けています。</p></template>
+  <DadsAccordion :default-open="true" title="利用料金はかかりますか">
+    <p>本サービスの基本機能は無料でご利用いただけます。一部の高度な機能については、別途有償プランをご用意しています。</p>
   </DadsAccordion>
 </div>
 
 ```vue
-<DadsAccordion v-model="openIds" :items="items" type="multiple" />
+<DadsAccordion :default-open="true" title="利用料金はかかりますか">
+  <!-- 本文 -->
+</DadsAccordion>
 ```
 
-## 状態
+## 制御モード（v-model）
 
-### 初期全閉
-
-`single` モードでは `v-model` に空文字列 `''` を渡すと、初期状態でどのパネルも開かない。
+外部のボタンから `v-model` を書き換えれば、コンポーネント外部から開閉できる。
 
 <div class="demo">
-  <DadsAccordion v-model="defaultClosed" :items="faqItems">
-    <template #panel-fee><p>料金は無料です。</p></template>
-    <template #panel-login><p>メールとパスワードでログインします。</p></template>
-    <template #panel-contact><p>専用フォームから受け付けています。</p></template>
+  <span class="demo-label">v-model: {{ controlled }}</span>
+  <div class="demo-row">
+    <button type="button" @click="controlled = !controlled">外部から開閉</button>
+  </div>
+  <DadsAccordion v-model="controlled" title="ログイン方法を教えてください">
+    <p>登録済みのメールアドレスとパスワードでログインしてください。パスワードを忘れた場合は「パスワード再設定」リンクから手続きできます。</p>
   </DadsAccordion>
 </div>
 
-### 個別項目の無効化
+## disabled
 
-`items` の各エントリに `disabled: true` を指定すると、その項目はクリック・キーボード操作とも無効化され、矢印キーのフォーカス移動でもスキップされる。
+操作を一時的に無効化したいときは `disabled` を指定する。クリック・キーボード操作いずれでも開閉できない（薄く表示される）。
 
 <div class="demo">
-  <DadsAccordion v-model="disabledValue" :items="disabledItems">
-    <template #panel-a><p>通常項目 A の本文です。</p></template>
-    <template #panel-b><p>このパネルには到達できません。</p></template>
-    <template #panel-c><p>通常項目 C の本文です。</p></template>
+  <DadsAccordion disabled title="この項目は現在準備中です">
+    <p>準備が整い次第、こちらに本文が表示されます。</p>
   </DadsAccordion>
 </div>
 
-## Slot
+## 「先頭に戻る」リンク
 
-各項目の本文は **`panel-{id}` という名前付きスロット** で差し込む。`items` で指定した `id` がそのままスロット名のサフィックスになる。
+`back-link` を指定すると、本文末尾に公式の「先頭に戻る」リンク（サマリへのアンカー）を表示する。長い本文の末尾から見出しへ戻る導線として使う。ラベルは既定で `「{title}」の先頭に戻る`、`back-link-label` で上書きできる。
+
+<div class="demo">
+  <DadsAccordion :default-open="true" back-link title="ダミーテキストはどのような場合に使用されますか？">
+    <p>これはダミーテキストです。ダミーテキストは、デザインやレイアウトの作成時に使用される仮の文章です。ダミーテキストを使用すると、デザインの全体像を評価したり、テキストの配置や長さを確認したりすることができます。ダミーテキストは実際の文章ではないので、内容には意味がありません。</p>
+  </DadsAccordion>
+</div>
 
 ```vue
-<DadsAccordion :items="[{ id: 'foo', title: 'Foo' }]">
-  <template #panel-foo>
-    <p>Foo の本文をここに書く。任意の Vue ノードを置ける。</p>
-  </template>
+<DadsAccordion back-link title="ダミーテキストはどのような場合に使用されますか？">
+  <!-- 本文 -->
 </DadsAccordion>
+```
+
+## 複数項目（スタック）
+
+複数の Q&A を束ねるときは `<DadsAccordion>` を縦に並べる。各セクションは独立して開閉する。
+
+<div class="demo">
+  <DadsAccordion title="利用料金はかかりますか">
+    <p>本サービスの基本機能は無料でご利用いただけます。</p>
+  </DadsAccordion>
+  <DadsAccordion :default-open="true" title="ログイン方法を教えてください">
+    <p>登録済みのメールアドレスとパスワードでログインしてください。</p>
+  </DadsAccordion>
+  <DadsAccordion title="お問い合わせ窓口はどこですか">
+    <p>平日 9 時から 17 時まで、専用フォームにてお問い合わせを受け付けています。</p>
+  </DadsAccordion>
+</div>
+
+```vue
+<template>
+  <DadsAccordion title="利用料金はかかりますか">
+    <p>本サービスの基本機能は無料でご利用いただけます。</p>
+  </DadsAccordion>
+  <DadsAccordion :default-open="true" title="ログイン方法を教えてください">
+    <p>登録済みのメールアドレスとパスワードでログインしてください。</p>
+  </DadsAccordion>
+  <DadsAccordion title="お問い合わせ窓口はどこですか">
+    <p>平日 9 時から 17 時まで、専用フォームで受け付けています。</p>
+  </DadsAccordion>
+</template>
 ```
 
 ## Props
 
-| Prop         | 型                       | デフォルト | 説明                                                                                |
-| ------------ | ------------------------ | ---------- | ----------------------------------------------------------------------------------- |
-| `modelValue` | `string \| string[]`     | `''`       | 開いているパネルの id。`single` では文字列（空文字列で全閉）、`multiple` では配列。 |
-| `items`      | `DadsAccordionItem[]`    | -（必須）  | 項目定義。各要素は `{ id, title, disabled? }`。                                     |
-| `type`       | `'single' \| 'multiple'` | `'single'` | 開閉の振る舞い。`single` は最大 1 件、`multiple` は複数同時可。                     |
-
-`DadsAccordionItem`:
-
-| Field      | 型        | デフォルト | 説明                                                             |
-| ---------- | --------- | ---------- | ---------------------------------------------------------------- |
-| `id`       | `string`  | -（必須）  | 一意識別子。`v-model` の値・スロット名 `panel-{id}` の基となる。 |
-| `title`    | `string`  | -（必須）  | ヘッダーボタンに表示するラベル。                                 |
-| `disabled` | `boolean` | `false`    | 項目を無効化（クリック不可・矢印キーでもスキップ）。             |
+| Prop            | 型                           | デフォルト  | 説明                                                                                            |
+| --------------- | ---------------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| `modelValue`    | `boolean`                    | `undefined` | 制御モードの開閉状態。`undefined` のとき非制御モードとなり `defaultOpen` で初期状態を決定する。 |
+| `defaultOpen`   | `boolean`                    | `false`     | 非制御モード時の初期開閉状態。`modelValue` が指定されている場合は無視される。                   |
+| `title`         | `string`                     | -（必須）   | サマリ見出しに表示するラベル。                                                                  |
+| `headingLevel`  | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `3`         | サマリ内のタイトルを包む見出しレベル。公式は `<h3>`。                                           |
+| `disabled`      | `boolean`                    | `false`     | 操作を無効化する。クリック・キーボードいずれでも開閉できない。                                  |
+| `backLink`      | `boolean`                    | `false`     | `true` で本文末尾に「先頭に戻る」リンク（サマリへのアンカー）を表示する。                       |
+| `backLinkLabel` | `string`                     | `undefined` | 「先頭に戻る」リンクのラベルを上書き。既定は `「{title}」の先頭に戻る`。                        |
 
 ## Events
 
-| Event               | Payload              | 説明                                                                    |
-| ------------------- | -------------------- | ----------------------------------------------------------------------- |
-| `update:modelValue` | `string \| string[]` | 開閉状態が変わったとき発火。`single` は次に開く id、`multiple` は配列。 |
+| Event               | Payload   | 説明                                                               |
+| ------------------- | --------- | ------------------------------------------------------------------ |
+| `update:modelValue` | `boolean` | 開閉状態が変わったとき発火（`v-model` の対）。新しい開閉値を渡す。 |
+| `toggle`            | `boolean` | 開閉状態が変わったとき発火。新しい開閉値を渡す。                   |
+
+## Slots
+
+| Slot      | 説明                                                                |
+| --------- | ------------------------------------------------------------------- |
+| `default` | パネル本文。任意の Vue ノードを差し込める（段落・リスト・表など）。 |
 
 ## アクセシビリティ
 
-- ヘッダーは `<button type="button">` でレンダリングされ、`aria-expanded` が現在の開閉状態を反映する。
-- 各ヘッダーには一意な id が付与され、対応するパネル `role="region"` を `aria-controls` / `aria-labelledby` で双方向に関連付けている。
-- 開閉アイコン (chevron) は `aria-hidden="true"` で支援技術から隠し、状態は `aria-expanded` のみで伝達する。
-- `ArrowDown` / `ArrowUp` / `Home` / `End` でヘッダー間をフォーカス移動できる（端で循環、`disabled` 項目はスキップ）。
-- 見出しは `<h3>` でラップされているため、スクリーンリーダーの見出しナビゲーションでも辿れる。
+- ネイティブ `<details>` / `<summary>` をベースにしているため、ブラウザ標準の開閉セマンティクスをそのまま継承する。
+- `<summary>` には `aria-expanded` を付与し、現在の開閉状態が支援技術に伝わる。
+- サマリのタイトルは見出し（既定 `<h3>`）でラップされ、スクリーンリーダーの見出しナビゲーションでも辿れる。
+- `Enter` / `Space` キーで開閉できる（標準のキーボード操作）。
+- `disabled` 時は `aria-disabled="true"` を設定し、`tabindex="-1"` でフォーカスから外す。
+- 開閉アイコン（chevron）は `aria-hidden="true"` で支援技術から隠し、状態は `aria-expanded` のみで伝達する。
+- `back-link` のアイコンも `aria-hidden="true"`。リンク先は当該サマリの `id`。
+
+## 使い分けの目安
+
+- **複数の Q&A / 設定セクション群** → Accordion（縦に並べる）
+- **単一の補足情報 / グラフの基礎データ** → [Disclosure](./disclosure)
+- **モーダルでのフォーカストラップが必要な重要情報** → [Dialog](./dialog)

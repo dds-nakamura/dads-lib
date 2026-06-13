@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import DadsMenuList from '../MenuList/DadsMenuList.vue'
 import DadsUtilityLink from '../UtilityLink/DadsUtilityLink.vue'
 import type { DadsMenuListItem } from '../MenuList/DadsMenuList.types'
@@ -146,7 +147,7 @@ watch(
               :aria-label="backLabel"
               @click="goBack"
             >
-              <i class="mdi mdi-chevron-left dads-mobile-menu__back-icon" aria-hidden="true" />
+              <DadsIcon name="chevron_left" class="dads-mobile-menu__back-icon" :size="20" />
               <span>{{ backLabel }}</span>
             </button>
             <h2 v-if="isSlide && currentPanel.label" class="dads-mobile-menu__panel-title">
@@ -210,10 +211,11 @@ watch(
                   @click="onSlideItemClick(item, $event)"
                 >
                   <span class="dads-mobile-menu__slide-item-label">{{ item.label }}</span>
-                  <i
+                  <DadsIcon
                     v-if="item.children && item.children.length > 0"
-                    class="mdi mdi-chevron-right dads-mobile-menu__slide-item-chevron"
-                    aria-hidden="true"
+                    name="chevron_right"
+                    class="dads-mobile-menu__slide-item-chevron"
+                    :size="24"
                   />
                 </button>
               </li>
@@ -249,7 +251,9 @@ watch(
   &__overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    // Matches DadsDrawer / DadsDialog scrim: the official opacity-gray-100
+    // overlay token, with a direct fallback for token-less consumers.
+    background-color: var(--color-neutral-opacity-gray-100, rgba(0, 0, 0, 0.1));
   }
 
   // -------------------- panel --------------------------------------------
@@ -259,8 +263,13 @@ watch(
     flex-direction: column;
     width: 100%;
     max-height: 100vh;
-    background-color: var(--color-background-base, #fff);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background-color: var(--color-neutral-white, #fff);
+    // Tokenized elevation, aligned with DadsDrawer's panel (--elevation-2).
+    box-shadow: var(
+      --elevation-2,
+      0 2px 12px 2px rgba(0, 0, 0, 0.1),
+      0 1px 6px 0 rgba(0, 0, 0, 0.3)
+    );
     overflow-y: auto;
 
     &:focus {
@@ -273,8 +282,8 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
     border-bottom: 1px solid var(--color-neutral-solid-gray-100, #e5e5e5);
   }
 
@@ -284,9 +293,9 @@ watch(
 
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     min-height: 2.5rem;
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
     color: var(--color-neutral-solid-gray-800, #1a1a1c);
     font-size: var(--font-size-14, 0.875rem);
@@ -336,7 +345,7 @@ watch(
   // -------------------- nav (main menu) ----------------------------------
   &__nav {
     flex: 1 1 auto;
-    padding: var(--spacing-8, 0.5rem) 0;
+    padding: calc(8 / 16 * 1rem) 0;
   }
 
   // -------------------- slide-mode list ----------------------------------
@@ -359,10 +368,10 @@ watch(
 
     display: flex;
     align-items: center;
-    gap: var(--spacing-12, 0.75rem);
+    gap: calc(12 / 16 * 1rem);
     width: 100%;
     min-height: 3rem; // 48px touch target
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
     color: inherit;
     text-decoration: none;
     text-align: start;
@@ -385,7 +394,7 @@ watch(
 
   // -------------------- utility links ------------------------------------
   &__utility {
-    padding: var(--spacing-16, 1rem);
+    padding: calc(16 / 16 * 1rem);
     border-top: 1px solid var(--color-neutral-solid-gray-100, #e5e5e5);
   }
 

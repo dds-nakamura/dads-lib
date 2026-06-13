@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsGlobalMenuEmits,
   DadsGlobalMenuItem,
@@ -41,10 +42,11 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
           :tabindex="item.disabled ? -1 : undefined"
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-global-menu__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-global-menu__front-icon"
+            :size="24"
           />
           <span class="dads-global-menu__label">{{ item.label }}</span>
         </a>
@@ -58,16 +60,18 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
           :aria-expanded="hasChildren(item) ? Boolean(item.expanded) : undefined"
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-global-menu__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-global-menu__front-icon"
+            :size="24"
           />
           <span class="dads-global-menu__label">{{ item.label }}</span>
-          <i
+          <DadsIcon
             v-if="hasChildren(item)"
-            :class="['mdi', 'mdi-chevron-down', 'dads-global-menu__chevron']"
-            aria-hidden="true"
+            name="keyboard_arrow_down"
+            class="dads-global-menu__chevron"
+            :size="16"
           />
         </button>
       </li>
@@ -91,7 +95,7 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
   flex-wrap: wrap;
   border-bottom: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
   padding: 0;
-  color: var(--color-neutral-solid-gray-900, #1a1a1c);
+  color: var(--color-neutral-solid-gray-900, #1a1a1a);
   list-style-type: none;
   font-weight: bold;
   font-size: 1rem;
@@ -106,7 +110,9 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
 
   &__item-inner {
     @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+    // Menu items fill the focus background with yellow-300 and round the
+    // corners by 4px, matching the official global-menu focus treatment.
+    @include ring.dads-focus-ring-fill;
 
     position: relative;
     display: inline-flex;
@@ -175,26 +181,37 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
   }
 
   // -------------------- current ------------------------------------------
-  &__item-inner[aria-current='page'] {
+  // Official global-menu.css decorates the current item for any `aria-current`
+  // value (not just `page`), so the selector matches the attribute regardless
+  // of its value. The DOM/aria output is unchanged; this only widens which
+  // states pick up the current styling.
+  &__item-inner[aria-current] {
     background-color: var(--color-neutral-white, #fff);
-    color: var(--color-primitive-blue-1000, #001a59);
+    color: var(--color-primitive-blue-1000, #00118f);
 
     &::after {
       position: absolute;
       right: 0;
       bottom: 0;
       left: 0;
-      border-bottom: 4px solid var(--color-primitive-blue-900, #002fa1);
+      border-bottom: 4px solid var(--color-primitive-blue-900, #0017c1);
       content: '';
     }
 
     @media (hover: hover) {
       &:hover {
-        color: var(--color-primitive-blue-900, #002fa1);
+        color: var(--color-primitive-blue-900, #0017c1);
         text-decoration: underline;
         text-decoration-thickness: 0.0625rem;
         text-underline-offset: 0.1875rem;
       }
+    }
+
+    // Keep the white current background when focused so the yellow focus
+    // fill does not erase the current indicator (official: current focus
+    // restores the white background).
+    &:focus-visible {
+      background-color: var(--color-neutral-white, #fff);
     }
   }
 
@@ -207,7 +224,7 @@ const handleClick = (item: DadsGlobalMenuItem, event: MouseEvent) => {
   @include base.dads-forced-colors {
     border-bottom: 1px solid CanvasText;
 
-    &__item-inner[aria-current='page'] {
+    &__item-inner[aria-current] {
       color: Highlight;
 
       &::after {

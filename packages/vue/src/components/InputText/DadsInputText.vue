@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
+import DadsFormControlLabel from '../FormControlLabel/DadsFormControlLabel.vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsInputTextEmits, DadsInputTextProps } from './DadsInputText.types'
 
 const props = withDefaults(defineProps<DadsInputTextProps>(), {
@@ -10,7 +12,7 @@ const props = withDefaults(defineProps<DadsInputTextProps>(), {
   required: false,
   error: false,
   align: 'vertical',
-  requiredLabel: '必須',
+  requiredLabel: '※必須',
 })
 
 // Official DADS a11y guidance discourages both `placeholder` and `maxlength`:
@@ -83,9 +85,12 @@ const inputAttrs = computed(() => ({
   'aria-describedby': describedBy.value,
 }))
 
-const hasFooter = computed(
-  () => (isError.value && !!props.errorMessage) || !!props.hint || props.counter !== undefined,
-)
+// Field-label layer is delegated to DadsFormControlLabel. Map hint→support-text
+// and errorMessage→error-text, keeping the stable ids so aria-describedby still
+// resolves. Only one of support/error is shown at a time (error wins), matching
+// the previous footer behaviour.
+const supportText = computed(() => (isError.value && props.errorMessage ? undefined : props.hint))
+const errorText = computed(() => (isError.value ? props.errorMessage : undefined))
 
 const onInput = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -99,19 +104,25 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 </script>
 
 <template>
-  <div :class="rootClasses">
-    <label v-if="label" :for="inputId" class="dads-input-text__label">
-      {{ label }}
-      <span v-if="required" class="dads-input-text__required" aria-hidden="true">{{
-        requiredLabel
-      }}</span>
-    </label>
-
+  <DadsFormControlLabel
+    :class="rootClasses"
+    :size="size"
+    :label="label"
+    :label-for="inputId"
+    :required="required"
+    :required-label="requiredLabel"
+    :support-text="supportText"
+    :support-text-id="hintId"
+    :error-text="errorText"
+    :error-text-id="errorId"
+    :disabled="disabled"
+  >
     <div class="dads-input-text__control">
-      <i
+      <DadsIcon
         v-if="prependIcon"
-        :class="['mdi', prependIcon, 'dads-input-text__icon', 'dads-input-text__icon--prepend']"
-        aria-hidden="true"
+        :name="prependIcon"
+        :size="20"
+        class="dads-input-text__icon dads-input-text__icon--prepend"
       />
       <input
         :id="inputId"
@@ -124,94 +135,32 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         @focus="onFocus"
         @blur="onBlur"
       />
-      <i
+      <DadsIcon
         v-if="appendIcon"
-        :class="['mdi', appendIcon, 'dads-input-text__icon', 'dads-input-text__icon--append']"
-        aria-hidden="true"
+        :name="appendIcon"
+        :size="20"
+        class="dads-input-text__icon dads-input-text__icon--append"
       />
     </div>
 
-    <div v-if="hasFooter" class="dads-input-text__footer">
-      <span
-        v-if="isError && errorMessage"
-        :id="errorId"
-        class="dads-input-text__error"
-        role="alert"
-        >{{ errorMessage }}</span
-      >
-      <span v-else-if="hint" :id="hintId" class="dads-input-text__hint">{{ hint }}</span>
-      <span v-if="counter !== undefined" :id="counterId" class="dads-input-text__counter"
-        >{{ currentLength }} / {{ counter }}</span
-      >
-    </div>
-  </div>
+    <span v-if="counter !== undefined" :id="counterId" class="dads-input-text__counter"
+      >{{ currentLength }} / {{ counter }}</span
+    >
+  </DadsFormControlLabel>
 </template>
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
 @use '../../styles/focus-ring' as ring;
 
+// The field-label layer (label / ※必須 / support-text / error-text) is owned
+// by DadsFormControlLabel. This stylesheet only styles the input control,
+// icons and the optional character counter.
 .dads-input-text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
-
-  // -------------------- alignment ---------------------------------------
-  // vertical (default) stays as flex-direction: column.
-  // horizontal-* variants swap to a label-row + control-column grid.
-  &--align-horizontal-left,
-  &--align-horizontal-right,
-  &--align-fixed-label {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: start;
-    gap: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
-  }
-
-  &--align-horizontal-left &__label,
-  &--align-horizontal-right &__label,
-  &--align-fixed-label &__label {
-    align-self: center;
-    margin-bottom: 0;
-  }
-
-  &--align-horizontal-right &__label {
-    text-align: end;
-  }
-
-  &--align-fixed-label {
-    grid-template-columns: 8rem 1fr;
-  }
-
-  // The footer should span both columns regardless of alignment so it
-  // doesn't squeeze under the label.
-  &--align-horizontal-left &__footer,
-  &--align-horizontal-right &__footer,
-  &--align-fixed-label &__footer {
-    grid-column: 2;
-  }
-
-  // -------------------- label & required marker --------------------------
-  &__label {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
-    line-height: var(--line-height-150, 1.5);
-  }
-
-  &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
-  }
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
 
   // -------------------- control wrapper ----------------------------------
   // The focus ring lives on the wrapper so prepend / append icons share the
@@ -220,9 +169,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     position: relative;
     display: flex;
     align-items: stretch;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
@@ -250,60 +199,95 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: 1.25em;
   }
 
-  // -------------------- footer (hint / error / counter) ------------------
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
+  // -------------------- counter ------------------------------------------
+  &__counter {
+    align-self: flex-end;
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-  }
-
-  &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
-  }
-
-  &__error {
-    color: var(--color-error, #ec0000);
-    font-weight: 500;
-  }
-
-  &__counter {
-    color: var(--color-text-secondary, #4d4d4d);
-    margin-left: auto;
     font-variant-numeric: tabular-nums;
+  }
+
+  // -------------------- align (official label placement) -----------------
+  // Official DADS allows horizontal label placement (input-text MD「横幅設定 /
+  // 水平配置」): label (and support text) beside the control, optionally right-
+  // aligned or with a fixed-width label column. The field-label layer now lives
+  // in DadsFormControlLabel, so we re-establish these layouts with a grid on the
+  // merged root, targeting the form-control-label parts via :deep. The control
+  // wrapper uses `display: contents`, so `.dads-input-text__control` / counter
+  // participate directly in this grid.
+  &--align-horizontal-left,
+  &--align-horizontal-right,
+  &--align-fixed-label {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    column-gap: calc(16 / 16 * 1rem);
+    row-gap: calc(4 / 16 * 1rem);
+
+    :deep(.dads-form-control-label__label) {
+      grid-column: 1;
+      grid-row: 1;
+      margin-bottom: 0;
+      // align label baseline with the control on the first row
+      align-self: center;
+    }
+    :deep(.dads-form-control-label__support-text) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .dads-input-text__control {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+    .dads-input-text__counter,
+    :deep(.dads-form-control-label__error-text) {
+      grid-column: 2;
+    }
+  }
+
+  &--align-horizontal-right {
+    :deep(.dads-form-control-label__label),
+    :deep(.dads-form-control-label__support-text) {
+      text-align: right;
+    }
+  }
+
+  // Fixed-width label column so multiple stacked fields align their inputs.
+  &--align-fixed-label {
+    grid-template-columns: calc(128 / 16 * 1rem) minmax(0, 1fr);
   }
 
   // -------------------- size ---------------------------------------------
   &--lg &__input {
     min-height: calc(3.5rem - 2px);
-    font-size: var(--font-size-18, 1.125rem);
-    padding: 0 var(--spacing-16, 1rem);
+    font-size: var(--font-size-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
   &--lg &__icon {
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   &--md &__input {
     min-height: calc(3rem - 2px);
     font-size: var(--font-size-16, 1rem);
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
   &--md &__icon {
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   &--sm &__input {
     min-height: calc(2.5rem - 2px);
-    font-size: var(--font-size-14, 0.875rem);
-    padding: 0 var(--spacing-12, 0.75rem);
+    font-size: var(--font-size-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
   &--sm &__icon {
-    padding: 0 var(--spacing-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
   }
 
   // When an icon is rendered, drop the input's leading/trailing padding so
@@ -318,34 +302,55 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-input-text--readonly):not(.dads-input-text--disabled):not(.dads-input-text--error)
     .dads-input-text__control:hover {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-black, #000);
   }
 
   // -------------------- readonly -----------------------------------------
+  // Official input-text uses border-style:dashed only (no background change).
   &--readonly &__control {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
   }
 
   // -------------------- disabled -----------------------------------------
+  // Official disabled uses dedicated tokens (border gray-300 / bg gray-50 /
+  // text gray-420) instead of opacity, which would degrade text contrast.
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+    color: var(--color-neutral-solid-gray-420, #949494);
 
     .dads-input-text__control {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      border-color: var(--color-neutral-solid-gray-300, #d9d9d9);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-input-text__input {
+      color: var(--color-neutral-solid-gray-420, #949494);
     }
   }
 
   // -------------------- error --------------------------------------------
   &--error &__control {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
+  }
+
+  // Invalid + hover deepens the border, matching official red-1000.
+  &--error:not(.dads-input-text--readonly):not(.dads-input-text--disabled)
+    .dads-input-text__control:hover {
+    border-color: var(--color-primitive-red-1000, #a30000);
   }
 
   // -------------------- forced colors ------------------------------------
   @include base.dads-forced-colors {
     &__control {
       border: 1px solid CanvasText;
+    }
+
+    &--disabled &__control {
+      border-color: GrayText;
+    }
+
+    &--disabled &__input {
+      color: GrayText;
     }
   }
 }

@@ -18,14 +18,16 @@ describe('DadsInputText', () => {
 
     it('renders the label when provided', () => {
       const wrapper = createWrapper({ label: '名前' })
-      const label = wrapper.find('label.dads-input-text__label')
+      const label = wrapper.find('label.dads-form-control-label__label')
       expect(label.exists()).toBe(true)
       expect(label.text()).toContain('名前')
     })
 
-    it('does not render the footer when there is no hint, error or counter', () => {
+    it('does not render support, error or counter when none are provided', () => {
       const wrapper = createWrapper()
-      expect(wrapper.find('.dads-input-text__footer').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-input-text__counter').exists()).toBe(false)
     })
   })
 
@@ -108,7 +110,7 @@ describe('DadsInputText', () => {
   describe('required', () => {
     it('renders a required marker', () => {
       const wrapper = createWrapper({ label: 'Name', required: true })
-      expect(wrapper.find('.dads-input-text__required').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__requirement').exists()).toBe(true)
     })
 
     it('sets aria-required on the input', () => {
@@ -116,9 +118,9 @@ describe('DadsInputText', () => {
       expect(wrapper.find('input').attributes('aria-required')).toBe('true')
     })
 
-    it('renders the default 必須 label when required is true', () => {
+    it('renders the default ※必須 marker when required is true', () => {
       const wrapper = createWrapper({ label: 'Name', required: true })
-      expect(wrapper.find('.dads-input-text__required').text()).toBe('必須')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('※必須')
     })
 
     it('renders a custom requiredLabel when provided (i18n override)', () => {
@@ -127,7 +129,7 @@ describe('DadsInputText', () => {
         required: true,
         requiredLabel: 'Required',
       })
-      expect(wrapper.find('.dads-input-text__required').text()).toBe('Required')
+      expect(wrapper.find('.dads-form-control-label__requirement').text()).toBe('Required')
     })
   })
 
@@ -156,12 +158,12 @@ describe('DadsInputText', () => {
   })
 
   describe('error / errorMessage', () => {
-    it('renders the error message with role="alert"', () => {
+    it('renders the error message without role="alert" (official a11y)', () => {
       const wrapper = createWrapper({ errorMessage: '必須項目です' })
-      const error = wrapper.find('.dads-input-text__error')
+      const error = wrapper.find('.dads-form-control-label__error-text')
       expect(error.exists()).toBe(true)
       expect(error.text()).toBe('必須項目です')
-      expect(error.attributes('role')).toBe('alert')
+      expect(error.attributes('role')).toBeUndefined()
     })
 
     it('sets aria-invalid when errorMessage is present', () => {
@@ -175,45 +177,43 @@ describe('DadsInputText', () => {
       expect(wrapper.find('input').attributes('aria-invalid')).toBe('true')
     })
 
-    it('hides the hint when an error message is shown', () => {
+    it('hides the support text when an error message is shown', () => {
       const wrapper = createWrapper({ hint: 'ヒント', errorMessage: 'エラー' })
-      expect(wrapper.find('.dads-input-text__hint').exists()).toBe(false)
-      expect(wrapper.find('.dads-input-text__error').exists()).toBe(true)
+      expect(wrapper.find('.dads-form-control-label__support-text').exists()).toBe(false)
+      expect(wrapper.find('.dads-form-control-label__error-text').exists()).toBe(true)
     })
   })
 
   describe('hint', () => {
-    it('renders the hint when provided', () => {
+    it('renders the hint as support text when provided', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hint = wrapper.find('.dads-input-text__hint')
+      const hint = wrapper.find('.dads-form-control-label__support-text')
       expect(hint.exists()).toBe(true)
       expect(hint.text()).toBe('メモ')
     })
 
-    it('points aria-describedby at the hint id', () => {
+    it('points aria-describedby at the support text id', () => {
       const wrapper = createWrapper({ hint: 'メモ' })
-      const hintId = wrapper.find('.dads-input-text__hint').attributes('id')
+      const hintId = wrapper.find('.dads-form-control-label__support-text').attributes('id')
       expect(wrapper.find('input').attributes('aria-describedby')).toBe(hintId)
     })
   })
 
   describe('icons', () => {
     it('renders the prepend icon', () => {
-      const wrapper = createWrapper({ prependIcon: 'mdi-tag' })
-      const icon = wrapper.find('.dads-input-text__icon--prepend')
+      const wrapper = createWrapper({ prependIcon: 'label' })
+      const icon = wrapper.find('svg.dads-icon.dads-input-text__icon--prepend')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-tag')
     })
 
     it('renders the append icon', () => {
-      const wrapper = createWrapper({ appendIcon: 'mdi-magnify' })
-      const icon = wrapper.find('.dads-input-text__icon--append')
+      const wrapper = createWrapper({ appendIcon: 'search' })
+      const icon = wrapper.find('svg.dads-icon.dads-input-text__icon--append')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-magnify')
     })
 
     it('marks decorative icons as aria-hidden', () => {
-      const wrapper = createWrapper({ prependIcon: 'mdi-tag' })
+      const wrapper = createWrapper({ prependIcon: 'label' })
       expect(wrapper.find('.dads-input-text__icon--prepend').attributes('aria-hidden')).toBe('true')
     })
   })

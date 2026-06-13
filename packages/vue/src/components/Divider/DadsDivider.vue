@@ -4,7 +4,7 @@ import type { DadsDividerProps } from './DadsDivider.types'
 
 const props = withDefaults(defineProps<DadsDividerProps>(), {
   orientation: 'horizontal',
-  color: 'default',
+  color: 'gray-420',
   variant: 'full-width',
   thickness: 1,
   lineStyle: 'solid',
@@ -55,13 +55,13 @@ const rootClasses = computed(() => [
 .dads-divider {
   display: flex;
   align-items: center;
-  gap: var(--spacing-8, 0.5rem);
+  gap: calc(8 / 16 * 1rem);
 
   &__line {
     flex: 1 1 auto;
-    // Background color is owned by the color modifiers below (`--default` /
-    // `--strong`) so each variant lives in exactly one place — no base rule
-    // to override and re-override.
+    // Background color is owned by the color modifiers below
+    // (`--gray-420` / `--gray-536` / `--black`) so each variant lives in
+    // exactly one place — no base rule to override and re-override.
   }
 
   &__label {
@@ -69,7 +69,7 @@ const rootClasses = computed(() => [
     font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-secondary, #555);
+    color: var(--color-neutral-solid-gray-700, #555);
   }
 
   // -------------------- orientation --------------------------------------
@@ -94,20 +94,25 @@ const rootClasses = computed(() => [
   }
 
   // -------------------- color variants -----------------------------------
+  // Official `data-color` の 3 段階 (gray-420 / gray-536 / black) に対応。
   // For solid lines: use background-color on the line element.
   // For dashed lines: switch to border-top (border-style supports dashed
   // while background-color cannot).
-  &--default &__line {
-    background-color: var(--color-border-default, rgba(0, 0, 0, 0.1));
+  &--gray-420 &__line {
+    background-color: var(--color-neutral-solid-gray-420, #949494);
   }
 
-  &--strong &__line {
-    background-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+  &--gray-536 &__line {
+    background-color: var(--color-neutral-solid-gray-536, #767676);
+  }
+
+  &--black &__line {
+    background-color: var(--color-neutral-black, #000000);
   }
 
   // -------------------- width variants -----------------------------------
   &--inset {
-    padding-inline: var(--spacing-16, 1rem);
+    padding-inline: calc(16 / 16 * 1rem);
   }
 
   // -------------------- thickness -----------------------------------------
@@ -145,21 +150,29 @@ const rootClasses = computed(() => [
   }
 
   &--style-dashed.dads-divider--horizontal &__line {
-    border-top: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border-top: 1px dashed var(--color-neutral-solid-gray-420, #949494);
     height: 0;
   }
 
   &--style-dashed.dads-divider--vertical &__line {
-    border-left: 1px dashed var(--color-border-default, rgba(0, 0, 0, 0.1));
+    border-left: 1px dashed var(--color-neutral-solid-gray-420, #949494);
     width: 0;
   }
 
-  &--style-dashed.dads-divider--strong.dads-divider--horizontal &__line {
-    border-top-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+  &--style-dashed.dads-divider--gray-536.dads-divider--horizontal &__line {
+    border-top-color: var(--color-neutral-solid-gray-536, #767676);
   }
 
-  &--style-dashed.dads-divider--strong.dads-divider--vertical &__line {
-    border-left-color: var(--color-border-strong, rgba(0, 0, 0, 0.3));
+  &--style-dashed.dads-divider--gray-536.dads-divider--vertical &__line {
+    border-left-color: var(--color-neutral-solid-gray-536, #767676);
+  }
+
+  &--style-dashed.dads-divider--black.dads-divider--horizontal &__line {
+    border-top-color: var(--color-neutral-black, #000000);
+  }
+
+  &--style-dashed.dads-divider--black.dads-divider--vertical &__line {
+    border-left-color: var(--color-neutral-black, #000000);
   }
 
   // -------------------- forced colors ------------------------------------

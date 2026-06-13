@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import DadsFormControlLabel from '../FormControlLabel/DadsFormControlLabel.vue'
 import type { DadsTextareaEmits, DadsTextareaProps } from './DadsTextarea.types'
 
 const props = withDefaults(defineProps<DadsTextareaProps>(), {
@@ -12,7 +13,7 @@ const props = withDefaults(defineProps<DadsTextareaProps>(), {
   readonly: false,
   required: false,
   error: false,
-  requiredLabel: '必須',
+  requiredLabel: '※必須',
 })
 
 const emit = defineEmits<DadsTextareaEmits>()
@@ -36,10 +37,16 @@ const effectiveRows = computed(() => (props.autoResize ? props.minRows : props.r
 
 const effectiveResize = computed(() => (props.autoResize ? 'none' : props.resize))
 
+// The official form-control-label only renders error-text *or* support-text via
+// its own slots, so we mirror that precedence: show the support text only when
+// no error message is present.
+const showSupportText = computed(() => !!props.hint && !(isError.value && !!props.errorMessage))
+const showErrorText = computed(() => isError.value && !!props.errorMessage)
+
 const describedBy = computed(() => {
   const ids: string[] = []
-  if (isError.value && props.errorMessage) ids.push(errorId.value)
-  else if (props.hint) ids.push(hintId.value)
+  if (showErrorText.value) ids.push(errorId.value)
+  else if (showSupportText.value) ids.push(hintId.value)
   if (props.counter !== undefined) ids.push(counterId.value)
   return ids.length > 0 ? ids.join(' ') : undefined
 })
@@ -65,10 +72,6 @@ const textareaAttrs = computed(() => ({
   'aria-required': props.required || undefined,
   'aria-describedby': describedBy.value,
 }))
-
-const hasFooter = computed(
-  () => (isError.value && !!props.errorMessage) || !!props.hint || props.counter !== undefined,
-)
 
 let rafHandle: number | null = null
 
@@ -118,14 +121,20 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 </script>
 
 <template>
-  <div :class="rootClasses">
-    <label v-if="label" :for="textareaId" class="dads-textarea__label">
-      {{ label }}
-      <span v-if="required" class="dads-textarea__required" aria-hidden="true">{{
-        requiredLabel
-      }}</span>
-    </label>
-
+  <DadsFormControlLabel
+    as="div"
+    :class="rootClasses"
+    :size="size"
+    :label="label"
+    :label-for="textareaId"
+    :required="required"
+    :required-label="requiredLabel"
+    :support-text="showSupportText ? hint : undefined"
+    :support-text-id="hintId"
+    :error-text="showErrorText ? errorMessage : undefined"
+    :error-text-id="errorId"
+    :disabled="disabled"
+  >
     <div class="dads-textarea__control">
       <textarea
         :id="textareaId"
@@ -142,20 +151,10 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
       />
     </div>
 
-    <div v-if="hasFooter" class="dads-textarea__footer">
-      <span
-        v-if="isError && errorMessage"
-        :id="errorId"
-        class="dads-textarea__error"
-        role="alert"
-        >{{ errorMessage }}</span
-      >
-      <span v-else-if="hint" :id="hintId" class="dads-textarea__hint">{{ hint }}</span>
-      <span v-if="counter !== undefined" :id="counterId" class="dads-textarea__counter"
-        >{{ currentLength }} / {{ counter }}</span
-      >
-    </div>
-  </div>
+    <p v-if="counter !== undefined" :id="counterId" class="dads-textarea__counter">
+      {{ currentLength }} / {{ counter }}
+    </p>
+  </DadsFormControlLabel>
 </template>
 
 <style scoped lang="scss">
@@ -163,41 +162,15 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 @use '../../styles/focus-ring' as ring;
 
 .dads-textarea {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
-
-  // -------------------- label & required marker --------------------------
-  &__label {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
-    line-height: var(--line-height-150, 1.5);
-  }
-
-  &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
-  }
-
   // -------------------- control wrapper ----------------------------------
   // The focus ring lives on the wrapper so the highlight envelopes the entire
   // textarea regardless of its current resize handle position.
   &__control {
     position: relative;
     display: flex;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
@@ -210,7 +183,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     @include base.dads-reset-input;
     flex: 1;
     width: 100%;
-    line-height: var(--line-height-150, 1.5);
+    line-height: var(--line-height-170, 1.7);
 
     // The wrapper provides the focus ring via :focus-within. Suppress the
     // textarea's own :focus-visible outline so the global `:focus-visible` rule
@@ -221,77 +194,82 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     }
   }
 
-  // -------------------- footer (hint / error / counter) ------------------
-  &__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
+  // -------------------- counter (non-official, preserved) ----------------
+  &__counter {
+    margin: 0;
+    margin-left: auto;
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-  }
-
-  &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
-  }
-
-  &__error {
-    color: var(--color-error, #ec0000);
-    font-weight: 500;
-  }
-
-  &__counter {
-    color: var(--color-text-secondary, #4d4d4d);
-    margin-left: auto;
     font-variant-numeric: tabular-nums;
   }
 
   // -------------------- size ---------------------------------------------
   &--lg &__input {
     font-size: var(--font-size-18, 1.125rem);
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
+    padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
   }
 
   &--md &__input {
     font-size: var(--font-size-16, 1rem);
-    padding: var(--spacing-12, 0.75rem);
+    padding: calc(16 / 16 * 1rem);
   }
 
   &--sm &__input {
     font-size: var(--font-size-14, 0.875rem);
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
   }
 
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-textarea--readonly):not(.dads-textarea--disabled):not(.dads-textarea--error)
     .dads-textarea__control:hover {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-solid-gray-800, #1a1a1a);
   }
 
   // -------------------- readonly -----------------------------------------
   &--readonly &__control {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   // -------------------- disabled -----------------------------------------
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
 
     .dads-textarea__control {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-textarea__input {
+      color: var(--color-neutral-solid-gray-420, #949494);
+      resize: none;
     }
   }
 
   // -------------------- error --------------------------------------------
   &--error &__control {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
+  }
+
+  // error + hover: deepen the border to match the official red-1000 treatment.
+  &--error:not(.dads-textarea--readonly):not(.dads-textarea--disabled)
+    .dads-textarea__control:hover {
+    border-color: var(--color-primitive-red-1000, #a90000);
   }
 
   // -------------------- forced colors ------------------------------------
   @include base.dads-forced-colors {
     &__control {
       border: 1px solid CanvasText;
+    }
+
+    &--disabled .dads-textarea__control {
+      border-color: GrayText;
+    }
+
+    &--disabled .dads-textarea__input {
+      color: GrayText;
     }
   }
 }

@@ -1,287 +1,309 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId } from 'vue'
-import type {
-  DadsAccordionEmits,
-  DadsAccordionItem,
-  DadsAccordionProps,
-} from './DadsAccordion.types'
+import { computed, ref, useId, watch } from 'vue'
+import type { DadsAccordionEmits, DadsAccordionProps } from './DadsAccordion.types'
 
 const props = withDefaults(defineProps<DadsAccordionProps>(), {
-  modelValue: () => '',
-  type: 'single',
-  size: 'm',
+  modelValue: undefined,
+  defaultOpen: false,
+  headingLevel: 3,
+  disabled: false,
+  backLink: false,
+  backLinkLabel: undefined,
 })
 
 const emit = defineEmits<DadsAccordionEmits>()
 
+// -------------------- ids --------------------------------------------------
+
 const generatedId = useId()
-const baseId = computed(() => `dads-accordion-${generatedId}`)
+const summaryId = computed(() => `dads-accordion-${generatedId}-summary`)
 
-const headerRefs = ref<HTMLButtonElement[]>([])
+// -------------------- controlled / uncontrolled state ---------------------
 
-// -------------------- open / closed state ---------------------------------
+// When `modelValue` is undefined we operate in uncontrolled mode using a
+// local ref seeded from `defaultOpen`.
+const isControlled = computed(() => props.modelValue !== undefined)
+const internalOpen = ref<boolean>(props.defaultOpen)
 
-const isOpen = (id: string): boolean => {
-  if (props.type === 'multiple') {
-    return Array.isArray(props.modelValue) && props.modelValue.includes(id)
+const isOpen = computed<boolean>(() =>
+  isControlled.value ? Boolean(props.modelValue) : internalOpen.value,
+)
+
+// Keep the native `<details>` element in sync with state when the consumer
+// changes `modelValue` externally.
+const detailsRef = ref<HTMLDetailsElement | null>(null)
+watch(isOpen, (next) => {
+  if (detailsRef.value && detailsRef.value.open !== next) {
+    detailsRef.value.open = next
   }
-  return props.modelValue === id
+})
+
+// -------------------- handlers --------------------------------------------
+
+const setOpen = (next: boolean) => {
+  if (!isControlled.value) {
+    internalOpen.value = next
+  }
+  emit('update:modelValue', next)
+  emit('toggle', next)
 }
 
-const toggle = (item: DadsAccordionItem) => {
-  if (item.disabled) return
-  if (props.type === 'multiple') {
-    const current = Array.isArray(props.modelValue) ? props.modelValue : []
-    const next = current.includes(item.id)
-      ? current.filter((v) => v !== item.id)
-      : [...current, item.id]
-    emit('update:modelValue', next)
-    return
-  }
-  // single mode: clicking the open panel closes it.
-  emit('update:modelValue', props.modelValue === item.id ? '' : item.id)
-}
-
-// -------------------- keyboard navigation ---------------------------------
-
-const focusHeader = (index: number) => {
-  void nextTick(() => {
-    headerRefs.value[index]?.focus()
-  })
-}
-
-const onKeydown = (event: KeyboardEvent, currentIdx: number) => {
-  // Indices of items that can receive focus.
-  const enabledIndices = props.items
-    .map((item, idx) => (item.disabled ? -1 : idx))
-    .filter((idx) => idx >= 0)
-
-  if (enabledIndices.length === 0) return
-
-  const currentEnabledIdx = enabledIndices.indexOf(currentIdx)
-  // Fallback to the first enabled header if the current one is disabled
-  // (shouldn't usually happen, but keeps wrap-around math sane).
-  const safeEnabledIdx = currentEnabledIdx === -1 ? 0 : currentEnabledIdx
-  const len = enabledIndices.length
-
-  let nextIdx: number
-  switch (event.key) {
-    case 'ArrowDown':
-      nextIdx = enabledIndices[(safeEnabledIdx + 1) % len]
-      break
-    case 'ArrowUp':
-      nextIdx = enabledIndices[(safeEnabledIdx - 1 + len) % len]
-      break
-    case 'Home':
-      nextIdx = enabledIndices[0]
-      break
-    case 'End':
-      nextIdx = enabledIndices[len - 1]
-      break
-    default:
-      return
-  }
-
+// The native <summary> click is what flips <details>. Intercept it so we can
+// 1. block toggling when disabled, and 2. drive the open state through Vue
+// instead of letting the browser race with our `watch`.
+const onSummaryClick = (event: MouseEvent) => {
   event.preventDefault()
-  focusHeader(nextIdx)
+  if (props.disabled) return
+  setOpen(!isOpen.value)
 }
 
-// -------------------- id helpers ------------------------------------------
+// Native <summary> already responds to Enter / Space, but since we suppressed
+// the default click, we re-implement keyboard activation here for parity.
+const onSummaryKeydown = (event: KeyboardEvent) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return
+  event.preventDefault()
+  if (props.disabled) return
+  setOpen(!isOpen.value)
+}
 
-const headerId = (id: string) => `${baseId.value}-header-${id}`
-const panelId = (id: string) => `${baseId.value}-panel-${id}`
+// -------------------- derived view state ----------------------------------
 
-const itemClasses = (item: DadsAccordionItem) => [
-  'dads-accordion__item',
-  {
-    'dads-accordion__item--open': isOpen(item.id),
-    'dads-accordion__item--disabled': item.disabled,
-  },
-]
+const headingTag = computed(() => `h${props.headingLevel}`)
+
+const backLinkText = computed(() => props.backLinkLabel ?? `「${props.title}」の先頭に戻る`)
 </script>
 
 <template>
-  <div :class="['dads-accordion', `dads-accordion--size-${size}`]">
-    <div v-for="(item, idx) in items" :key="item.id" :class="itemClasses(item)">
-      <h3 class="dads-accordion__heading">
-        <button
-          :id="headerId(item.id)"
-          ref="headerRefs"
-          type="button"
-          class="dads-accordion__header"
-          :aria-expanded="isOpen(item.id)"
-          :aria-controls="panelId(item.id)"
-          :disabled="item.disabled || undefined"
-          @click="toggle(item)"
-          @keydown="onKeydown($event, idx)"
+  <details
+    ref="detailsRef"
+    class="dads-accordion"
+    :open="isOpen"
+    :aria-disabled="disabled || undefined"
+  >
+    <summary
+      :id="summaryId"
+      class="dads-accordion__summary"
+      :aria-expanded="isOpen"
+      :aria-disabled="disabled || undefined"
+      :tabindex="disabled ? -1 : 0"
+      @click="onSummaryClick"
+      @keydown="onSummaryKeydown"
+    >
+      <span class="dads-accordion__icon">
+        <svg
+          class="dads-accordion__icon-svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
         >
-          <span class="dads-accordion__title">{{ item.title }}</span>
-          <span class="dads-accordion__icon" aria-hidden="true">
-            <i class="mdi" :class="isOpen(item.id) ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
-          </span>
-        </button>
-      </h3>
-      <div
-        v-show="isOpen(item.id)"
-        :id="panelId(item.id)"
-        role="region"
-        class="dads-accordion__panel"
-        :aria-labelledby="headerId(item.id)"
-      >
-        <slot :name="`panel-${item.id}`" />
-        <p v-if="returnLink" class="dads-accordion__return-link">
-          <a :href="returnLink.href">{{ returnLink.label }}</a>
-        </p>
-      </div>
+          <path d="M3.3 7.3L12 16L20.7 7.3" fill="none" stroke="currentcolor" stroke-width="2" />
+        </svg>
+      </span>
+      <component :is="headingTag">{{ title }}</component>
+    </summary>
+    <div class="dads-accordion__content">
+      <slot />
+      <a v-if="backLink" :href="`#${summaryId}`" class="dads-accordion__back-link">
+        <svg
+          class="dads-accordion__back-link-icon"
+          width="24"
+          height="24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 7V14.5C6 16.8 8.2 19 10.5 19C12.8 19 15 16.8 15 14.5V6M10.709 9.7L15 5.414L19.291 9.7"
+            stroke="currentcolor"
+            stroke-width="2"
+          />
+        </svg>
+        {{ backLinkText }}
+      </a>
     </div>
-  </div>
+  </details>
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
+// Scoped port of the official `accordion.css`
+// (design-system-example-components-html/src/components/accordion/accordion.css).
+// Class names, DOM structure, inline SVG, responsive media queries, focus,
+// hover and back-link styles are reproduced 1:1.
 
 .dads-accordion {
+  --_icon-size: calc(20 / 16 * 1rem);
+  border-bottom: 1px solid var(--color-neutral-solid-gray-420);
+}
+
+@media (min-width: 48rem) {
+  .dads-accordion {
+    --_icon-size: calc(32 / 16 * 1rem);
+  }
+}
+
+.dads-accordion__summary {
+  position: relative;
+  display: block;
+  padding: calc(8 / 16 * 1rem) calc(8 / 16 * 1rem) calc(8 / 16 * 1rem)
+    calc(var(--_icon-size) + 0.75rem);
+  color: var(--color-neutral-solid-gray-800);
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
+  line-height: 1.7;
+  font-family: var(--font-family-sans);
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+
+.dads-accordion__summary::marker {
+  content: '';
+}
+
+.dads-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .dads-accordion__summary {
+    padding: calc(16 / 16 * 1rem) calc(16 / 16 * 1rem) calc(16 / 16 * 1rem)
+      calc(var(--_icon-size) + calc(20 / 16 * 1rem));
+    font-size: calc(18 / 16 * 1rem);
+    line-height: 1.6;
+  }
+}
+
+@media (hover: hover) {
+  .dads-accordion__summary:hover:not(:focus-visible) {
+    background-color: var(--color-neutral-solid-gray-50);
+  }
+}
+
+.dads-accordion__summary:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(2 / 16 * 1rem);
+  border-radius: calc(4 / 16 * 1rem);
+  background-color: var(--color-primitive-yellow-300);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+}
+
+.dads-accordion__icon {
+  position: absolute;
+  top: calc(8 / 16 * 1rem);
+  left: calc(2 / 16 * 1rem);
+  margin-top: calc((1lh - var(--_icon-size)) / 2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--_icon-size);
+  height: var(--_icon-size);
+  border-radius: 50%;
+  border: 1px solid currentcolor;
+  background-color: var(--color-neutral-white);
+  color: var(--color-primitive-blue-1000);
+}
+
+@media (min-width: 48rem) {
+  .dads-accordion__icon {
+    top: calc(14 / 16 * 1rem);
+    left: calc(6 / 16 * 1rem);
+  }
+}
+
+.dads-accordion[open] .dads-accordion__icon {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .dads-accordion__summary:hover .dads-accordion__icon {
+    outline: calc(2 / 16 * 1rem) solid currentcolor;
+  }
+}
+
+.dads-accordion__icon-svg {
+  margin-top: calc(2 / 16 * 1rem);
+  width: calc(16 / 16 * 1rem);
+  height: calc(16 / 16 * 1rem);
+  pointer-events: none;
+}
+
+@media (min-width: 48rem) {
+  .dads-accordion__icon-svg {
+    width: auto;
+    height: auto;
+  }
+}
+
+.dads-accordion__summary :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  font: inherit;
+}
+
+.dads-accordion__content {
+  padding: calc(16 / 16 * 1rem) calc(8 / 16 * 1rem) calc(16 / 16 * 1rem)
+    calc(var(--_icon-size) + 0.75rem);
+}
+
+@media (min-width: 48rem) {
+  .dads-accordion__content {
+    padding: calc(24 / 16 * 1rem) calc(16 / 16 * 1rem) calc(24 / 16 * 1rem)
+      calc(var(--_icon-size) + 1.25rem);
+  }
+}
+
+.dads-accordion__back-link:any-link {
   display: flex;
-  flex-direction: column;
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
-  border-top: 1px solid var(--color-border-divider, #d6d6d6);
+  align-items: flex-start;
+  gap: calc(6 / 16 * 1rem);
+  width: fit-content;
+  color: var(--color-primitive-blue-1000);
+  text-decoration: underline;
+  text-decoration-thickness: calc(1 / 16 * 1rem);
+  text-underline-offset: calc(3 / 16 * 1rem);
+  text-spacing-trim: trim-start;
+}
 
-  // -------------------- item ---------------------------------------------
-  &__item {
-    border-bottom: 1px solid var(--color-border-divider, #d6d6d6);
+@media (hover: hover) {
+  .dads-accordion__back-link:hover {
+    color: var(--color-primitive-blue-900);
+    text-decoration-thickness: calc(3 / 16 * 1rem);
+  }
+}
 
-    &--disabled {
-      color: var(--color-text-disabled, #999);
-    }
-  }
+.dads-accordion__back-link:active {
+  color: var(--color-primitive-orange-800);
+  text-decoration-thickness: calc(1 / 16 * 1rem);
+}
 
-  // -------------------- heading wrapper ----------------------------------
-  // Reset native h3 spacing so the header button owns the rhythm.
-  &__heading {
-    margin: 0;
-    padding: 0;
-    font-size: inherit;
-    font-weight: inherit;
-  }
+.dads-accordion__back-link:focus-visible {
+  outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black);
+  outline-offset: calc(2 / 16 * 1rem);
+  border-radius: calc(4 / 16 * 1rem);
+  background-color: var(--color-primitive-yellow-300);
+  box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300);
+}
 
-  // -------------------- header button ------------------------------------
-  &__header {
-    @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+.dads-accordion__back-link-icon {
+  margin-top: calc((1lh - 24 / 16 * 1rem) / 2);
+  flex-shrink: 0;
+}
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-12, 0.75rem);
-    width: 100%;
-    min-height: 3rem; // 48px keeps the touch target generous.
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
-    font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
-    line-height: var(--line-height-150, 1.5);
-    color: inherit;
-    background-color: transparent;
-    transition: background-color 0.15s ease;
+// -------------------- disabled --------------------------------------------
+// Official accordion has no disabled state; the a3-deferred decision keeps the
+// dimming affordance. Mirror DadsDisclosure: dim and block interaction.
+.dads-accordion[aria-disabled='true'] {
+  .dads-accordion__summary {
+    cursor: not-allowed;
+    opacity: 0.6;
 
-    &:hover:not(:disabled) {
-      background-color: var(--color-bg-subtle, #f0f0f0);
-    }
-
-    &:disabled {
-      color: var(--color-text-disabled, #999);
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-  }
-
-  // -------------------- title --------------------------------------------
-  &__title {
-    flex: 1 1 auto;
-    text-align: left;
-  }
-
-  // -------------------- icon ---------------------------------------------
-  &__icon {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-20, 1.25rem);
-    color: var(--color-text-secondary, #4d4d4d);
-  }
-
-  // -------------------- size variants ------------------------------------
-  // Per official DADS scale L/M/S/XS — drives header padding + icon size.
-  &--size-l &__header {
-    min-height: 4rem;
-    padding: var(--spacing-16, 1rem) var(--spacing-16, 1rem);
-    font-size: var(--font-size-18, 1.125rem);
-  }
-  &--size-l &__icon {
-    font-size: var(--font-size-24, 1.5rem);
-  }
-  &--size-m &__header {
-    min-height: 3rem;
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem);
-    font-size: var(--font-size-16, 1rem);
-  }
-  &--size-m &__icon {
-    font-size: var(--font-size-20, 1.25rem);
-  }
-  &--size-s &__header {
-    min-height: 2.5rem;
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
-    font-size: var(--font-size-14, 0.875rem);
-  }
-  &--size-s &__icon {
-    font-size: var(--font-size-18, 1.125rem);
-  }
-  &--size-xs &__header {
-    min-height: 2rem;
-    padding: var(--spacing-4, 0.25rem) var(--spacing-12, 0.75rem);
-    font-size: var(--font-size-14, 0.875rem);
-  }
-  &--size-xs &__icon {
-    font-size: var(--font-size-16, 1rem);
-  }
-
-  // -------------------- return link -------------------------------------
-  &__return-link {
-    margin: var(--spacing-16, 1rem) 0 0;
-    text-align: end;
-
-    a {
-      color: var(--color-brand-primary, #0017c1);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      font-size: var(--font-size-14, 0.875rem);
-
-      &:hover {
-        text-decoration: underline;
+    @media (hover: hover) {
+      &:hover:not(:focus-visible) {
+        background-color: transparent;
       }
-    }
-  }
 
-  // -------------------- panel --------------------------------------------
-  &__panel {
-    padding: var(--spacing-12, 0.75rem) var(--spacing-16, 1rem) var(--spacing-16, 1rem);
-    font-size: var(--font-size-16, 1rem);
-    line-height: var(--line-height-150, 1.5);
-    color: var(--color-text-primary, #1a1a1a);
-  }
-
-  // -------------------- forced colors ------------------------------------
-  @include base.dads-forced-colors {
-    border-top: 1px solid CanvasText;
-
-    .dads-accordion__item {
-      border-bottom: 1px solid CanvasText;
-    }
-
-    .dads-accordion__icon {
-      color: CanvasText;
+      &:hover .dads-accordion__icon {
+        outline: none;
+      }
     }
   }
 }

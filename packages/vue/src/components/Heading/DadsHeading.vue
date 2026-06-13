@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsHeadingLevel, DadsHeadingProps } from './DadsHeading.types'
 
 const props = withDefaults(defineProps<DadsHeadingProps>(), {
@@ -42,7 +43,7 @@ const rootClasses = computed(() => {
     <component :is="as" class="dads-heading__title">
       <span v-if="$slots['prepend-icon'] || icon" class="dads-heading__icon" aria-hidden="true">
         <slot name="prepend-icon">
-          <i v-if="icon" :class="['mdi', icon]" />
+          <DadsIcon v-if="icon" :name="icon" :size="24" />
         </slot>
       </span>
       <span class="dads-heading__text">
@@ -64,16 +65,16 @@ const rootClasses = computed(() => {
 .dads-heading {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   &__shoulder {
     margin: 0;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
-    font-weight: 500;
+    font-weight: bold;
   }
 
   // Reset the native h1..h6 margin so the gap to the subtitle is controlled
@@ -81,7 +82,7 @@ const rootClasses = computed(() => {
   &__title {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     margin: 0;
   }
 
@@ -100,7 +101,7 @@ const rootClasses = computed(() => {
   &__chip {
     display: inline-flex;
     align-items: center;
-    margin-inline-start: var(--spacing-8, 0.5rem);
+    margin-inline-start: calc(8 / 16 * 1rem);
     // Chip text should not inherit the heading's bold weight or large
     // font-size — let DadsChipLabel manage its own typography.
     font-weight: normal;
@@ -110,7 +111,7 @@ const rootClasses = computed(() => {
 
   &__subtitle {
     margin: 0;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
@@ -155,32 +156,60 @@ const rootClasses = computed(() => {
   }
 
   // -------------------- explicit size overrides ---------------------------
-  // 8 tokens from the DADS Figma scale (14 / 16 / 18 / 20 / 24 / 28 / 32 / 36).
-  // Selector specificity matches `--level-N` so any of them wins over the
-  // implicit level mapping.
-  &--size-14 .dads-heading__title {
-    font-size: var(--font-size-14, 0.875rem);
+  // Official DADS `data-size` scale (10 steps: 64 / 57 / 45 / 36 / 32 / 28 /
+  // 24 / 20 / 18 / 16 px). Each step carries the canonical per-size
+  // `line-height` and `letter-spacing` from `heading.css` so the visual
+  // scale matches DADS exactly. Selector specificity matches `--level-N` so
+  // an explicit `size` always wins over the implicit level mapping.
+  &--size-64 .dads-heading__title {
+    font-size: var(--font-size-64, 4rem);
+    line-height: 1.4;
+    letter-spacing: 0;
   }
-  &--size-16 .dads-heading__title {
-    font-size: var(--font-size-16, 1rem);
+  &--size-57 .dads-heading__title {
+    font-size: var(--font-size-57, 3.5625rem);
+    line-height: 1.4;
+    letter-spacing: 0;
   }
-  &--size-18 .dads-heading__title {
-    font-size: var(--font-size-18, 1.125rem);
-  }
-  &--size-20 .dads-heading__title {
-    font-size: var(--font-size-20, 1.25rem);
-  }
-  &--size-24 .dads-heading__title {
-    font-size: var(--font-size-24, 1.5rem);
-  }
-  &--size-28 .dads-heading__title {
-    font-size: var(--font-size-28, 1.75rem);
-  }
-  &--size-32 .dads-heading__title {
-    font-size: var(--font-size-32, 2rem);
+  &--size-45 .dads-heading__title {
+    font-size: var(--font-size-45, 2.8125rem);
+    line-height: 1.4;
+    letter-spacing: 0;
   }
   &--size-36 .dads-heading__title {
     font-size: var(--font-size-36, 2.25rem);
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+  &--size-32 .dads-heading__title {
+    font-size: var(--font-size-32, 2rem);
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+  &--size-28 .dads-heading__title {
+    font-size: var(--font-size-28, 1.75rem);
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+  &--size-24 .dads-heading__title {
+    font-size: var(--font-size-24, 1.5rem);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+  &--size-20 .dads-heading__title {
+    font-size: var(--font-size-20, 1.25rem);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+  &--size-18 .dads-heading__title {
+    font-size: var(--font-size-18, 1.125rem);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+  &--size-16 .dads-heading__title {
+    font-size: var(--font-size-16, 1rem);
+    line-height: 1.7;
+    letter-spacing: 0.02em;
   }
 
   @include base.dads-forced-colors {

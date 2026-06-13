@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsMenuListEmits, DadsMenuListItem, DadsMenuListProps } from './DadsMenuList.types'
 
 const props = withDefaults(defineProps<DadsMenuListProps>(), {
@@ -70,25 +71,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
           :aria-current="item.active ? 'page' : undefined"
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-menu-list__front-icon"
+            :size="20"
           />
           <span class="dads-menu-list__label">
             {{ item.label }}
-            <i
+            <DadsIcon
               v-if="item.tailIcon"
-              :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-              :role="item.tailIconLabel ? 'img' : undefined"
-              :aria-label="item.tailIconLabel || undefined"
-              :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+              :name="item.tailIcon"
+              class="dads-menu-list__tail-icon"
+              :size="16"
+              :label="item.tailIconLabel || undefined"
             />
           </span>
-          <i
+          <DadsIcon
             v-if="item.endIcon"
-            :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-            aria-hidden="true"
+            :name="item.endIcon"
+            class="dads-menu-list__end-icon"
+            :size="16"
           />
         </a>
         <button
@@ -102,25 +105,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
           "
           @click="handleClick(item, $event)"
         >
-          <i
+          <DadsIcon
             v-if="item.frontIcon"
-            :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-            aria-hidden="true"
+            :name="item.frontIcon"
+            class="dads-menu-list__front-icon"
+            :size="20"
           />
           <span class="dads-menu-list__label">
             {{ item.label }}
-            <i
+            <DadsIcon
               v-if="item.tailIcon"
-              :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-              :role="item.tailIconLabel ? 'img' : undefined"
-              :aria-label="item.tailIconLabel || undefined"
-              :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+              :name="item.tailIcon"
+              class="dads-menu-list__tail-icon"
+              :size="16"
+              :label="item.tailIconLabel || undefined"
             />
           </span>
-          <i
+          <DadsIcon
             v-if="item.endIcon"
-            :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-            aria-hidden="true"
+            :name="item.endIcon"
+            class="dads-menu-list__end-icon"
+            :size="16"
           />
         </button>
         <DadsMenuList
@@ -153,25 +158,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
         :aria-current="item.active ? 'page' : undefined"
         @click="handleClick(item, $event)"
       >
-        <i
+        <DadsIcon
           v-if="item.frontIcon"
-          :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-          aria-hidden="true"
+          :name="item.frontIcon"
+          class="dads-menu-list__front-icon"
+          :size="20"
         />
         <span class="dads-menu-list__label">
           {{ item.label }}
-          <i
+          <DadsIcon
             v-if="item.tailIcon"
-            :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-            :role="item.tailIconLabel ? 'img' : undefined"
-            :aria-label="item.tailIconLabel || undefined"
-            :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+            :name="item.tailIcon"
+            class="dads-menu-list__tail-icon"
+            :size="16"
+            :label="item.tailIconLabel || undefined"
           />
         </span>
-        <i
+        <DadsIcon
           v-if="item.endIcon"
-          :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-          aria-hidden="true"
+          :name="item.endIcon"
+          class="dads-menu-list__end-icon"
+          :size="16"
         />
       </a>
       <button
@@ -185,25 +192,27 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
         "
         @click="handleClick(item, $event)"
       >
-        <i
+        <DadsIcon
           v-if="item.frontIcon"
-          :class="['mdi', item.frontIcon, 'dads-menu-list__front-icon']"
-          aria-hidden="true"
+          :name="item.frontIcon"
+          class="dads-menu-list__front-icon"
+          :size="20"
         />
         <span class="dads-menu-list__label">
           {{ item.label }}
-          <i
+          <DadsIcon
             v-if="item.tailIcon"
-            :class="['mdi', item.tailIcon, 'dads-menu-list__tail-icon']"
-            :role="item.tailIconLabel ? 'img' : undefined"
-            :aria-label="item.tailIconLabel || undefined"
-            :aria-hidden="item.tailIconLabel ? undefined : 'true'"
+            :name="item.tailIcon"
+            class="dads-menu-list__tail-icon"
+            :size="16"
+            :label="item.tailIconLabel || undefined"
           />
         </span>
-        <i
+        <DadsIcon
           v-if="item.endIcon"
-          :class="['mdi', item.endIcon, 'dads-menu-list__end-icon']"
-          aria-hidden="true"
+          :name="item.endIcon"
+          class="dads-menu-list__end-icon"
+          :size="16"
         />
       </button>
       <DadsMenuList
@@ -220,7 +229,6 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
-@use '../../styles/focus-ring' as ring;
 
 .dads-menu-list-root {
   display: block;
@@ -242,22 +250,22 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
   // -------------------- divider / section --------------------------------
   // Plain horizontal rule between menu groups.
   &__divider {
-    margin: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+    margin: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
     border: 0;
-    border-top: 1px solid var(--color-border-divider, #d6d6d6);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
   }
 
   // Section header (divider + bold category title).
   &__section {
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem) var(--spacing-4, 0.25rem);
-    border-top: 1px solid var(--color-border-divider, #d6d6d6);
-    margin-top: var(--spacing-4, 0.25rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem) calc(4 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #d6d6d6);
+    margin-top: calc(4 / 16 * 1rem);
   }
 
   &__section-title {
-    font-size: var(--font-size-12, 0.75rem);
+    font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     text-transform: none;
     line-height: 1.4;
     letter-spacing: 0.04em;
@@ -301,11 +309,11 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
     margin-left: calc(1rem * var(--menu-list-indentation, 0));
 
     &[data-size='regular'] {
-      border-radius: 0.5rem;
+      border-radius: var(--border-radius-8, 0.5rem);
     }
 
     &[data-size='small'] {
-      border-radius: 0.25rem;
+      border-radius: var(--border-radius-4, 0.25rem);
     }
   }
 
@@ -320,6 +328,13 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
     font-weight: bold;
   }
 
+  // Highlight a parent item when one of its descendants is the current page,
+  // matching the official `:has(+ * [data-current])` selector.
+  &__item:has(+ * [data-current]) {
+    background-color: var(--color-primitive-blue-50, #ebf0ff);
+    color: var(--color-primitive-blue-1000, #001a59);
+  }
+
   @media (hover: hover) {
     &__item:hover {
       background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
@@ -327,14 +342,44 @@ const handleChildClick = (item: DadsMenuListItem, event: MouseEvent) => {
       text-underline-offset: 0.1875rem;
     }
 
-    &__item[data-current]:hover {
+    &__item[data-current]:hover,
+    &__item:has(+ * [data-current]):hover {
       background-color: var(--color-primitive-blue-50, #ebf0ff);
       color: var(--color-primitive-blue-900, #002fa1);
     }
   }
 
-  &__item {
-    @include ring.dads-focus-ring;
+  // Focus-visible follows the official menu-list spec: a common yellow-300
+  // fill plus a variant-specific outline (standard = outset 4px, box = inset).
+  // Current / parent-current items keep their blue background under focus.
+  &__item:focus-visible {
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  &__item[data-type='standard']:focus-visible {
+    outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+    outline-offset: calc(2 / 16 * 1rem);
+    box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  &__item[data-type='box']:focus-visible {
+    outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+    outline-offset: calc(-4 / 16 * 1rem);
+    box-shadow: inset 0 0 0 calc(6 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+  }
+
+  &__item[data-current]:focus-visible {
+    background-color: var(--color-primitive-blue-100, #d6e1ff);
+  }
+
+  &__item:has(+ * [data-current]):focus-visible {
+    background-color: var(--color-primitive-blue-50, #ebf0ff);
+  }
+
+  &__item:focus:not(:focus-visible) {
+    outline: none;
   }
 
   &__item:disabled,

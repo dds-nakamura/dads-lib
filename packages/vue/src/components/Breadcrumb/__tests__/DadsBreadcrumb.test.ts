@@ -130,14 +130,21 @@ describe('DadsBreadcrumb', () => {
       expect(currents[2]?.attributes('aria-current')).toBe('page')
     })
 
-    it('sets default aria-label to "パンくずリスト" on the nav element', () => {
+    it('labels the nav via aria-labelledby + a visually-hidden label (default 現在位置)', () => {
       const wrapper = createWrapper()
-      expect(wrapper.attributes('aria-label')).toBe('パンくずリスト')
+      const labelId = wrapper.attributes('aria-labelledby')
+      expect(labelId).toBeTruthy()
+      const label = wrapper.find('.dads-breadcrumb__label')
+      expect(label.exists()).toBe(true)
+      expect(label.attributes('id')).toBe(labelId)
+      expect(label.text()).toBe('現在位置')
+      // aria-label is no longer used directly on the nav.
+      expect(wrapper.attributes('aria-label')).toBeUndefined()
     })
 
-    it('overrides nav aria-label via the ariaLabel prop', () => {
+    it('overrides the visually-hidden label via the ariaLabel prop', () => {
       const wrapper = createWrapper({ ariaLabel: 'Site navigation' })
-      expect(wrapper.attributes('aria-label')).toBe('Site navigation')
+      expect(wrapper.find('.dads-breadcrumb__label').text()).toBe('Site navigation')
     })
 
     it('marks separators as aria-hidden="true"', () => {
@@ -150,10 +157,13 @@ describe('DadsBreadcrumb', () => {
   })
 
   describe('separator', () => {
-    it('uses "》" by default', () => {
+    it('renders the official inline SVG chevron by default', () => {
       const wrapper = createWrapper()
       const separators = wrapper.findAll('.dads-breadcrumb__separator')
-      expect(separators[0]?.text()).toBe('》')
+      // Default separator is the official SVG chevron, not a text character.
+      const icon = separators[0]?.find('svg.dads-breadcrumb__separator-icon')
+      expect(icon?.exists()).toBe(true)
+      expect(icon?.find('path').exists()).toBe(true)
     })
 
     it('renders n-1 separators for n items', () => {

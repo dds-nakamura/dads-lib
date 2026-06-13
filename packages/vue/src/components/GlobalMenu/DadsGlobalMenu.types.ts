@@ -22,7 +22,7 @@ export interface DadsGlobalMenuItem {
   active?: boolean
   /** 操作不可化。リンクなら `aria-disabled="true"` + tabindex=-1、ボタンなら `disabled`。 */
   disabled?: boolean
-  /** 項目先頭に並べるアイコン (MDI クラス名。例: `mdi-home`)。 */
+  /** 項目先頭に並べるアイコン (Material Symbols 名。例: `home`)。 */
   frontIcon?: string
   /**
    * 子メニュー (ドロップダウン / メガメニュー)。存在する場合は `<button>` として

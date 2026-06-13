@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import type {
   DadsBreadcrumbEmits,
   DadsBreadcrumbItem,
@@ -7,9 +7,13 @@ import type {
 } from './DadsBreadcrumb.types'
 
 const props = withDefaults(defineProps<DadsBreadcrumbProps>(), {
-  separator: '》',
-  ariaLabel: 'パンくずリスト',
+  // 公式 example の visually-hidden ラベル文言に合わせる。
+  ariaLabel: '現在位置',
 })
+
+// 公式は nav を aria-labelledby + visually-hidden ラベルで命名する。
+const generatedId = useId()
+const labelId = computed(() => `dads-breadcrumb-label-${generatedId}`)
 
 const emit = defineEmits<DadsBreadcrumbEmits>()
 
@@ -30,7 +34,8 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
 </script>
 
 <template>
-  <nav class="dads-breadcrumb" :aria-label="ariaLabel">
+  <nav class="dads-breadcrumb" :aria-labelledby="labelId">
+    <span :id="labelId" class="dads-breadcrumb__label">{{ ariaLabel }}</span>
     <ol class="dads-breadcrumb__list">
       <li v-for="entry in renderedItems" :key="entry.index" class="dads-breadcrumb__item">
         <a
@@ -50,9 +55,20 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
           :aria-disabled="entry.isDisabled ? 'true' : undefined"
           >{{ entry.item.title }}</span
         >
-        <span v-if="!entry.isLast" class="dads-breadcrumb__separator" aria-hidden="true">{{
-          separator
-        }}</span>
+        <span v-if="!entry.isLast" class="dads-breadcrumb__separator" aria-hidden="true">
+          <!-- 既定は公式の inline SVG chevron。`separator` prop 指定時はその文字で上書き。 -->
+          <svg
+            v-if="!separator"
+            class="dads-breadcrumb__separator-icon"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            aria-hidden="true"
+          >
+            <path d="M4.5 11L4 10.5L8 6.5L4 2.5L4.5 2L9 6.5L4.5 11Z" fill="currentColor" />
+          </svg>
+          <template v-else>{{ separator }}</template>
+        </span>
       </li>
     </ol>
   </nav>
@@ -64,9 +80,24 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
 
 .dads-breadcrumb {
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  font-size: var(--font-size-14, 0.875rem);
-  line-height: var(--line-height-150, 1.5);
-  color: var(--color-text-body, #333);
+  font-size: var(--font-size-16, 1rem);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
+  color: var(--color-neutral-solid-gray-800, #333333);
+
+  // Visually-hidden nav label (referenced by aria-labelledby), matching the
+  // official `dads-u-visually-hidden` pattern.
+  &__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 
   &__list {
     list-style: none;
@@ -75,7 +106,7 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0;
+    column-gap: calc(4 / 16 * 1rem);
   }
 
   &__item {
@@ -85,37 +116,49 @@ const handleClick = (item: DadsBreadcrumbItem, index: number, event: MouseEvent)
   }
 
   &__link {
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
 
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-1000, #00118f);
     text-decoration: underline;
-    text-underline-offset: 2px;
-    border-radius: var(--border-radius-4, 0.25rem);
+    text-decoration-thickness: calc(1 / 16 * 1rem);
+    text-underline-offset: calc(3 / 16 * 1rem);
 
     &:hover {
-      color: var(--color-brand-primary-hover, #001a9c);
+      color: var(--color-primitive-blue-900, #0017c1);
       text-decoration: underline;
+      text-decoration-thickness: calc(3 / 16 * 1rem);
     }
 
     &:active {
-      color: var(--color-brand-primary-active, #001480);
+      color: var(--color-primitive-orange-800, #c74700);
+      text-decoration-thickness: calc(1 / 16 * 1rem);
     }
   }
 
   &__current {
-    color: var(--color-text-body, #333);
-    font-weight: 500;
+    color: var(--color-neutral-solid-gray-800, #333333);
 
     &--disabled {
-      color: var(--color-text-disabled, #999);
+      color: var(--color-neutral-solid-gray-420, #949494);
       cursor: not-allowed;
     }
   }
 
   &__separator {
-    margin: 0 var(--spacing-8, 0.5rem);
-    color: var(--color-neutral-solid-gray-500, #69707d);
+    display: inline-flex;
+    align-items: center;
+    margin: 0 calc(4 / 16 * 1rem);
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
     user-select: none;
+  }
+
+  // Official inline SVG chevron separator (12×12, currentColor).
+  &__separator-icon {
+    display: inline-block;
+    width: calc(12 / 16 * 1rem);
+    height: calc(12 / 16 * 1rem);
+    vertical-align: middle;
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
   }
 
   // -------------------- forced colors -----------------------------------

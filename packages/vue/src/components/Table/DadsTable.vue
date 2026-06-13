@@ -1,186 +1,278 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { DadsTableProps } from './DadsTable.types'
+import { computed, useSlots } from 'vue'
+import type { DadsTableBorder, DadsTableProps } from './DadsTable.types'
 
 const props = withDefaults(defineProps<DadsTableProps>(), {
-  stickyHeader: false,
-  density: 'comfortable',
-  bordered: false,
+  dense: false,
   striped: false,
-  loading: false,
-  skeletonRowCount: 3,
-  skeletonColumnCount: 4,
-  loadingLabel: '読み込み中',
+  hoverable: false,
+  selectable: false,
+  cellBorder: false,
+  border: false,
 })
 
-const skeletonRows = computed(() => Array.from({ length: props.skeletonRowCount }, (_, i) => i))
-const skeletonCols = computed(() => Array.from({ length: props.skeletonColumnCount }, (_, i) => i))
+const slots = useSlots()
 
-const wrapperClasses = computed(() => ({
-  'dads-table-wrapper--sticky-header': props.stickyHeader,
+// Caption can be supplied via prop or the `caption` slot. Either one promotes
+// the root element to a <figure> (official with-caption.html structure).
+const hasCaption = computed(() => Boolean(props.caption) || Boolean(slots.caption))
+const rootTag = computed(() => (hasCaption.value ? 'figure' : 'div'))
+
+// Container-level data attributes mirror the official boolean attributes
+// (`data-size="dense"`, `data-row-stripe`, `data-row-hover-highlight`,
+// `data-selectable`). Vue omits attributes bound to `undefined`/`false`,
+// so we map "off" to undefined and "on" boolean attrs to an empty string.
+const containerAttrs = computed(() => ({
+  'data-size': props.dense ? 'dense' : undefined,
+  'data-row-stripe': props.striped ? '' : undefined,
+  'data-row-hover-highlight': props.hoverable ? '' : undefined,
+  'data-selectable': props.selectable ? '' : undefined,
 }))
 
-// stickyHeader is duplicated on the table so scoped descendant selectors
-// (`.dads-table--sticky-header thead th`) can target the pinned cells without
-// reaching across the scoping boundary into the wrapper.
-const rootClasses = computed(() => [
-  `dads-table--${props.density}`,
-  {
-    'dads-table--sticky-header': props.stickyHeader,
-    'dads-table--bordered': props.bordered,
-    'dads-table--striped': props.striped,
-    'dads-table--loading': props.loading,
-  },
-])
+// Normalize the string/boolean border API to the official attribute value:
+//   false / undefined → undefined (attribute omitted)
+//   true / ''         → '' (all edges, official empty-string form)
+//   'bottom' etc.     → the string verbatim (space-separated edge keywords)
+const normalizeBorder = (value: DadsTableBorder | undefined): string | undefined => {
+  if (value === false || value === undefined) return undefined
+  if (value === true) return ''
+  return value
+}
+
+const tableAttrs = computed(() => ({
+  'data-cell-border': normalizeBorder(props.cellBorder),
+  'data-border': normalizeBorder(props.border),
+}))
 </script>
 
 <template>
-  <div class="dads-table-wrapper" :class="wrapperClasses">
-    <table class="dads-table" :class="rootClasses">
-      <caption v-if="caption || $slots.caption" class="dads-table__caption">
-        <slot name="caption">{{ caption }}</slot>
-      </caption>
-      <slot v-if="!loading" />
-      <tbody v-else class="dads-table__skeleton-body" aria-busy="true" aria-live="polite">
-        <tr v-for="row in skeletonRows" :key="row" class="dads-table__skeleton-row">
-          <td v-for="col in skeletonCols" :key="col" class="dads-table__skeleton-cell">
-            <span class="dads-table__skeleton-bar" aria-hidden="true" />
-            <span class="dads-table__sr-only">{{ loadingLabel }}</span>
-          </td>
-        </tr>
-      </tbody>
+  <component :is="rootTag" class="dads-table" v-bind="containerAttrs">
+    <figcaption v-if="hasCaption" class="dads-table__caption">
+      <slot name="caption">{{ caption }}</slot>
+    </figcaption>
+    <table class="dads-table__table" v-bind="tableAttrs">
+      <slot />
     </table>
-  </div>
+  </component>
 </template>
 
 <style scoped lang="scss">
 @use '../../styles/base' as base;
 
-.dads-table-wrapper {
-  width: 100%;
-
-  // Pinning thead via position: sticky requires a scrolling ancestor.
-  // The wrapper provides one only when stickyHeader is enabled, otherwise
-  // the table flows in its parent layout untouched.
-  &--sticky-header {
-    max-height: 100%;
-    overflow-y: auto;
-  }
-}
+// =============================================================================
+// Reproduced verbatim from the official table.css. Token references keep the
+// official primitives; comma fallbacks preserve rendering when tokens are
+// absent. No --spacing-* tokens (they do not exist upstream); calc(N/16*1rem).
+//
+// The table body (thead/tbody/th/td and the official header-cell classes) is
+// supplied by the consumer through the default slot, so every selector that
+// reaches into it is wrapped in :deep() to cross the scoping boundary.
+// =============================================================================
 
 .dads-table {
-  width: 100%;
-  border-collapse: collapse;
+  --_border-color: var(--color-neutral-solid-gray-420, #949494);
+  --_padding: calc(20 / 16 * 1rem) calc(16 / 16 * 1rem);
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: calc(16 / 16 * 1rem);
+  color: var(--color-neutral-solid-gray-800, #333333);
+  font-weight: normal;
+  font-size: calc(16 / 16 * 1rem);
+  line-height: 1.7;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
-  font-size: var(--font-size-16, 1rem);
-  line-height: var(--line-height-150, 1.5);
+  letter-spacing: 0.02em;
 
-  th,
-  td {
-    padding: var(--spacing-12, 0.75rem);
-    text-align: left;
-    border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
-    vertical-align: top;
+  &[data-size='dense'] {
+    --_padding: calc(12 / 16 * 1rem) calc(16 / 16 * 1rem);
+    line-height: 1.3;
   }
 
-  thead th {
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
-    font-weight: 700;
-  }
-
-  // Caption sits above the table by default; styling keeps it readable
-  // without overpowering header cells.
+  // Caption lives in the component's own template — no :deep() needed.
   &__caption {
-    caption-side: top;
-    padding: var(--spacing-8, 0.5rem) 0;
-    text-align: left;
-    color: var(--color-text-secondary, #4d4d4d);
-    font-size: var(--font-size-14, 0.875rem);
+    font-weight: bold;
+    font-size: calc(17 / 16 * 1rem);
   }
 
-  // ----- density -----------------------------------------------------------
-  // `comfortable` matches the base padding above; nothing to override.
-  &--compact {
-    th,
-    td {
-      padding: var(--spacing-8, 0.5rem);
-      font-size: var(--font-size-14, 0.875rem);
+  // The <table> is in the component template; its cells / header classes come
+  // from the slot, hence :deep() on the descendant parts.
+  &__table {
+    border-collapse: collapse;
+
+    :deep(:is(td, th)) {
+      padding: var(--_padding);
+      text-align: left;
+      vertical-align: baseline;
+    }
+
+    :deep(th) {
+      font-weight: bold;
     }
   }
 
-  // ----- sticky-header -----------------------------------------------------
-  // z-index keeps the pinned cell above striped row backgrounds during scroll.
-  &--sticky-header thead th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
+  :deep(.dads-table__col-header) {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+    background-color: var(--color-neutral-solid-gray-100, #e6e6e6);
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
   }
 
-  // ----- bordered ---------------------------------------------------------
-  &--bordered {
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+  :deep(.dads-table__row-header) {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+    background-color: var(--color-neutral-solid-gray-100, #e6e6e6);
+    color: var(--color-neutral-solid-gray-900, #1a1a1a);
   }
 
-  // ----- striped ----------------------------------------------------------
-  // Even-row tint draws from the hover token to stay visually subordinate
-  // to true hover/selection states the consumer may layer on top.
-  &--striped tbody tr:nth-child(even) {
-    background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.04));
+  // ----- Stripe -----------------------------------------------------------
+  &[data-row-stripe] {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+
+    :deep(tr:nth-child(even)) {
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
   }
 
-  // ----- loading skeleton -------------------------------------------------
-  // Replaces the body with placeholder rows that pulse subtly so users see
-  // visual progress without reading specific values. We keep the table's
-  // structural classes (density, striped, etc.) so transitions on / off
-  // loading state don't jitter the layout.
-  &__skeleton-bar {
-    display: block;
+  // ----- Hover highlight ---------------------------------------------------
+  &[data-row-hover-highlight] {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+  }
+
+  @media (hover: hover) {
+    &[data-row-hover-highlight] :deep(tr:hover) {
+      background-color: var(--color-primitive-blue-50, #e8f1fe);
+    }
+  }
+
+  // ----- Selectable (checkbox) --------------------------------------------
+  &[data-selectable] {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+
+    :deep(tr:has(:checked)) {
+      background-color: var(--color-primitive-blue-100, #d9e6ff);
+    }
+  }
+
+  // ----- Utilities (edge borders, width, layout, bg) ----------------------
+  // The data-* hooks live on slotted descendants (the <table>, <tbody>, <td>…).
+  :deep([data-width='full']) {
     width: 100%;
-    height: 0.875rem;
-    border-radius: var(--border-radius-4, 0.25rem);
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.08));
-    animation: dads-table-skeleton-pulse 1.4s ease-in-out infinite;
   }
 
-  &__sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  :deep([data-layout='fixed']) {
+    table-layout: fixed;
+  }
+
+  :deep([data-cell-border=''] :where(td, th)) {
+    border: 1px solid var(--_border-color);
+  }
+
+  :deep([data-cell-border~='top'] :where(td, th)) {
+    border-top: 1px solid var(--_border-color);
+  }
+
+  :deep([data-cell-border~='right'] :where(td, th)) {
+    border-right: 1px solid var(--_border-color);
+  }
+
+  :deep([data-cell-border~='bottom'] :where(td, th)) {
+    border-bottom: 1px solid var(--_border-color);
+  }
+
+  :deep([data-cell-border~='left'] :where(td, th)) {
+    border-left: 1px solid var(--_border-color);
+  }
+
+  :deep([data-border='']) {
+    border: 1px solid var(--_border-color);
+  }
+
+  :deep([data-border~='top']) {
+    border-top: 1px solid var(--_border-color);
+  }
+
+  :deep([data-border~='right']) {
+    border-right: 1px solid var(--_border-color);
+  }
+
+  :deep([data-border~='bottom']) {
+    border-bottom: 1px solid var(--_border-color);
+  }
+
+  :deep([data-border~='left']) {
+    border-left: 1px solid var(--_border-color);
+  }
+
+  :deep([data-border='hidden']) {
+    border-style: hidden;
+  }
+
+  :deep([data-border~='top-hidden']) {
+    border-top-style: hidden;
+  }
+
+  :deep([data-border~='right-hidden']) {
+    border-right-style: hidden;
+  }
+
+  :deep([data-border~='bottom-hidden']) {
+    border-bottom-style: hidden;
+  }
+
+  :deep([data-border~='left-hidden']) {
+    border-left-style: hidden;
+  }
+
+  :deep([data-bg='white']) {
+    background-color: var(--color-neutral-white, #ffffff);
+  }
+
+  :deep([data-bg='solid-gray-50']) {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+  }
+
+  :deep([data-bg='solid-gray-100']) {
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
+    background-color: var(--color-neutral-solid-gray-100, #e6e6e6);
+  }
+
+  :deep([data-bg='transparent']) {
+    background-color: transparent;
+  }
+
+  // ----- Header cell black emphasis border --------------------------------
+  // Symbolic 1px solid black under the last header row's column headers and at
+  // the right edge of row headers. Must take precedence over [data-cell-border].
+  :deep(:last-of-type > .dads-table__col-header) {
+    border-bottom: 1px solid var(--color-neutral-black, #000000);
+  }
+
+  :deep(.dads-table__row-header:last-of-type) {
+    border-right: 1px solid var(--color-neutral-black, #000000);
   }
 
   // ----- forced-colors ----------------------------------------------------
   @include base.dads-forced-colors {
-    th,
-    td {
-      border-bottom-color: CanvasText;
-    }
-    thead th {
+    --_border-color: CanvasText;
+
+    :deep(.dads-table__col-header),
+    :deep(.dads-table__row-header) {
       background-color: Canvas;
       color: CanvasText;
     }
-    &--bordered {
-      border-color: CanvasText;
+
+    :deep(:last-of-type > .dads-table__col-header) {
+      border-bottom-color: CanvasText;
     }
-    &--striped tbody tr:nth-child(even) {
+
+    :deep(.dads-table__row-header:last-of-type) {
+      border-right-color: CanvasText;
+    }
+
+    &[data-row-stripe] :deep(tr:nth-child(even)) {
       background-color: Canvas;
     }
-  }
-}
-
-@keyframes dads-table-skeleton-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
   }
 }
 </style>

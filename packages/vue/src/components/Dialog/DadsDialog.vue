@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsDialogEmits, DadsDialogFocusTarget, DadsDialogProps } from './DadsDialog.types'
 
 const props = withDefaults(defineProps<DadsDialogProps>(), {
@@ -150,7 +151,7 @@ watch(
               :aria-label="closeLabel"
               @click="close"
             >
-              <i class="mdi mdi-close" aria-hidden="true" />
+              <DadsIcon name="close" :size="24" />
             </button>
           </header>
           <div class="dads-dialog__body">
@@ -176,9 +177,9 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-16, 1rem);
+  padding: calc(16 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
 
   // -------------------- overlay ------------------------------------------
   &__overlay {
@@ -194,9 +195,13 @@ watch(
     flex-direction: column;
     width: 100%;
     max-height: calc(100vh - 2rem);
-    background-color: var(--color-bg-primary, #fff);
+    background-color: var(--color-neutral-white, #fff);
     border-radius: var(--border-radius-8, 0.5rem);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(
+      --elevation-4,
+      0 6px 20px 4px rgba(0, 0, 0, 0.1),
+      0 2px 6px 0 rgba(0, 0, 0, 0.3)
+    );
     overflow: hidden;
 
     &:focus {
@@ -247,9 +252,9 @@ watch(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-16, 1rem);
-    border-bottom: 1px solid var(--color-border-divider, #e5e5e5);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(16 / 16 * 1rem);
+    border-bottom: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
   }
 
   &__title {
@@ -269,19 +274,19 @@ watch(
     width: 2.5rem;
     height: 2.5rem;
     border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-text-primary, #1a1a1a);
+    color: var(--color-neutral-solid-gray-800, #1a1a1a);
     font-size: 1.5rem;
     margin-inline-start: auto;
 
     &:hover {
-      background-color: var(--color-bg-subtle, #f5f5f5);
+      background-color: var(--color-neutral-solid-gray-50, #f5f5f5);
     }
   }
 
   // -------------------- body / footer ------------------------------------
   &__body {
     flex: 1 1 auto;
-    padding: var(--spacing-16, 1rem);
+    padding: calc(16 / 16 * 1rem);
     overflow-y: auto;
   }
 
@@ -289,9 +294,9 @@ watch(
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--spacing-8, 0.5rem);
-    padding: var(--spacing-16, 1rem);
-    border-top: 1px solid var(--color-border-divider, #e5e5e5);
+    gap: calc(8 / 16 * 1rem);
+    padding: calc(16 / 16 * 1rem);
+    border-top: 1px solid var(--color-neutral-solid-gray-420, #e5e5e5);
   }
 
   // -------------------- forced colors -----------------------------------

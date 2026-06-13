@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsPageNavigationEmits,
   DadsPageNavigationPageEntry,
@@ -74,7 +75,7 @@ const goTo = (target: number) => {
           :aria-label="firstLabel"
           @click="goTo(1)"
         >
-          <i class="mdi mdi-chevron-double-left" aria-hidden="true" />
+          <DadsIcon name="keyboard_double_arrow_left" :size="20" />
         </button>
       </li>
       <li v-if="showPrevNext" class="dads-page-navigation__item">
@@ -84,7 +85,7 @@ const goTo = (target: number) => {
           :disabled="isPrevDisabled || undefined"
           @click="goTo(modelValue - 1)"
         >
-          <i class="mdi mdi-chevron-left" aria-hidden="true" />
+          <DadsIcon name="chevron_left" :size="20" />
           <span class="dads-page-navigation__label">{{ prevLabel }}</span>
         </button>
       </li>
@@ -113,7 +114,7 @@ const goTo = (target: number) => {
           @click="goTo(modelValue + 1)"
         >
           <span class="dads-page-navigation__label">{{ nextLabel }}</span>
-          <i class="mdi mdi-chevron-right" aria-hidden="true" />
+          <DadsIcon name="chevron_right" :size="20" />
         </button>
       </li>
       <li v-if="showFirstLast" class="dads-page-navigation__item">
@@ -124,7 +125,7 @@ const goTo = (target: number) => {
           :aria-label="lastLabel"
           @click="goTo(totalPages)"
         >
-          <i class="mdi mdi-chevron-double-right" aria-hidden="true" />
+          <DadsIcon name="keyboard_double_arrow_right" :size="20" />
         </button>
       </li>
     </ul>
@@ -139,14 +140,15 @@ const goTo = (target: number) => {
   display: block;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
   color: var(--color-neutral-solid-gray-900, #1a1a1c);
 
   &__list {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -163,13 +165,13 @@ const goTo = (target: number) => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     box-sizing: border-box;
     min-width: 2rem;
     min-height: 2rem;
     border: 1px solid transparent;
     border-radius: var(--border-radius-4, 0.25rem);
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     background-color: transparent;
     color: var(--color-primitive-blue-900, #002fa1);
     font: inherit;
@@ -208,7 +210,7 @@ const goTo = (target: number) => {
     justify-content: center;
     min-width: 2rem;
     min-height: 2rem;
-    padding: var(--spacing-4, 0.25rem) var(--spacing-8, 0.5rem);
+    padding: calc(4 / 16 * 1rem) calc(8 / 16 * 1rem);
     color: var(--color-neutral-solid-gray-420, #d6d6d6);
     user-select: none;
   }

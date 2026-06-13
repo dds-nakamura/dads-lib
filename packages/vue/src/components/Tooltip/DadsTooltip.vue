@@ -78,6 +78,15 @@ const onLeave = () => {
   }
 }
 
+// WAI-ARIA Tooltip: Esc dismisses the tooltip while keeping focus on the
+// trigger (does not move focus).
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && isOpen.value) {
+    clearTimers()
+    close()
+  }
+}
+
 const GAP = 8
 
 const updatePosition = () => {
@@ -157,6 +166,7 @@ onBeforeUnmount(() => {
     @mouseleave="onLeave"
     @focusin="onEnter"
     @focusout="onLeave"
+    @keydown="onKeydown"
   >
     <slot name="trigger" />
     <Teleport to="body">
@@ -194,14 +204,14 @@ onBeforeUnmount(() => {
   position: absolute;
   z-index: 1100;
   max-width: 16rem;
-  padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
-  background-color: var(--color-bg-inverse, #1a1a1a);
-  color: var(--color-text-inverse, #fff);
+  padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
+  background-color: var(--color-neutral-solid-gray-900, #1a1a1a);
+  color: var(--color-neutral-white, #fff);
   border-radius: var(--border-radius-4, 0.25rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   font-size: var(--font-size-14, 0.875rem);
   line-height: var(--line-height-150, 1.5);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--elevation-1, 0 2px 8px 1px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.3));
   pointer-events: none;
   word-break: break-word;
 

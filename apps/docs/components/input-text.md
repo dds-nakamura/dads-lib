@@ -1,6 +1,6 @@
 # InputText
 
-1 行のテキスト入力欄。ラベル・ヒント・エラー・カウンター・前後アイコンを内蔵し、`v-model` で文字列または数値を双方向バインドする。公式 slug は `input-text`。旧名 `DadsTextField` は deprecated として併存する。
+1 行のテキスト入力欄。ラベル・ヒント・エラー・カウンター・前後アイコンを内蔵し、`v-model` で文字列または数値を双方向バインドする。公式 slug は `input-text`。
 
 ## 基本
 
@@ -104,12 +104,12 @@ const name = ref('')
 
 ## アイコン
 
-`prependIcon` / `appendIcon` に Material Design Icons のクラス名を渡す。
-利用側で `@mdi/font` の CSS を読み込むことが前提（カタログ側では未ロードのためここでは表示されない）。
+`prependIcon` / `appendIcon` に Material Symbols 名を渡す。
+アイコンは inline SVG (`DadsIcon`) で描画されるためフォント読込は不要。
 
 ```vue
-<DadsInputText prepend-icon="mdi-magnify" label="検索" placeholder="キーワード" />
-<DadsInputText append-icon="mdi-email" label="メール" type="email" />
+<DadsInputText prepend-icon="search" label="検索" placeholder="キーワード" />
+<DadsInputText append-icon="description" label="メール" type="email" />
 ```
 
 ## カウンター
@@ -163,8 +163,8 @@ const name = ref('')
 | `error`         | `boolean`                                                                   | `false`    | メッセージ無しでエラー視覚状態を強制                     |
 | `disabled`      | `boolean`                                                                   | `false`    | 操作不可化                                               |
 | `readonly`      | `boolean`                                                                   | `false`    | 読み取り専用（破線ボーダー）                             |
-| `prependIcon`   | `string`                                                                    | -          | 前置アイコンの MDI クラス名                              |
-| `appendIcon`    | `string`                                                                    | -          | 後置アイコンの MDI クラス名                              |
+| `prependIcon`   | `string`                                                                    | -          | 前置アイコンの Material Symbols 名                       |
+| `appendIcon`    | `string`                                                                    | -          | 後置アイコンの Material Symbols 名                       |
 | `counter`       | `number`                                                                    | -          | `現在文字数 / counter` を表示（制限はしない）            |
 | `requiredLabel` | `string`                                                                    | `'必須'`   | 「必須」バッジに表示するテキスト。i18n 用に上書き可能    |
 
@@ -187,11 +187,11 @@ const name = ref('')
 
 ## マイグレーション (DadsTextField → DadsInputText)
 
-旧名 `DadsTextField` は引き続き re-export されているが、`@deprecated` 警告が出る。次のメジャーバージョンで削除予定。CSS クラスも `dads-text-field*` から `dads-input-text*` に変更されている。
+旧名 `DadsTextField` は major リリース (Issue #14) で削除済み。新規コード・既存コードともに `DadsInputText` を使用すること。CSS クラスも `dads-text-field*` から `dads-input-text*` に変更されている。
 
 ```ts
-// 旧 (deprecated)
-import { DadsTextField } from '@dads/vue'
+// 旧 (削除済み)
+// import { DadsTextField } from '@dads/vue'
 // 新
 import { DadsInputText } from '@dads/vue'
 ```

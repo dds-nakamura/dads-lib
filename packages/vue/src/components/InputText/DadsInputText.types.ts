@@ -1,8 +1,7 @@
 import type { DadsSize } from '../../types/common'
 
 /**
- * 公式 slug は `input-text`。旧名 `DadsTextField` は deprecated alias と
- * して併存する。
+ * 公式 slug は `input-text`。
  */
 export type DadsInputTextSize = Exclude<DadsSize, 'xs'>
 
@@ -55,7 +54,7 @@ export interface DadsInputTextProps {
    *  on the error visual state and links it via `aria-describedby`. Prefer
    *  this over `error` so screen reader users hear the reason. */
   errorMessage?: string
-  /** Marks the field as required (renders the badge and sets aria-required). */
+  /** Marks the field as required (renders the ※必須 marker and sets aria-required). */
   required?: boolean
   /** Forces the error visual state when no message is available — for
    *  example, when the form-level error is shown elsewhere. Pair with an
@@ -65,9 +64,9 @@ export interface DadsInputTextProps {
   disabled?: boolean
   /** Render as read-only (dashed border). */
   readonly?: boolean
-  /** Material Design Icon class name shown before the input. e.g. `mdi-tag`. */
+  /** Material Symbols name (rendered via DadsIcon) shown before the input. e.g. `label`. */
   prependIcon?: string
-  /** Material Design Icon class name shown after the input. e.g. `mdi-magnify`. */
+  /** Material Symbols name (rendered via DadsIcon) shown after the input. e.g. `search`. */
   appendIcon?: string
   /** Show a counter `current / counter` below the input. The component does
    *  not enforce the limit; pair with `maxlength` to do so. */
@@ -78,8 +77,8 @@ export interface DadsInputTextProps {
    */
   align?: DadsInputTextAlign
   /**
-   * 「必須」バッジに表示するテキスト。i18n 用にプロップで上書き可能。
-   * Default: `'必須'`.
+   * 必須マーカーに表示するテキスト。i18n 用にプロップで上書き可能。
+   * Default: `'※必須'` (公式 DADS form-control-label の requirement 表現)。
    */
   requiredLabel?: string
 }

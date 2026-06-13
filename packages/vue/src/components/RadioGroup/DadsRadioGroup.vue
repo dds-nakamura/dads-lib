@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue'
 import DadsRadio from '../Radio/DadsRadio.vue'
+import DadsFormControlLabel from '../FormControlLabel/DadsFormControlLabel.vue'
 import type {
   DadsRadioGroupEmits,
   DadsRadioGroupProps,
@@ -14,7 +15,7 @@ const props = withDefaults(defineProps<DadsRadioGroupProps>(), {
   error: false,
   disabled: false,
   legendVisuallyHidden: false,
-  requiredLabel: '必須',
+  requiredLabel: '※必須',
 })
 
 const emit = defineEmits<DadsRadioGroupEmits>()
@@ -36,6 +37,13 @@ const describedBy = computed(() => {
   return undefined
 })
 
+// The shared form-control-label only knows about `sm` / `md` / `lg`. Radio's
+// own size scale is the same set, so we can forward directly.
+const labelSize = computed(() => props.size)
+
+// Root modifier classes layered onto DadsFormControlLabel's fieldset. The
+// label / required / support / error visuals are owned by form-control-label;
+// these modifiers only drive the items layout + state hooks.
 const rootClasses = computed(() => [
   'dads-radio-group',
   `dads-radio-group--${props.direction}`,
@@ -45,164 +53,136 @@ const rootClasses = computed(() => [
   },
 ])
 
-const hasFooter = computed(() => (isError.value && !!props.errorMessage) || !!props.hint)
-
 const onSelect = (value: DadsRadioGroupValue) => {
   emit('update:modelValue', value)
   emit('change', value)
 }
+
+// Per-item description / hint are not part of the official radio markup — they
+// belong to the form-control-label layer. We render them next to each radio
+// using the official `dads-form-control-label__support-text` class and wire the
+// radio input's `aria-describedby` at them so screen readers announce them.
+const itemDescriptionId = (value: DadsRadioGroupValue) =>
+  `${rootId.value}-item-${String(value)}-description`
+const itemHintId = (value: DadsRadioGroupValue) => `${rootId.value}-item-${String(value)}-hint`
+
+const itemDescribedBy = (item: {
+  value: DadsRadioGroupValue
+  hint?: string
+  description?: string
+}) => {
+  const ids: string[] = []
+  if (item.description) ids.push(itemDescriptionId(item.value))
+  if (item.hint) ids.push(itemHintId(item.value))
+  return ids.length > 0 ? ids.join(' ') : undefined
+}
 </script>
 
 <template>
-  <fieldset
+  <DadsFormControlLabel
     :id="rootId"
+    as="fieldset"
     :class="rootClasses"
+    :size="labelSize"
+    :label="legend"
+    :required="required"
+    :required-label="requiredLabel"
+    :support-text="hint"
+    :support-text-id="hintId"
+    :error-text="isError && errorMessage ? errorMessage : undefined"
+    :error-text-id="errorId"
     :disabled="disabled"
     :aria-invalid="isError || undefined"
     :aria-describedby="describedBy"
   >
-    <legend
-      v-if="legend"
-      class="dads-radio-group__legend"
-      :class="{ 'dads-radio-group__legend--visually-hidden': legendVisuallyHidden }"
-    >
-      {{ legend }}
-      <span v-if="required" class="dads-radio-group__required" aria-hidden="true">{{
-        requiredLabel
-      }}</span>
-    </legend>
+    <template v-if="legend && legendVisuallyHidden" #label>
+      <span class="dads-radio-group__legend-visually-hidden">{{ legend }}</span>
+    </template>
 
     <div class="dads-radio-group__items">
-      <DadsRadio
-        v-for="item in items"
-        :key="String(item.value)"
-        :model-value="modelValue ?? null"
-        :value="item.value"
-        :label="item.label"
-        :hint="item.hint"
-        :description="item.description"
-        :disabled="item.disabled || disabled"
-        :size="size"
-        :name="resolvedName"
-        :error="isError"
-        @update:model-value="onSelect"
-      />
+      <div v-for="item in items" :key="String(item.value)" class="dads-radio-group__item">
+        <DadsRadio
+          :model-value="modelValue ?? null"
+          :value="item.value"
+          :label="item.label"
+          :disabled="item.disabled || disabled"
+          :size="size"
+          :name="resolvedName"
+          :error="isError"
+          :aria-describedby="itemDescribedBy(item)"
+          @update:model-value="onSelect"
+        />
+        <p
+          v-if="item.description"
+          :id="itemDescriptionId(item.value)"
+          class="dads-radio__description dads-form-control-label__support-text"
+        >
+          {{ item.description }}
+        </p>
+        <p
+          v-if="item.hint"
+          :id="itemHintId(item.value)"
+          class="dads-radio__support-text dads-form-control-label__support-text"
+        >
+          {{ item.hint }}
+        </p>
+      </div>
     </div>
-
-    <div v-if="hasFooter" class="dads-radio-group__footer">
-      <span
-        v-if="isError && errorMessage"
-        :id="errorId"
-        class="dads-radio-group__error"
-        role="alert"
-        >{{ errorMessage }}</span
-      >
-      <span v-else-if="hint" :id="hintId" class="dads-radio-group__hint">{{ hint }}</span>
-    </div>
-  </fieldset>
+  </DadsFormControlLabel>
 </template>
 
 <style scoped lang="scss">
-@use '../../styles/base' as base;
-
+// The label / ※必須 / support-text / error-text layer is delegated entirely to
+// DadsFormControlLabel (official `dads-form-control-label`). Only the items
+// layout (direction) and the visually-hidden legend helper remain here.
 .dads-radio-group {
-  // Reset native fieldset chrome so we can compose with our own tokens.
-  appearance: none;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-8, 0.5rem);
-  font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
-
-  // -------------------- legend & required marker -------------------------
-  &__legend {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-8, 0.5rem);
-    padding: 0;
-    font-size: var(--font-size-16, 1rem);
-    font-weight: 500;
-    line-height: var(--line-height-150, 1.5);
-
-    // Visually hide while keeping it in the a11y tree. Mirrors the canonical
-    // "sr-only" pattern so screen readers still announce the group label.
-    &--visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      margin: -1px;
-      padding: 0;
-      overflow: hidden;
-      clip: rect(0 0 0 0);
-      clip-path: inset(50%);
-      white-space: nowrap;
-      border: 0;
-    }
-  }
-
-  &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
-    font-size: var(--font-size-14, 0.875rem);
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-4, 0.25rem);
-    line-height: 1.2;
-  }
-
-  // -------------------- items wrapper ------------------------------------
   &__items {
     display: flex;
-    gap: var(--spacing-12, 0.75rem);
+  }
+
+  // Each item groups its radio with the optional per-option description / hint
+  // paragraphs (form-control-label support-text styling, indented under the
+  // control). These paragraphs are the official `support-text` layer, not part
+  // of the radio markup itself.
+  &__item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // The radio's own gap/padding owns the spacing; the description/hint sit just
+  // below, aligned with the label (control width + gap indent).
+  .dads-radio__description,
+  .dads-radio__support-text {
+    margin: 0;
+    color: var(--color-neutral-solid-gray-600, #666);
+    font-size: calc(14 / 16 * 1rem);
+    line-height: 1.5;
   }
 
   &--vertical &__items {
     flex-direction: column;
+    gap: calc(12 / 16 * 1rem);
   }
 
   &--horizontal &__items {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
   }
 
-  // -------------------- footer (hint / error) ---------------------------
-  // Only one of hint / error renders at a time (v-if/v-else-if), so we just
-  // need the typography here.
-  &__footer {
-    font-size: var(--font-size-14, 0.875rem);
-    line-height: var(--line-height-150, 1.5);
-  }
-
-  &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
-  }
-
-  &__error {
-    color: var(--color-error, #ec0000);
-    font-weight: 500;
-  }
-
-  // -------------------- error -------------------------------------------
-  &--error &__legend {
-    color: var(--color-error, #ec0000);
-  }
-
-  // -------------------- disabled ----------------------------------------
-  // The native `fieldset[disabled]` attribute already disables descendant
-  // form controls, so visually we only dim the group.
-  &--disabled {
-    opacity: 0.5;
-  }
-
-  // -------------------- forced colors -----------------------------------
-  @include base.dads-forced-colors {
-    border: 1px solid CanvasText;
-    padding: var(--spacing-8, 0.5rem);
+  // Keep the legend in the a11y tree while hiding it visually. Mirrors the
+  // canonical "sr-only" pattern so screen readers still announce the group.
+  &__legend-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
 }
 </style>

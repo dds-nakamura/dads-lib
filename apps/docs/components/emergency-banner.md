@@ -79,13 +79,13 @@ import { DadsEmergencyBanner } from '@dads/vue'
 
 ## アイコン
 
-`iconName` で MDI のアイコンを差し替えられる（デフォルト `mdi-alert`）。空文字を渡すとアイコンを描画しない。
+`iconName` で Material Symbols のアイコンを差し替えられる（デフォルト `warning`）。空文字を渡すとアイコンを描画しない。
 
 <div class="demo">
   <DadsEmergencyBanner
     title="火災発生"
     message="ただちに最寄りの非常口から避難してください。"
-    icon-name="mdi-fire"
+    icon-name="local_fire_department"
     style="position: static;"
   />
 </div>
@@ -94,7 +94,7 @@ import { DadsEmergencyBanner } from '@dads/vue'
 <DadsEmergencyBanner
   title="火災発生"
   message="ただちに最寄りの非常口から避難してください。"
-  icon-name="mdi-fire"
+  icon-name="local_fire_department"
 />
 ```
 
@@ -146,7 +146,7 @@ const visible = ref(true)
 | `linkHref`       | `string`         | -                      | CTA リンクの遷移先。`linkLabel` とセットで指定                                                         |
 | `closable`       | `boolean`        | `false`                | 閉じるボタンを表示するか。DADS 仕様では本番では推奨されない                                            |
 | `closeLabel`     | `string`         | `'閉じる'`             | 閉じるボタンの `aria-label`                                                                            |
-| `iconName`       | `string`         | `'mdi-alert'`          | 見出し横の MDI アイコン。空文字でアイコン非表示                                                        |
+| `iconName`       | `string`         | `'warning'`            | 見出し横の Material Symbols アイコン。空文字でアイコン非表示                                           |
 | `ariaLabel`      | `string`         | `'緊急情報'`           | バナールートの `aria-label`                                                                            |
 | `linkExternal`   | `boolean`        | `false`                | `true` で CTA リンクを新規タブ (`target=_blank` + 安全な `rel`) で開く。可視ラベルに外部アイコンも付与 |
 | `newTabHintText` | `string`         | `'（新規タブで開く）'` | `linkExternal=true` のとき CTA ラベル後に追加するスクリーンリーダ専用ヒント。i18n 用に上書き可能       |

@@ -20,8 +20,8 @@ export interface DadsTabItem {
   /** Visible label rendered inside the tab button. */
   label: string
   /**
-   * Optional Material Design Icons class name shown before the label
-   * (e.g. `'mdi-home'`). The host app must have the `mdi` font loaded.
+   * Optional Material Symbols icon name shown before the label
+   * (e.g. `'home'`). Rendered via DadsIcon as an inline SVG.
    */
   icon?: string
   /** Disable interaction; the tab is skipped by keyboard navigation. */

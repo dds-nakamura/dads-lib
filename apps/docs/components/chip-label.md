@@ -24,29 +24,38 @@ import { DadsChipLabel } from '@dads/vue'
 </template>
 ```
 
-## Size
-
-3 サイズ (`sm` / `md` / `lg`)。デフォルトは `md`。
-
-<div class="demo">
-  <div class="demo-row">
-    <DadsChipLabel size="sm">SM</DadsChipLabel>
-    <DadsChipLabel size="md">MD</DadsChipLabel>
-    <DadsChipLabel size="lg">LG</DadsChipLabel>
-  </div>
-</div>
+> サイズ軸は公式に存在しないため撤廃された。チップラベルは単一サイズ (min-height 32px / font-size 16px) で固定される。
 
 ## Color
 
-5 つの semantic color (`primary` / `success` / `error` / `warning` / `secondary`)。デフォルトは `primary`。
+公式の 11 primitive 色相 (`gray` / `blue` / `light-blue` / `cyan` / `green` / `lime` / `yellow` / `orange` / `red` / `magenta` / `purple`)。デフォルトは `gray`。
 
 <div class="demo">
   <div class="demo-row">
-    <DadsChipLabel color="primary">Primary</DadsChipLabel>
-    <DadsChipLabel color="success">Success</DadsChipLabel>
-    <DadsChipLabel color="error">Error</DadsChipLabel>
-    <DadsChipLabel color="warning">Warning</DadsChipLabel>
-    <DadsChipLabel color="secondary">Secondary</DadsChipLabel>
+    <DadsChipLabel color="gray">gray</DadsChipLabel>
+    <DadsChipLabel color="blue">blue</DadsChipLabel>
+    <DadsChipLabel color="light-blue">light-blue</DadsChipLabel>
+    <DadsChipLabel color="cyan">cyan</DadsChipLabel>
+    <DadsChipLabel color="green">green</DadsChipLabel>
+    <DadsChipLabel color="lime">lime</DadsChipLabel>
+    <DadsChipLabel color="yellow">yellow</DadsChipLabel>
+    <DadsChipLabel color="orange">orange</DadsChipLabel>
+    <DadsChipLabel color="red">red</DadsChipLabel>
+    <DadsChipLabel color="magenta">magenta</DadsChipLabel>
+    <DadsChipLabel color="purple">purple</DadsChipLabel>
+  </div>
+</div>
+
+## Appearance (style)
+
+公式の 4 種 (`text` / `outline` / `filled-outline` / `fill`)。デフォルトは `text`。
+
+<div class="demo">
+  <div class="demo-row">
+    <DadsChipLabel color="blue" appearance="text">text</DadsChipLabel>
+    <DadsChipLabel color="blue" appearance="outline">outline</DadsChipLabel>
+    <DadsChipLabel color="blue" appearance="filled-outline">filled-outline</DadsChipLabel>
+    <DadsChipLabel color="blue" appearance="fill">fill</DadsChipLabel>
   </div>
 </div>
 
@@ -57,7 +66,7 @@ import { DadsChipLabel } from '@dads/vue'
 ```vue
 <DadsChipLabel color="success">
   <template #prepend>
-    <i class="mdi mdi-check-circle" />
+    <DadsIcon name="check_circle" />
   </template>
   公開中
 </DadsChipLabel>
@@ -65,10 +74,10 @@ import { DadsChipLabel } from '@dads/vue'
 
 ## Props
 
-| Prop    | 型                                                              | デフォルト  | 説明                 |
-| ------- | --------------------------------------------------------------- | ----------- | -------------------- |
-| `size`  | `'lg' \| 'md' \| 'sm'`                                          | `'md'`      | サイズ               |
-| `color` | `'primary' \| 'success' \| 'error' \| 'warning' \| 'secondary'` | `'primary'` | セマンティックカラー |
+| Prop         | 型                                                                                                                          | デフォルト | 説明                        |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------- |
+| `color`      | `'gray' \| 'blue' \| 'light-blue' \| 'cyan' \| 'green' \| 'lime' \| 'yellow' \| 'orange' \| 'red' \| 'magenta' \| 'purple'` | `'gray'`   | 公式 primitive 色相 (11 種) |
+| `appearance` | `'text' \| 'outline' \| 'filled-outline' \| 'fill'`                                                                         | `'text'`   | 公式 style 軸 (4 種)        |
 
 ## Slot
 

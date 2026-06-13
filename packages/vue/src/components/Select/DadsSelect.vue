@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsSelectEmits,
   DadsSelectItem,
@@ -316,10 +317,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
         @focus="onFocus"
         @blur="onBlur"
       >
-        <i
+        <DadsIcon
           v-if="prefixIcon"
-          :class="['mdi', prefixIcon, 'dads-select__prefix-icon']"
-          aria-hidden="true"
+          :name="prefixIcon"
+          class="dads-select__prefix-icon"
+          :size="20"
         />
         <span class="dads-select__value-wrap">
           <template v-if="multiple && selectedItems.length > 0 && chips">
@@ -355,10 +357,11 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
             <span class="dads-select__placeholder">{{ placeholder }}</span>
           </template>
         </span>
-        <i
-          class="mdi mdi-chevron-down dads-select__icon"
+        <DadsIcon
+          name="keyboard_arrow_down"
+          class="dads-select__icon"
           :class="{ 'dads-select__icon--open': isOpen }"
-          aria-hidden="true"
+          :size="20"
         />
       </button>
 
@@ -416,24 +419,26 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
 .dads-select {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #333);
+  line-height: 1.7;
+  letter-spacing: 0.02em;
   position: relative;
 
   // -------------------- label & required marker --------------------------
   &__label {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -447,9 +452,9 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__control {
     position: relative;
     display: flex;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
     transition:
       border-color 0.15s ease,
       box-shadow 0.15s ease;
@@ -464,7 +469,7 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     width: 100%;
     text-align: left;
   }
@@ -481,8 +486,8 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     flex-shrink: 0;
     font-size: 1.25em;
     line-height: 1;
-    color: var(--color-text-secondary, #4d4d4d);
-    margin-inline-end: var(--spacing-8, 0.5rem);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
+    margin-inline-end: calc(8 / 16 * 1rem);
   }
 
   &__value {
@@ -492,12 +497,12 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   &__placeholder {
-    color: var(--color-text-disabled, #999);
+    color: var(--color-neutral-solid-gray-420, #999);
   }
 
   &__icon {
     flex-shrink: 0;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: 1.25em;
     transition: transform 0.15s ease;
   }
@@ -510,17 +515,17 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
   }
 
   &__tag {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
-    padding: 0 var(--spacing-8, 0.5rem);
+    gap: calc(4 / 16 * 1rem);
+    background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    border: 1px solid var(--color-neutral-solid-gray-600, #666);
+    border-radius: var(--border-radius-8, 0.5rem);
+    padding: 0 calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: 1.6;
   }
@@ -534,12 +539,12 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     width: 1.25em;
     height: 1.25em;
     border-radius: 50%;
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: 1em;
     line-height: 1;
 
     &:hover:not(:disabled) {
-      background-color: var(--color-bg-hover, rgba(0, 0, 0, 0.08));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.08));
     }
   }
 
@@ -551,41 +556,42 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
     right: 0;
     z-index: 10;
     margin: 0;
-    padding: var(--spacing-4, 0.25rem) 0;
+    padding: calc(4 / 16 * 1rem) 0;
     list-style: none;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
-    border-radius: var(--border-radius-4, 0.25rem);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
+    border-radius: var(--border-radius-8, 0.5rem);
+    box-shadow: var(--elevation-1);
     max-height: 16rem;
     overflow-y: auto;
   }
 
   &__option {
-    padding: var(--spacing-8, 0.5rem) var(--spacing-12, 0.75rem);
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
     cursor: pointer;
     line-height: var(--line-height-150, 1.5);
 
     &--active {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
     }
 
     &--selected {
       font-weight: 600;
-      background-color: var(--color-bg-selected, rgba(0, 102, 204, 0.08));
+      background-color: var(--color-primitive-blue-100, #d9e6ff);
+      color: var(--color-primitive-blue-1000, #00118f);
     }
 
     &--selected.dads-select__option--active {
-      background-color: var(--color-bg-selected-hover, rgba(0, 102, 204, 0.16));
+      background-color: var(--color-primitive-blue-200, #c5d7fb);
     }
 
     &--disabled {
-      opacity: 0.5;
+      color: var(--color-neutral-solid-gray-420, #949494);
       cursor: not-allowed;
     }
 
     &--empty {
-      color: var(--color-text-secondary, #4d4d4d);
+      color: var(--color-neutral-solid-gray-700, #4d4d4d);
       cursor: default;
       text-align: center;
     }
@@ -594,17 +600,17 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   // -------------------- footer (hint / error) ----------------------------
   &__footer {
     display: flex;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
   }
 
@@ -612,31 +618,31 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   &--lg &__trigger {
     min-height: calc(3.5rem - 2px);
     font-size: var(--font-size-18, 1.125rem);
-    padding: 0 var(--spacing-16, 1rem);
+    padding: 0 calc(16 / 16 * 1rem);
   }
 
   &--md &__trigger {
     min-height: calc(3rem - 2px);
     font-size: var(--font-size-16, 1rem);
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   &--sm &__trigger {
     min-height: calc(2.5rem - 2px);
     font-size: var(--font-size-14, 0.875rem);
-    padding: 0 var(--spacing-12, 0.75rem);
+    padding: 0 calc(12 / 16 * 1rem);
   }
 
   // -------------------- hover (interactive) ------------------------------
   &:not(.dads-select--readonly):not(.dads-select--disabled):not(.dads-select--error)
     .dads-select__control:hover {
-    border-color: var(--color-text-primary, #1a1a1a);
+    border-color: var(--color-neutral-black, #000);
   }
 
   // -------------------- readonly -----------------------------------------
   &--readonly &__control {
     border-style: dashed;
-    background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+    background-color: var(--color-neutral-solid-gray-50, rgba(0, 0, 0, 0.05));
   }
 
   &--readonly &__trigger {
@@ -644,18 +650,33 @@ const onBlur = (event: FocusEvent) => emit('blur', event)
   }
 
   // -------------------- disabled -----------------------------------------
+  // Official DADS form-control disabled palette: border gray-300, bg gray-50,
+  // text gray-420 (no flat opacity dimming).
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
+    color: var(--color-neutral-solid-gray-420, #949494);
 
     .dads-select__control {
-      background-color: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
+      border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+    }
+
+    .dads-select__trigger,
+    .dads-select__placeholder,
+    .dads-select__icon,
+    .dads-select__prefix-icon {
+      color: var(--color-neutral-solid-gray-420, #949494);
     }
   }
 
   // -------------------- error --------------------------------------------
   &--error &__control {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
+  }
+
+  // Invalid hover deepens to red-1000 (official select.css:60-63).
+  &--error:not(.dads-select--disabled) &__control:hover {
+    border-color: var(--color-primitive-red-1000, #a90000);
   }
 
   // -------------------- forced colors ------------------------------------

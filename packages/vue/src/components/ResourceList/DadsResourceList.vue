@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type {
   DadsResourceListEmits,
   DadsResourceListItem,
@@ -69,10 +70,11 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
             :src="entry.item.thumbnail"
             alt=""
           />
-          <i
+          <DadsIcon
             v-else-if="entry.item.iconName"
-            :class="['mdi', entry.item.iconName, 'dads-resource-list__icon']"
-            aria-hidden="true"
+            :name="entry.item.iconName"
+            class="dads-resource-list__icon"
+            :size="32"
           />
           <div class="dads-resource-list__contents">
             <h3 class="dads-resource-list__title">{{ entry.item.title }}</h3>
@@ -103,10 +105,10 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
           class="dads-resource-list__action"
           @click="onActionClick(entry.item, entry.index, $event)"
         >
-          <i
+          <DadsIcon
             v-if="entry.item.action.iconName"
-            :class="['mdi', entry.item.action.iconName]"
-            aria-hidden="true"
+            :name="entry.item.action.iconName"
+            :size="20"
           />
           <span v-else>{{ entry.item.action.label }}</span>
         </component>
@@ -126,7 +128,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   margin: 0;
   padding: 0;
   display: grid;
-  row-gap: var(--spacing-16, 1rem);
+  row-gap: calc(16 / 16 * 1rem);
 
   // `list` mode squashes the rows together — the per-row bottom border draws
   // the divider, so the gap collapses to zero.
@@ -143,13 +145,13 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   display: flex;
   align-items: center;
   background: var(--color-neutral-white, #fff);
-  color: var(--color-text-primary, var(--color-neutral-solid-gray-800, #1a1a1a));
+  color: var(--color-neutral-solid-gray-800, var(--color-neutral-solid-gray-800, #1a1a1a));
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
   overflow-wrap: anywhere;
 
   --_border-color: var(--color-neutral-solid-gray-420, #69707d);
-  --_padding-block: var(--spacing-16, 1rem);
-  --_padding-inline: var(--spacing-16, 1rem);
+  --_padding-block: calc(16 / 16 * 1rem);
+  --_padding-inline: calc(16 / 16 * 1rem);
 
   &[data-style='list'] {
     border: 1px solid transparent;
@@ -168,7 +170,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     display: flex;
     flex-grow: 1;
     align-items: center;
-    gap: var(--spacing-16, 1rem);
+    gap: calc(16 / 16 * 1rem);
     outline-offset: calc(-1 / 16 * 1rem);
     border-radius: inherit;
     padding: var(--_padding-block) var(--_padding-inline);
@@ -199,15 +201,12 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   }
 
   &__icon {
+    // Icon is now an inline SVG (DadsIcon) sized via the :size prop (32px).
+    // Keep the optical 4px breathing room the old 40px box provided so the
+    // gap to the contents column matches the official spec.
     flex-shrink: 0;
-    width: calc(40 / 16 * 1rem);
-    height: calc(40 / 16 * 1rem);
-    font-size: calc(32 / 16 * 1rem);
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    margin: calc(4 / 16 * 1rem);
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
   }
 
   // ---------- contents column --------------------------------------------
@@ -217,7 +216,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     flex-grow: 1;
     flex-shrink: 1;
     flex-direction: column;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
     font-weight: normal;
     font-size: var(--font-size-16, 1rem);
     line-height: 1.3;
@@ -230,7 +229,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
 
   &__title {
     margin: 0;
-    color: var(--color-text-primary, var(--color-neutral-solid-gray-900, #0f0f0f));
+    color: var(--color-neutral-solid-gray-800, var(--color-neutral-solid-gray-900, #0f0f0f));
     font-weight: bold;
     font-size: var(--font-size-20, 1.25rem);
     line-height: 1.5;
@@ -253,9 +252,15 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     }
   }
 
+  // Active state (resource-list.css:164-168): orange-800 title, thin underline.
+  a.dads-resource-list__body:active .dads-resource-list__title {
+    color: var(--color-primitive-orange-800, #c74700);
+    text-decoration-thickness: calc(1 / 16 * 1rem);
+  }
+
   &__support > * {
     margin: 0;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
     font-size: var(--font-size-14, 0.875rem);
     line-height: 1.4;
   }
@@ -263,22 +268,23 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
   // ---------- tags --------------------------------------------------------
   &__tags {
     list-style: none;
-    margin: var(--spacing-4, 0.25rem) 0 0;
+    margin: calc(4 / 16 * 1rem) 0 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--spacing-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
   }
 
   &__tag {
     display: inline-flex;
     align-items: center;
-    padding: calc(2 / 16 * 1rem) var(--spacing-8, 0.5rem);
+    padding: calc(2 / 16 * 1rem) calc(8 / 16 * 1rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #69707d);
     border-radius: calc(999 / 16 * 1rem);
     background-color: var(--color-neutral-white, #fff);
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
-    font-size: var(--font-size-12, 0.75rem);
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
+    // DADS has no 12px size token (smallest is 14px); use the canonical minimum.
+    font-size: var(--font-size-14, 0.875rem);
     line-height: 1.2;
   }
 
@@ -289,7 +295,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     font-size: var(--font-size-16, 1rem);
     line-height: 1.3;
     letter-spacing: 0;
-    color: var(--color-text-secondary, var(--color-neutral-solid-gray-700, #595959));
+    color: var(--color-neutral-solid-gray-700, var(--color-neutral-solid-gray-700, #595959));
   }
 
   &__sub > * {
@@ -301,13 +307,20 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     cursor: pointer;
   }
 
+  // Selected mirrors official `:has(:checked:enabled)` — blue-50 fill with a
+  // gray-500 frame/divider (resource-list.css:24-27).
   &--selected {
-    background-color: var(--color-info-bg, #e8eaf6);
-    border-color: var(--color-brand-primary, #0017c1);
+    background: var(--color-primitive-blue-50, #e8f1fe);
+    --_border-color: var(--color-neutral-solid-gray-500, #7f7f7f);
   }
 
+  // Disabled mirrors official `:has(:disabled)` token switch instead of a flat
+  // opacity dim: gray-50 fill, gray-420 text, gray-300 border
+  // (resource-list.css:29-39).
   &--disabled {
-    opacity: 0.6;
+    background: var(--color-neutral-solid-gray-50, #f2f2f2);
+    color: var(--color-neutral-solid-gray-420, #949494);
+    --_border-color: var(--color-neutral-solid-gray-300, #b3b3b3);
     pointer-events: none;
   }
 
@@ -320,10 +333,10 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     justify-content: center;
     min-width: 2.75rem;
     min-height: 2.75rem;
-    padding: 0 var(--spacing-12, 0.75rem);
-    margin-inline: var(--spacing-8, 0.5rem);
+    padding: 0 calc(12 / 16 * 1rem);
+    margin-inline: calc(8 / 16 * 1rem);
     border-radius: var(--border-radius-4, 0.25rem);
-    color: var(--color-brand-primary, #0017c1);
+    color: var(--color-primitive-blue-900, #0017c1);
     background-color: transparent;
     font: inherit;
     font-size: 1.25rem;
@@ -333,7 +346,7 @@ const onActionClick = (item: DadsResourceListItem, index: number, event: MouseEv
     flex-shrink: 0;
 
     &:hover {
-      background-color: var(--color-info-bg, rgba(0, 23, 193, 0.06));
+      background-color: var(--color-primitive-blue-50, #e8f1fe);
     }
   }
 

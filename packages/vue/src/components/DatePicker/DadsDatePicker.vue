@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import DadsIcon from '../Icon/DadsIcon.vue'
 import type { DadsDatePickerEmits, DadsDatePickerProps } from './DadsDatePicker.types'
 
 const props = withDefaults(defineProps<DadsDatePickerProps>(), {
@@ -516,8 +517,12 @@ const warekiHint = computed(() => {
         data-js-calendar-button
         @click="toggleCalendar"
       >
-        <i class="mdi mdi-calendar dads-date-picker__calendar-icon" aria-hidden="true" />
-        <i class="mdi mdi-chevron-down dads-date-picker__calendar-chevron" aria-hidden="true" />
+        <DadsIcon name="calendar_today" class="dads-date-picker__calendar-icon" :size="24" />
+        <DadsIcon
+          name="keyboard_arrow_down"
+          class="dads-date-picker__calendar-chevron"
+          :size="16"
+        />
       </button>
 
       <div
@@ -537,7 +542,7 @@ const warekiHint = computed(() => {
             :aria-label="prevMonthAriaLabel"
             @click="navigateMonth(-1)"
           >
-            <i class="mdi mdi-chevron-left" aria-hidden="true" />
+            <DadsIcon name="chevron_left" :size="20" />
           </button>
           <span class="dads-date-picker__current-month" aria-live="polite">
             {{ displayMonthLabel }}
@@ -549,7 +554,7 @@ const warekiHint = computed(() => {
             :aria-label="nextMonthAriaLabel"
             @click="navigateMonth(1)"
           >
-            <i class="mdi mdi-chevron-right" aria-hidden="true" />
+            <DadsIcon name="chevron_right" :size="20" />
           </button>
         </div>
         <table class="dads-date-picker__calendar-table" role="grid" :aria-label="displayMonthLabel">
@@ -607,23 +612,25 @@ const warekiHint = computed(() => {
 .dads-date-picker {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4, 0.25rem);
+  gap: calc(4 / 16 * 1rem);
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
+  line-height: var(--line-height-170, 1.7);
+  letter-spacing: 0.02em;
 
   // -------------------- external label & required marker -----------------
   &__label-text {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-16, 1rem);
     font-weight: 500;
     line-height: var(--line-height-150, 1.5);
   }
 
   &__required {
-    background-color: var(--color-error, #ec0000);
-    color: var(--color-text-on-primary, #fff);
+    background-color: var(--color-semantic-error-1, #ec0000);
+    color: var(--color-neutral-white, #fff);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     padding: 2px 8px;
@@ -636,7 +643,7 @@ const warekiHint = computed(() => {
     position: relative;
     display: flex;
     align-items: end;
-    column-gap: var(--spacing-16, 1rem);
+    column-gap: calc(16 / 16 * 1rem);
   }
 
   // -------------------- year/month/day box -------------------------------
@@ -645,10 +652,10 @@ const warekiHint = computed(() => {
 
     display: inline-flex;
     box-sizing: border-box;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-600, #595959);
     background-color: var(--_bg);
-    padding: 2px 0 2px 2px;
+    padding: calc(2 / 16 * 1rem) 0 calc(2 / 16 * 1rem) calc(2 / 16 * 1rem);
   }
 
   // -------------------- variant: separated -------------------------------
@@ -659,14 +666,14 @@ const warekiHint = computed(() => {
     border: 0;
     background-color: transparent;
     padding: 0;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
   }
 
   &--variant-separated &__year,
   &--variant-separated &__month,
   &--variant-separated &__day {
     border: 1px solid var(--color-neutral-solid-gray-600, #595959);
-    border-radius: 0.25rem;
+    border-radius: var(--border-radius-4, 0.25rem);
     padding: 0 0.25rem;
   }
 
@@ -674,8 +681,8 @@ const warekiHint = computed(() => {
   &__wareki {
     display: inline-block;
     margin-inline-start: 0.25rem;
-    font-size: var(--font-size-12, 0.75rem);
-    color: var(--color-text-secondary, #4d4d4d);
+    font-size: var(--font-size-14, 0.875rem);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__controls[data-size='sm'] &__inputs {
@@ -699,7 +706,11 @@ const warekiHint = computed(() => {
   }
 
   &__inputs[data-error] {
-    border-color: var(--color-error, #ec0000);
+    border-color: var(--color-semantic-error-1, #ec0000);
+  }
+
+  &__inputs[data-error]:focus-within {
+    border-color: var(--color-primitive-red-1000, #d20000);
   }
 
   &__inputs[data-disabled] {
@@ -710,6 +721,7 @@ const warekiHint = computed(() => {
 
   &__inputs[data-readonly] {
     border-style: dashed;
+    border-color: var(--color-neutral-solid-gray-600, #595959);
   }
 
   &__year,
@@ -725,7 +737,7 @@ const warekiHint = computed(() => {
     margin-left: -4px;
   }
   &__day {
-    padding-right: 1rem;
+    padding-right: calc(16 / 16 * 1rem);
   }
 
   &__label {
@@ -743,19 +755,21 @@ const warekiHint = computed(() => {
     margin-right: -4px;
     box-sizing: border-box;
     width: 4rem;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid transparent;
     background-color: transparent;
-    padding-right: 0.75rem;
+    padding-right: calc(12 / 16 * 1rem);
     color: inherit;
     text-align: right;
     font: inherit;
+    letter-spacing: inherit;
 
     &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000) !important;
-      outline-offset: 2px;
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
-      border-radius: 0.5rem;
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
+      border: 1px solid var(--color-neutral-solid-gray-600, #595959);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
+      border-radius: var(--border-radius-8, 0.5rem);
     }
   }
 
@@ -769,18 +783,27 @@ const warekiHint = computed(() => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    column-gap: 0.25rem;
-    border-radius: 6px;
+    column-gap: calc(4 / 16 * 1rem);
+    border-radius: var(--border-radius-6, 0.375rem);
     border: 1px solid currentColor;
     background-color: var(--color-neutral-white, #fff);
-    padding: 0 0.75rem;
+    padding: 0 calc(12 / 16 * 1rem);
     color: var(--color-primitive-blue-900, #0017c1);
     cursor: pointer;
 
+    @media (hover: hover) {
+      &:enabled:hover {
+        border-width: calc(3 / 16 * 1rem);
+        padding-left: calc(10 / 16 * 1rem);
+        padding-right: calc(10 / 16 * 1rem);
+      }
+    }
+
     &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000);
-      outline-offset: 2px;
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
+      border-radius: var(--border-radius-4, 0.25rem);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
     }
 
     &:disabled {
@@ -817,10 +840,14 @@ const warekiHint = computed(() => {
     top: calc(100% + 4px);
     left: 0;
     z-index: 10;
-    border-radius: 8px;
+    border-radius: var(--border-radius-8, 0.5rem);
     border: 1px solid var(--color-neutral-solid-gray-420, #808080);
     background-color: var(--color-neutral-white, #fff);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: var(
+      --elevation-1,
+      0 2px 8px 1px rgba(0, 0, 0, 0.1),
+      0 1px 5px 0 rgba(0, 0, 0, 0.3)
+    );
     padding: 0.5rem;
   }
 
@@ -834,6 +861,7 @@ const warekiHint = computed(() => {
 
   &__nav-button {
     @include base.dads-reset-button;
+    @include ring.dads-focus-ring;
     width: 2.5rem;
     height: 2.5rem;
     display: inline-flex;
@@ -850,11 +878,6 @@ const warekiHint = computed(() => {
     &:disabled {
       cursor: not-allowed;
       color: var(--color-neutral-solid-gray-300, #b3b3b3);
-    }
-    &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000);
-      outline-offset: 2px;
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
     }
   }
 
@@ -903,10 +926,10 @@ const warekiHint = computed(() => {
     }
 
     &:focus-visible {
-      outline: 2px solid var(--color-neutral-black, #000);
-      outline-offset: 2px;
+      outline: calc(4 / 16 * 1rem) solid var(--color-neutral-black, #000);
+      outline-offset: calc(2 / 16 * 1rem);
       background-color: var(--color-primitive-yellow-300, #ffd43d);
-      box-shadow: 0 0 0 4px var(--color-primitive-yellow-300, #ffd43d);
+      box-shadow: 0 0 0 calc(2 / 16 * 1rem) var(--color-primitive-yellow-300, #ffd43d);
     }
 
     &[data-selected] {
@@ -934,17 +957,17 @@ const warekiHint = computed(() => {
   &__footer {
     display: flex;
     justify-content: space-between;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     font-size: var(--font-size-14, 0.875rem);
     line-height: var(--line-height-150, 1.5);
   }
 
   &__hint {
-    color: var(--color-text-secondary, #4d4d4d);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
   }
 
   &__error-text {
-    color: var(--color-error, #ec0000);
+    color: var(--color-semantic-error-1, #ec0000);
     font-weight: 500;
     margin: 0;
   }
@@ -952,7 +975,6 @@ const warekiHint = computed(() => {
   // -------------------- disabled -----------------------------------------
   &--disabled {
     pointer-events: none;
-    opacity: 0.5;
   }
 
   // -------------------- forced colors ------------------------------------
@@ -963,6 +985,11 @@ const warekiHint = computed(() => {
     &__inputs:focus-within {
       border-color: Highlight;
     }
+    @media (hover: hover) {
+      &__inputs:hover {
+        border-color: Highlight;
+      }
+    }
     &__inputs[data-disabled] {
       --_bg: ButtonFace;
       border-color: GrayText;
@@ -970,6 +997,10 @@ const warekiHint = computed(() => {
     }
     &__inputs[data-readonly] {
       border-color: currentcolor;
+    }
+    &__calendar-button:disabled {
+      border-color: GrayText;
+      color: GrayText;
     }
     &__calendar-popover {
       border: 1px solid CanvasText;

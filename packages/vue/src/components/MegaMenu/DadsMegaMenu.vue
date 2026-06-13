@@ -160,26 +160,30 @@ watch(
   position: relative;
   display: inline-block;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-neutral-solid-gray-900, #1a1a1c);
+  color: var(--color-neutral-solid-gray-900, #1a1a1a);
 
   // -------------------- trigger button -----------------------------------
   &__trigger {
     @include base.dads-reset-button;
-    @include ring.dads-focus-ring;
+    @include ring.dads-focus-ring-fill;
 
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-4, 0.25rem);
-    min-height: 2.75rem;
-    padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
-    border-radius: var(--border-radius-4, 0.25rem);
+    gap: calc(4 / 16 * 1rem);
+    min-height: calc(44 / 16 * 1rem);
+    padding: calc(8 / 16 * 1rem) calc(16 / 16 * 1rem);
+    // menu-list-box opener の慣例に合わせ 8px の角丸。
+    border-radius: var(--border-radius-8, 0.5rem);
     color: inherit;
     font-weight: 700;
     font-size: var(--font-size-16, 1rem);
-    line-height: var(--line-height-150, 1.5);
+    // menu-list 系の行間 (1.3) に寄せる。
+    line-height: 1.3;
 
     &:hover {
-      background-color: var(--color-neutral-solid-gray-50, #f3f4f5);
+      background-color: var(--color-neutral-solid-gray-50, #f2f2f2);
+      text-decoration: underline;
+      text-underline-offset: calc(3 / 16 * 1rem);
     }
   }
 
@@ -203,31 +207,35 @@ watch(
     left: 0;
     z-index: 20;
     min-width: 16rem;
-    background-color: var(--color-bg-surface, #fff);
-    border: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.1));
+    background-color: var(--color-neutral-white, #fff);
+    border: 1px solid var(--color-neutral-solid-gray-420, #949494);
     border-radius: var(--border-radius-8, 0.5rem);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
-    padding: var(--spacing-16, 1rem);
+    box-shadow: var(
+      --elevation-1,
+      0 2px 8px 1px rgba(0, 0, 0, 0.1),
+      0 1px 5px 0 rgba(0, 0, 0, 0.3)
+    );
+    padding: calc(16 / 16 * 1rem);
   }
 
   // -------------------- columns layout -----------------------------------
   &__columns {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: var(--spacing-24, 1.5rem);
+    gap: calc(24 / 16 * 1rem);
   }
 
   &__column {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-8, 0.5rem);
+    gap: calc(8 / 16 * 1rem);
     min-width: 12rem;
   }
 
   &__heading {
     margin: 0;
-    padding: 0 var(--spacing-16, 1rem);
-    color: var(--color-neutral-solid-gray-700, #41464d);
+    padding: 0 calc(16 / 16 * 1rem);
+    color: var(--color-neutral-solid-gray-700, #4d4d4d);
     font-size: var(--font-size-14, 0.875rem);
     font-weight: 700;
     line-height: var(--line-height-150, 1.5);

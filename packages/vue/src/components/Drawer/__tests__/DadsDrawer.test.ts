@@ -1,489 +1,205 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
 import DadsDrawer from '../DadsDrawer.vue'
-import DadsDrawerItem from '../DadsDrawerItem.vue'
-import type { DadsDrawerItem as DadsDrawerItemType, DadsDrawerProps } from '../DadsDrawer.types'
+import DadsHamburgerMenuButton from '../../HamburgerMenuButton/DadsHamburgerMenuButton.vue'
+import type { DadsDrawerProps } from '../DadsDrawer.types'
 
 enableAutoUnmount(afterEach)
 
-const flatItems: DadsDrawerItemType[] = [
-  { label: 'ホーム', href: '/', icon: 'mdi-home' },
-  { label: 'タスク', href: '/tasks' },
-  { label: '設定', icon: 'mdi-cog' },
-]
-
-const nestedItems: DadsDrawerItemType[] = [
-  { label: 'ホーム', href: '/' },
-  {
-    label: 'プロジェクト',
-    children: [
-      { label: '一覧', href: '/projects' },
-      { label: '新規作成', href: '/projects/new' },
-    ],
-  },
-]
+// happy-dom は HTMLDialogElement.showModal/close と open 属性のリフレクションを
+// 実装していないため、prototype に最小ポリフィルを当ててコンポーネント挙動を
+// 観測可能にする。showModal は open=true、close は open=false + close イベント。
+beforeAll(() => {
+  const proto = HTMLDialogElement.prototype as unknown as {
+    showModal?: () => void
+    close?: () => void
+  }
+  if (typeof proto.showModal !== 'function') {
+    proto.showModal = function showModal(this: HTMLDialogElement) {
+      this.setAttribute('open', '')
+    }
+  }
+  if (typeof proto.close !== 'function') {
+    proto.close = function close(this: HTMLDialogElement) {
+      this.removeAttribute('open')
+      this.dispatchEvent(new Event('close'))
+    }
+  }
+})
 
 const createWrapper = (props: Partial<DadsDrawerProps> = {}) =>
   mount(DadsDrawer, {
     props: {
       modelValue: true,
-      items: flatItems,
       ...props,
     } as DadsDrawerProps,
+    slots: {
+      default: '<a href="/home">ホーム</a><a href="/tasks">タスク</a>',
+    },
     attachTo: document.body,
   })
 
-const queryDrawer = () => document.body.querySelector('.dads-drawer')
+const queryDrawer = () =>
+  document.body.querySelector('dialog.dads-drawer') as HTMLDialogElement | null
 
 describe('DadsDrawer', () => {
   describe('rendering', () => {
-    it('does not render the drawer when modelValue is false', () => {
-      createWrapper({ modelValue: false })
-      expect(queryDrawer()).toBeNull()
+    it('renders a <dialog class="dads-drawer">', () => {
+      createWrapper()
+      const dialog = queryDrawer()
+      expect(dialog).not.toBeNull()
+      expect(dialog?.tagName).toBe('DIALOG')
     })
 
-    it('renders the drawer when modelValue is true', () => {
+    it('opens (sets the open attribute) when modelValue is true', async () => {
       createWrapper({ modelValue: true })
-      expect(queryDrawer()).not.toBeNull()
+      await nextTick()
+      expect(queryDrawer()?.hasAttribute('open')).toBe(true)
     })
 
-    it('teleports the drawer into the document.body subtree', () => {
-      createWrapper()
-      // Teleport target is document.body — the drawer must be reachable from
-      // document.body's subtree, even if it lives outside the wrapper root.
-      expect(document.body.contains(queryDrawer())).toBe(true)
+    it('does not set the open attribute when modelValue is false', async () => {
+      createWrapper({ modelValue: false })
+      await nextTick()
+      expect(queryDrawer()?.hasAttribute('open')).toBe(false)
     })
 
-    it('renders the overlay element', () => {
-      createWrapper()
-      expect(document.body.querySelector('.dads-drawer__overlay')).not.toBeNull()
+    it('reacts to modelValue changes (false -> true opens)', async () => {
+      const wrapper = createWrapper({ modelValue: false })
+      expect(queryDrawer()?.hasAttribute('open')).toBe(false)
+      await wrapper.setProps({ modelValue: true })
+      await nextTick()
+      expect(queryDrawer()?.hasAttribute('open')).toBe(true)
     })
 
-    it('renders the panel element', () => {
+    it('renders the default slot content inside .dads-drawer__body', () => {
       createWrapper()
-      expect(document.body.querySelector('.dads-drawer__panel')).not.toBeNull()
+      const body = document.body.querySelector('.dads-drawer__body')
+      expect(body).not.toBeNull()
+      expect(body?.querySelectorAll('a').length).toBe(2)
     })
   })
 
-  describe('a11y attributes', () => {
-    it('sets role="dialog"', () => {
+  describe('placement', () => {
+    it('applies data-placement="left" by default', () => {
       createWrapper()
-      expect(queryDrawer()?.getAttribute('role')).toBe('dialog')
+      expect(queryDrawer()?.getAttribute('data-placement')).toBe('left')
     })
 
-    it('sets aria-modal="true"', () => {
-      createWrapper()
-      expect(queryDrawer()?.getAttribute('aria-modal')).toBe('true')
+    it('applies data-placement="right" when placement="right"', () => {
+      createWrapper({ placement: 'right' })
+      expect(queryDrawer()?.getAttribute('data-placement')).toBe('right')
     })
+  })
 
-    it('falls back to "ナビゲーション" aria-label when title is missing', () => {
-      createWrapper()
-      expect(queryDrawer()?.getAttribute('aria-label')).toBe('ナビゲーション')
-    })
-
-    it('uses title as aria-label when provided', () => {
+  describe('accessible name', () => {
+    it('renders a visually-hidden <h2> wired via aria-labelledby', () => {
       createWrapper({ title: 'メインメニュー' })
-      expect(queryDrawer()?.getAttribute('aria-label')).toBe('メインメニュー')
+      const dialog = queryDrawer()
+      const labelledby = dialog?.getAttribute('aria-labelledby')
+      expect(labelledby).toBeTruthy()
+      const heading = document.getElementById(labelledby as string)
+      expect(heading?.tagName).toBe('H2')
+      expect(heading?.classList.contains('dads-u-visually-hidden')).toBe(true)
+      expect(heading?.textContent).toBe('メインメニュー')
     })
 
-    it('sets the close button aria-label to "閉じる" by default', () => {
+    it('falls back to the default accessible name "メニュー"', () => {
       createWrapper()
-      const closeBtn = document.body.querySelector('.dads-drawer__close')
-      expect(closeBtn?.getAttribute('aria-label')).toBe('閉じる')
-    })
-
-    it('overrides the close button aria-label via closeLabel prop', () => {
-      createWrapper({ closeLabel: 'Close menu' })
-      const closeBtn = document.body.querySelector('.dads-drawer__close')
-      expect(closeBtn?.getAttribute('aria-label')).toBe('Close menu')
-    })
-
-    it('overrides the fallback aria-label via defaultAriaLabel prop (i18n)', () => {
-      createWrapper({ defaultAriaLabel: 'Navigation' })
-      expect(queryDrawer()?.getAttribute('aria-label')).toBe('Navigation')
-    })
-
-    it('sets the nav aria-label to "ドロワーナビゲーション" by default', () => {
-      createWrapper()
-      const nav = document.body.querySelector('.dads-drawer__nav')
-      expect(nav?.getAttribute('aria-label')).toBe('ドロワーナビゲーション')
-    })
-
-    it('overrides the nav aria-label via navAriaLabel prop (i18n)', () => {
-      createWrapper({ navAriaLabel: 'Drawer navigation' })
-      const nav = document.body.querySelector('.dads-drawer__nav')
-      expect(nav?.getAttribute('aria-label')).toBe('Drawer navigation')
+      const dialog = queryDrawer()
+      const heading = document.getElementById(dialog?.getAttribute('aria-labelledby') as string)
+      expect(heading?.textContent).toBe('メニュー')
     })
   })
 
-  describe('title', () => {
-    it('renders the title heading when provided', () => {
-      createWrapper({ title: 'メインメニュー' })
-      const title = document.body.querySelector('.dads-drawer__title')
-      expect(title?.textContent).toBe('メインメニュー')
-    })
-
-    it('omits the title heading when prop is undefined', () => {
-      createWrapper()
-      expect(document.body.querySelector('.dads-drawer__title')).toBeNull()
-    })
-  })
-
-  describe('items', () => {
-    it('renders one item per entry', () => {
+  describe('close button', () => {
+    it('renders a DadsHamburgerMenuButton in close (X) state', () => {
       const wrapper = createWrapper()
-      expect(wrapper.findAllComponents(DadsDrawerItem)).toHaveLength(3)
+      const btn = wrapper.findComponent(DadsHamburgerMenuButton)
+      expect(btn.exists()).toBe(true)
+      // open state -> shows the close label
+      expect(btn.text()).toContain('閉じる')
     })
 
-    it('renders an <a> for items with href', () => {
-      createWrapper()
-      const anchor = document.body.querySelector('a.dads-drawer__item-button')
-      expect(anchor?.getAttribute('href')).toBe('/')
+    it('uses a custom closeLabel', () => {
+      const wrapper = createWrapper({ closeLabel: 'Close menu' })
+      const btn = wrapper.findComponent(DadsHamburgerMenuButton)
+      expect(btn.text()).toContain('Close menu')
     })
 
-    it('renders a <button> for items without href and without children', () => {
-      createWrapper()
-      const buttons = document.body.querySelectorAll('button.dads-drawer__item-button')
-      // 1 close button + 1 settings (no href, no children) = 2 buttons
-      expect(buttons.length).toBeGreaterThanOrEqual(1)
-      const labels = Array.from(buttons).map((b) => b.textContent?.trim())
-      expect(labels.some((l) => l?.includes('設定'))).toBe(true)
-    })
-
-    it('renders mdi icon class when item.icon is set', () => {
-      createWrapper()
-      const homeIcon = document.body.querySelector('.mdi-home')
-      expect(homeIcon).not.toBeNull()
-    })
-  })
-
-  describe('close interactions', () => {
-    it('emits update:modelValue=false when close button is clicked', async () => {
+    it('emits update:modelValue=false when the close button is clicked', async () => {
       const wrapper = createWrapper()
-      const closeBtn = document.body.querySelector('.dads-drawer__close') as HTMLButtonElement
-      closeBtn.click()
-      await nextTick()
-      const events = wrapper.emitted('update:modelValue')
-      expect(events?.[0]?.[0]).toBe(false)
-    })
-
-    it('emits update:modelValue=false when the overlay is clicked', async () => {
-      const wrapper = createWrapper()
-      const overlay = document.body.querySelector('.dads-drawer__overlay') as HTMLElement
-      overlay.click()
-      await nextTick()
-      const events = wrapper.emitted('update:modelValue')
-      expect(events?.[0]?.[0]).toBe(false)
-    })
-
-    it('emits update:modelValue=false on Esc keydown', async () => {
-      const wrapper = createWrapper()
-      const drawer = queryDrawer() as HTMLElement
-      drawer.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
-      await nextTick()
-      const events = wrapper.emitted('update:modelValue')
-      expect(events?.[0]?.[0]).toBe(false)
-    })
-  })
-
-  describe('item click', () => {
-    it('emits click:item with the item and event', async () => {
-      const wrapper = createWrapper()
-      const anchor = document.body.querySelector('a.dads-drawer__item-button') as HTMLAnchorElement
-      anchor.click()
-      await nextTick()
-      const events = wrapper.emitted('click:item')
-      expect(events).toBeTruthy()
-      expect((events?.[0]?.[0] as DadsDrawerItemType).label).toBe('ホーム')
-      expect(events?.[0]?.[1]).toBeInstanceOf(MouseEvent)
-    })
-
-    it('emits update:modelValue=false after clicking a leaf item (auto-close)', async () => {
-      const wrapper = createWrapper()
-      const anchor = document.body.querySelector('a.dads-drawer__item-button') as HTMLAnchorElement
-      anchor.click()
-      await nextTick()
-      const events = wrapper.emitted('update:modelValue')
-      expect(events?.[0]?.[0]).toBe(false)
-    })
-
-    it('does not emit click:item for disabled items', async () => {
-      const items: DadsDrawerItemType[] = [{ label: '無効', href: '/x', disabled: true }]
-      const wrapper = createWrapper({ items })
-      const anchor = document.body.querySelector('a.dads-drawer__item-button') as HTMLAnchorElement
-      anchor.click()
-      await nextTick()
-      expect(wrapper.emitted('click:item')).toBeFalsy()
-    })
-
-    it('does not auto-close when a disabled item is clicked', async () => {
-      const items: DadsDrawerItemType[] = [{ label: '無効', href: '/x', disabled: true }]
-      const wrapper = createWrapper({ items })
-      const anchor = document.body.querySelector('a.dads-drawer__item-button') as HTMLAnchorElement
-      anchor.click()
-      await nextTick()
-      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
-    })
-
-    it('invokes the per-item onClick callback', async () => {
-      const onClick = vi.fn()
-      const items: DadsDrawerItemType[] = [{ label: 'コールバック', onClick }]
-      createWrapper({ items })
-      const button = document.body.querySelector(
-        'button.dads-drawer__item-button',
-      ) as HTMLButtonElement
+      const button = document.body.querySelector('.dads-drawer__header button') as HTMLButtonElement
       button.click()
       await nextTick()
-      expect(onClick).toHaveBeenCalledTimes(1)
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(false)
+    })
+
+    it('points aria-controls at the dialog id', () => {
+      createWrapper()
+      const dialog = queryDrawer()
+      const button = document.body.querySelector('.dads-drawer__header button')
+      expect(button?.getAttribute('aria-controls')).toBe(dialog?.id)
     })
   })
 
-  describe('children (accordion)', () => {
-    it('renders a <details> element for items with children', () => {
-      createWrapper({ items: nestedItems })
-      const details = document.body.querySelector('.dads-drawer__item-details')
-      expect(details?.tagName).toBe('DETAILS')
+  describe('native close behavior', () => {
+    it('emits update:modelValue=false on the dialog native close event', async () => {
+      const wrapper = createWrapper({ modelValue: true })
+      const dialog = queryDrawer() as HTMLDialogElement
+      dialog.dispatchEvent(new Event('close'))
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(false)
     })
 
-    it('renders nested items inside the children list', () => {
-      createWrapper({ items: nestedItems })
-      const childList = document.body.querySelector('.dads-drawer__item-children')
-      const childItems = childList?.querySelectorAll('a.dads-drawer__item-button')
-      expect(childItems?.length).toBe(2)
-    })
-
-    it('does not render <details> when an item has no children', () => {
-      createWrapper({ items: flatItems })
-      expect(document.body.querySelector('.dads-drawer__item-details')).toBeNull()
-    })
-
-    it('does not auto-close when a parent (with children) is clicked', async () => {
-      const wrapper = createWrapper({ items: nestedItems })
-      // Clicking the disclosure summary toggles the accordion; it must not
-      // close the drawer because the user is exploring children.
-      const summary = document.body.querySelector(
-        'details.dads-drawer__item-details > summary',
-      ) as HTMLElement
-      summary.click()
+    it('does not emit on close when already closed (no loop)', async () => {
+      const wrapper = createWrapper({ modelValue: false })
+      const dialog = queryDrawer() as HTMLDialogElement
+      dialog.dispatchEvent(new Event('close'))
       await nextTick()
       expect(wrapper.emitted('update:modelValue')).toBeFalsy()
     })
-
-    it('bubbles click:item from nested children up to the drawer', async () => {
-      const wrapper = createWrapper({ items: nestedItems })
-      const childList = document.body.querySelector('.dads-drawer__item-children') as HTMLElement
-      const firstChild = childList.querySelector('a.dads-drawer__item-button') as HTMLAnchorElement
-      firstChild.click()
-      await nextTick()
-      const events = wrapper.emitted('click:item')
-      expect(events).toBeTruthy()
-      expect((events?.[0]?.[0] as DadsDrawerItemType).label).toBe('一覧')
-    })
   })
 
-  describe('disabled items', () => {
-    it('omits href on disabled anchor items', () => {
-      const items: DadsDrawerItemType[] = [{ label: '無効', href: '/x', disabled: true }]
-      createWrapper({ items })
-      const anchor = document.body.querySelector('a.dads-drawer__item-button') as HTMLAnchorElement
-      // Vue renders attribute as undefined → element has no href attribute.
-      expect(anchor.hasAttribute('href')).toBe(false)
-      expect(anchor.getAttribute('aria-disabled')).toBe('true')
+  describe('backdrop click', () => {
+    it('emits update:modelValue=false when the click target is the dialog itself', async () => {
+      const wrapper = createWrapper()
+      const dialog = queryDrawer() as HTMLDialogElement
+      dialog.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await nextTick()
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBe(false)
     })
 
-    it('sets disabled attribute on disabled button items', () => {
-      const items: DadsDrawerItemType[] = [{ label: '無効ボタン', disabled: true }]
-      createWrapper({ items })
-      const button = document.body.querySelector(
-        'button.dads-drawer__item-button',
-      ) as HTMLButtonElement
-      expect(button.disabled).toBe(true)
-    })
-  })
-
-  describe('focus management', () => {
-    it('focuses the panel when the drawer opens', async () => {
-      const wrapper = mount(DadsDrawer, {
-        props: { modelValue: false, items: flatItems } as DadsDrawerProps,
-        attachTo: document.body,
-      })
-      await wrapper.setProps({ modelValue: true })
+    it('does not emit when a child element is clicked', async () => {
+      const wrapper = createWrapper()
+      const body = document.body.querySelector('.dads-drawer__body') as HTMLElement
+      body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
       await nextTick()
-      await nextTick()
-      const panel = document.body.querySelector('.dads-drawer__panel') as HTMLElement
-      expect(document.activeElement).toBe(panel)
-    })
-
-    it('restores focus to the previously active element on close', async () => {
-      const trigger = document.createElement('button')
-      trigger.textContent = 'open'
-      document.body.appendChild(trigger)
-      trigger.focus()
-      expect(document.activeElement).toBe(trigger)
-
-      const wrapper = mount(DadsDrawer, {
-        props: { modelValue: false, items: flatItems } as DadsDrawerProps,
-        attachTo: document.body,
-      })
-      await wrapper.setProps({ modelValue: true })
-      await nextTick()
-      await nextTick()
-      await wrapper.setProps({ modelValue: false })
-      await nextTick()
-      expect(document.activeElement).toBe(trigger)
-      trigger.remove()
-    })
-
-    it('traps Tab from the last focusable back to the first', async () => {
-      const wrapper = mount(DadsDrawer, {
-        props: { modelValue: false, items: flatItems } as DadsDrawerProps,
-        attachTo: document.body,
-      })
-      await wrapper.setProps({ modelValue: true })
-      await nextTick()
-      await nextTick()
-
-      const focusables = Array.from(
-        document.body.querySelectorAll<HTMLElement>(
-          '.dads-drawer__panel a[href], .dads-drawer__panel button:not([disabled])',
-        ),
-      )
-      expect(focusables.length).toBeGreaterThan(1)
-      const last = focusables[focusables.length - 1]
-      const first = focusables[0]
-      last.focus()
-      expect(document.activeElement).toBe(last)
-
-      const drawer = queryDrawer() as HTMLElement
-      const event = new KeyboardEvent('keydown', {
-        key: 'Tab',
-        bubbles: true,
-        cancelable: true,
-      })
-      drawer.dispatchEvent(event)
-      await nextTick()
-      expect(document.activeElement).toBe(first)
-    })
-
-    it('traps Shift+Tab from the panel back to the last focusable', async () => {
-      const wrapper = mount(DadsDrawer, {
-        props: { modelValue: false, items: flatItems } as DadsDrawerProps,
-        attachTo: document.body,
-      })
-      await wrapper.setProps({ modelValue: true })
-      await nextTick()
-      await nextTick()
-
-      const focusables = Array.from(
-        document.body.querySelectorAll<HTMLElement>(
-          '.dads-drawer__panel a[href], .dads-drawer__panel button:not([disabled])',
-        ),
-      )
-      const last = focusables[focusables.length - 1]
-      // Panel has focus by default after open.
-      const drawer = queryDrawer() as HTMLElement
-      const event = new KeyboardEvent('keydown', {
-        key: 'Tab',
-        shiftKey: true,
-        bubbles: true,
-        cancelable: true,
-      })
-      drawer.dispatchEvent(event)
-      await nextTick()
-      expect(document.activeElement).toBe(last)
-    })
-  })
-
-  // ----------------------------------------------------------------------
-  // placement — DADS specifies left (default) / right / full overlay.
-  // The modifier class drives the SCSS-side margin + transition.
-  // ----------------------------------------------------------------------
-  describe('placement variant', () => {
-    it('applies the dads-drawer--left modifier by default', () => {
-      createWrapper()
-      expect(queryDrawer()?.classList.contains('dads-drawer--left')).toBe(true)
-    })
-
-    it('applies the dads-drawer--right modifier when placement="right"', () => {
-      createWrapper({ placement: 'right' })
-      expect(queryDrawer()?.classList.contains('dads-drawer--right')).toBe(true)
-      expect(queryDrawer()?.classList.contains('dads-drawer--left')).toBe(false)
-    })
-
-    it('applies the dads-drawer--full modifier when placement="full"', () => {
-      createWrapper({ placement: 'full' })
-      expect(queryDrawer()?.classList.contains('dads-drawer--full')).toBe(true)
-      expect(queryDrawer()?.classList.contains('dads-drawer--left')).toBe(false)
-    })
-
-    it.each(['left', 'right', 'full'] as const)(
-      'keeps role="dialog" and aria-modal across placement=%s',
-      (placement) => {
-        createWrapper({ placement })
-        const dialog = queryDrawer()
-        expect(dialog?.getAttribute('role')).toBe('dialog')
-        expect(dialog?.getAttribute('aria-modal')).toBe('true')
-      },
-    )
-
-    it('only applies one placement modifier at a time', () => {
-      createWrapper({ placement: 'right' })
-      const placementClasses = (queryDrawer() as Element).className
-        .split(/\s+/)
-        .filter((c) => /^dads-drawer--(left|right|full)$/.test(c))
-      expect(placementClasses).toEqual(['dads-drawer--right'])
+      expect(wrapper.emitted('update:modelValue')).toBeFalsy()
     })
   })
 
   describe('a11y (vitest-axe)', () => {
-    it('has no violations with flat items and a fallback aria-label', async () => {
-      createWrapper()
-      const drawer = queryDrawer()
-      expect(drawer).not.toBeNull()
-      expect(await axe(drawer as Element)).toHaveNoViolations()
+    it('has no violations (left placement)', async () => {
+      createWrapper({ title: 'メニュー' })
+      const dialog = queryDrawer()
+      expect(dialog).not.toBeNull()
+      expect(await axe(dialog as Element)).toHaveNoViolations()
     })
 
-    it('has no violations with a title (aria-label wired)', async () => {
-      createWrapper({ title: 'メインメニュー' })
-      const drawer = queryDrawer()
-      expect(drawer).not.toBeNull()
-      expect(await axe(drawer as Element)).toHaveNoViolations()
-    })
-
-    it('has no violations with nested items', async () => {
-      createWrapper({ title: 'メニュー', items: nestedItems })
-      const drawer = queryDrawer()
-      expect(drawer).not.toBeNull()
-      expect(await axe(drawer as Element)).toHaveNoViolations()
-    })
-
-    it('has no violations when placement is right', async () => {
+    it('has no violations (right placement)', async () => {
       createWrapper({ title: 'フィルタ', placement: 'right' })
-      const drawer = queryDrawer()
-      expect(drawer).not.toBeNull()
-      expect(await axe(drawer as Element)).toHaveNoViolations()
+      const dialog = queryDrawer()
+      expect(dialog).not.toBeNull()
+      expect(await axe(dialog as Element)).toHaveNoViolations()
     })
 
-    it('has no violations when placement is full', async () => {
-      createWrapper({ title: 'メニュー', placement: 'full' })
-      const drawer = queryDrawer()
-      expect(drawer).not.toBeNull()
-      expect(await axe(drawer as Element)).toHaveNoViolations()
-    })
-
-    it('has no violations with a disabled item', async () => {
-      createWrapper({
-        title: 'メニュー',
-        items: [
-          { label: 'ホーム', href: '/' },
-          { label: '準備中', disabled: true },
-        ],
-      })
-      const drawer = queryDrawer()
-      expect(drawer).not.toBeNull()
-      expect(await axe(drawer as Element)).toHaveNoViolations()
+    it('has no violations with a custom title', async () => {
+      createWrapper({ title: 'メインメニュー' })
+      const dialog = queryDrawer()
+      expect(dialog).not.toBeNull()
+      expect(await axe(dialog as Element)).toHaveNoViolations()
     })
   })
 })

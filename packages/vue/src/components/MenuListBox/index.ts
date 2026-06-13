@@ -5,4 +5,5 @@ export type {
   DadsMenuListBoxItem,
   DadsMenuListBoxPlacement,
   DadsMenuListBoxTriggerSize,
+  DadsMenuListBoxTriggerStyle,
 } from './DadsMenuListBox.types'

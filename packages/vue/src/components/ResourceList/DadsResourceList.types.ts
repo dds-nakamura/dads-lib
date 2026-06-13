@@ -33,7 +33,7 @@ export type DadsResourceListItemKind = 'information' | 'form'
 export interface DadsResourceListAction {
   /** aria-label (also the visible text when `iconName` is omitted). */
   label: string
-  /** Material Design Icons class for an icon-only action (`mdi-download` etc). */
+  /** Material Symbols name for an icon-only action (e.g. `"download"`). */
   iconName?: string
   /** href — when set, renders as `<a>`; otherwise as `<button>` for click event. */
   href?: string
@@ -53,7 +53,7 @@ export interface DadsResourceListItem {
   date?: string
   /** Optional list of tag labels rendered as small chips below the title. */
   tags?: string[]
-  /** Material Design Icons class name (e.g. `"mdi-file-document"`). Used when `thumbnail` is absent. */
+  /** Material Symbols name (e.g. `"description"`). Used when `thumbnail` is absent. */
   iconName?: string
   /** Item kind (Information vs Form per Figma). Default `'information'`. */
   kind?: DadsResourceListItemKind

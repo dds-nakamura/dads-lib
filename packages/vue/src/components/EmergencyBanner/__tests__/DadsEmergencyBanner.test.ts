@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { axe } from 'vitest-axe'
 import { h, nextTick } from 'vue'
 import DadsEmergencyBanner from '../DadsEmergencyBanner.vue'
+import DadsIcon from '../../Icon/DadsIcon.vue'
 import type { DadsEmergencyBannerProps } from '../DadsEmergencyBanner.types'
 
 enableAutoUnmount(afterEach)
@@ -164,18 +165,18 @@ describe('DadsEmergencyBanner', () => {
   })
 
   describe('icon', () => {
-    it('renders the default mdi-alert icon', () => {
+    it('renders the default warning icon as a DadsIcon svg', () => {
       const wrapper = createWrapper({ title: 'タイトル' })
-      const icon = wrapper.find('.dads-emergency-banner__icon')
+      const icon = wrapper.find('svg.dads-emergency-banner__icon')
       expect(icon.exists()).toBe(true)
-      expect(icon.classes()).toContain('mdi-alert')
+      expect(icon.element.tagName.toLowerCase()).toBe('svg')
+      expect(wrapper.findComponent(DadsIcon).props('name')).toBe('warning')
     })
 
     it('renders a custom iconName when provided', () => {
-      const wrapper = createWrapper({ title: 'タイトル', iconName: 'mdi-fire' })
-      const icon = wrapper.find('.dads-emergency-banner__icon')
-      expect(icon.classes()).toContain('mdi-fire')
-      expect(icon.classes()).not.toContain('mdi-alert')
+      const wrapper = createWrapper({ title: 'タイトル', iconName: 'local_fire_department' })
+      const icon = wrapper.findComponent(DadsIcon)
+      expect(icon.props('name')).toBe('local_fire_department')
     })
 
     it('omits the icon when iconName is an empty string', () => {
@@ -185,7 +186,7 @@ describe('DadsEmergencyBanner', () => {
 
     it('marks the icon as aria-hidden', () => {
       const wrapper = createWrapper({ title: 'タイトル' })
-      const icon = wrapper.find('.dads-emergency-banner__icon')
+      const icon = wrapper.find('svg.dads-emergency-banner__icon')
       expect(icon.attributes('aria-hidden')).toBe('true')
     })
   })

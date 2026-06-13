@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import type { DadsDescriptionListProps } from './DadsDescriptionList.types'
 
 const props = withDefaults(defineProps<DadsDescriptionListProps>(), {
-  layout: 'horizontal',
+  layout: 'vertical',
   marker: 'none',
   bordered: false,
 })
@@ -39,11 +39,17 @@ const rootClasses = computed(() => [
 @use '../../styles/base' as base;
 
 .dads-description-list {
-  margin: var(--spacing-16, 1rem) 0;
+  // The official example (description-list.css) makes the <dl> itself a grid
+  // with an 8px row gap and indents each <dd> by 32px — a single canonical
+  // vertical stack. There is no two-column / "horizontal" layout in DADS, so
+  // the component now mirrors that single layout exactly.
+  margin: calc(16 / 16 * 1rem) 0;
+  display: grid;
+  gap: calc(8 / 16 * 1rem) 0;
   font-family: var(--font-family-sans, 'Noto Sans JP', sans-serif);
-  color: var(--color-text-primary, #1a1a1a);
+  color: var(--color-neutral-solid-gray-800, #1a1a1a);
   font-size: var(--font-size-16, 1rem);
-  line-height: var(--line-height-150, 1.5);
+  line-height: var(--line-height-170, 1.7);
   // Long words (URLs, IDs) should not punch out of the layout.
   overflow-wrap: anywhere;
 
@@ -51,16 +57,20 @@ const rootClasses = computed(() => [
     font-weight: 700;
   }
 
-  // Native <dl> default margin on <dd> would push descriptions out by 40px
-  // on most engines; the DADS reference normalises this to 32px and the
-  // horizontal layout overrides it to 0.
+  // Each pair is a block so <dt>/<dd> stack vertically; <dd> is indented 32px
+  // to match the DADS reference (description-list.css:24-26).
+  .dads-description-list__item {
+    display: block;
+  }
+
   dd {
     margin: 0;
+    margin-left: calc(32 / 16 * 1rem);
   }
 
   // ----- marker: bullet ---------------------------------------------------
   &[data-marker='bullet'] dt {
-    margin-left: var(--spacing-32, 2rem);
+    margin-left: calc(32 / 16 * 1rem);
     display: list-item;
     list-style-type: disc;
   }
@@ -71,54 +81,7 @@ const rootClasses = computed(() => [
   // intrinsic width.
   &[data-marker='custom'] dt > span:first-child {
     display: inline-block;
-    min-width: var(--spacing-32, 2rem);
-  }
-
-  // ----- layout: vertical -------------------------------------------------
-  // Each pair is its own block; <dd> stacks under <dt> with a small indent
-  // matching the DADS reference (32px).
-  &--vertical {
-    display: grid;
-    gap: var(--spacing-8, 0.5rem) 0;
-
-    .dads-description-list__item {
-      display: block;
-    }
-
-    dd {
-      margin-left: var(--spacing-32, 2rem);
-    }
-  }
-
-  // ----- layout: horizontal ----------------------------------------------
-  // Each item is a two-column grid (term | description) that reflows to a
-  // single column on narrow viewports so the layout stays readable on
-  // phones.
-  &--horizontal {
-    display: grid;
-    gap: var(--spacing-12, 0.75rem) 0;
-
-    .dads-description-list__item {
-      display: grid;
-      grid-template-columns: minmax(8rem, 1fr) 3fr;
-      gap: var(--spacing-16, 1rem);
-      align-items: baseline;
-    }
-
-    dd {
-      margin: 0;
-    }
-
-    @media (max-width: 599px) {
-      .dads-description-list__item {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-4, 0.25rem);
-      }
-
-      dd {
-        margin-left: var(--spacing-16, 1rem);
-      }
-    }
+    min-width: calc(32 / 16 * 1rem);
   }
 
   // ----- bordered ---------------------------------------------------------
@@ -126,8 +89,8 @@ const rootClasses = computed(() => [
   // a hanging line at the bottom of the list.
   &--bordered {
     .dads-description-list__item {
-      padding-bottom: var(--spacing-12, 0.75rem);
-      border-bottom: 1px solid var(--color-border-default, rgba(0, 0, 0, 0.12));
+      padding-bottom: calc(12 / 16 * 1rem);
+      border-bottom: 1px solid var(--color-neutral-solid-gray-420, #949494);
     }
 
     .dads-description-list__item:last-child {

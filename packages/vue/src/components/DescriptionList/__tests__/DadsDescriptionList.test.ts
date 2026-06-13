@@ -113,24 +113,16 @@ describe('DadsDescriptionList', () => {
   })
 
   describe('layout', () => {
-    it('applies the --horizontal modifier by default', () => {
+    it('applies the --vertical modifier by default (the only official layout)', () => {
       const wrapper = createWrapper({ items: ITEMS })
-      expect(wrapper.classes()).toContain('dads-description-list--horizontal')
-      expect(wrapper.classes()).not.toContain('dads-description-list--vertical')
+      expect(wrapper.classes()).toContain('dads-description-list--vertical')
+      // The non-official horizontal variant has been removed.
+      expect(wrapper.classes()).not.toContain('dads-description-list--horizontal')
     })
 
-    it('applies the --vertical modifier when layout="vertical"', () => {
+    it('applies the --vertical modifier when layout="vertical" is explicit', () => {
       const wrapper = createWrapper({ items: ITEMS, layout: 'vertical' })
       expect(wrapper.classes()).toContain('dads-description-list--vertical')
-      expect(wrapper.classes()).not.toContain('dads-description-list--horizontal')
-    })
-
-    it('updates the layout class when the prop changes', async () => {
-      const wrapper = createWrapper({ items: ITEMS, layout: 'horizontal' })
-      expect(wrapper.classes()).toContain('dads-description-list--horizontal')
-      await wrapper.setProps({ layout: 'vertical' })
-      expect(wrapper.classes()).toContain('dads-description-list--vertical')
-      expect(wrapper.classes()).not.toContain('dads-description-list--horizontal')
     })
   })
 
@@ -248,12 +240,12 @@ describe('DadsDescriptionList', () => {
         attachTo: document.body,
       })
 
-    it('has no violations in horizontal layout with items', async () => {
+    it('has no violations in the default (vertical) layout with items', async () => {
       const wrapper = mountInBody({ items: ITEMS })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
 
-    it('has no violations in vertical layout', async () => {
+    it('has no violations when layout="vertical" is explicit', async () => {
       const wrapper = mountInBody({ items: ITEMS, layout: 'vertical' })
       expect(await axe(wrapper.element)).toHaveNoViolations()
     })
