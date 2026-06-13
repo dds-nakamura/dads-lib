@@ -22,9 +22,9 @@
 | `dads-document-md/`    | <https://design.digital.go.jp/dads/>                                        | DADS **v2.13.0** / 91 ファイル / 604 KB                                                                  | 2026-05-12 | `dads-document-md/README.md`                   |
 | `dads-document-html/`  | <https://design.digital.go.jp/dads/>                                        | DADS **v2.13.0** (md と同時取得) / 958 ファイル (HTML 148 + PNG 669 + フォント/assets) / 51 MB           | 2026-05-12 | （README 未配置。md と同一抽出に由来）         |
 | `dads-document-figma/` | Figma Community: <https://www.figma.com/community/file/1255349027535859598> | (frame モード) `fileKey=SZ2T652pyb3nz4Mrh06ALt` / "v2.13.0 (Community)" / lastModified 2026-05-14T06:48Z | 2026-05-14 | `dads-document-figma/manifest.json`            |
-| `dads-document-figma/` | 〃                                                                          | (playwright モード) `fileKey=71GUnpF30YjVBRuWCPgKaC` / 42 pages / scale 2 / exportedAt 2026-05-16T14:54Z | 2026-05-16 | `dads-document-figma/playwright-manifest.json` |
+| `dads-document-figma/` | Figma Community: <https://www.figma.com/community/file/1255349027535859598> | (playwright モード) **v2.14.0** / `fileKey=k37j9LDbHk1LwpgdzTZJWY` / 43 pages / exportedAt 2026-06-13T05:32Z | 2026-06-13 | `dads-document-figma/playwright-manifest.json` |
 
-> 注: 上記サイト / Figma 行は依然 **v2.13.0** スナップショット。DADS v2.14.0 への追随は GitHub vendor 3 件（design-tokens v2.0.1 / tailwind-theme-plugin v1.0.0 / example-components-html）を本 PR で先行実施済みで、Figma 再エクスポートとサイト md/html 再クロールは後続作業で更新する。
+> 注: **Figma スナップショット（playwright モード）は DADS v2.14.0 へ更新済み**（43 pages・新規「スタイルガイド」追加。canonical な参照は playwright-manifest.json 側）。frame モードの `manifest.json` は v2.13.0 Community 由来の旧エクスポートで未更新（Claude の一次参照は playwright 側）。**サイト md / html 行は依然 v2.13.0**（後続の再クロールで更新）。GitHub vendor 3 件（design-tokens v2.0.1 / tailwind-theme-plugin v1.0.0 / example-components-html）は別 PR で実施済み。
 
 `dads-document-figma/` は `.gitignore` 対象（各環境で再生成）。再取得手順は [scripts/README.md](./scripts/README.md) (`pnpm figma:pw-export`) を参照。
 
