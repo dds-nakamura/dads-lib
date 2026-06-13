@@ -37,6 +37,8 @@
 
 ## 上流追随手順
 
+> **DADS 新バージョン全体の追随**（GitHub vendor + npm dep + Figma + 公式サイト md + docs/ を一括で追随）は、ランブックスキル [`.claude/skills/dads-upstream-sync`](./.claude/skills/dads-upstream-sync/SKILL.md)（`/dads-upstream-sync <version>`）を使う。以下は単一 vendor dir を手動更新する場合の最小手順。
+
 ```bash
 # 例: design-tokens を最新化
 cd /tmp
